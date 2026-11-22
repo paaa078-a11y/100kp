@@ -118,9 +118,9 @@
             {yun:}if $row.address{/yun}
             <div class="job_describe_bottom" style="padding: 5px 0 10px 0px">
                 <div class="job_describe_cengter_header">公司地址</div>
-                <div class="newcom_add" {yun:}if $config.map_key{/yun} onclick="navigateTo('{yun:}url m=wap c=job a=jobmap uid=$row.uid{/yun}')"{yun:}/if{/yun}>
+                <div class="newcom_add" {yun:}if $config.map_enabled{/yun} onclick="navigateTo('{yun:}url m=wap c=job a=jobmap uid=$row.uid{/yun}')"{yun:}/if{/yun}>
                 <div class="newcom_add_dz"><i class="newcom_add_dzicon"></i>{yun:}$row.address{/yun}</div>
-                {yun:}if $row.x && $row.y && $config.map_key{/yun}
+                {yun:}if $row.x && $row.y && $config.map_enabled{/yun}
                 <div class="newcom_add_jl">距离<em id="distance"></em></div>
                 <input type="hidden" id="map_x" value="{yun:}$mapx{/yun}"/>
                 <input type="hidden" id="map_y" value="{yun:}$mapy{/yun}"/>
@@ -695,7 +695,7 @@
         }
     }
 </script>
-{yun:}if $row.x && $row.y && $config.map_key{/yun}
+{yun:}if $row.x && $row.y && $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'

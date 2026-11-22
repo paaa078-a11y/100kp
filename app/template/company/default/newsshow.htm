@@ -149,7 +149,7 @@
 						{yun:}/if{/yun}
 
 
-        {yun:}if $com.x!='' && $com.y!='' && $config.map_key{/yun}
+        {yun:}if $com.x!='' && $com.y!='' && $config.map_enabled{/yun}
          
                     <div class="com_show_lmap">
                         <div class="frc_map" id="company_baidu_map">
@@ -234,7 +234,7 @@ DD_belatedPNG.fix('.png');
 
 <script>
 $(function () {
-    {yun:}if $com.y!='' && $com.x!=''&& $config.map_key{/yun}
+    {yun:}if $com.y!='' && $com.x!=''&& $config.map_enabled{/yun}
 	getmapnoshowcont_diffDomains('maps_container', "{yun:}$com.x{/yun}", "{yun:}$com.y{/yun}", "map_x", "map_y",'company_baidu_map');
 	{yun:}/if{/yun}
 	$(".firm_post").hover(function () {

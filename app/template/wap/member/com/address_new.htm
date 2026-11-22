@@ -107,7 +107,7 @@
 </div>
 
 <script src="{yun:}$wap_style{/yun}/js/jsMath.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -142,7 +142,7 @@
             }
         }
     }
-	var map_key = '{yun:}$config.map_key{/yun}';
+	var map_key = '{yun:}$config.map_enabled{/yun}';
     var addressId = parseInt('{yun:}$smarty.get.id{/yun}');
 
     var cityParam = {

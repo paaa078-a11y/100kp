@@ -11,16 +11,25 @@
  */
 class config_controller extends adminCommon{
 
+    private function build_map_url($config = array())
+    {
+        $mapType = isset($config['map_type']) && (string)$config['map_type'] === '2' ? '2' : '1';
+        $weburl = !empty($config['sy_weburl']) ? rtrim($config['sy_weburl'], '/') : '';
+        if ($mapType === '2') {
+            $key = !empty($config['tdt_map_key']) ? trim($config['tdt_map_key']) : '';
+            return ($key !== '' && $weburl !== '')
+                ? $weburl . '/js/tianditu-map-loader.js?tk=' . rawurlencode($key) . '&v=1.0.3'
+                : '';
+        }
+        $key = !empty($config['map_key']) ? trim($config['map_key']) : '';
+        return $key !== '' ? 'https://webapi.amap.com/maps?v=2.0&key=' . rawurlencode($key) : '';
+    }
+
     /**
      * 系统-网站设置
      */
     function index_action(){
-        if (strpos($this->config['sy_weburl'], 'https') !== false) {
-            
-            $this->config['mapurl'] = 'https://api.map.baidu.com/api?v=2.0&ak=' . $this->config['map_key'] . '&s=1';
-        } else {
-            $this->config['mapurl'] = 'http://api.map.baidu.com/api?v=2.0&ak=' . $this->config['map_key'];
-        }
+        $this->config['mapurl'] = $this->build_map_url($this->config);
         if ($this->config['sy_ossurl'] == ''){
             $this->config['sy_ossurl']  =  $this->config['sy_weburl'];
         }
@@ -95,13 +104,8 @@ class config_controller extends adminCommon{
             }
             unset($_POST['config']);
             unset($_POST['pytoken']);
-            if (isset($_POST['map_key'])) {
-                if (strpos($this->config['sy_weburl'], 'https') !== false) {
-                    
-                    $_POST['mapurl'] = 'https://api.map.baidu.com/api?v=2.0&ak=' . $_POST['map_key'] . '&s=1';
-                } else {
-                    $_POST['mapurl'] = 'http://api.map.baidu.com/api?v=2.0&ak=' . $_POST['map_key'];
-                }
+            if (isset($_POST['map_key']) || isset($_POST['map_type'])) {
+                $_POST['mapurl'] = $this->build_map_url(array_merge($this->config, $_POST));
             }
             if (!empty($_POST['sy_weburl'])) {
                 $weburl = trim($_POST['sy_weburl']);
@@ -109,10 +113,8 @@ class config_controller extends adminCommon{
                     $this->layer_msg('网站地址缺少http://或https://', 8, 1, '');
                 }
                 // 保存域名时，相关的内容要重新保存，防止域名或http头改变后，有关功能异常
-                if (!empty($this->config['map_key'])){
-                    // 百度地图地址
-                    $protocol  =  getprotocol($weburl);
-                    $_POST['mapurl']  =  $protocol . 'api.map.baidu.com/api?v=2.0&ak=' . $this->config['map_key'] . '&s=1';
+                if (!empty($this->config['map_key']) || !empty($this->config['tdt_map_key'])) {
+                    $_POST['mapurl'] = $this->build_map_url(array_merge($this->config, $_POST));
                 }
                 if (!empty($this->config['sy_indexdomain'])){
                     // 分站默认域名

@@ -34,6 +34,7 @@ class common{
 	function common($tpl,$db,$def='',$model='index',$m='') {
 		global $config;
 		$this->config = $config;
+		$this->config['map_enabled'] = !empty($this->config['mapurl']) ? '1' : '0';
 		$this->tpl=$tpl;
 		$this->db=$db;
 		$this->def=$def;

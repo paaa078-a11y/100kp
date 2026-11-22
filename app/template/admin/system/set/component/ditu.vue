@@ -12,6 +12,24 @@
                 <tbody>
                     <tr>
                         <td>
+                            <div class="TableTite">地图类型</div>
+                        </td>
+                        <td>
+                            <div class="TableButn">
+                                <el-radio-group v-model="list.map_type">
+                                    <el-radio label="1">高德地图</el-radio>
+                                    <el-radio label="2">天地图</el-radio>
+                                </el-radio-group>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>选择前台和后台地图所使用的服务商</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <div class="TableTite">IP跳转到当前城市</div>
                         </td>
                         <td>
@@ -29,7 +47,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-if="list.map_type == '1'">
                         <td>
                             <div class="TableTite">高德地图Web端Key</div>
                         </td>
@@ -44,7 +62,7 @@
                             </div>
                         </td>
                     </tr>
-					<tr>
+					<tr v-if="list.map_type == '1'">
                         <td>
                             <div class="TableTite">高德地图Web端安全秘钥</div>
                         </td>
@@ -54,7 +72,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-if="list.map_type == '1'">
                         <td>
                             <div class="TableTite">高德地图Web服务Key</div>
                         </td>
@@ -66,6 +84,37 @@
                         <td>
                             <div class="TableShuom">
                                 <span>服务平台必须是“Web服务”</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="list.map_type == '2'">
+                        <td>
+                            <div class="TableTite">天地图浏览器端密钥</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input v-model="list.tdt_map_key" placeholder="请输入浏览器端密钥"></el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>应用类型必须为“浏览器端”</span>
+                                <a href="https://console.tianditu.gov.cn/api/key" target="_blank">申请地址</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="list.map_type == '2'">
+                        <td>
+                            <div class="TableTite">天地图服务端密钥</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input v-model="list.tdt_server_key" placeholder="请输入服务端密钥"></el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>用于后台地址搜索和逆地址解析，不会输出到前台</span>
                             </div>
                         </td>
                     </tr>
@@ -133,8 +182,10 @@ module.exports = {
         }
     },
     mounted() {
-        var mapurl = this.list.mapurl+"&callback=onAMapCallback";
-        this.writeJs(mapurl);
+        if (this.list.mapurl) {
+            var mapurl = this.list.mapurl + (this.list.mapurl.indexOf('?') > -1 ? '&' : '?') + 'callback=onAMapCallback';
+            this.writeJs(mapurl);
+        }
     },
     methods: {
         writeJs(url) {
@@ -156,11 +207,11 @@ module.exports = {
             });
         },
         getclick:function(){
-            if (this.list.map_key){
+            if (this.list.mapurl){
 				this.dituShow = true;
                 this.openMap();
             }else{
-				message.error('请先设置Web端Key');
+				message.error('请先保存有效的地图类型和密钥');
 			}
         },
         openMap:function (){
@@ -198,9 +249,12 @@ module.exports = {
             let url = this.uri+"set_config&a=save";
             let ruleForm = {
                 map_tocity: _this.list.map_tocity,
+                map_type: _this.list.map_type,
                 content: _this.list.map_key,
                 con_post:_this.list.bmap_webak,
 				map_secret: _this.list.map_secret,
+                tdt_map_key: _this.list.tdt_map_key,
+                tdt_server_key: _this.list.tdt_server_key,
                 pytoken: _this.list.pytoken,
                 map_x: _this.list.map_x,
                 map_y: _this.list.map_y,

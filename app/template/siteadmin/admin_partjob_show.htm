@@ -221,7 +221,7 @@
 		          		<th width="120">详细地址：</th>
 		          		<td><input type="text" class="input-text" name="address" id="address" size="30" value="{yun:}$show.address{/yun}"></td>
 		        	</tr>
-			        {yun:}if $config.map_key{/yun}
+			        {yun:}if $config.map_enabled{/yun}
 			        <tr>
 			          	<th width="120"></th>
 			          	<td >
@@ -279,7 +279,7 @@
   		</div>
 	</div>
 	
-	{yun:}if $config.map_key{/yun}
+	{yun:}if $config.map_enabled{/yun}
 	<script src="{yun:}$config.mapurl{/yun}"></script> 
 	<script type="text/javascript" src="{yun:}$config.sy_weburl{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}"></script>
 	{yun:}/if{/yun}
@@ -288,7 +288,7 @@
 	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
 	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
 	<script>
-		{yun:}if $config.map_key{/yun}
+		{yun:}if $config.map_enabled{/yun}
 		var map=new BMap.Map("map_container");
 		setLocation('map_container',116.404,39.915,"map_x","map_y");
 		$(document).ready(function() {

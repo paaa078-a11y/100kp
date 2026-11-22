@@ -514,7 +514,7 @@
                     </a>
                     {yun:}/joblist{/yun}
                 </van-tab>
-                {yun:}if $config.map_key{/yun}
+                {yun:}if $config.map_enabled{/yun}
                 <van-tab title="附近">
                     <div v-if="skeletonLoading">
                         <div class="map_job_list" v-for="(item,skeletonKey) in skeletonLen" :key="skeletonKey">
@@ -634,7 +634,7 @@
 </style>
 
 {yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'

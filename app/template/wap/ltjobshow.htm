@@ -213,7 +213,7 @@
         };
         var wapurl = "{yun:}url m=wap{/yun}"
     </script>
-    {yun:}if $job.x && $job.y && $config.map_key{/yun}
+    {yun:}if $job.x && $job.y && $config.map_enabled{/yun}
 	<script type="text/javascript">
 		window._AMapSecurityConfig = {
 			securityJsCode:'{yun:}$config.map_secret{/yun}'

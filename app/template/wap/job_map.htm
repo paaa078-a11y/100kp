@@ -45,11 +45,11 @@
 <script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/prefixfree.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
 <script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
 {yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript" src="{yun:}$config.mapurl{/yun}"></script>
 {yun:}/if{/yun}
 <script type="text/javascript">
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 	var wapurl = '{yun:}url m=wap{/yun}';
 
 	var x = '{yun:}$com.x{/yun}';

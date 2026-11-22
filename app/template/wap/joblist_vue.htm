@@ -71,7 +71,7 @@
         <div class="wap_member_no"> 您的附近没有相关职位！</div>
     </div>
 </div>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -80,7 +80,7 @@
 <script type="text/javascript" src="{yun:}$config.mapurl{/yun}"></script>
 {yun:}/if{/yun}
 <script type="text/javascript">
-	var map_key = '{yun:}$config.map_key{/yun}';
+	var map_key = '{yun:}$config.map_enabled{/yun}';
     var app = new Vue({
         el: '#joblist_wx_vue',
         data: {

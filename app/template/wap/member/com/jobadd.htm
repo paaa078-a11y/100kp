@@ -669,7 +669,7 @@
 <script src="{yun:}$plusstyle{/yun}/job.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
 <script src="{yun:}$plusstyle{/yun}/jobparent.cache.js?v={yun:}$config.cachecode{/yun}"></script>
 <script src="{yun:}$wap_style{/yun}/js/category.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -704,7 +704,7 @@
         }
     }
 
-    var map_key = '{yun:}$config.map_key{/yun}';
+    var map_key = '{yun:}$config.map_enabled{/yun}';
     var cmcJs = null;
     var cityParam = {
         one_all: false,

@@ -674,7 +674,7 @@
 										<input class="input-text" type="text" name="map_y" id="map_y" value="{yun:}$config.map_y{/yun}" size="20" maxlength="255" placeholder="Y坐标" style="height: 36px; padding-left: 50px;"/>
 										<span class="admin_comclass_add_n_dw" style="height: 36px; top: 1px; left: 0;border-right: 1px solid #dcdee2;">Y</span>
 									</div>
-									{yun:}if $config.map_key{/yun}
+									{yun:}if $config.map_enabled{/yun}
 									<a href="javascript:;" id="getclick" class="set_bth"style=" float:left; margin-top:10px; margin-left:5px;">获取坐标</a>
 									{yun:}/if{/yun}
 								</div>
@@ -873,7 +873,7 @@
 					</div>
 				</div>
 
-			{yun:}if $config.map_key{/yun}	
+			{yun:}if $config.map_enabled{/yun}	
 			<script src="{yun:}$config.mapurl{/yun}"></script>
 			<script src="{yun:}$config.sy_weburl{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}"></script>
 			{yun:}/if{/yun}
@@ -954,7 +954,7 @@
 						layer.closeAll('tips');
 					}
 				});
-				{yun:}if $config.map_key{/yun}
+				{yun:}if $config.map_enabled{/yun}
 				getmapnoshowcont('map_container',
 					"{yun:}if $config.map_x{/yun}{yun:}$config.map_x{/yun}{yun:}else{/yun}116.404{yun:}/if{/yun}",
 					"{yun:}if $config.map_y{/yun}{yun:}$config.map_y{/yun}{yun:}else{/yun}39.915{yun:}/if{/yun}", "map_x", "map_y");

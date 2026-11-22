@@ -4,7 +4,7 @@
 
 	var userstyle	=	'{yun:}$user_style{/yun}';
 	var setPosition	=	'{yun:}$config.com_enforce_setposition{/yun}';
-	var map_key = '{yun:}$config.map_key{/yun}';
+	var map_key = '{yun:}$config.map_enabled{/yun}';
 
 	function checkIsUsed(typeStr){
 
@@ -338,7 +338,7 @@
 					<li><a href="index.php?c=uppic"> 公司LOGO</a></li>
 					<li><a href="index.php?c=product">产品介绍</a></li>
 					<li><a href="index.php?c=news">公司资讯</a></li>
-					{yun:}if $config.map_key{/yun}
+					{yun:}if $config.map_enabled{/yun}
 					<li><a href="index.php?c=map">公司地图</a></li>
 					{yun:}/if{/yun}
 					<li><a href="index.php?c=comtpl">个性化模板</a></li>
@@ -507,7 +507,7 @@
 
 								<div class="com_release_cont_text com_info_tip" style="width:640px">
 									<input type="text" id="address" name="address" size="45" value="{yun:}$row.address{/yun}" class="layui-input" placeholder="建议格式：XX市XX县XX路" onkeyup="addressKeyup();"/>
-									{yun:}if $config.map_key{/yun}
+									{yun:}if $config.map_enabled{/yun}
 									<i class="com_release_mapicon" onclick="clickSearch();"></i>
 									{yun:}/if{/yun}
 									<div class="comEleaseMaps" id="poiSearch" style="display: none;"></div>
@@ -516,7 +516,7 @@
 
 								<div class="clear"></div>
                                 <div style="margin-top:10px;">
-			                  	{yun:}if $config.map_key{/yun}
+			                  	{yun:}if $config.map_enabled{/yun}
 			                  	<div id="map_container" style="width:640px;height:300px; left:0px;"></div>
 			                  	{yun:}/if{/yun}
 			                  	<input name="x" id="map_x" type="hidden" value="{yun:}$row.x{/yun}">
@@ -1006,7 +1006,7 @@
 
 	<div class="yun_prompt_writing_operation">
 	    <a href="index.php?c=binding" id='zzrz_a' class="yun_prompt_writing_operation_bth" style='display:none;'>开始资质认证</a>
-		{yun:}if $config.map_key{/yun}
+		{yun:}if $config.map_enabled{/yun}
 	    <a href="index.php?c=map" id='map_a' class="yun_prompt_writing_operation_bth" style='display:none;'>设置地图</a>
 		{yun:}/if{/yun}
 	    <a href="javascript:void(0)" id='job_a' onclick="jobadd_url('{yun:}$addjobnum{/yun}');return false;" class="yun_prompt_writing_operation_bth" style="display:none;">发布职位</a>
@@ -1017,7 +1017,7 @@
 
 
 </div>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'

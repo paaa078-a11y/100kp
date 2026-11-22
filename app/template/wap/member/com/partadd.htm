@@ -371,7 +371,7 @@
 <script src="{yun:}$plusstyle{/yun}/part.cache.js?v={yun:}$config.cachecode{/yun}"></script>
 <script src="{yun:}$wap_style{/yun}/js/partPicker.js?v={yun:}$config.cachecode{/yun}"></script>
 <script src="{yun:}$wap_style{/yun}/js/category.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -380,7 +380,7 @@
 <script type="text/javascript" src="{yun:}$config.mapurl{/yun}"></script>
 {yun:}/if{/yun}
 <script>
-	var map_key = '{yun:}$config.map_key{/yun}';
+	var map_key = '{yun:}$config.map_enabled{/yun}';
     var cityParam = {
         one_all: false,
     };

@@ -6,7 +6,7 @@
 	.none{display: none !important;}
 </style>
 <script src="{yun:}$config.sy_weburl{/yun}/js/binding.js?v={yun:}$config.cachecode{/yun}"></script> 
-{yun:}if $config.map_key{/yun} 
+{yun:}if $config.map_enabled{/yun} 
 <script src="{yun:}$config.mapurl{/yun}"></script>
 {yun:}/if{/yun}
 <script>
@@ -151,7 +151,7 @@
 					<li><a href="index.php?c=uppic"> 公司LOGO</a></li>
 					<li><a href="index.php?c=product">产品介绍</a></li>
 					<li><a href="index.php?c=news">公司资讯</a></li>
-					{yun:}if $config.map_key{/yun}
+					{yun:}if $config.map_enabled{/yun}
 					<li><a href="index.php?c=map">公司地图</a></li>
 					{yun:}/if{/yun}
 					<li><a href="index.php?c=comtpl">个性化模板</a></li>
@@ -482,7 +482,7 @@
  	
 	<div class="yun_prompt_writing_operation">
 	    <a href="index.php?c=binding" id='zzrz_a' class="yun_prompt_writing_operation_bth" style='display:none;'>开始资质认证</a>
-		{yun:}if $config.map_key{/yun}
+		{yun:}if $config.map_enabled{/yun}
 	    <a href="index.php?c=map" id='map_a' class="yun_prompt_writing_operation_bth" style='display:none;'>设置地图</a>
 		{yun:}/if{/yun}
 	    <a href="javascript:void(0)" id='job_a' onclick="jobadd_url('{yun:}$addjobnum{/yun}');return false;" class="yun_prompt_writing_operation_bth" style="display:none;">发布职位</a>

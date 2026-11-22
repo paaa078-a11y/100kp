@@ -274,6 +274,7 @@ class index_controller extends common{
     	$arr	=	array(
 			'map_x'					=>	$this->config['map_x'],
 			'map_y'					=>	$this->config['map_y'],
+			'map_type'				=>	isset($this->config['map_type']) ? $this->config['map_type'] : '1',
 			'map_rating'			=>	$this->config['map_rating'],
 			'map_control'			=>	$this->config['map_control'],
 			'map_control_anchor'	=>	$this->config['map_control_anchor'],
@@ -288,6 +289,7 @@ class index_controller extends common{
       $arr	=	array(
 		'map_x'					=>	$this->config['map_x'],
 		'map_y'					=>	$this->config['map_y'],
+		'map_type'				=>	isset($this->config['map_type']) ? $this->config['map_type'] : '1',
 		'map_rating'			=>	$this->config['map_rating'],
 		'map_control'			=>	$this->config['map_control'],
 		'map_control_anchor'	=>	$this->config['map_control_anchor'],

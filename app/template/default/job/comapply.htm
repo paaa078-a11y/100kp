@@ -322,7 +322,7 @@
                     {yun:}/if{/yun}
                     {yun:}/if{/yun}
                     {yun:}if $link.linkData.address{/yun}
-                    <span class="job_details_touch_add">地址：{yun:}$link.linkData.address{/yun}{yun:}if $Info.y!='' && $Info.x!='' && $config.map_key{/yun} 
+                    <span class="job_details_touch_add">地址：{yun:}$link.linkData.address{/yun}{yun:}if $Info.y!='' && $Info.x!='' && $config.map_enabled{/yun} 
                     <span class="job_details_topright_data_add"><a href="javascript:showmap('map_show','{yun:}$Info.x{/yun}','{yun:}$Info.y{/yun}','{yun:}$Info.com_name{/yun}','{yun:}$link.linkData.address{/yun}');" class="job_details_touch_add_a" rel="nofollow">查看上班路线</a></span> 
                     {yun:}/if{/yun}</span>
                     {yun:}/if{/yun}
@@ -1118,7 +1118,7 @@
     DD_belatedPNG.fix('.png');
 </script>
 <![endif]-->
-    {yun:}if $config.map_key{/yun}
+    {yun:}if $config.map_enabled{/yun}
     <script type="text/javascript">
     window._AMapSecurityConfig = {
         securityJsCode: '{yun:}$config.map_secret{/yun}'

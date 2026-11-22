@@ -2,7 +2,7 @@ var localCityName = '';
 //获取地图坐标
 function getmaplnglat(id,x,y,xid,yid){
 	var data=get_map_config();
-	if(data && dataindexOf('map_x')>-1){
+		if(data && data.indexOf('map_x')>-1){
 		var config=eval('('+data+')');
 		var rating,map_control_type,map_control_anchor;
 		if(!x && !y){x=config.map_x;y=config.map_y;}

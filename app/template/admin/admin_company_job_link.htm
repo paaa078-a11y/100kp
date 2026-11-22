@@ -57,7 +57,7 @@
 				<label class="layui-form-label">详细地址</label>
 				<div class="layui-input-inline" style="width: 588px;">
 					<input type="text" name="link_address" id="link_address" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input" />
-					{yun:}if $config.map_key{/yun}
+					{yun:}if $config.map_enabled{/yun}
 					<i class="admin_com_map" onclick="localsearch('全国')" style="left: 555px;"></i>
 					{yun:}/if{/yun}
 				</div>
@@ -65,7 +65,7 @@
 
 			<div class="layui-form-item">
 				<div class="layui-input-inline">
-					{yun:}if $config.map_key{/yun}
+					{yun:}if $config.map_enabled{/yun}
 					<script src="{yun:}$config.mapurl{/yun}"></script>
 					<script type="text/javascript" src="{yun:}$config.sy_weburl{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}"></script>
 					<div id="map_container" style="width:698px;height:280px;"></div>
@@ -112,7 +112,7 @@
 	var weburl = "{yun:}$config.sy_weburl{/yun}";
 	var form, url = weburl + "/index.php?m=ajax&c=get_city_option";
 	var divheight = 0;
-    {yun:}if $config.map_key{/yun}
+    {yun:}if $config.map_enabled{/yun}
     divheight = 650;
     {yun:}else{/yun}
     divheight = 370 ;
@@ -172,7 +172,7 @@
 				area : screen() < 2 ?['790px',divheight+'px'] : ['790px',$(window).height() - 50 +'px'],
 				page : {dom :"#AddressBox"}
 			});
-			{yun:}if $config.map_key{/yun}
+			{yun:}if $config.map_enabled{/yun}
 			var map =   getMap();
 
 			setLocation('map_container',116.404,39.915,"map_x","map_y",map);

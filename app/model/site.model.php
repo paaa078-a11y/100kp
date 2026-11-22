@@ -320,10 +320,20 @@ class site_model extends model
 
             $geoarr = array(
                 'bmap_webak' => $this->config['bmap_webak'],
+                'tdt_server_key' => isset($this->config['tdt_server_key']) ? $this->config['tdt_server_key'] : '',
                 'lat' => round($y, 6),
                 'lng' => round($x, 6)
             );
-            $geores = bd_reverse_geocoding($geoarr);
+            if (isset($this->config['map_type']) && (string)$this->config['map_type'] === '2'
+                && !empty($geoarr['tdt_server_key'])) {
+                $geores = tdt_reverse_geocoding($geoarr);
+                if ((!isset($geores['error']) || (int)$geores['error'] !== 1) && !empty($geoarr['bmap_webak'])) {
+                    // 天地图服务暂时不可用时保留高德逆地址解析作为回退。
+                    $geores = bd_reverse_geocoding($geoarr);
+                }
+            } else {
+                $geores = bd_reverse_geocoding($geoarr);
+            }
 
             if ($geores['error'] == 1) {
                 $province = $geores['data']['addressComponent']['province'];

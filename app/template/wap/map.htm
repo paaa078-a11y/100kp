@@ -38,7 +38,7 @@
         <li class="yun_map_cur">
             <a href="{yun:}url m=wap c=map x=$smarty.get.x y=$smarty.get.y{/yun}">列表</a>
         </li>
-		{yun:}if $config.map_key{/yun}
+		{yun:}if $config.map_enabled{/yun}
         <li>
             <a href="{yun:}url m=wap c=map a=maplist x=$smarty.get.x y=$smarty.get.y{/yun}" class="tcq_mune_msgnews_box">地图</a>
         </li>
@@ -60,7 +60,7 @@
     您的附近没有相关职位！
 </div>
 <script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/prefixfree.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -73,7 +73,7 @@
 <script type="text/javascript">
 
     var wapurl = '{yun:}url m=wap{/yun}';
-	var map_key = '{yun:}$config.map_key{/yun}';
+	var map_key = '{yun:}$config.map_enabled{/yun}';
     var currentPage = parseInt('{yun:}$smarty.get.page{/yun}') ? parseInt('{yun:}$smarty.get.page{/yun}') : 1;
     var total = 0;
 

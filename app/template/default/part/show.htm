@@ -104,7 +104,7 @@
                         <span class="yun_part_show_jobinfo_p_s">工作地址：</span>
                         <span class="con_require_con">{yun:}$job.address{/yun}</span>
                     </div>
-                    {yun:}if $config.map_key{/yun}
+                    {yun:}if $config.map_enabled{/yun}
                     <div class="con_map fl" id="company_baidu_map">
                         <div id="maps_container" style="width:300px;height:200px;"></div>
                         <div class="frc_map_look" style="text-align:center; padding-top:10px;"><a href="javascript:showmap('map_show');">查看完整地图</a></div>
@@ -317,12 +317,12 @@
     DD_belatedPNG.fix('.png');
 </script>
 <![endif]-->
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript" src="{yun:}$config.mapurl{/yun}" charset="utf-8"></script>
 <script src="{yun:}$config.sy_weburl{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
 {yun:}/if{/yun}
 <script>
-	{yun:}if $config.map_key{/yun}
+	{yun:}if $config.map_enabled{/yun}
     $(function () {		
         getmapnoshowcont_diffDomains('maps_container', "{yun:}$job.x{/yun}", "{yun:}$job.y{/yun}", "map_x", "map_y", 'company_baidu_map');
     });

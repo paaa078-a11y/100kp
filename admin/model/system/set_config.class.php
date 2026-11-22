@@ -11,6 +11,26 @@
  */
 class set_config_controller extends adminCommon{
 
+    private function build_map_url($config = array())
+    {
+        $mapType = isset($config['map_type']) && (string)$config['map_type'] === '2' ? '2' : '1';
+        $weburl = !empty($config['sy_weburl']) ? rtrim($config['sy_weburl'], '/') : '';
+
+        if ($mapType === '2') {
+            $tdtKey = !empty($config['tdt_map_key']) ? trim($config['tdt_map_key']) : '';
+            if ($tdtKey === '' || $weburl === '') {
+                return '';
+            }
+            return $weburl . '/js/tianditu-map-loader.js?tk=' . rawurlencode($tdtKey) . '&v=1.0.3';
+        }
+
+        $amapKey = !empty($config['map_key']) ? trim($config['map_key']) : '';
+        if ($amapKey === '') {
+            return '';
+        }
+        return 'https://webapi.amap.com/maps?v=2.0&key=' . rawurlencode($amapKey);
+    }
+
     /**
      * 系统-网站设置
      */
@@ -97,7 +117,10 @@ class set_config_controller extends adminCommon{
         $data['sy_zphbanner_icon'] = $this->config['sy_zphbanner_icon'];
         $data['sy_cplogo'] = $this->config['sy_cplogo'];
         $data['sy_gongzhaologo'] = $this->config['sy_gongzhaologo'];
-        $data['mapurl'] = 'https://webapi.amap.com/maps?v=2.0&key=' . $this->config['map_key'];
+        $data['mapurl'] = $this->build_map_url($this->config);
+        $data['map_type'] = isset($this->config['map_type']) && (string)$this->config['map_type'] === '2' ? '2' : '1';
+        $data['tdt_map_key'] = !empty($this->config['tdt_map_key']) ? $this->config['tdt_map_key'] : '';
+        $data['tdt_server_key'] = !empty($this->config['tdt_server_key']) ? $this->config['tdt_server_key'] : '';
         $data['map_tocity'] = $this->config['map_tocity'];
         $data['map_key'] = $this->config['map_key'];
         $data['map_secret'] = $this->config['map_secret'];
@@ -187,12 +210,16 @@ class set_config_controller extends adminCommon{
         if(isset($_POST['ctype']) && $_POST['ctype']=='mapconfig'){
             $_POST['bmap_webak'] = $_POST['con_post'];
             $_POST['map_key'] = $_POST['content'];
-            $_POST['map_secret'] = $_POST['map_secret'];
+            $_POST['map_secret'] = isset($_POST['map_secret']) ? trim($_POST['map_secret']) : '';
+            $_POST['map_type'] = isset($_POST['map_type']) && (string)$_POST['map_type'] === '2' ? '2' : '1';
+            $_POST['tdt_map_key'] = isset($_POST['tdt_map_key']) ? trim($_POST['tdt_map_key']) : '';
+            $_POST['tdt_server_key'] = isset($_POST['tdt_server_key']) ? trim($_POST['tdt_server_key']) : '';
             unset($_POST['con_post']);
             unset($_POST['content']);
         }
-        if (isset($_POST['map_key'])) {
-            $_POST['mapurl'] = 'https://webapi.amap.com/maps?v=2.0&key=' . $_POST['map_key'];
+        if (isset($_POST['map_key']) || isset($_POST['map_type']) || isset($_POST['tdt_map_key'])) {
+            $mapConfig = array_merge($this->config, $_POST);
+            $_POST['mapurl'] = $this->build_map_url($mapConfig);
         }
 
         if (!empty($_POST['sy_weburl'])) {
@@ -201,9 +228,10 @@ class set_config_controller extends adminCommon{
                 $this->render_json('1','网站地址缺少http://或https://');
             }
             // 保存域名时，相关的内容要重新保存，防止域名或http头改变后，有关功能异常
-            if (!empty($this->config['map_key'])){
+            if (!empty($this->config['map_key']) || !empty($this->config['tdt_map_key'])) {
                 // 地图地址
-                $_POST['mapurl'] = 'https://webapi.amap.com/maps?v=2.0&key=' . $this->config['map_key'];
+                $mapConfig = array_merge($this->config, $_POST);
+                $_POST['mapurl'] = $this->build_map_url($mapConfig);
             }
             if (!empty($this->config['sy_indexdomain'])){
                 // 分站默认域名

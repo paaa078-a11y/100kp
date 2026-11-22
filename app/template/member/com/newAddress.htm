@@ -111,7 +111,7 @@
                 <label class="layui-form-label">详细地址</label>
                 <div class="layui-input-inline" style="width: 588px;">
                     <input type="text" name="link_address" id="link_address" lay-verify="required" placeholder="建议格式：XX市XX县XX路" autocomplete="off" class="layui-input" onkeyup="addressKeyup();">
-                    {yun:}if $config.map_key{/yun}
+                    {yun:}if $config.map_enabled{/yun}
                     <i class="com_release_mapicon" onclick="localsearch();"></i>
                     {yun:}/if{/yun}
                     <div class="comEleaseMaps" id="poiSearch" style="display: none;"></div>
@@ -120,7 +120,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-inline">
-                    {yun:}if $config.map_key{/yun}
+                    {yun:}if $config.map_enabled{/yun}
 					<script type="text/javascript">
 						window._AMapSecurityConfig = {
 							securityJsCode:'{yun:}$config.map_secret{/yun}'
@@ -172,7 +172,7 @@
     var weburl = "{yun:}$config.sy_weburl{/yun}";
     var form, url = weburl + "/index.php?m=ajax&c=get_city_option";
 	var divheight = 0;
-    {yun:}if $config.map_key{/yun}
+    {yun:}if $config.map_enabled{/yun}
     divheight = 640;
     {yun:}else{/yun}
     divheight = 470 ;
@@ -243,7 +243,7 @@
                 area : ['790px',divheight+'px'],
                 page : {dom :"#AddressBox"}
             });
-			{yun:}if $config.map_key{/yun}
+			{yun:}if $config.map_enabled{/yun}
             var map =   getMap("map_container", '{yun:}$config.map_x{/yun}', '{yun:}$config.map_y{/yun}');
 
             if(map_x && map_y){

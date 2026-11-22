@@ -1068,6 +1068,67 @@ function latlngCheck($data = array()){
     
     return $return;
 }
+
+function map_out_of_china($lng, $lat)
+{
+    return ($lng < 72.004 || $lng > 137.8347 || $lat < 0.8293 || $lat > 55.8271);
+}
+
+function map_transform_lat($lng, $lat)
+{
+    $ret = -100.0 + 2.0 * $lng + 3.0 * $lat + 0.2 * $lat * $lat + 0.1 * $lng * $lat + 0.2 * sqrt(abs($lng));
+    $ret += (20.0 * sin(6.0 * $lng * M_PI) + 20.0 * sin(2.0 * $lng * M_PI)) * 2.0 / 3.0;
+    $ret += (20.0 * sin($lat * M_PI) + 40.0 * sin($lat / 3.0 * M_PI)) * 2.0 / 3.0;
+    $ret += (160.0 * sin($lat / 12.0 * M_PI) + 320 * sin($lat * M_PI / 30.0)) * 2.0 / 3.0;
+    return $ret;
+}
+
+function map_transform_lng($lng, $lat)
+{
+    $ret = 300.0 + $lng + 2.0 * $lat + 0.1 * $lng * $lng + 0.1 * $lng * $lat + 0.1 * sqrt(abs($lng));
+    $ret += (20.0 * sin(6.0 * $lng * M_PI) + 20.0 * sin(2.0 * $lng * M_PI)) * 2.0 / 3.0;
+    $ret += (20.0 * sin($lng * M_PI) + 40.0 * sin($lng / 3.0 * M_PI)) * 2.0 / 3.0;
+    $ret += (150.0 * sin($lng / 12.0 * M_PI) + 300.0 * sin($lng / 30.0 * M_PI)) * 2.0 / 3.0;
+    return $ret;
+}
+
+function wgs84_to_gcj02($lng, $lat)
+{
+    $lng = (float)$lng;
+    $lat = (float)$lat;
+    if (map_out_of_china($lng, $lat)) {
+        return array('lng' => $lng, 'lat' => $lat);
+    }
+    $a = 6378245.0;
+    $ee = 0.00669342162296594323;
+    $dLat = map_transform_lat($lng - 105.0, $lat - 35.0);
+    $dLng = map_transform_lng($lng - 105.0, $lat - 35.0);
+    $radLat = $lat / 180.0 * M_PI;
+    $magic = sin($radLat);
+    $magic = 1 - $ee * $magic * $magic;
+    $sqrtMagic = sqrt($magic);
+    $dLat = ($dLat * 180.0) / (($a * (1 - $ee)) / ($magic * $sqrtMagic) * M_PI);
+    $dLng = ($dLng * 180.0) / ($a / $sqrtMagic * cos($radLat) * M_PI);
+    return array('lng' => $lng + $dLng, 'lat' => $lat + $dLat);
+}
+
+function gcj02_to_wgs84($lng, $lat)
+{
+    $lng = (float)$lng;
+    $lat = (float)$lat;
+    if (map_out_of_china($lng, $lat)) {
+        return array('lng' => $lng, 'lat' => $lat);
+    }
+    $wgsLng = $lng;
+    $wgsLat = $lat;
+    for ($i = 0; $i < 3; $i++) {
+        $converted = wgs84_to_gcj02($wgsLng, $wgsLat);
+        $wgsLng -= $converted['lng'] - $lng;
+        $wgsLat -= $converted['lat'] - $lat;
+    }
+    return array('lng' => $wgsLng, 'lat' => $wgsLat);
+}
+
 function curlMappic($data=array()){
     
     include(PLUS_PATH.'config.php');
@@ -1202,13 +1263,107 @@ function bd_reverse_geocoding($data=array()){
 
     return $return;
 }
+
+function tdt_reverse_geocoding($data = array())
+{
+    $return = array('error' => 0);
+    $key = !empty($data['tdt_server_key']) ? trim($data['tdt_server_key']) : '';
+    $latlng = latlngCheck(array('lat' => $data['lat'], 'lng' => $data['lng']));
+
+    if ($key === '' || empty($latlng['lng']) || empty($latlng['lat'])) {
+        $return['error'] = -1;
+        $return['msg'] = '天地图服务端密钥或坐标无效';
+        return $return;
+    }
+
+    // 站内坐标统一保存为 GCJ-02，调用天地图服务时转换为 WGS-84。
+    $wgs = gcj02_to_wgs84($latlng['lng'], $latlng['lat']);
+    $postStr = json_encode(array(
+        'lon' => round($wgs['lng'], 6),
+        'lat' => round($wgs['lat'], 6),
+        'ver' => 1
+    ), JSON_UNESCAPED_UNICODE);
+    $url = 'https://api.tianditu.gov.cn/geocoder?postStr=' . rawurlencode($postStr)
+        . '&type=geocode&tk=' . rawurlencode($key);
+    $result = json_decode(CurlGet($url, array()), true);
+
+    if (!is_array($result) || (isset($result['msg']) && $result['msg'] !== 'ok')) {
+        $return['error'] = -1;
+        $return['msg'] = isset($result['msg']) ? $result['msg'] : '天地图逆地址解析失败';
+        return $return;
+    }
+
+    $address = isset($result['result']) && is_array($result['result']) ? $result['result'] : array();
+    $component = isset($address['addressComponent']) && is_array($address['addressComponent'])
+        ? $address['addressComponent']
+        : array();
+    $province = isset($component['province']) ? $component['province'] : '';
+    $city = isset($component['city']) && $component['city'] !== '' ? $component['city'] : $province;
+    $district = isset($component['county']) ? $component['county'] : (isset($component['district']) ? $component['district'] : '');
+
+    $return['error'] = 1;
+    $return['data'] = array(
+        'formatted_address' => isset($address['formatted_address']) ? $address['formatted_address'] : '',
+        'addressComponent' => array(
+            'province' => $province,
+            'city' => $city,
+            'district' => $district
+        )
+    );
+    return $return;
+}
+
+function tdt_keyword_geocoding($data = array())
+{
+    $key = !empty($data['tdt_server_key']) ? trim($data['tdt_server_key']) : '';
+    $keyword = !empty($data['address']) ? trim($data['address']) : '';
+    if ($key === '' || $keyword === '') {
+        return '';
+    }
+
+    $ds = json_encode(array(
+        'keyWord' => $keyword,
+        'level' => 12
+    ), JSON_UNESCAPED_UNICODE);
+    $url = 'https://api.tianditu.gov.cn/geocoder?ds=' . rawurlencode($ds)
+        . '&tk=' . rawurlencode($key);
+    $result = json_decode(CurlGet($url, array()), true);
+    if (!is_array($result) || !isset($result['location']) || !is_array($result['location'])) {
+        return '';
+    }
+
+    $location = $result['location'];
+    $lng = isset($location['lon']) ? $location['lon'] : (isset($location['lng']) ? $location['lng'] : '');
+    $lat = isset($location['lat']) ? $location['lat'] : '';
+    if ($lng === '' || $lat === '') {
+        return '';
+    }
+    $gcj = wgs84_to_gcj02($lng, $lat);
+    $detail = isset($result['result']) && is_array($result['result']) ? $result['result'] : array();
+    $formatted = isset($detail['formatted_address']) ? $detail['formatted_address'] : $keyword;
+
+    return json_encode(array(
+        'count' => 1,
+        'tips' => array(array(
+            'name' => $formatted,
+            'address' => $formatted,
+            'location' => round($gcj['lng'], 6) . ',' . round($gcj['lat'], 6),
+            'value' => $formatted
+        ))
+    ), JSON_UNESCAPED_UNICODE);
+}
+
 function getPoi($data=array()){
 
     include(PLUS_PATH.'config.php');
     
     $res = '';
 
-    if($config['bmap_webak'] && $data['address']){
+    if (isset($config['map_type']) && (string)$config['map_type'] === '2'
+        && !empty($config['tdt_server_key']) && !empty($data['address'])) {
+        $data['tdt_server_key'] = $config['tdt_server_key'];
+        $res = tdt_keyword_geocoding($data);
+    } elseif($config['bmap_webak'] && $data['address']){
 
         $url = 'https://restapi.amap.com/v3/assistant/inputtips?key='. $config['bmap_webak'] .'&keywords='.$data['address'];
         

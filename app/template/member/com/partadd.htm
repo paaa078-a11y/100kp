@@ -158,7 +158,7 @@
                       <div class="comEleaseMaps" id="poiSearch" style="display: none;"></div>
                           </div>
                   <div class="clear"></div>
-                  {yun:}if $config.map_key{/yun}
+                  {yun:}if $config.map_enabled{/yun}
                   <div id="map_container" style="width:70%;height:300px; left:0px;margin-top:15px;"></div>
                   {yun:}/if{/yun}
                   <input name="x" id="map_x" type="hidden" value="{yun:}$row.x{/yun}">
@@ -264,7 +264,7 @@ layui.use(['form', 'laydate'], function(){
 		toolbars:[[ 'Source','|', 'Undo', 'Redo','Bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'fontfamily', 'fontsize',  'forecolor', 'backcolor', 'removeformat', 'autotypeset', 'pasteplain', '|','insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|','simpleupload', '|', 'indent', '|','justifyleft', 'justifycenter', 'justifyright', 'justifyjustify']],wordCount:false,elementPathEnabled:false,initialFrameHeight:200
 	});
 </script>
-{yun:}if $config.map_key{/yun}
+{yun:}if $config.map_enabled{/yun}
 <script type="text/javascript">
 	window._AMapSecurityConfig = {
 		securityJsCode:'{yun:}$config.map_secret{/yun}'

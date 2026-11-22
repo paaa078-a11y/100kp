@@ -173,7 +173,7 @@
         </a>
         ㊭ 地址：{yun:}$job.job_city_one{/yun}-{yun:}$job.job_city_two{/yun}
         {yun:}if $link.linkData.address{/yun}
-        {yun:}if $job.x && $job.y&&$config.map_key{/yun}
+        {yun:}if $job.x && $job.y&&$config.map_enabled{/yun}
         <!-- 预留地图部分 -->
         <a href="{yun:}url m=wap c=job a=jobmap id=$job.id{/yun}">
             <div class="corporate_information_map">

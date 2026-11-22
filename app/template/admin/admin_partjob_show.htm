@@ -236,7 +236,7 @@
 			        <tr>
 			          	<th width="120"></th>
 			          	<td width="100%" height="300">
-			            	{yun:}if $config.map_key{/yun}
+			            	{yun:}if $config.map_enabled{/yun}
 			          		<script src="{yun:}$config.mapurl{/yun}"></script> 
 							<script type="text/javascript" src="{yun:}$config.sy_weburl{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}"></script>
 			            	<div id="map_container" style="width:70%;height:300px;"></div>
@@ -291,7 +291,7 @@
 	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
 	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
 	<script>
-		{yun:}if $config.map_key{/yun}
+		{yun:}if $config.map_enabled{/yun}
 		var map=new BMap.Map("map_container");
 		setLocation('map_container',116.404,39.915,"map_x","map_y");
 		$(document).ready(function() {
