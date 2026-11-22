@@ -14,6 +14,38 @@ class site_controller extends common{
             $this->ACT_msg_wap($_SERVER['HTTP_REFERER'], $msg = "暂未开启多站点模式！",2,5);
         }
 
+        $siteinfo = getLocalCity();
+        if ($siteinfo) {
+            if ($siteinfo['mode'] == '2') {
+                $siteinfo['host'] = rtrim($this->config['sy_indexdomain'], '/') . '/' . trim($siteinfo['indexdir'], '/') . '/';
+            } else {
+                $siteinfo['host'] = getprotocol($this->config['sy_weburl']) . $siteinfo['host'];
+            }
+            $this->yunset('siteinfo', $siteinfo);
+            $this->yunset('vurl', $siteinfo['host']);
+        }
+
+        $siteCityData = get_site_city_groups();
+        $this->yunset('province_groups', $siteCityData['groups']);
+        $this->yunset('province_list', $siteCityData['provinces']);
+        $localHotCities = array();
+        $localProvinceId = $siteinfo && !empty($siteinfo['province']) ? (int)$siteinfo['province'] : 0;
+        foreach ($siteCityData['groups'] as $provinces) {
+            foreach ($provinces as $province) {
+                if (($localProvinceId && $province['id'] == $localProvinceId) || (!$localProvinceId && $province['name'] == '福建')) {
+                    $localHotCities = array_slice($province['cities'], 0, 16);
+                    break 2;
+                }
+            }
+        }
+        if (empty($localHotCities)) {
+            $localHotCities = array_slice($siteCityData['cities'], 0, 16);
+        }
+        $currentCityName = $siteinfo && !empty($siteinfo['cityname'])
+            ? $siteinfo['cityname']
+            : (!empty($this->config['cityname']) ? $this->config['cityname'] : $this->config['sy_indexcity']);
+        $this->yunset('local_hot_cities', $localHotCities);
+        $this->yunset('current_city_name', $currentCityName);
         $this->yunset("headertitle","分站");
         $this->seo("index");
         $this->yuntpl(array('wap/site'));
@@ -23,28 +55,9 @@ class site_controller extends common{
 		include(PLUS_PATH."domain_cache.php");
 		include(PLUS_PATH."config.php");
 		
-		$domainarr = array();
 		$hy_site = array();
 		foreach($site_domain as $k=>$v){
-			if($v['fz_type']=='1' && $v['is_show'] == '1'){
-				if($v['three_cityid']>0){
-					$cityid=$v['three_cityid'];
-				}elseif($v['cityid']>0){
-					$cityid=$v['cityid'];
-				}else{
-					$cityid=$v['province'];
-				}
-				
-				if($v['mode']=='2'){
-					$indexdir[$cityid] = $v['indexdir'];
-					$domainarr[$cityid]=$config['sy_weburl'].'/'.$v['indexdir'].'/';
-				}else{
-					$protocol   =   getprotocol($config['sy_weburl']);
-					$domainarr[$cityid]=$protocol.$v['host'];
-				}
-				
-				$city_id[]=$cityid;
-			}elseif($v['fz_type']=='2' && $v['is_show'] == '1'){
+			if($v['fz_type']=='2' && $v['is_show'] == '1'){
 			    
 			    if($v['mode']=='2'){
 			        $v['url']=$config['sy_weburl'].'/'.$v['indexdir'].'/';
@@ -55,19 +68,10 @@ class site_controller extends common{
 			    $hy_site[]=$v;
 			} 
 		}
-		$city_ids=implode(",",$city_id);
-		$sitecity=$db->select_all("city_class","`id` in(".$city_ids.")","`id`,`name`,`letter`");
-		$city_ABC = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-		foreach($city_ABC as $key=>$val){
-			foreach($sitecity as $v){
-				if($val==$v['letter']){
-					$v['indexdir']=$indexdir[$v['id']];
-					$v['url']=$domainarr[$v['id']];
-					$site[$val][] = $v;
-				}
-			}
-		}
-		$return['city'] = $site;
+		$cityData = get_site_city_groups();
+		$return['province_groups'] = $cityData['groups'];
+		$return['provinces'] = $cityData['provinces'];
+		$return['cities'] = $cityData['cities'];
 		$return['hy'] = $hy_site;
 		echo json_encode($return);
 	}

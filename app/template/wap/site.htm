@@ -1,198 +1,147 @@
 {yun:}include file="$wapstyle/header.htm"{/yun}
-<style>
-.search_type {padding: 8px 5px; width: calc(25% - 10px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  display: inline-block; font-size: 16px; line-height: 16px; text-align: center;}
-.search_types_title { padding: 10px 20px 20px 20px;}
-.search_types_content {overflow: hidden; transition: height 0.5s; padding-bottom: 9px; width: 100%;}
-.anc {border-left: 5px solid #F4243E; padding-left: 10px; font-size: 16px; float: left;}
-.ant {color: #A6A6A6; font-size: 14px; padding-right: 20px; float: right;}
-.floatbox:after {content: ''; display: block; clear: both;}
-.wcolor {background: #fff;}
-</style>
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/site-city.css?v={yun:}$config.cachecode{/yun}&citypage=4">
 
-<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/app/template/wap/css/css.css?v={yun:}$config.cachecode{/yun}" type="text/css">
-<link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
-
-<header class="nav_bar">
-	<div class="header_bg">
-		<a class="hd-lbtn" href="javascript:goBack();"><i class="header_top_l iconfont"></i></a>
-		<div class="header_h1">{yun:}$headertitle{/yun}</div>
-	</div>
+<header class="city-mobile-head">
+    <a href="javascript:history.back();" class="city-mobile-back" aria-label="返回"></a>
+    <h1>分站</h1>
 </header>
 
-<div id="app" class="none">
-    
-<div class="search_types_title floatbox wcolor"><span class="anc">热门城市</span><a href="https://www.100kp.com/wap/" target="_self" class="ant">返回主页</a></div>
-<div class="search_types_content wcolor">
-<a href="https://bj.100kp.com/" target="_blank" class="search_type">北京</a>
-<a href="https://sh.100kp.com/" target="_blank" class="search_type">上海</a>
-<a href="https://gz.100kp.com/" target="_blank" class="search_type">广州</a>
-<a href="https://sz.100kp.com/" target="_blank" class="search_type">深圳</a>
-<a href="https://cd.100kp.com/" target="_blank" class="search_type">成都</a>
-<a href="https://hz.100kp.com/" target="_blank" class="search_type">杭州</a>
-<a href="https://tj.100kp.com/" target="_blank" class="search_type">天津</a>
-<a href="https://wh.100kp.com/" target="_blank" class="search_type">武汉</a>
-<a href="https://cq.100kp.com/" target="_blank" class="search_type">重庆</a>
-<a href="https://nj.100kp.com/" target="_blank" class="search_type">南京</a>
-<a href="https://zz.100kp.com/" target="_blank" class="search_type">郑州</a>
-<a href="https://cs.100kp.com/" target="_blank" class="search_type">长沙</a>
-</div>
-    
-	<van-search v-model="searchKey" placeholder="搜索分站" ></van-search>
-	<van-index-bar :index-list="indexList" :sticky='false'>
-		<van-cell v-show="allShow">
-			<a href="javascript:void(0)" onclick="setsite('-1','')">{yun:}$config.sy_indexcity{/yun}</a>
-		</van-cell>
-		
-		<template v-if="cityShow">
-			<template :index="cityKey" v-for="(cityValue,cityKey) in filterTex(searchKey, 1)">
-				<div>
-					<van-index-anchor v-if="cityValue != ''">{{cityKey}}</van-index-anchor>
-					<van-cell :index="item.name" v-for="(item,index) in cityValue" @click="changeSite(item.url)">
-						{{item.name}}
-					</van-cell>
-				</div>
-			</template>
-		</template>
+<main id="cityMobile" class="city-mobile-page">
+    <section class="city-mobile-block">
+        <div class="city-mobile-title">
+            <h2>热门城市</h2>
+            <a href="{yun:}url m=wap{/yun}">返回主页</a>
+        </div>
+        <div class="city-mobile-hot city-mobile-hot-main">
+            <a href="https://bj.100kp.com/m/">北京</a>
+            <a href="https://sh.100kp.com/m/">上海</a>
+            <a href="https://gz.100kp.com/m/">广州</a>
+            <a href="https://sz.100kp.com/m/">深圳</a>
+            <a href="https://cd.100kp.com/m/">成都</a>
+            <a href="https://hz.100kp.com/m/">杭州</a>
+            <a href="https://tj.100kp.com/m/">天津</a>
+            <a href="https://wh.100kp.com/m/">武汉</a>
+            <a href="https://cq.100kp.com/m/">重庆</a>
+            <a href="https://nj.100kp.com/m/">南京</a>
+            <a href="https://zz.100kp.com/m/">郑州</a>
+            <a href="https://cs.100kp.com/m/">长沙</a>
+        </div>
+    </section>
 
-		<div v-show="hyShow">
-			<van-index-anchor >行业分站</van-index-anchor>
-			<van-cell :index="hyKey" v-for="(item,hyKey) in filterTex(searchKey, 2)" @click="changeSite(item.url)">
-				{{item.webname}}
-			</van-cell>
-		</div>
-	</van-index-bar>
-</div>
+    <section class="city-mobile-block city-mobile-current">
+        <div class="city-mobile-current-row">
+            <span>当前城市：</span>
+            {yun:}if $siteinfo.cityname{/yun}
+            <a href="{yun:}$vurl{/yun}m/">{yun:}$current_city_name{/yun}</a>
+            {yun:}else{/yun}
+            <strong>{yun:}$current_city_name{/yun}</strong>
+            {yun:}/if{/yun}
+        </div>
+        <div class="city-mobile-current-row">
+            <span class="city-mobile-location">当前定位：</span>
+            <strong>{yun:}$current_city_name{/yun}</strong>
+            <a class="city-mobile-relocate" href="javascript:location.reload();">重新定位</a>
+        </div>
+        <div class="city-mobile-search">
+            <span class="city-mobile-search-icon"></span>
+            <input id="mobileCitySearch" type="search" autocomplete="off" placeholder="请输入城市名或首字母">
+            <div id="mobileCitySearchResult" class="city-mobile-search-result"></div>
+        </div>
+    </section>
 
-<script>var weburl="{yun:}$config.sy_weburl{/yun}",wapurl="{yun:}url m=wap{/yun}";</script>
-{yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
-<script type="text/javascript" charset="utf-8">
-function replaceSubdomain(url, replacement) {
-    // 正则表达式匹配子域名
-    const regex = /^(?:https?:\/\/)?([^.]+)\.(.+)/;
-    const match = url.match(regex);
+    <section class="city-mobile-block">
+        <div class="city-mobile-title">
+            <h2>热门城市</h2>
+            <a href="{yun:}$config.sy_indexdomain{/yun}/m/">切换全国站</a>
+        </div>
+        <div class="city-mobile-hot">
+            {yun:}foreach item=city from=$local_hot_cities{/yun}
+            <a href="{yun:}$city.url{/yun}m/">{yun:}$city.name{/yun}</a>
+            {yun:}/foreach{/yun}
+        </div>
+    </section>
 
-    if (match) {
-        // 如果找到匹配项，那么第一个捕获组就是子域名，第二个捕获组是剩余部分
-        const subdomain = match[1];
-        const domainRest = match[2];
-        const newUrl = `http://${replacement}.${domainRest}`;
-        return newUrl;
+    <section class="city-mobile-block city-mobile-groups">
+        <div class="city-mobile-title">
+            <h2>按省份首字母选择</h2>
+            <a href="{yun:}$config.sy_indexdomain{/yun}/m/">切换全国站</a>
+        </div>
+        {yun:}foreach key=letter item=provinces from=$province_groups{/yun}
+        <div class="city-mobile-letter-group">
+            <div class="city-mobile-letter">{yun:}$letter{/yun}</div>
+            <div class="city-mobile-provinces">
+                {yun:}foreach item=province from=$provinces{/yun}
+                <div class="city-mobile-province" data-province="{yun:}$province.name{/yun}">
+                    <div class="city-mobile-province-name">{yun:}$province.name{/yun}</div>
+                    <div class="city-mobile-cities">
+                        {yun:}foreach item=city from=$province.cities{/yun}
+                        <a href="{yun:}$city.url{/yun}m/"
+                           data-name="{yun:}$city.name{/yun}"
+                           data-e-name="{yun:}$city.e_name{/yun}"
+                           data-letter="{yun:}$city.letter{/yun}"
+                           data-province="{yun:}$city.province_name{/yun}"
+                           data-url="{yun:}$city.url{/yun}m/">{yun:}$city.name{/yun}</a>
+                        {yun:}/foreach{/yun}
+                    </div>
+                </div>
+                {yun:}/foreach{/yun}
+            </div>
+        </div>
+        {yun:}/foreach{/yun}
+    </section>
+</main>
+
+<script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+(function () {
+    var input = document.getElementById('mobileCitySearch');
+    var result = document.getElementById('mobileCitySearchResult');
+    var groups = document.querySelector('.city-mobile-groups');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.city-mobile-cities a'));
+
+    function search() {
+        var keyword = input.value.trim().toLowerCase();
+        if (!keyword) {
+            result.style.display = 'none';
+            result.innerHTML = '';
+            groups.classList.remove('searching');
+            Array.prototype.forEach.call(document.querySelectorAll('.city-mobile-province'), function (row) {
+                row.style.display = '';
+            });
+            return;
+        }
+        var matches = links.filter(function (link) {
+            return link.dataset.name.indexOf(keyword) > -1 ||
+                link.dataset.eName.toLowerCase().indexOf(keyword) === 0 ||
+                link.dataset.letter.toLowerCase() === keyword;
+        }).slice(0, 20);
+        if (!matches.length) {
+            result.innerHTML = '<div class="city-mobile-empty">未找到匹配城市</div>';
+            result.style.display = 'block';
+            return;
+        }
+        result.innerHTML = matches.map(function (link) {
+            return '<a href="' + link.dataset.url + '"><span>' + link.dataset.name +
+                '</span><em>' + link.dataset.province + '</em></a>';
+        }).join('');
+        result.style.display = 'block';
     }
 
-    // 如果没有匹配或者不需要替换，则返回原 URL
-    return url;
-}
-// 	function setsite(id){
-// 		$.post("{yun:}url m=wap c=site a=domain{/yun}",{id:id},function(data){
-// 			window.location.href=wapurl;
-// 		});
-// 	}
-
-function setsite(cityid,name){
-	$.post("{yun:}url m=wap c=site a=domain{/yun}",{cityid:cityid,cityname:name},function(data){
-	    wapurl = replaceSubdomain(wapurl, 'www')
-  		// console.log(data);
-  		// window.location.href=data.url;
-  		window.location.href= wapurl.replace(/\/m\//g, "/wap/");
-	}, 'json');
-}
-
-// function setsite(cityid,name){
-// 	$.post("{yun:}url m=wap c=site a=domain{/yun}",{cityid:cityid,cityname:name},function(data){
-// 	   // wapurl = replaceSubdomain(wapurl, 'www')
-//   		console.log(data);
-//   		window.location.href=data.url;
-//   		// window.location.href=wapurl;
-// 	}, 'json');
-// }
-	var arr = {};
-
-	var vm = new Vue({
-		el: '#app',
-		name:"list",
-		data: {
-			cityList:[],
-			indexList:[],
-			hyList:[],
-			searchKey:'',
-			cityShow:true,
-			hyShow:true,
-			allShow:true,
-		},
-		created() {
-			this.getSite()
-		},
-		methods: {
-			getSite(){
-				let self = this;
-				$.post(wapurl+'index.php?c=site&a=cache',{rand: Math.random()}, function(res){
-					self.cityList = res.city;
-					self.hyList = res.hy;
-					$.each(res.city, function(index, item){
-						self.indexList.push(index);
-					});
-					$('#app').css('display','block');
-				},'json');
-			},
-			filterTex(indexKey, flag){
-				var $this=this;
-				var isReturn = false;
-				let newCityArray = newHyArray = {};
-				$this.allShow = indexKey ? false : true;
-				if (flag == 1) {
-					if (indexKey) {
-						$.each(this.cityList, function(index, citys){
-							newCityArray[index] = citys.filter(function(item, index){
-								if (item.name.includes(indexKey)) {
-									return item;
-								}
-							})
-						});
-						$.each(newCityArray, function(index, item){
-							if (item != '') {
-								isReturn = true;
-								return;
-							}
-						});
-
-						if (isReturn) {
-							$this.hyShow = false;
-							return newCityArray;
-						}
-					} else {
-						$this.hyShow = true;
-						return $this.cityList;
-					}
-				} else {
-					if (indexKey) {
-						newHyArray = this.hyList.filter(function(item){
-							if (item.hyname.includes(indexKey)) {
-								return item;
-							}
-						});
-						$this.hyShow = newHyArray != '' ? true : false;
-						if (newHyArray) {
-							return newHyArray;
-						}
-					} else {
-						$this.cityShow = true;
-						return $this.hyList;
-					}
-				}
-			},
-			changeSite(url){
-			    var pathname = window.location.pathname || "";
-			    if(pathname.indexOf("/m/") >= 0){
-			        window.location.href = url.indexOf("/m/") < 0  ? url + "/m/" : url;
-			      
-			    }else{
-				    window.location.href = url;
-			    }
-			}
-		}
-	});
-
+    input.addEventListener('input', search);
+    result.addEventListener('click', function (event) {
+        var link = event.target.closest('a');
+        if (link) {
+            window.location.href = link.href;
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.city-mobile-search')) {
+            result.style.display = 'none';
+        }
+    });
+})();
 </script>
 
+{yun:}include file="$wapstyle/footer.htm"{/yun}
 </body>
 </html>

@@ -430,6 +430,125 @@ function getLocalCity()
     return $cityInfo;
 }
 
+function get_site_city_groups()
+{
+    global $db;
+    include(PLUS_PATH . 'domain_cache.php');
+    include(PLUS_PATH . 'config.php');
+    include(PLUS_PATH . 'city.cache.php');
+    include(PLUS_PATH . 'cityparent.cache.php');
+
+    $activeSites = array();
+    $lookupIds = array();
+    foreach ($site_domain as $site) {
+        if ($site['fz_type'] != '1' || $site['is_show'] != '1') {
+            continue;
+        }
+        if (!empty($site['three_cityid'])) {
+            $cityId = (int)$site['three_cityid'];
+        } elseif (!empty($site['cityid'])) {
+            $cityId = (int)$site['cityid'];
+        } else {
+            $cityId = (int)$site['province'];
+        }
+        if ($cityId <= 0) {
+            continue;
+        }
+        if ($site['mode'] == '2') {
+            $url = rtrim($config['sy_weburl'], '/') . '/' . trim($site['indexdir'], '/') . '/';
+        } else {
+            $url = getprotocol($config['sy_weburl']) . $site['host'];
+        }
+        $activeSites[$cityId] = array(
+            'id' => $cityId,
+            'name' => $site['cityname'],
+            'url' => rtrim($url, '/') . '/'
+        );
+        $lookupIds[$cityId] = $cityId;
+    }
+
+    $provinceIds = array();
+    foreach ($activeSites as $cityId => $site) {
+        $nodeId = $cityId;
+        for ($i = 0; $i < 4; $i++) {
+            if (in_array((string)$nodeId, $city_index)) {
+                $provinceIds[$cityId] = (int)$nodeId;
+                break;
+            }
+            if (empty($city_parent[$nodeId])) {
+                break;
+            }
+            $nodeId = (int)$city_parent[$nodeId];
+            $lookupIds[$nodeId] = $nodeId;
+        }
+    }
+
+    $classMap = array();
+    if (!empty($lookupIds)) {
+        $rows = $db->select_all(
+            'city_class',
+            '`id` in(' . implode(',', array_map('intval', $lookupIds)) . ')',
+            '`id`,`name`,`letter`,`e_name`'
+        );
+        foreach ($rows as $row) {
+            $classMap[(int)$row['id']] = $row;
+        }
+    }
+
+    $groups = array();
+    $provinces = array();
+    $flatCities = array();
+    foreach ($activeSites as $cityId => $site) {
+        if (empty($provinceIds[$cityId]) || $cityId === $provinceIds[$cityId]) {
+            continue;
+        }
+        $provinceId = $provinceIds[$cityId];
+        if (empty($city_parent[$cityId]) || (int)$city_parent[$cityId] !== $provinceId) {
+            continue;
+        }
+        $province = isset($classMap[$provinceId]) ? $classMap[$provinceId] : array();
+        $city = isset($classMap[$cityId]) ? $classMap[$cityId] : array();
+        $letter = !empty($province['letter']) ? strtoupper($province['letter']) : '#';
+        $provinceName = !empty($province['name']) ? $province['name'] : (isset($city_name[$provinceId]) ? $city_name[$provinceId] : '');
+        $cityName = !empty($city['name']) ? $city['name'] : $site['name'];
+        $cityItem = array(
+            'id' => (int)$cityId,
+            'name' => $cityName,
+            'e_name' => !empty($city['e_name']) ? $city['e_name'] : '',
+            'url' => $site['url'],
+            'province_id' => (int)$provinceId,
+            'province_name' => $provinceName,
+            'letter' => $letter
+        );
+        $groups[$letter][$provinceId]['id'] = (int)$provinceId;
+        $groups[$letter][$provinceId]['name'] = $provinceName;
+        $groups[$letter][$provinceId]['letter'] = $letter;
+        $groups[$letter][$provinceId]['cities'][(int)$cityId] = $cityItem;
+        $provinces[$provinceId] = array(
+            'id' => (int)$provinceId,
+            'name' => $provinceName,
+            'letter' => $letter
+        );
+        $flatCities[(int)$cityId] = $cityItem;
+    }
+
+    ksort($groups);
+    foreach ($groups as $letter => $provinceGroup) {
+        ksort($groups[$letter]);
+        foreach ($groups[$letter] as $provinceId => $provinceGroupItem) {
+            $groups[$letter][$provinceId]['cities'] = array_values($provinceGroupItem['cities']);
+        }
+        $groups[$letter] = array_values($groups[$letter]);
+    }
+    ksort($provinces);
+
+    return array(
+        'groups' => $groups,
+        'provinces' => array_values($provinces),
+        'cities' => array_values($flatCities)
+    );
+}
+
 function go_to_city($config)
 {
 

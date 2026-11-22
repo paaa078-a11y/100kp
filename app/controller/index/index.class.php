@@ -420,6 +420,10 @@ class index_controller extends common{
 
 		}
 
+		$siteCityData = get_site_city_groups();
+		$this->yunset('province_groups', $siteCityData['groups']);
+		$this->yunset('province_list', $siteCityData['provinces']);
+
 		$this->seo("index");
 
 		$this->yun_tpl(array('site'));
