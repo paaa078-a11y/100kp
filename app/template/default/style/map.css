@@ -243,3 +243,4 @@ i.job{background-image: url(../images/map_icon_job.png);background-repeat: none;
 .map_comlist_c{border:1px solid #eee;border-radius:3px;}
 .new_map_lookjob{ padding:4px 10px; background:#fe5356;border-radius:2px; position:absolute;right:10px;top:20px;color:#fff}
 .map_no_job{width:100%; text-align:center; padding-top:200px;color:#999; background:url(../images/no1.png) no-repeat center 120px;}
+.map-list-loading{height:500px;line-height:500px;color:#999;text-align:center;background:#fff}

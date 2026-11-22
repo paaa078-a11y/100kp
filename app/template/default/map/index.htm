@@ -6,7 +6,7 @@
 		<meta name="description" content="{yun:}$description{/yun}" />
 
 		<link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
-		<link href="{yun:}$style{/yun}/style/map.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$style{/yun}/style/map.css?v={yun:}$config.cachecode{/yun}&mapfix=4" rel="stylesheet" type="text/css" />
 
 		<title>{yun:}$title{/yun}</title>
 	</head>
@@ -35,8 +35,7 @@
 				</div>
 
 				<div id="newcontent" class="new_map_jobbox">
-
-
+					<div class="map-list-loading">正在加载附近职位...</div>
 				</div>
 				<div id="Pagination" class="pagination"></div>
 			</div>
@@ -86,7 +85,7 @@
 			}
 		</script>
 		<script type="text/javascript" src="{yun:}$config.mapurl{/yun}" charset="utf-8"></script>
-		<script src="{yun:}$style{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$style{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}&mapfix=4"></script>
 		{yun:}/if{/yun}
 		
 		<div class="none">
