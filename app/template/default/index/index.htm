@@ -7,8 +7,8 @@
     <title>{yun:}$title{/yun}</title>
     <meta name="keywords" content="{yun:}$keywords{/yun}"/>
     <meta name="description" content="{yun:}$description{/yun}"/>
-    <link href="{yun:}$style{/yun}/style/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
-    <link href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="{yun:}$style{/yun}/style/index.css?v={yun:}$config.cachecode{/yun}&adscroll=2" rel="stylesheet" type="text/css"/>
+    <link href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}&adscroll=2" rel="stylesheet" type="text/css"/>
     <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
     <link href="{yun:}$config.sy_weburl{/yun}/js/swiper/swiper-bundle.min.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
     {yun:}if $ishtml{/yun}
@@ -544,7 +544,6 @@
             <span class="ban_close" onclick="colse_bottom()">关闭</span>
             {yun:}$footer_ad.lay_html{/yun}
         </div>
-        <input type="hidden" value='1' id='bottom_ad_is_show'/>
     </div>
     {yun:}/adlist{/yun}
 
@@ -560,7 +559,7 @@
 
 {yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
 <script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
-<script src="{yun:}$style{/yun}/js/index.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$style{/yun}/js/index.js?v={yun:}$config.cachecode{/yun}&adscroll=2" language="javascript"></script>
 <script src="{yun:}$style{/yun}/js/reg_ajax.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
 <script src="{yun:}$config.sy_weburl{/yun}/js/slides.jquery.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
 <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
@@ -664,17 +663,15 @@
             $(this).siblings().removeClass('show').find('.moren').show();
             $(this).siblings().find('.lr-show').hide();
         });
-        var a = '{yun:}if $config.sy_footer_fix=="1"{/yun}';
-        $.get('{yun:}url m=ajax c=footertj{/yun}', {
-            rand: Math.random()
-        }, function (data) {
-            $(".tip_bottom_left").html(data);
-            if ($('#tip_bottom')) {
-                $('#tip_bottom').show();
-            }
-
-        })
-        var b = '{yun:}/if{/yun}';
+        if ($('#tip_bottom').length) {
+            $.get('{yun:}url m=ajax c=footertj{/yun}', {
+                rand: Math.random()
+            }, function (data) {
+                $(".tip_bottom_left").html(data);
+                $('#tip_bottom').removeClass('none').attr('data-ready', '1');
+                updateBottomAds();
+            });
+        }
     });
 
 

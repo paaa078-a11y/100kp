@@ -137,16 +137,15 @@ $(function(){
 
 /*首页广告*/
 $(document).ready(function(){	
-	$('#bottom_ad_is_show').val('1');
 	var duilian = $("div.duilian");
 	var duilian_close = $(".btn_close");
 	var scroll_Top = $(window).scrollTop();
 	var window_w = $(window).width();
 	if(window_w>1000){duilian.show();}
-	buttom_ad();
+	updateBottomAds();
 	$("div .duilian").css("top",scroll_Top+200);
 	$(window).scroll(function(){
-		buttom_ad();
+		updateBottomAds();
 		var scroll_Top = $(window).scrollTop();
 		duilian.stop().animate({top:scroll_Top+200});
 	});
@@ -154,29 +153,20 @@ $(document).ready(function(){
 		$(this).parents('.duilian').hide();
 		return false;
 	});
+	$('#tip_bottom').on('click', '.tip_bottom_close, .tip_bottom_close2', function(){
+		$(this).closest('#tip_bottom').attr('data-closed', '1').removeClass('is-visible').hide();
+	});
 });
 
 function colse_bottom(){
-	$("#bottom_ad_fl").parent().hide();
-	$('#bottom_ad_is_show').val('0');
+	$('#footer_ad .footer_ban').attr('data-closed', '1').removeClass('is-visible');
 }
-function buttom_ad(){
-	if($("#bottom_ad").length>0&&$("#bottom_ad_is_show").length>0){
-		var scrollTop = $(window).scrollTop();
-		var w_height=$(document).height();
-		var bottom_ad=$("#bottom_ad").offset().top;
-		var bottom_ad_fl=$("#bottom_ad_fl").offset().top;
-		var poor_height=parseInt(w_height)-parseInt(scrollTop);
-		var bottom_ad_is_show=$('#bottom_ad_is_show').val();
-		if(window.attachEvent){
-			poor_height=parseInt(poor_height)-parseInt(22);
-		}
-		if(poor_height<=880){
-			$("#bottom_ad_fl").parent().hide();
-		}else if(bottom_ad_is_show=='1'){
-			$("#bottom_ad_fl").parent().show();
-		}
-	}
+function updateBottomAds(){
+	var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+	var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+	var show = scrollTop > viewportHeight;
+	$('#tip_bottom[data-ready="1"]').not('[data-closed="1"]').toggleClass('is-visible', show);
+	$('#footer_ad .footer_ban').not('[data-closed="1"]').toggleClass('is-visible', show);
 }
 /*首页广告结束*/
 function showDiv2(obj){
