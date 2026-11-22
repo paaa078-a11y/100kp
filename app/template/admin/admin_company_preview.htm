@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+
+	</head>
+
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div id="leftbox" class="admin_jobleft">
+				<div class="admin_jobname">{yun:}$Info.name{/yun}</div>
+				<div><span style="padding: 0px 15px; display: inline-block;">	IP：{yun:}$Info.login_ip{/yun}</span>{yun:}if $Info.login_address{/yun} IP归属地：{yun:}$Info.login_address{/yun} {yun:}/if{/yun}</div>	
+				{yun:}if $Info.shortname{/yun}
+				<div class="admin_jobmx"> 企业简称：{yun:}$Info.shortname{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.hy{/yun}
+				<div class="admin_jobmx"> 从事行业：{yun:}$Info.hy_n{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.pr{/yun}
+				<div class="admin_jobmx"> 企业性质：{yun:}$Info.pr_n{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.mun{/yun}
+				<div class="admin_jobmx"> 企业规模：{yun:}$Info.mun_n{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.money{/yun}
+				<div class="admin_jobmx"> 注册资金：{yun:}$Info.money{/yun} {yun:}$Info.moneytype_n{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.content{/yun}
+				<div class="admin_jobh1"> 企业简介</div>
+				<div class="admin_jobp">
+					{yun:}$Info.content{/yun}
+				</div>
+				{yun:}/if{/yun}
+
+
+				{yun:}if $Info.welfare{/yun}
+				<div class="admin_jobh1"> 福利待遇</div>
+				{yun:}if $Info.welfare_n{/yun}
+				<div class="admin_jobfl">
+					{yun:}foreach from=$Info.welfare_n item=wlist{/yun}
+					<span class="admin_jobfl_n ">{yun:}$wlist{/yun}</span>
+					{yun:}/foreach{/yun}
+				</div>
+				{yun:}/if{/yun}
+				{yun:}/if{/yun}
+
+				<div class="admin_jobh1"> 联系方式</div>
+				{yun:}if $Info.linkman{/yun}
+				<div class="admin_jobp"> 联系人：{yun:}$Info.linkman{/yun} {yun:}if $Info.linkjob{/yun}（{yun:}$Info.linkjob{/yun}）{yun:}/if{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linktel{/yun}
+				<div class="admin_jobp"> 联系手机：{yun:}$Info.linktel{/yun}  {yun:}if $Info.infostatus == 1{/yun}（公开）{yun:}else{/yun}（不公开）{yun:}/if{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linkphone{/yun}
+				<div class="admin_jobp"> 固定电话：{yun:}$Info.linkphone{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linkmail{/yun}
+				<div class="admin_jobp"> 联系邮箱：{yun:}$Info.linkmail{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.shortname{/yun}
+				<div class="admin_jobp"> 联系QQ：{yun:}$Info.shortname{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.website{/yun}
+				<div class="admin_jobp"> 企业网址：{yun:}$Info.website{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.provinceid{/yun}
+				<div class="admin_jobp"> 企业地址：{yun:}$Info.job_city_one{/yun} {yun:}$Info.job_city_two{/yun} {yun:}$Info.job_city_three{/yun} {yun:}$Info.address{/yun}</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.comqcode{/yun}
+				<div class="admin_jobp"> 公司二维码：<img src="{yun:}$Info.comqcode{/yun}" width="150" height="150"/></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.busstops{/yun}
+				<div class="admin_jobp"> 公交站点：{yun:}$Info.busstops{/yun}</div>
+				{yun:}/if{/yun}
+			</div>
+		</div>
+		<script>
+			layui.use(['layer', 'form',], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					$ = layui.$;
+					
+				$("#leftbox").css({'height':$(window).height() - 50 + 'px', 'overflow': 'auto'});
+			});
+		</script>
+	</body>
+</html>

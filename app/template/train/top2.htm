@@ -1,0 +1,34 @@
+<div class="Agency_banner ftl "><img src="{yun:}$banner.pic{/yun}" onerror="showImgDelay(this,'{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_px_banner{/yun}',2);" width="1200" height="160"></div>
+  <div class="Agency_nav ftl">
+    <div class="Agency_logo"><img src="{yun:}$row.logo{/yun}" onerror="showImgDelay(this,'{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_px_icon{/yun}',2);" width="120" height="120"></div>
+    <ul class="Agency_nav_ul" style="color: #fff; font-size: 15px; padding-top: 5px; font-weight: bold;">
+<marquee direction="left">通知：本站所有广告位，支持在线直接购买，咨询QQ：70466670 (备注：广告合作)</marquee>
+    </ul>
+  </div>
+  <div class="Agency_Int ftl">
+    <div class="Agency_Int_left">
+      <h1 class="Agency_Int_Name" style="color: #f00; line-height: 28px; padding: 10px 25px;"> &nbsp;&nbsp;我们的优势：</br>
+      &nbsp;&nbsp;快聘网拥有全国市县分站共6000多个,主域名https://100kp.com 权重 ≥ 5 </br>
+      【分站】投放：指的是单一城市分站投放，同城本地宣传更精准！例：杭州站：https://hz.100kp.com </br>
+      【全站】投放：指全国6000多个城市分站全网投放，推广效果更好~~
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="Agency_Int_spans">已有<font id="antnum{yun:}$row.uid{/yun}">652{yun:}$row.ant_num{/yun}</font>人关注</span>
+            
+      </h1>
+         
+    </div>
+  </div>
+  <script src="{yun:}$train_style{/yun}/js/train_public.js?v={yun:}$config.cachecode{/yun}"></script>
+  <script>
+function showImgDelay(imgObj,imgSrc,maxErrorNum){   
+	if(maxErrorNum>0){ 
+        imgObj.onerror=function(){
+            showImgDelay(imgObj,imgSrc,maxErrorNum-1);
+        };
+		
+        setTimeout(function(){
+            imgObj.src=imgSrc;
+        },500);
+		maxErrorNum=parseInt(maxErrorNum)-parseInt(1);
+    }
+}
+</script>

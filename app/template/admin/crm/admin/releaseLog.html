@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<style>
+    .moduleInptList .el-select .el-input {
+        width: 140px;
+    }
+</style>
+<body>
+<div id="releaseLogApp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleElTabInpt">
+            <div class="moduleInptList">
+                <el-select size="small" v-model="search.crm_uid" placeholder="业务员" clearable @change="handleSearch">
+                    <el-option v-for="item in crmUserOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </div>
+            <div class="moduleInptList">
+                <el-input size="small" @keyup.enter.native="handleSearch" placeholder="请输入客户名称检索" v-model="search.keyword" clearable>
+                    <template slot="prepend">客户名称</template>
+                </el-input>
+            </div>
+            <div class="moduleInptList">
+                <el-date-picker size="small" style="width: 230px;" v-model="search.time" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="释放开始" end-placeholder="结束日期" :picker-options="timeOptions" value-format="timestamp" clearable @change="handleSearch"></el-date-picker>
+            </div>
+            <div class="moduleInptList">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSearch">查询</el-button>
+            </div>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%" stripe
+              :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" :empty-text="emptytext"
+              @selection-change="handleSelectionChange" :default-sort="{prop: 'time_n', order: 'descending'}"
+              @sort-change="sortChange" ref="releaseLogTable" v-loading="loading">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="name" label="客户经理（释放前）" width="170"></el-table-column>
+            <el-table-column prop="time_n" label="释放时间" width="170" sortable="custom" :sort-orders="['descending','ascending']"></el-table-column>
+            <el-table-column prop="comname" label="客户名称" min-width="200"></el-table-column>
+            <el-table-column prop="content" label="释放说明" width="200"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="130">
+                <template slot-scope="scope">
+                    <div class="moduleElTaCaoz" style="display: initial;">
+                        <el-button size="mini" @click="delReleaseLog(scope)" type="danger">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div style="margin-left: 10px;">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"> 全选 </el-checkbox>
+            <el-button size="mini" style="margin-left: 20px;" @click="delReleaseLogSel">批量删除</el-button>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size.sync="pageSize" :page-sizes="pageSizes" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    const releaseLogApp = new Vue({
+        el: '#releaseLogApp',
+        data: function () {
+            return {
+                emptytext: '暂无数据',
+                loading: false,
+                search: {
+                    time: '',
+                    crm_uid: '',
+                    keyword: ''
+                },
+                crmUserOptions: [],
+                timeOptions: {
+                    shortcuts: [{
+                        text: '昨天',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24);
+                            end.setTime(end.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '今天',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '本周',
+                        onClick(picker) {
+                            const start = new Date(new Date().setHours(0, 0, 0) - (new Date().getDay() - 1) * 24 * 60 * 60 * 1000);
+                            const end = new Date();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '上周',
+                        onClick(picker) {
+                            const start = new Date(new Date().setHours(0, 0, 0) - (new Date().getDay() + 6) * 24 * 60 * 60 * 1000);
+                            const end = new Date(new Date().setHours(0, 0, 0) + (0 - new Date().getDay()) *24 * 60 * 60 *1000);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '本月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 1).setHours(0, 0, 0));
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '上月',
+                        onClick(picker) {
+                            const end = new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 0).setHours(23, 59, 59, 59));
+                            const start = new Date(new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1).setHours(0, 0, 0));
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+
+                tableData: [],
+                total: 0,
+                prevPage: 0,
+                currentPage: 1,
+                pageSize: 0,
+                pageSizes: [],
+
+                // 批量选择
+                checkAll: false,
+                isIndeterminate: false,
+                selectedItem: [],
+            }
+        },
+        created(){
+			this.getStaticData();
+            this.getReleaseLog();
+        },
+        methods: {
+			getStaticData(){
+			    var that = this
+				let params = {}
+			    httpPost('m=crm&c=releaseLog&a=getIndexStaticData',params,{hideloading:true}).then((result) => {
+					var res = result.data;
+					if (res.error == 0) {
+						var crmUser = res.data.crmUser
+						that.crmUserOptions = [];
+						crmUser.forEach(function (item) {
+						    that.crmUserOptions.push({value: item.uid, label: item.name})
+						});
+					}
+			    });
+			},
+            getReleaseLog() {
+                var that = this;
+                var params = JSON.parse(JSON.stringify(this.search));
+                params.pageSize = that.pageSize;
+                params.page = that.currentPage;
+                that.loading = true;
+                that.emptytext = "数据加载中";
+                httpPost('m=crm&c=releaseLog&a=getReleaseLog', params).then(function (res) {
+                    let data = res.data.data;
+                    that.tableData = data.list;
+                    that.total = data.total;
+                    that.pageSize = parseInt(data.pageSize);
+                    that.pageSizes = data.pageSizes;
+                    if(that.prevPage != that.currentPage){
+                        that.prevPage = that.currentPage;
+                        that.$refs.releaseLogTable.bodyWrapper.scrollTop = 0;
+                    }
+                    that.loading = false;
+                    if (that.tableData.length === 0){
+                        that.emptytext = "暂无数据";
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            sortChange: function (e) {
+                this.search.t = e.prop;
+                if(e.prop == 'time_n'){
+                    this.search.t = 'ctime';
+                }
+                this.search.order = e.order == 'ascending' ? 'asc' : 'desc';
+                this.handleSearch();
+            },
+            handleSearch: function () {
+                this.currentPage = 1
+                this.getReleaseLog()
+            },
+            handleSelectionChange(val) {
+                this.selectedItem = val;
+                if (this.selectedItem.length == 0) {
+                    this.isIndeterminate = false;
+                    this.checkAll = false;
+                } else {
+                    if (this.selectedItem.length == this.tableData.length) {
+                        this.isIndeterminate = false;
+                        this.checkAll = true;
+                    } else {
+                        this.isIndeterminate = true;
+                        this.checkAll = false;
+                    }
+                }
+            },
+            handleCheckAllChange(val) {
+                val ? this.$refs.releaseLogTable.toggleAllSelection() : this.$refs.releaseLogTable.clearSelection();
+            },
+            delReleaseLog(scope, isMore) {
+                var that = this;
+                let name = '';
+                let idArr = [], nameArr = [];
+                let params = {};
+                if (isMore) {
+                    this.selectedItem.forEach((item) => {
+
+                        idArr.push(item.id);
+                        nameArr.push(item.comname);
+                    });
+                    name = '（' + nameArr.join('，') + '）';
+                    params.id = idArr;
+                } else {
+
+                    name = '（' + scope.row.comname + '）';
+                    params.id = scope.row.id;
+                }
+
+                delConfirm(this, params, this.delete, '您确定要删除客户'+name+'释放记录吗？');
+            },
+            delReleaseLogSel: function () {
+                var that = this;
+                if (!that.selectedItem.length) {
+                    message.error('请选择要删除的客户释放记录');
+                    return;
+                }
+                this.delReleaseLog(null, true);
+            },
+            delete(params){
+                var self = this;
+                httpPost('m=crm&c=releaseLog&a=delReleaseLog', params).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        message.success(res.msg, function () {
+                            self.getReleaseLog();
+                        });
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getReleaseLog();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getReleaseLog();
+            },
+        }
+    });
+</script>
+</body>
+</html>

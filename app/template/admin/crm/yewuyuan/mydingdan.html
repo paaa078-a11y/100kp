@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+</head>
+
+<body>
+<div id="crnDealApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="我的订单" name="first">
+                <div class="wodegengjinds">
+                    <crm_deal v-bind:deal_tab="1" ref="dealOne"></crm_deal>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="下属订单" name="second" lazy>
+                <div class="wodegengjinds">
+                    <crm_deal v-bind:deal_tab="2" ref="dealTwo"></crm_deal>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+    const crnDealApp = new Vue({
+        el: '#crnDealApp',
+        data: function () {
+            return {
+                activeName: 'first'
+            }
+        },
+        components: {
+            'crm_deal': httpVueLoader('../component/crm_deal.vue'),
+        },
+        methods: {
+            handleClick(tab, event) {
+                if (tab._props.name == 'first') {
+                    this.$nextTick(function () {
+                        this.$refs.dealOne.getDealList();
+                    })
+                } else if (tab._props.name == 'second') {
+                    this.$nextTick(function () {
+                        this.$refs.dealTwo.getDealList();
+                    })
+                }
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

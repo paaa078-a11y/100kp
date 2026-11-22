@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="orgStrApp" class="moduleElenAl moduleElenAuto">
+      
+        <div class="moduleElTable" style="height: calc(100% - (60px + 10px))">
+            <el-table ref="orgStrTable" :data="tableData" row-key="id" default-expand-all
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" :empty-text="emptytext"
+                :tree-props="{children: 'children', hasChildren: 'hasChildren'}" height="100%" v-loading="loading" border>
+                <el-table-column prop="name" label="部门" width="300px;"></el-table-column>
+                <el-table-column prop="num" label="人员数量" width="200px;"></el-table-column>
+                <el-table-column label="部门详情" width="300px;">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="showDepartUser(scope.row.name, scope.row.id)">查看详情</el-button>
+                    </template>
+                </el-table-column>
+				 
+                <el-table-column label="操作" align="right">
+                    <template slot-scope="scope">
+						<el-button size="mini"  v-if="scope.row.level < 3"
+						    @click="newOrg(scope)">添加子部门</el-button>
+                        <el-button type=" "  size="mini"
+                            @click="editOrgName(scope)">修改</el-button>
+                       
+                      
+							 <el-button type="danger" size="mini" @click="delOrg(scope)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modluDrawer">
+            <el-drawer :title="departTitle" :visible.sync="departBoxShow" direction="rtl" :append-to-body="true"
+                :modal-append-to-body="false" :show-close="true" size="80%">
+                <depart-user ref="departUser"></depart-user>
+            </el-drawer>
+        </div>
+        <div class="modluDrawer">
+            <el-dialog title="修改部门名称" :visible.sync="orgNameBoxShow" :append-to-body="true"
+                :modal-append-to-body="false" :show-close="true" width="30%">
+                <el-input v-model="orgName" clearable></el-input>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="orgNameBoxShow = false">取 消</el-button>
+                    <el-button type="primary" @click="setOrgName" :dsiabled="btDisabled">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+        <div class="modluDrawer">
+            <el-dialog title="添加子部门" :visible.sync="orgBoxShow" :append-to-body="true" :modal-append-to-body="false"
+                :show-close="true" width="35%">
+                <div class="dialog_item">
+                    <span class="item_span">当前部门：</span>
+                    <span style="font-weight: bold;">{{orgName}}</span>
+                </div>
+                <div class="dialog_item">
+                    <span class="item_span">部门名称：</span>
+                    <el-input type="textarea" v-model="newOrgName" style="flex: 1;" rows="3"></el-input>
+                </div>
+                <div style="overflow: hidden; padding-left: 75px">
+                    <i class="el-icon-info" style="margin-top: 10px;">说明：可以添加多个部门（请按回车Enter键换行，一行一个)</i>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="orgBoxShow = false">取 消</el-button>
+                    <el-button type="primary" @click="saveNewOrg" :dsiabled="btDisabled">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </div>
+    <script>
+        const orgStrApp = new Vue({
+            el: '#orgStrApp',
+            data: function () {
+                return {
+                    emptytext: '暂无数据',
+                    loading: false,
+                    tableData: [],
+
+                    orgId: '',
+                    orgName: '',
+                    orgLevel: 0,
+
+                    orgNameBoxShow: false,
+                    oldName: '',
+
+                    orgBoxShow: false,
+                    newOrgName: '',
+
+                    departTitle: '部门成员',
+                    departBoxShow: false,
+                    btDisabled: false,
+                }
+            },
+            components: {
+                'depart-user': httpVueLoader('./component/departUser.vue'),
+            },
+            mounted() {
+                this.getOrgList();
+            },
+            methods: {
+                getOrgList() {
+                    var that = this;
+                    that.loading = true;
+                    that.emptytext = "数据加载中";
+                    httpPost('m=crm&c=orgStr', { rand: Math.random() }).then(function (res) {
+                        let data = res.data.data;
+                        that.tableData = data;
+                        that.loading = false;
+                        if (that.tableData.length === 0){
+                            that.emptytext = "暂无数据";
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
+                },
+                showDepartUser: function (name, id) {
+                    let _this = this;
+                    _this.departTitle = name + '部门成员';
+                    setTimeout(function () {
+                        _this.$nextTick(function () {
+
+                            _this.$refs.departUser._data.orgId = id;
+                            _this.$refs.departUser.getUserList();
+                        });
+                    }, 500);
+                    _this.departBoxShow = true;
+                },
+                editOrgName: function (scope) {
+
+                    let _this = this;
+                    _this.orgId = scope.row.id;
+                    _this.oldName = scope.row.name;
+                    _this.orgName = scope.row.name;
+                    _this.orgNameBoxShow = true;
+                },
+                setOrgName: function () {
+                    let _this = this;
+                    if (_this.orgName == '') {
+                        message.error('请填写部门名称！');
+                        return;
+                    } else if (_this.orgName == _this.oldName) {
+
+                        message.success('名称未变更，无需调整！');
+                        _this.orgNameBoxShow = false;
+                        return;
+                    }
+                    _this.btDisabled = true
+                    httpPost('m=crm&c=orgStr&a=upOrgName', { id: _this.orgId, name: _this.orgName }).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, function () {
+
+                                _this.getOrgList();
+                                _this.orgNameBoxShow = false;
+                            });
+                        } else {
+                            message.error(res.msg);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    }).finally(function(){
+                        _this.btDisabled = false
+                    })
+                },
+                delOrg: function (e) {
+                    var that = this;
+                    let name = '';
+                    let params = {};
+                    name = '（' + e.row.name + '）';
+                    params.id = e.row.id;
+
+                    delConfirm(this, params, this.delete, '您确定要删除' + name + '吗？');
+                },
+                delete(params) {
+                    var self = this;
+                    httpPost('m=crm&c=orgStr&a=delOrg', params).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, function () {
+                                self.getOrgList();
+                            });
+                        } else {
+                            message.error(res.msg);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
+                },
+                newOrg: function (scope) {
+
+                    let _this = this;
+
+                    _this.orgId = scope.row.id;
+                    _this.orgLevel = scope.row.level;
+                    _this.orgName = scope.row.name;
+
+                    _this.orgBoxShow = true;
+                },
+                saveNewOrg: function () {
+
+                    let _this = this;
+                    if (_this.newOrgName == '') {
+                        message.error('请填写新部门名称');
+                        return;
+                    }
+
+                    let params = {};
+                    params.name = _this.newOrgName.split("\n").join("-");
+                    params.fid = _this.orgId;
+                    params.level = _this.orgLevel;
+                    _this.btDisabled = true
+                    httpPost('m=crm&c=orgStr&a=addOrg', params).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, function () {
+
+                                _this.getOrgList();
+                                _this.orgBoxShow = false;
+                            });
+                        } else {
+                            message.error(res.msg);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    }).finally(function(){
+                        _this.btDisabled = false
+                    })
+                }
+            }
+        });
+    </script>
+    <style>
+        .dialog_item {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .item_span {
+            width: 75px;
+            text-align: right;
+            display: block;
+        }
+    </style>
+</body>
+
+</html>

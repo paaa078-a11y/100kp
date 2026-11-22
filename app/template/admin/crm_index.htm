@@ -1,0 +1,472 @@
+<!DOCTYPE htmlPUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>后台管理 - CRM - 业务员 - 工作台</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"/>
+    <script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+</head>
+<body style="overflow:auto">
+<div class=" ">
+    <form class='layui-form'>
+        <div style="display: flex;">
+            <div class="crm_left">
+                <table class="crm_newly_build_table">
+                    <tr>
+                        <td><div class="crm_newly_build_list crm_newly_build_listkh" onclick="iframfunct('index.php?m=crm_my_customer&c=add', '80%');"><i class="crm_newly_build_icon"></i>录客户</div></td>
+                        <td><div class="crm_newly_build_list crm_newly_build_listtzw" onclick="iframfunct('index.php?m=crm_index&c=job', '80%');"><i class="crm_newly_build_icon"></i>推职位</div></td>
+                        <td><div class="crm_newly_build_list crm_newly_build_listgj CrmnewFollow"><i class="crm_newly_build_icon"></i>写跟进</div></td>
+                    </tr>
+                </table>
+                <div style="display: flex;">
+                    <div class="crm_mypre" style="width: 50%;">
+                        <div class="crm_newly_build_tit_news">
+                            <span class="crm_newly_build_tit_n">客户数据 </span>
+                        </div>
+                        <div class="crm_newly_build_body">
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c"><span>客户数量</span>
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer', '80%');" class="crm_msg_tx_n"><span id="customerNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c"><span>成交客户</span>
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer&vip=1', '80%');" class="crm_msg_tx_n"><span id="dealNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx userNumDiv" style="display: none;">
+                                <div class="crm_msg_tx_c"><span>限定总数</span>
+                                    <a href="javascript:;" class="crm_msg_tx_n"><span id="userNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx syNumDiv" style="display: none;">
+                                <div class="crm_msg_tx_c"><span>剩余名额</span>
+                                    <a href="javascript:;" class="crm_msg_tx_n"><span id="syNum">0</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crm_mypre" style="width: 50%;">
+                        <div class="crm_newly_build_tit_news">
+                            <span class="crm_newly_build_tit_n">消息提醒</span>
+                        </div>
+                        <div class="crm_newly_build_body">
+                            <div class="crm_msg_tx">
+                                    <div class="crm_msg_tx_c"><span>30天未登录</span>
+                                    <a href="index.php?m=crm_my_customer&loginDate=4" class="crm_msg_tx_n"><span id="noLoginNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c"><span>过期未续费</span>
+                                    <a href="index.php?m=crm_my_customer&vipetime=5" class="crm_msg_tx_n"><span id="vipedNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c">
+                                    <span>15天内到期</span>
+                                    <a href="index.php?m=crm_my_customer&vipetime=3" class="crm_msg_tx_n"><span id="willDownNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c"><span>从未跟进</span>
+                                    <a href="index.php?m=crm_my_customer&lastFtime=1" class="crm_msg_tx_n"><span id="noFollowNum">0</span></a>
+                                </div>
+                            </div>
+                            <div class="crm_msg_tx">
+                                <div class="crm_msg_tx_c"><span>权益提醒</span>
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer&c=notice', '80%');" class="crm_msg_tx_n"><span id="noticeNum">0</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex;">
+                    <div class="crm_mypre" style="width: 50%;">
+                        <div class="crm_newly_build_tit_news">
+                            <span class="crm_newly_build_tit_n">跟进提醒</span>
+                        </div>
+                        <div class="crm_mytx">
+                            <div id="followTipsHtml"></div>
+                        </div>
+                    </div>
+                    <div class="crm_mypre" style="width: 50%;">
+                        <div class="crm_newly_build_tit_news">
+                            <span class="crm_newly_build_tit_n">释放提醒</span>
+                        </div>
+                        <div class="crm_mytx">
+                            <div id="releaseTipsHtml"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="crm_mypre">
+                    <div class="crm_newly_build_tit_news">
+                        <span class="crm_newly_build_tit_n">我的简报</span>
+                        <div class="layui-input-inline">
+                            <select name="jbtime" lay-filter='jbtime'>
+                                <option value="1" {yun:}if $smarty.get.jbtime==1{/yun}selected{yun:}/if{/yun}>今天</option>
+                                <option value="2" {yun:}if $smarty.get.jbtime==2{/yun}selected{yun:}/if{/yun}>昨天</option>
+                                <option value="3" {yun:}if $smarty.get.jbtime==3{/yun}selected{yun:}/if{/yun}>本周</option>
+                                <option value="4" {yun:}if $smarty.get.jbtime==4 || !$smarty.get.jbtime{/yun}selected{yun:}/if{/yun}>本月</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="crm_newly_build_body">
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title"></i>新增客户</div>
+                            <div class="fz20">
+                                {yun:}if $smarty.get.jbtime{/yun}
+                                    <a href="index.php?m=crm_my_customer&jbtime={yun:}$smarty.get.jbtime{/yun}" class='newKh'>0</a>
+                                {yun:}else{/yun}
+                                    <a href="index.php?m=crm_my_customer&jbtime=4" class='newKh'>0</a>
+                                {yun:}/if{/yun}
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">发布岗位数</div>
+                            <div class="fz20">
+                                {yun:}if $smarty.get.jbtime == 1{/yun}
+                                <a href="index.php?m=admin_company_job&adtime=1&fromCrmIndex=1" class='newJob'>0</a>
+                                {yun:}else if $smarty.get.jbtime == 2{/yun}
+                                <a href="index.php?m=admin_company_job&adtime=-1&fromCrmIndex=1" class='newJob'>0</a>
+                                {yun:}else if $smarty.get.jbtime == 3{/yun}
+                                <a href="index.php?m=admin_company_job&adtime=-7&fromCrmIndex=1" class='newJob'>0</a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=admin_company_job&adtime=31&fromCrmIndex=1" class='newJob'>0</a>
+                                {yun:}/if{/yun}
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">联系跟进</div>
+                            <div class="fz20">
+                                {yun:}if $smarty.get.jbtime{/yun}
+                                    <a href="index.php?m=crm_concern&day={yun:}$smarty.get.jbtime{/yun}" class='newFollow'>0</a>
+                                {yun:}else{/yun}
+                                    <a href="index.php?m=crm_concern&day=4" class='newFollow'>0</a>
+                                {yun:}/if{/yun}
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">成交金额</div>
+                            <div class="fz20">
+                                <a href="index.php?m=crm_my_performance&c=amount" class='totalDealPrice'>0</a>
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">成交订单</div>
+                            <div class="fz20">
+                                <a href="index.php?m=crm_my_performance&c=amount" class='orderNum'>0</a>
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">外呼电话量</div>
+                            <div class="fz20">
+                                {yun:}if $smarty.get.jbtime{/yun}
+                                <a href="index.php?m=crm_contact_log&time={yun:}$smarty.get.jbtime{/yun}&fromCrmIndex=1" class='outcallCnt'>0</a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_contact_log&time=4&fromCrmIndex=1" class='outcallCnt'>0</a>
+                                {yun:}/if{/yun}
+                            </div>
+                        </div>
+                        <div class="crm_mypre_datalist">
+                            <div class="fz14 panel-banner-box-title">职位推广</div>
+                            <div class="fz20">
+                                {yun:}if $smarty.get.jbtime{/yun}
+                                <a href="index.php?m=crm_index&c=recJob&time={yun:}$smarty.get.jbtime{/yun}" class='recJob'>0</a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_index&c=recJob&time=4" class='recJob'>0</a>
+                                {yun:}/if{/yun}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="crm_right">
+                <div class="crm_newly_build">
+				    <table class="crm_newly_build_table">
+					    <tr>
+                            <td><div class="crm_newly_build_list crm_newly_build_listdd" id="newDeal"><i class="crm_newly_build_icon"></i>录订单</div></td>
+                            <td><div class="crm_newly_build_list crm_newly_build_listrw CrmnewTask"><i class="crm_newly_build_icon"></i>建任务</div></td>
+                            <td><div class="crm_newly_build_list crm_newly_build_listrz" id="newWorkLog"><i class="crm_newly_build_icon"></i>写日志</div></td>
+                        </tr>
+				   </table>
+                    <div class="crm_cjphb">
+                        <div class="crm_mypre_ranking_list" style="position: relative; padding-bottom:30px;">
+                            <div class="crm_newly_build_tit" style="padding:0px 0px 5px 10px">
+                                <span class="crm_newly_build_tit_n">新增客户排行榜<span id="khM" class="data_box">{yun:}$month{/yun}</span></span>
+                                <span class="data_boxtime" id="khTime" style="cursor:pointer;"><input type="text" autocomplete="false" placeholder="年月" style="cursor:pointer;border-radius:4px ;"/></span>
+                            </div>
+                            <div class="crm_space_box crm_space_box_ml">
+                                <div class="crm_space_boxtableall" id="khTable">
+                                    <table class="crm_space_boxtablelist">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="crm_mypre_ranking_list" style="position: relative; padding-bottom:30px;">
+                            <div class="crm_newly_build_tit" style="padding:0px 0px 5px 10px">
+                                <span class="crm_newly_build_tit_n">月成交金额榜<span id="jeM" class="data_box">{yun:}$month{/yun}</span></span>
+                                <span class="data_boxtime" id="jeTime" style="cursor:pointer;"> <input type="text" autocomplete="false" placeholder="年月" style="cursor:pointer;border-radius: 4px;"/></span>
+                            </div>
+                            <div class="crm_space_box crm_space_box_ml">
+                                <div class="crm_space_boxtableall" id="jeTable">
+                                    <table class="crm_space_boxtablelist">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}"/>
+<input type="hidden" id="handel_status" value=""/>
+
+<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+
+<script type="text/javascript">
+
+    var weburl = "{yun:}$config.sy_weburl{/yun}";
+    var pytoken = $('#pytoken').val();
+
+    var khUrl = "index.php?m=crm_index&c=getCustomer";
+    var xxUrl = "index.php?m=crm_index&c=getNotice";
+    var jbUrl = "index.php?m=crm_index&c=getWorkReport";
+    var khbUrl = "index.php?m=crm_index&c=getKhb";
+    var jebUrl = "index.php?m=crm_index&c=getJeb";
+
+    var Ytime  = "{yun:}$time{/yun}";
+
+    layui.use(['form', 'laydate', 'element'], function () {
+        var form = layui.form
+            , element = layui.element
+            , laydate = layui.laydate
+            , $ = layui.$;
+
+        laydate.render({
+            elem: '#khTime'
+            , type: 'month'
+            , value: Ytime
+            , done: function (value, date) {
+                $('#khM').html('（'+date.month+'月）');
+                Ytime = value;
+                $.post(khbUrl, {pytoken: pytoken, time: Ytime}, function (result) {
+                    if (result) {
+                        var result = eval('(' + result + ')');
+                        var data = result.data;
+                        var khbHtml = '<table class="crm_space_boxtablelist">';
+
+                        if (data.length > 0) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                if(i < 10) {
+                                    var j = i + 1;
+                                    khbHtml += '<tr>';
+                                    khbHtml += '<td style="width: 5%;"> ' + j + '</td>';
+                                    khbHtml += '<td> ' + data[i].name + '</td>';
+                                    khbHtml += '<td style="width: 10%; text-align: right;"><a href="'+data[i].url+'">' + data[i].khnum + '</a></td>';
+                                    khbHtml += '</tr>';
+                                }
+                            }
+                        }
+                        khbHtml += '<table>';
+                        khbHtml += '<div>';
+                        khbHtml += '<span style="color: #707070;position: absolute;right: 20;bottom: 20px;">总计 : '+result.total+'</span>';
+                        khbHtml += '</div>';
+
+                        $('#khTable').html(khbHtml);
+                    }
+                });
+            }
+        });
+        laydate.render({
+            elem: '#jeTime'
+            , type: 'month'
+            , value: Ytime
+            , done: function (value, date) {
+                $('#jeM').html('（'+date.month+'月）');
+                Ytime = value;
+                $.post(jebUrl, {pytoken: pytoken, time: Ytime}, function (result) {
+
+                    if (result) {
+                        var result = eval('(' + result + ')');
+                        var data = result.data;
+
+                        var jebHtml = '<table class="crm_space_boxtablelist">';
+
+                        if (data.length > 0) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                if(i < 10) {
+                                    var j = i + 1;
+                                    jebHtml += '<tr>';
+                                    jebHtml += '<td style="width: 5%;"> ' + j + '</td>';
+                                    jebHtml += '<td> ' + data[i].name + '</td>';
+                                    jebHtml += '<td style="width: 10%; text-align: right;"><a href="'+data[i].url+'">' + data[i].total + '</a></td>';
+                                    jebHtml += '</tr>';
+                                }
+                            }
+                        }
+                        jebHtml += '</table>';
+                        jebHtml += '<div>';
+                        jebHtml += '<span style="color: #707070;position: absolute;right: 20;bottom: 20px;">总计 : '+result.total+'</span>';
+                        jebHtml += '</div>';
+
+                        $('#jeTable').html(jebHtml);
+                    }
+                });
+            }
+        });
+
+        form.on('select(jbtime)', function (data) {
+            $('.outcallCnt').attr('href', 'index.php?m=crm_contact_log&time=' + data.value + '&fromCrmIndex=1');
+            $('.newKh').attr('href', 'index.php?m=crm_my_customer&jbtime='+data.value);
+            $('.newFollow').attr('href', 'index.php?m=crm_concern&day='+data.value);
+            $('.recJob').attr('href', 'index.php?m=crm_index&c=recJob&time=' + data.value);
+            var addTime = 31// 默认查当月
+            if (data.value == 1) {//今天
+                addTime = 1;
+            } else if (data.value == 2) {//昨天
+                addTime = -1;
+            } else if (data.value == 3) {//本周
+                addTime = -7;
+            }
+            $('.newJob').attr('href', 'index.php?m=admin_company_job&adtime=' + addTime + '&fromCrmIndex=1');
+
+            $.post(jbUrl, {pytoken: pytoken, time: data.value}, function (data) {
+                if (data) {
+                    var data = eval('(' + data + ')');
+
+                    $('.newFollow').html(data.followNum);
+                    $('.newKh').html(data.khNum);
+                    $('.totalDealPrice').html(data.orderDealPrice);
+                    $('.orderNum').html(data.orderNum);
+                    $('.outcallCnt').html(data.outcallCnt);
+                    $('.newJob').html(data.jobCnt);
+                    $('.recJob').html(data.jobRec);
+                }
+            });
+        });
+        $.post(jbUrl, {pytoken: pytoken, time: 4}, function (data) {
+            if (data) {
+                var data = eval('(' + data + ')');
+
+                $('.newFollow').html(data.followNum);
+                $('.newKh').html(data.khNum);
+                $('.totalDealPrice').html(data.orderDealPrice);
+                $('.orderNum').html(data.orderNum);
+                $('.outcallCnt').html(data.outcallCnt);
+                $('.newJob').html(data.jobCnt);
+                $('.recJob').html(data.jobRec);
+            }
+        });
+
+        $.post(khUrl, {pytoken: pytoken}, function (data) {
+            if (data) {
+                var data = eval('(' + data + ')');
+                $('#customerNum').html(data.customerNum);
+                $('#dealNum').html(data.dealNum);
+
+                if (parseInt(data.userNum)>0) {
+                    $('#userNum').html(data.userNum);
+                    $('.userNumDiv').show();
+                }
+                if (parseInt(data.syNum) > 0) {
+                    $('#syNum').html(data.syNum);
+                    $('.syNumDiv').show();
+                }
+            }
+        });
+
+        $.post(xxUrl, {pytoken: pytoken}, function (data) {
+            if (data) {
+                var data = eval('(' + data + ')');
+
+                $('#noLoginNum').html(data.noLoginNum);
+                $('#vipedNum').html(data.vipedNum);
+                $('#willDownNum').html(data.willDoneNum);
+                $('#noFollowNum').html(data.noFollowNum);
+                $('#noticeNum').html(data.noticeNum);
+
+                if (data.followHtml) {
+                    $('#followTipsHtml').html(data.followHtml);
+                }
+                if (data.releaseHtml) {
+                    $('#releaseTipsHtml').html(data.releaseHtml);
+                }
+            }
+        });
+
+        $.post(khbUrl, {pytoken: pytoken, time: Ytime}, function (result) {
+            if (result) {
+                var result = eval('(' + result + ')');
+                var data = result.data;
+                var khbHtml = '<table class="crm_space_boxtablelist">';
+
+                if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        if(i < 10) {
+                            var j = i + 1;
+                            khbHtml += '<tr>';
+                            khbHtml += '<td style="width: 5%;"> ' + j + '</td>';
+                            khbHtml += '<td> ' + data[i].name + '</td>';
+                            khbHtml += '<td style="width: 10%; text-align: right;"><a href="'+data[i].url+'">' + data[i].khnum + '</a></td>';
+                            khbHtml += '</tr>';
+                        }
+                    }
+                }
+                khbHtml += '</table>';
+                khbHtml += '<div>';
+                khbHtml += '<span style="color: #707070;position: absolute;right: 20;bottom: 20px;">总计 : '+result.total+'</span>';
+                khbHtml += '</div>';
+
+                $('#khTable').html(khbHtml);
+            }
+        });
+
+        $.post(jebUrl, {pytoken: pytoken, time: Ytime}, function (result) {
+            if (result) {
+                var result = eval('(' + result + ')');
+                var data = result.data;
+
+                var jebHtml = '<table class="crm_space_boxtablelist">';
+
+                if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        if(i < 10) {
+                            var j = i + 1;
+                            jebHtml += '<tr>';
+                            jebHtml += '<td style="width: 5%;"> ' + j + '</td>';
+                            jebHtml += '<td> ' + data[i].name + '</td>';
+                            jebHtml += '<td style="width: 10%; text-align: right;"><a href="'+data[i].url+'">' + data[i].total + '</a></td>';
+                            jebHtml += '</tr>';
+                        }
+                    }
+                    jebHtml += '</table>';
+                    jebHtml += '<div>';
+                    jebHtml += '<span style="color: #707070;position: absolute;right: 20;bottom: 20px;">总计 : '+result.total+'</span>';
+                    jebHtml += '</div>';
+                }
+
+                $('#jeTable').html(jebHtml);
+            }
+        });
+    });
+</script>
+{yun:}include file="$adminstyle/crm_public.htm"{/yun}
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</body>
+</html>

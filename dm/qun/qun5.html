@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>本地工作推荐群 - 邀你入群</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #f5f5f5;
+    max-width: 750px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+  }
+  /* 顶部导航栏 */
+  .top-bar {
+    background-color: #ff7a00;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    color: #fff;
+    font-size: 15px;
+  }
+  .top-bar-left {
+    font-weight: bold;
+  }
+  .top-bar-btn {
+    background-color: #fff;
+    color: #ff7a00;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .top-bar-close {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  /* 主体内容 */
+  .main-content {
+    background: linear-gradient(180deg, #e6fffa 0%, #f5f5f5 100%);
+    min-height: calc(100vh - 44px);
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  .invite-tag {
+    display: inline-block;
+    background-color: #07c160;
+    color: #fff;
+    padding: 8px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .invite-tag::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px 8px 0;
+    border-style: solid;
+    border-color: #07c160 transparent transparent;
+  }
+  /* 二维码/海报卡片 */
+  .card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+  }
+  .poster-img {
+    width: 100%;
+    max-width: 396px;
+    margin: 0 auto;
+    display: block;
+    cursor: pointer;
+  }
+  .tip-text {
+    font-size: 16px;
+    color: #333;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  .sub-tip {
+    font-size: 13px;
+    color: #999;
+    margin-top: 5px;
+  }
+  /* 底部按钮 */
+  .bottom-area {
+    position: relative;
+    margin-top: 30px;
+  }
+  .btn-wechat {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #07c160;
+    color: #fff;
+    text-align: center;
+    padding: 14px 0;
+    border-radius: 8px;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .btn-float {
+    position: absolute;
+    right: 20px;
+    bottom: -25px;
+    background-color: #07c160;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 13px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+  /* 弹窗遮罩 */
+  .modal-mask {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-box {
+    width: 80%;
+    max-width: 320px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    background-color: #07c160;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .modal-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .modal-desc {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 25px;
+  }
+  .modal-btn {
+    display: block;
+    width: 100%;
+    background-color: #07c160;
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部栏 -->
+<div class="top-bar">
+  <span class="top-bar-left">打开 微信 小程序再进群</span>
+  <div>
+    <a href="weixin://dl/business/?appid=wx533eca4ff0bfe89b&path=pages/index/index" class="top-bar-btn">打开微信</a>
+    <a href="javascript:void(0);" class="top-bar-close">X</a>
+  </div>
+</div>
+
+<!-- 主体 -->
+<div class="main-content">
+  <div class="title">本地工作推荐群</div>
+  <div class="invite-tag">邀你入群</div>
+  
+  <div class="card">
+    <!-- 点击海报图触发弹窗 -->
+    <img src="https://100kp.com/dm/qun/qun.jpg" class="poster-img" id="posterImg" alt="群二维码">
+    <div class="tip-text">微信『扫一扫』进群</div>
+    <div class="sub-tip">H5页面请截图,再微信扫码</div>
+  </div>
+
+  <div class="bottom-area">
+    <a href="weixin://dl/business/?appid=wx533eca4ff0bfe89b&path=pages/index/index" class="btn-wechat">点击打开微信</a>
+    <button class="btn-float" id="floatBtn">点击<br>进群</button>
+  </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal-box">
+    <div class="modal-close" id="modalClose">X</div>
+    <div class="modal-icon">
+      <!-- 使用微信图标SVG适配纯手机端 -->
+      <svg viewBox="0 0 1024 1024" width="100%" height="100%"><path fill="#FFF" d="M668.8 598.4c-17.6 0-35.2 4.8-51.2 12.8-16-57.6-67.2-102.4-132.8-118.4-16-41.6-28.8-83.2-28.8-123.2 0-150.4 128-272 288-272s288 121.6 288 272-128 272-288 272z m-112-126.4c-9.6 0-19.2 3.2-28.8 6.4 9.6-32 32-60.8 64-83.2 16-9.6 35.2-16 54.4-16 73.6 0 132.8 54.4 132.8 120s-59.2 120-132.8 120c-16 0-32-3.2-48-9.6-16 54.4-64 96-124.8 112-9.6 3.2-19.2 3.2-28.8 3.2-16 0-32-3.2-48-9.6-16 54.4-64 96-124.8 112-9.6 3.2-19.2 3.2-28.8 3.2-73.6 0-132.8-54.4-132.8-120s59.2-120 132.8-120c9.6 0 19.2 0 28.8 3.2 9.6-32 32-60.8 64-83.2 16-9.6 35.2-16 54.4-16 73.6 0 132.8 54.4 132.8 120s-59.2 120-132.8 120c-9.6 0-19.2 0-28.8-3.2 16-16 28.8-35.2 35.2-57.6 9.6 3.2 19.2 3.2 28.8 3.2 73.6 0 132.8-54.4 132.8-120s-59.2-120-132.8-120z"/></svg>
+    </div>
+    <div class="modal-title">前往微信小程序</div>
+    <div class="modal-desc">本页面建议在微信打开，直接进群</div>
+    <a href="weixin://dl/business/?appid=wx533eca4ff0bfe89b&path=pages/index/index" class="modal-btn">打开微信入群</a>
+  </div>
+</div>
+
+<script>
+  // 绑定跳转链接
+  const schemeUrl = "weixin://dl/business/?appid=wx533eca4ff0bfe89b&path=pages/index/index";
+  
+  document.getElementById('posterImg').addEventListener('click', function() {
+    document.getElementById('modalMask').style.display = 'flex';
+  });
+  
+  document.getElementById('floatBtn').addEventListener('click', function() {
+    window.location.href = schemeUrl;
+  });
+  
+  // 关闭弹窗
+  document.getElementById('modalClose').addEventListener('click', function() {
+    document.getElementById('modalMask').style.display = 'none';
+  });
+  
+  // 点击遮罩空白处关闭
+  document.getElementById('modalMask').addEventListener('click', function(e) {
+    if(e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>

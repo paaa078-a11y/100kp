@@ -1,0 +1,293 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav coubtInput UserCoubtInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <form onsubmit="return false;">
+                <input type="text" v-model="keyword" placeholder="搜索客户名称/订单编号">
+                <button @click="searchsub">搜索</button>
+            </form>
+        </div>
+        <div class="subjectAdd">
+            <a class="claimScreen" href="javascript:void(0)" @click="czSerach">
+                <img src="img/serach.png" alt="">
+                <p>重置</p>
+            </a>
+        </div>
+    </section>
+    <section class="enterNameTab">
+        <div class="enterTabTitle">
+            <a href="javascript:void(0)" @click="crmUserShow = true">
+                <span style="width: unset;">{{crmUserName}}</span>
+                <img src="img/duob.png">
+            </a>
+            <a href="javascript:void(0)" @click="timeShow = true">
+                <span style="width: unset;">{{timeName}}</span>
+                <img src="img/duob.png">
+            </a>
+        </div>
+    </section>
+    <section class="enterpriseInfo">
+        <ul v-if="!noUser">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                    <li v-for="(item, reskey) in list" :key="reskey">
+                        <div class="resushowTitle">
+                            <a>{{item.comname}}</a>
+                            <p v-if="item.order_state==1"><span class="ysd"><i class="wshicon"></i>{{item.order_state_n}}</span></p><!--等待付款-->
+                            <p v-else-if="item.order_state==2"><span class="ysh"><i class="wshicon"></i>{{item.order_state_n}}</span></p><!--支付成功-->
+                            <p v-else-if="item.order_state==3"><span class="ysd"><i class="wshicon"></i>{{item.order_state_n}}</span></p><!--等待确认-->
+                            <p v-else><span class="wsh"><i class="wshicon"></i>{{item.order_state_n}}</span></p>
+                        </div>
+                        <div class="enterMess">
+                            <div class="enterMessList">
+                                <p>业务员　：{{item.aname}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>订单价格：￥{{item.order_price}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>订单类型：{{item.type_n}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>支付方式：{{item.order_type_n}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>单　　号：{{item.order_id}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>申请时间：{{item.time_n}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>备　　注：{{item.order_remark}}</p>
+                            </div>
+                        </div>
+                        <div class="enterClick">
+                            <div>
+                                <a href="javascript:void(0)" @click="approvalOrder(item)">审批</a>
+                                <a href="javascript:void(0)" @click="delCrmOrder(item)">删除</a>
+                            </div>
+
+                        </div>
+                    </li>
+                </van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-if="noUser" class="noneInfoAll">
+            <div class="nfoAllConu">
+                <img src="img/zwtip.png" alt="">
+                <p>暂无信息</p>
+            </div>
+        </div>
+    </section>
+    <van-popup v-model:show="crmUserShow" round position="bottom">
+        <van-picker
+            show-toolbar
+            :columns="crmUser"
+            value-key="name"
+            title="业务员"
+            @cancel="crmUserShow = false"
+            @confirm="onCrmUserConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="timeShow" round position="bottom">
+        <van-picker
+            show-toolbar
+            :columns="timearr"
+            value-key="name"
+            title="申请时间"
+            @cancel="timeShow = false"
+            @confirm="timeConfirm"
+        />
+    </van-popup>
+</div>
+<script>
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noUser: false,
+
+                keyword: '',
+
+                crmUserShow: false,
+                crmUser: [],
+                crm_uid: 0,
+                crmUserName: '业务员',
+
+                timeShow: false,
+                timearr: [
+                    {id: '-1', name: '昨天',},
+                    {id: '1', name: '今天',},
+                    {id: '7', name: '最近一周',},
+                    {id: '30', name: '最近一个月',},
+                    {id: '90', name: '最近三个月',},
+                ],
+                timeid: 0,
+                timeName: '申请时间',
+
+                screenShow: false,
+            }
+
+        },
+        created() {
+            this.getStatis();
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                    that.total = 0;
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                };
+                if (that.crm_uid) {
+                    param['crm_uid'] = that.crm_uid;
+                }
+                if (that.timeid != '') {
+                    param['timeid'] = that.timeid;
+                }
+                if (that.keyword) {
+                    param['keyword'] = that.keyword;
+                }
+                $.post('index.php?m=crm&c=order&a=getOrderList', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noUser = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noUser = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+
+                    that.keyword = res.keyword ? res.keyword : '';
+                }, 'json');
+            },
+            getStatis: function () {
+                var that = this;
+                $.post('index.php?m=crm&c=order&a=getOrderStaticData', {a: 1}, function (res) {
+                    that.crmUser = res.crmUser ? res.crmUser : [];
+                }, 'json');
+            },
+            approvalOrder: function (e) {
+                let that = this;
+                let name = '';
+                let params = {};
+                name = '（' + e.comname + '）';
+                params.id = e.id;
+                showConfirm('您确定要审批客户'+name+'订单记录吗？',function(){
+                    showLoading();
+                    $.post('index.php?m=crm&c=order&a=approval', params, function(res){
+                        hideLoading();
+                        if (res.error === 0) {
+                            showToast(res.msg, 2, function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    },'json');
+                })
+            },
+            delCrmOrder: function (e) {
+                let that = this;
+                let name = '';
+                let params = {};
+                name = '（' + e.comname + '）';
+                params.id = e.id;
+                showConfirm('您确定要删除客户'+name+'订单记录吗？',function(){
+                    showLoading();
+                    $.post('index.php?m=crm&c=order&a=delCrmOrder', params, function(res){
+                        hideLoading();
+                        if (res.error === 0) {
+                            showToast(res.msg, 2, function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    },'json');
+                })
+            },
+            searchsub: function () {
+                this.getList('refresh');
+            },
+            onCrmUserConfirm: function (e) {
+                this.crm_uid = e.uid;
+                this.crmUserName = e.name;
+                this.getList('refresh');
+                this.crmUserShow = false;
+            },
+            timeConfirm: function (e) {
+                this.timeid = e.id;
+                this.timeName = e.name;
+                this.getList('refresh');
+                this.timeShow = false;
+            },
+            czSerach: function () {
+                window.location.href = 'index.php?m=crm&c=order&a=crm_order';
+                window.history.replaceState({}, "", "index.php?m=crm&c=order&a=crm_order");
+            }
+        }
+    });
+</script>
+<style type="text/css">
+    .customerPopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .customerPopup .customerAls {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important
+    }
+</style>
+</body>
+
+</html>

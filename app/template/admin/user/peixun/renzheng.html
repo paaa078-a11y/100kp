@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="培训认证" name="cert" lazy>
+                    <cert ref="cert" :status="status.cert"></cert>
+                </el-tab-pane>
+                <el-tab-pane label="培训logo" name="logo" lazy>
+                    <logo ref="logo" :status="status.logo"></logo>
+                </el-tab-pane>
+                <el-tab-pane label="机构环境" name="show" lazy>
+                    <show ref="show" :status="status.show"></show>
+                </el-tab-pane>
+                <el-tab-pane label="机构横幅" name="banner" lazy>
+                    <banner ref="banner" :status="status.banner"></banner>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'cert',
+                status: {
+                    cert: '',
+                    logo: '',
+                    show: '',
+                    banner: '',
+                },
+            }
+        },
+        components: {
+            'cert': httpVueLoader('./component/renzheng_cert.vue'),
+            'logo': httpVueLoader('./component/renzheng_logo.vue'),
+            'show': httpVueLoader('./component/renzheng_show.vue'),
+            'banner': httpVueLoader('./component/renzheng_banner.vue'),
+        },
+        created: function () {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.tabs) {
+                that.activeName = query.tabs;
+            }
+            if (query.status) {
+                that.status[that.activeName] = query.status;
+            }
+        },
+        methods: {
+            handleClick(tab, event) {
+                // this.$refs[tab.name].init();
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>

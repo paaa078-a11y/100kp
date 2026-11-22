@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="moduleElTabInpt">
+                <div class="moduleInptList">
+                    <el-input @keyup.enter.native="search" placeholder="请输入手机号查询" v-model="searchForm.keyword" clearable>
+                        <template slot="prepend">手机号</template>
+                    </el-input>
+                </div>
+                <div class="moduleInptList">
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+                </div>
+            </div>
+        </div>
+        <div class="moduleElTable">
+            <el-table :data="list" ref="table" border style="width: 100%" :empty-text="emptytext"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+                <el-table-column prop="mobile" label="手机号">
+					<template slot-scope="scope">
+						<span v-if="scope.row.mobile">{{scope.row.mobile}}</span>
+						<span v-else>暂未绑定</span>
+					</template>
+                </el-table-column>
+                <el-table-column prop="name" label="业务员">
+                </el-table-column>
+                <el-table-column prop="send_amount" label="免费时长(分钟)">
+                </el-table-column>
+                <el-table-column prop="personal_amount" label="套餐外时长(分钟)">
+                </el-table-column>
+                <el-table-column prop="end_time" label="套餐到期">
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template slot-scope="scope">
+                    	<template v-if="scope.row.call_channel ==2 && scope.row.ry_state!=1 ">
+                    		<el-button type="primary" size="mini" @click="reMsg(scope.row.id)">重新验证</el-button>
+                    	</template>
+                    	<template >
+                    		<el-button type="primary" size="mini" @click="bindMobileBox(scope.row)" v-if="scope.row.mobile">换绑手机</el-button>
+                    		<el-button type="primary" size="mini" @click="bindMobileBox(scope.row)" v-else>绑定手机</el-button>
+                    	</template>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                   :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+                   layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <div class="">
+            <el-dialog title="绑定手机" :visible.sync="bindStaffBox" :with-header="true" :modal-append-to-body="false"
+                :show-close="true" width="450px">
+                <div class="wxsettip_small ">用户组</div>
+                <div class="wxsettip_Sealect">
+                    <el-select v-model="gid" placeholder="请选择" @change="group_sel">
+                        <el-option v-for="(item,key) in user_group" :key="key" :label="item.name"
+                                   :value="item.id">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="wxsettip_small ">业务员</div>
+                <div class="wxsettip_Sealect">
+                    <el-select v-model="uid" placeholder="请选择" @change="user_sel">
+                        <el-option v-for="(item,key) in user_list" :key="key" :label="item.name"
+                                   :value="item.uid">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="wxsettip_small" v-if="curr_staff && curr_staff.call_channel == 1">图片验证码</div>
+                <div class="wxsettip_Sealect" v-if="curr_staff && curr_staff.call_channel == 1" style="position: relative;">
+                    <el-input v-model="imgcode" placeholder="图片验证码" style="width:330px"></el-input>
+                    <el-image style="height:35px; position: absolute;right:0px;top:0px;" :src="'data:image/png;base64,' + ytxImg"></el-image>
+                </div>
+                <div style="color:red;padding-top: 5px;" v-if="curr_staff && curr_staff.call_channel == 1">提示：图片验证码有效期5分钟，请尽快完成绑定操作！</div>
+                <div class="wxsettip_small ">手机号</div>
+                <div class="wxsettip_Sealect">
+                    <el-input v-model="mobile" readonly placeholder="手机号" :style="curr_staff && (curr_staff.call_channel == 3 || curr_staff.call_channel == 1) ? 'width:330px' : ''"></el-input>
+                    <el-button v-if="curr_staff && (curr_staff.call_channel == 3 || curr_staff.call_channel == 1)" type="primary" size="mini" @click="yzcode">验证码</el-button>
+                </div>
+                <div class="wxsettip_small " v-if="curr_staff && (curr_staff.call_channel == 3 || curr_staff.call_channel == 1)">验证码</div>
+                <div class="wxsettip_Sealect" v-if="curr_staff && (curr_staff.call_channel == 3 || curr_staff.call_channel == 1)">
+                    <el-input v-model="yzm" placeholder="验证码"></el-input>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="bindStaffBox = false">取 消</el-button>
+                    <el-button type="primary" @click="bindStaff">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                    emptytext: '暂无数据',
+                    loading: false,
+					searchForm: {
+						type:'1',
+					    keyword: '',
+					},
+					page: 1,
+                    prevPage: 0,
+					limit: 0,
+					list: [],
+					total: 0,
+					pageSizes: [],
+					user_group:[],
+					bindStaffBox: false,
+                    curr_staff: null,
+                    gid: '',
+                    user_list: [],
+                    uid: '',
+                    yzm: '',
+                    mobile: '',
+                    ytxImg: '',
+                    ytxUuid: '',
+                    imgcode: ''
+                }
+            },
+            created(){
+				this.getStaticData()
+                this.getList();
+            },
+            methods: {
+				getStaticData(){
+				    var that = this
+				    httpPost('m=crm&c=crm_outcall&a=getStaticData',{},{hideloading:true}).then(function (res) {
+						var data = res.data
+				        that.user_group = data.data.user_group;
+				    });
+				},
+				group_sel(val){
+				    var that = this
+                    httpPost('m=crm&c=crm_outcall&a=getUsers', {group_id: val}).then(function (res) {
+                        that.user_list = res.data.data.users
+                        that.uid = ''
+                        that.mobile = ''
+                    });
+				},
+                user_sel: function(val){
+				    var that = this
+                    this.user_list.forEach(item => {
+                        if (item.uid == val) {
+                            if (!item.moblie) {
+                                message.error('业务员未绑定手机号！')
+                                return false
+                            } else {
+                                that.mobile = item.moblie
+                            }
+                        }
+                    });
+                },
+				bindMobileBox(row){
+					let that = this;
+                    that.curr_staff = row
+                    that.imgcode = ''
+                    that.yzm = ''
+					if (row.call_channel == 1) {// 云通讯
+                        httpPost('m=crm&c=crm_outcall&a=getYtxImgCode', {}).then(function(res) {
+                            var data = res.data
+                            if (data.error == 0) {
+                                that.ytxImg = data.data.img
+                                that.ytxUuid = data.data.uuid
+                                that.bindStaffBox = true
+                            } else {
+                                message.error(data.msg)
+                            }
+                        })
+                    } else {
+                        that.bindStaffBox = true;
+                    }
+				},
+                yzcode: function(){
+				    var that = this
+                    if (that.curr_staff.call_channel== 3) {// 云呼通道
+                        var params = {
+                            staff_id: that.curr_staff.id,
+                            mobile: that.mobile
+                        }
+                        httpPost('m=crm&c=crm_outcall&a=getYhCode', params).then(function(res) {
+                            var data = res.data
+                            if (data.data.code == 200) {
+                                message.success(data.msg)
+                            } else if (data.data.code == 201) {
+                                message.success(data.msg, function(){
+                                    that.bindStaffBox = false
+                                    that.getList()
+                                })
+                            } else {
+                                message.error(data.msg)
+                            }
+                        })
+                    } else if (that.curr_staff.call_channel== 1) {// 云通讯
+                        if (that.imgcode == '') {
+                            message.error('请输入图片验证码！')
+                            return false
+                        }
+                        var params = {
+                            mobile: that.mobile,
+                            imgcode: that.imgcode,
+                            uuid: that.ytxUuid
+                        }
+                        httpPost('m=crm&c=crm_outcall&a=getYtxMsgCode', params).then(function(res) {
+                            var data = res.data
+                            if (data.error == 0) {
+                                message.success(data.msg)
+                            } else {
+                                message.error(data.msg)
+                            }
+                        })
+                    }
+                },
+                // 绑定坐席提交
+                bindStaff(){
+                    let that = this;
+                    if (that.mobile == '') {
+                        message.error('请选择要绑定的业务员');
+                        return false;
+                    }
+                    if (that.mobile == that.curr_staff.mobile) {
+                        message.error('手机号不能与原手机号相同');
+                        return false;
+                    }
+                    var params = {
+                        staff_id: that.curr_staff.id,
+                        mobile: that.mobile,
+                    }
+                    if (that.curr_staff.call_channel == 3 || that.curr_staff.call_channel == 1) {// 云呼、云通讯
+                        if (!that.yzm) {
+                            message.error('请输入短信验证码');
+                            return false;
+                        } else {
+                            params.code = that.yzm;
+                        }
+                    }
+                    httpPost('m=crm&c=crm_outcall&a=bindStaff', params).then(function(res) {
+                        var data = res.data
+                        if (data.error == 0) {
+                            message.success(data.msg, function(){
+                                that.bindStaffBox = false;
+                            })
+                        } else {
+                            message.error(data.msg)
+                        }
+                    })
+                },
+				reMsg(id){
+					let that = this;
+					let msg = '单日最多重新发送3次，两次间隔最低10分钟，确定要重新发送验证信息吗？';
+					delConfirm(this, params, function (params) {
+					    httpPost('m=crm&c=crm_outcall&a=remsg', {staff_id:id}).then(function(res) {
+					        if (res.data.error > 0) {
+					            message.error(res.data.msg);
+					        } else {
+					            message.success(res.data.msg, function () {
+					                that.getList();
+					            });
+					        }
+					    })
+					}, msg)
+				},
+                handleSizeChange(val) {
+                    this.limit = val;
+                    this.getList();
+                },
+                handleCurrentChange(val) {
+                    this.page = val;
+                    this.getList();
+                },
+                search() {
+                    this.page = 1;
+                    this.getList();
+                },
+                getList() {
+                    let that = this,
+                        searchForm = that.searchForm,
+                        params = {
+                            page: that.page,
+                            limit: that.limit,
+                        };
+                        that.loading = true;
+                        that.emptytext = "数据加载中";
+                    httpPost('m=crm&c=crm_outcall&a=staffList', {...params, ...searchForm}).then(function (response) {
+                        let res = response.data,
+                            data = res.data;
+
+                        that.list = data.list;
+                        that.total = parseInt(data.total);
+                        that.pageSizes = data.page_sizes;
+                        if(that.prevPage != that.page){
+                            that.prevPage = that.page;
+                            that.$refs.table.bodyWrapper.scrollTop = 0;
+                        }
+                        if (that.limit === 0) {
+                            that.limit = parseInt(data.limit); // 取系统配置默认数量
+                        }
+                        if (that.page > data.page) {
+                            that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+                        }
+
+                        that.loading = false;
+                        if (that.list.length === 0){
+                            that.emptytext = "暂无数据";
+                        }
+                    })
+                },
+            }
+        });
+    </script>
+</body>
+<style>
+		.el-table .el-table__cell { padding: 12px 0; }
+		</style>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../header.js"></script>
+    <script src="../../httpVueLoader.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="abnApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="个人行为预警" name="first">
+                <user_abn v-bind:user_num="userNum"></user_abn>
+            </el-tab-pane>
+            <el-tab-pane label="企业行为预警" name="second">
+                <com_abn v-bind:com_num="comNum"></com_abn>
+            </el-tab-pane>
+        </el-tabs>
+        <div id="chatapp" style="display: none;"></div><!--单纯避免websocket.js报错用-->
+    </div>
+</div>
+<!-- script -->
+<script>
+    const abnApp = new Vue({
+        el: '#abnApp',
+        data: function () {
+            return {
+                activeName: 'first',
+                userNum: 0,
+                comNum: 0
+            }
+        },
+        components: {
+            'user_abn': httpVueLoader('./component/userAbn.vue'),
+            'com_abn': httpVueLoader('./component/comAbn.vue'),
+        },
+        methods: {
+            handleClick(tab, event) {
+                let that = this
+                if (tab._props.name == 'first'){
+
+                    that.userNum++;
+                } else if (tab._props.name == 'second'){
+
+                    that.comNum++;
+                }
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    var isAdmin = true;
+    var weburl = '';
+</script>
+<script src="../../../chat/yunliao/websocket.js"></script>
+</body>
+</html>

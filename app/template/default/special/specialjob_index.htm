@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>{yun:}$title{/yun}</title>
+<meta name="keywords" content="{yun:}$keywords{/yun}"/>
+<meta name="description" content="{yun:}$description{/yun}"/>
+<link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="{yun:}$style{/yun}/special/css/css.css?v={yun:}$config.cachecode{/yun}"/>
+<link rel="stylesheet" href="{yun:}$style{/yun}/style/news.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+<style>
+	a{text-decoration: none !important;}
+</style>
+</head>
+<body style="background-color:#f6f6f8">
+{yun:}include file="$tplstyle/header.htm"{/yun}
+<div class="clear"></div>
+<div class="yun_content">
+<div class="current_Location " style="padding-bottom:0px; padding-top:20px;  "> 您当前的位置：<a href="{yun:}$config.sy_weburl{/yun}">首页</a> &gt; 职位专题 </div>
+<div class="job_spc_left">
+	<!--list-->
+	{yun:}specialjob ispage=1 limit=10  item=row{/yun}
+	<div class="job_spc_list">
+		<div class="job_spc_pic">
+			<a href="{yun:}$row.url{/yun}"><img src="{yun:}$row.sjlist_pic_n{/yun}"></a>
+			
+		</div>
+		<div class="job_spc_list_name">
+			<a href="{yun:}$row.url{/yun}">{yun:}$row.title{/yun}</a>
+			<span class="job_spc_list_time">{yun:}$row.ctime|date_format:'%Y-%m-%d'{/yun}</span>
+		</div>
+		<div class="job_spc_list_p">{yun:}$row.sub_title{/yun}</div>
+        {yun:}if $row.job_num{/yun}
+		<div class="job_spc_list_com"></div>
+        {yun:}/if{/yun}
+		<a href="{yun:}$row.url{/yun}" class="job_spc_list_a">查看详情</a>
+	</div>
+	{yun:}specialjobelse{/yun}
+		<div class="clear"></div>
+		<div class="special_notip">
+			<div class="special_notip_img"><img src="{yun:}$style{/yun}/images/search-no.gif"></div>
+			<div class="special_notip_p">抱歉，还没有职位专题的相关信息</div>
+		</div>
+	{yun:}/specialjob{/yun}
+	<!--list-->
+    <div class="pages fl" style="padding-top:20px; padding-bottom:10px;"> {yun:}$pagenav{/yun} </div>
+</div>
+<div class="job_spc_right">
+	<div class="yun_job_list_right_banner">
+		{yun:}adlist classid=7 limit=5 item=adlist_7{/yun}
+	  {yun:}$adlist_7.html{/yun}
+	  {yun:}/adlist{/yun} </div>
+	<div class="job_recommendation">
+	  <div class="job_recommendation_title"><span class="job_recommendation_span"><i class="job_recommendation_span_line"></i>精选职位推荐</span> {yun:}if $recNum > 10{/yun}<a href="javascript:void(0)" onclick="exchange();" class="job_right_box_more png" rel="nofollow">换一组</a>{yun:}/if{/yun} </div>
+	  <ul class="job_recommendation_list">
+	    <input type="hidden" value='2' id='exchangep' />
+	    {yun:}joblist namelen=15 comlen=19 rec=1 limit=10 item=blist{/yun}
+	    <li> <a href="{yun:}$blist.job_url{/yun}" class="job_recommendation_jobname" title="{yun:}$blist.name{/yun}">{yun:}$blist.name_n{/yun}</a> <a href="{yun:}$blist.com_url{/yun}" class="job_recommendation_Comname" title="{yun:}$blist.com_name{/yun}">{yun:}$blist.com_n{/yun}</a>
+	      <div class="job_recommendation_msg"> <span class=""><em class="job_right_box_list_c">{yun:}$blist.job_salary{/yun} </em></span> </div>
+	    </li>
+	    {yun:}/joblist{/yun}
+	  </ul>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+<!--尾部导航-->
+{yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" /><script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script><script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/lazyload.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<!--[if IE 6]>
+<script src="{yun:}$config.sy_weburl{/yun}/js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+DD_belatedPNG.fix('.png');
+</script>
+<![endif]-->
+{yun:}include file="$tplstyle/public_search/login.htm"{/yun}
+{yun:}include file="$tplstyle/footer.htm"{/yun}

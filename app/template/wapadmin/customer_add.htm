@@ -1,0 +1,276 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+
+<body>
+    <div id="yunvue" style="display: none;">
+        <section class="innerPageTop">
+            <div class="subjectNav claimInput layerDemo">
+                <a href="javascript:goBack()">
+                    <img src="img/fh.png" alt="">
+                </a>
+                <p class="followTitle">录入新客户</p>
+            </div>
+        </section>
+        <section class="meanseData">
+            <form action="" id="subForm" onsubmit="return false;" class="layui-form">
+                <div class="meanseDataAlls">
+                    <div class="meansOne">
+                        <h3>手机号码</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linktel" v-model="row.linktel" placeholder="请输入联系手机">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>账号密码</h3>
+                        <div class="meanInput">
+                            <input type="password" name="password" v-model="row.password" placeholder="请输入账号密码">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业全称</h3>
+                        <div class="meanInput">
+                            <input type="text" name="name" v-model="row.name" placeholder="请输入企业全称">
+                        </div>
+                    </div>
+
+                    <div class="meansOne">
+                        <h3>联系人</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linkman" v-model="row.linkman" placeholder="请输入联系人">
+                        </div>
+                    </div>
+
+                    <div class="meansOne">
+                        <h3>客户等级</h3>
+                        <div class="meanTents" @click="crmTypeShow=true">
+                            <p>{{crmType.name[typeIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="crmTypeShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="typeIndex" @cancel="crmTypeShow = false" :columns="crmType.name" @confirm="bindCrmTypeChange"/></van-popup>
+                        <input hidden="true" name="crm_type" :value="row.crm_type?row.crm_type:0"/>
+                    </div>
+
+                    <div class="meansOne">
+                        <h3>客户标签</h3>
+                        <div class="meanTents" @click="crmStatusShow=true">
+                            <p>{{crmStatus.name[statusIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="crmStatusShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="statusIndex" @cancel="crmStatusShow = false" :columns="crmStatus.name" @confirm="bindCrmStatusChange"/></van-popup>
+                        <input hidden="true" name="crm_status" :value="row.crm_status?row.crm_status:0"/>
+                    </div>
+
+                    <div class="meansOne">
+                        <h3>绑定业务员</h3>
+                        <div class="meanTents" @click="crmShow=true">
+                            <p>{{crmS.name[crmIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="crmShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="crmIndex" @cancel="crmShow = false" :columns="crmS.name" @confirm="bindCrmChange"/>
+                        </van-popup>
+                        <input hidden="true" name="crm_uid" :value="row.crm_uid?row.crm_uid:0"/>
+                    </div>
+
+                    <div class="meansOne">
+                        <h3>会员等级</h3>
+                        <div class="meanTents" @click="ratingShow=true">
+                            <p>{{ratingArr.name[ratingIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="ratingShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="ratingIndex" @cancel="ratingShow = false" :columns="ratingArr.name" @confirm="bindRatingChange"/></van-popup>
+                        <input hidden="true" name="rating" :value="row.rating?row.rating:0"/>
+                    </div>
+                </div>
+                <div @click="subForm" class="meansButtom">
+                    <button>提交</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+
+        var yunvue = new Vue({
+            el: '#yunvue',
+            data() {
+                return {
+                    row: {},
+
+                    //  业务员
+                    crmShow: false,
+                    crmS: {
+                        uid: [],
+                        name: []
+                    },
+                    crmIndex: 0,
+
+                    //  客户等级
+                    crmTypeShow: false,
+                    crmType: {
+                        id: [],
+                        name: []
+                    },
+                    typeIndex: 0,
+
+                    //  客户标签
+                    crmStatusShow: false,
+                    crmStatus: {
+                        id: [],
+                        name: []
+                    },
+                    statusIndex: 0,
+
+                    //  会员登录
+                    ratingShow: false,
+                    ratingArr: {
+                        id: [],
+                        name: []
+                    },
+                    ratingIndex: 0,
+                };
+            },
+            created() {
+                this.getCrmClass();
+            },
+            methods: {
+                getCrmClass: function () {
+                    let that = this;
+                    var params = {
+                        rand: Math.random()
+                    };
+                    showLoading();
+                    $.post('index.php?m=crm&c=crm_my_customer&a=getCrmClass', params, function (res) {
+                        hideLoading();
+                        if (res.error === 0) {
+                            data = res.data;
+
+                            var crmSData = {
+                                uid: [],
+                                name: []
+                            };
+                            data.crmS.forEach(val=>{
+                                crmSData.uid.push(val.uid);
+                                crmSData.name.push(val.name);
+                            });
+                            that.crmS = crmSData;
+                            that.crmS.uid.unshift(0)
+                            that.crmS.name.unshift('请选择绑定业务员');
+
+                            var typeData = {
+                                id: [],
+                                name: []
+                            };
+                            data.crmType.forEach(val=>{
+                                typeData.id.push(val.id);
+                                typeData.name.push(val.name);
+                            });
+                            that.crmType = typeData;
+                            that.crmType.id.unshift(0)
+                            that.crmType.name.unshift('请选择客户等级');
+
+                            var statusData = {
+                                id: [],
+                                name: []
+                            };
+                            data.crmStatus.forEach(val=>{
+                                statusData.id.push(val.id);
+                                statusData.name.push(val.name);
+                            });
+                            that.crmStatus = statusData;
+                            that.crmStatus.id.unshift(0)
+                            that.crmStatus.name.unshift('请选择客户标签');
+
+                            var ratingData = {
+                                id: [],
+                                name: []
+                            };
+                            data.ratingArr.forEach(val=>{
+                                ratingData.id.push(val.id);
+                                ratingData.name.push(val.name);
+                            });
+                            that.ratingArr = ratingData;
+                            that.ratingArr.id.unshift(0)
+                            that.ratingArr.name.unshift('请选择会员等级')
+
+
+                            $("#yunvue").show();
+                        }
+                    }, 'json')
+                },
+                bindCrmChange: function (value, index) {
+                    this.crmIndex = index;
+                    this.row.crm_uid = this.crmS.uid[index];
+                    this.crmShow = false;
+                },
+                bindCrmTypeChange: function (value, index) {
+                    this.typeIndex = index;
+                    this.row.crm_type = this.crmType.id[index];
+                    this.crmTypeShow = false;
+                },
+                bindCrmStatusChange: function (value, index) {
+                    this.statusIndex = index;
+                    this.row.crm_status = this.crmStatus.id[index];
+                    this.crmStatusShow = false;
+                },
+                bindRatingChange: function (value, index) {
+                    this.ratingIndex = index;
+                    this.row.rating = this.ratingArr.id[index];
+                    this.ratingShow = false;
+                },
+
+                subForm: function(){
+                    var formData = new FormData(document.getElementById("subForm"));
+
+                    var moblie = $.trim(this.row.linktel);
+                    if (moblie == ''){
+                        showToast('请填写手机号！');
+                        return false;
+                    }else if (moblie && isjsMobile(moblie) == false) {
+                        showToast('手机格式错误！');
+                        return false;
+                    }
+                    var password = $.trim(this.row.password);
+                    if (password == ''){
+                        showToast('请填写账号密码！');
+                        return false;
+                    }
+                    var name = $.trim(this.row.name);
+                    if (name == ''){
+                        showToast('请填写企业名称！');
+                        return false;
+                    }
+                    var linkman = $.trim(this.row.linkman);
+                    if (linkman == ''){
+                        showToast('请填写企业联系人！');
+                        return false;
+                    }
+
+                    showLoading('提交中');
+                    $.ajax({
+                        url:"index.php?m=crm&c=crm_my_customer&a=add",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        dataType: 'json',
+                        success: function(res){
+                            hideLoading();
+                             if (res.error === 0) {
+                                showToast(res.msg, 2, function(){
+                                    goBack();
+                                });
+                            } else {
+                                showToast(res.msg);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

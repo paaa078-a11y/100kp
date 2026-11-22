@@ -1,0 +1,287 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav claimInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <p class="followTitle">待审核营业执照</p>
+        </div>
+    </section>
+    <section class="licenseSubject">
+        <ul v-if="!noCert">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                    <li v-for="(item, ckey) in list" :key="ckey">
+                        <div class="licenseInfo">
+                            <div class="licenseOne">
+                                <img :src="item.logo" alt="">
+                            </div>
+                            <div class="licenseTwo">
+                                <h3>{{item.name}}</h3>
+                                <p>申请时间：{{item.ctime_n}}</p>
+                                <span v-if="item.status==1">已审核</span>
+                                <span v-else-if="item.status==0">未审核</span>
+                                <span v-else-if="item.status==2">未通过</span>
+                            </div>
+                        </div>
+                        <div class="licenseExam">
+                            <a @click="statusBoxShow(ckey)" href="javascript:void(0);">审核</a>
+                        </div>
+                    </li>
+                </van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-else class="noneInfoAll">
+            <div class="nfoAllConu">
+                <img src="img/zwtip.png" alt="">
+                <p>暂无信息</p>
+            </div>
+        </div>
+    </section>
+
+    <van-popup v-model="statusShow" round position="bottom">
+        <section class="licensePopu">
+            <div class="licenseShen">
+                <img class="licenseClose" src="img/close.png" alt="" @click="statusShow = false">
+                <div class="licenseForms">
+                    <h3>审核信息</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="licenseSubes">
+                            <!-- <p>公司信息</p> -->
+                            <div class="licenseInfose">
+                                <div class="licenseInfoseOne">
+                                    <p>公司名称：</p>
+                                    <span>{{info.name}}</span>
+                                </div>
+                                <div class="licenseInfoseOne">
+                                    <p>统一社会信用代码：</p>
+                                    <span>{{info.social_credit}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="licenseSubes">
+                            <p>证件照片</p>
+                            <div class="licensePhoto">
+                                <ul>
+                                    <li v-if="info.check">
+                                        <img :src="info.check" alt="">
+                                        <span @click="setCurrPic(info.check)">查看原图</span>
+                                    </li>
+                                    <li v-if="info.owner_cert">
+                                        <img :src="info.owner_cert" alt="">
+                                        <span @click="setCurrPic(info.owner_cert)">查看原图</span>
+                                    </li>
+                                    <li v-if="info.wt_cert">
+                                        <img :src="info.wt_cert" alt="">
+                                        <span @click="setCurrPic(info.wt_cert)">查看原图</span>
+                                    </li>
+                                    <li v-if="info.other_cert">
+                                        <img :src="info.other_cert" alt="">
+                                        <span @click="setCurrPic(info.other_cert)">查看原图</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="licenseSubes">
+                            <p>审核状态</p>
+                            <div class="licenseList" v-if="status==0">
+                                <a href="javascript:void(0);" @click="setStatus(1)">正常</a>
+                                <a href="javascript:void(0);" @click="setStatus(2)">未通过</a>
+                            </div>
+                            <div class="licenseList" v-else-if="status==1">
+                                <a href="javascript:void(0);" class="licenseButton" @click="setStatus(1)">正常</a>
+                                <a href="javascript:void(0);" @click="setStatus(2)">未通过</a>
+                            </div>
+                            <div class="licenseList" v-else>
+                                <a href="javascript:void(0);" @click="setStatus(1)">正常</a>
+                                <a href="javascript:void(0);" class="licenseButton" @click="setStatus(2)">未通过</a>
+                            </div>
+                        </div>
+                        <div class="licenseSubes">
+                            <p>同步操作</p>
+                            <div class="licenseTongbu">
+                                <div class="licenseTongbuyi" style="border:none">
+                                    <van-switch v-model="jobstatus" inactive-color="#dcdee0"/>
+                                </div>
+                                <div class="licenseTongbuer">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    <span>说明：所有未审核职位同步审核成功</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="licenseSubes">
+                            <p>备注说明</p>
+                            <div class="licenseCont">
+                                <textarea class="follotextarea" placeholder="审核说明~" v-model="statusbody"></textarea>
+                            </div>
+                        </div>
+                        <div class="licenseSubes">
+                            <div class="licenseCont">
+                                <button @click="submitStatus">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <van-image-preview v-model:show="picShow" :images="curpic"/>
+</div>
+<script>
+    var status = '{yun:}$smarty.get.status{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noCert: false,
+
+                statusShow: false,
+                preview: '',
+                owner_cert: '',
+                wt_cert: '',
+                other_cert: '',
+                status: status,
+                social_credit: '',
+                id: '',
+                statusbody: '',
+                fileList: [],
+                info: {},
+                jobstatus: false,
+
+                picShow: false,
+                curpic: []
+            }
+        },
+        created() {
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                };
+                if (that.status) {
+                    param['status'] = that.status;
+                }
+                $.post('index.php?m=user&c=company_cert', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noCert = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noCert = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+                }, 'json');
+            },
+            submitStatus: function () {
+                var that = this;
+                var param = {
+                    uid: that.uid,
+                    status: that.status,
+                    statusbody: that.statusbody,
+                    job_status: that.jobstatus
+                };
+                if (that.status == 0) {
+                    return showToast('请选择审核状态');
+                }
+
+                showLoading('审核中');
+                $.post('index.php?m=user&c=company_cert&a=status', param, function (res) {
+                    hideLoading();
+
+                    if (res.error == 9) {
+                        that.statusShow = false;
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            setCurrPic: function (src) {
+                this.curpic = [src];
+                this.picShow = true;
+            },
+            statusBoxShow: function (key) {
+                this.preview = this.list[key].check;
+                this.owner_cert = this.list[key].owner_cert;
+                this.wt_cert = this.list[key].wt_cert;
+                this.other_cert = this.list[key].other_cert;
+                this.status = this.list[key].status;
+                this.social_credit = this.list[key].social_credit;
+                this.uid = this.list[key].uid;
+                this.statusbody = this.list[key].statusbody;
+                this.info = this.list[key];
+                this.statusShow = true;
+            },
+            setStatus: function (e) {
+                this.status = e;
+            },
+            pageChange: function (e) {
+                this.page = e;
+                this.getList();
+            }
+        }
+    });
+</script>
+<style type="text/css">
+    .licensePopu {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .licensePopu .licenseShen {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important
+    }
+</style>
+</body>
+
+</html>

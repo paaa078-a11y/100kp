@@ -1,0 +1,150 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav claimInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <p class="followTitle">网站动态</p>
+        </div>
+    </section>
+    <section class="dynamicTab">
+        <div class="dynamicTabLeft">
+            <ul class="dynamicUl">
+                <li :class="type=='downresumedt'?'dynamicCur':''" @click="setNav('downresumedt')">下载简历</li>
+                <li :class="type=='useridmsgdt'?'dynamicCur':''" @click="setNav('useridmsgdt')">邀请面试</li>
+                <li :class="type=='useridjobdt'?'dynamicCur':''" @click="setNav('useridjobdt')">职位申请</li>
+                <li :class="type=='lookjobdt'?'dynamicCur':''" @click="setNav('lookjobdt')">职位浏览</li>
+                <li :class="type=='lookresumedt'?'dynamicCur':''" @click="setNav('lookresumedt')">简历浏览</li>
+                <li :class="type=='favjobdt'?'dynamicCur':''" @click="setNav('favjobdt')">职位收藏</li>
+                <li :class="type=='companylogdt'?'dynamicCur':''" @click="setNav('companylogdt')">企业日志</li>
+                <li :class="type=='resumelogdt'?'dynamicCur':''" @click="setNav('resumelogdt')">个人日志</li>
+            </ul>
+        </div>
+        <div class="dynamicTabTight">
+
+            <div class="dynamicCont dynamicOn">
+                <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                    <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                        <div class="dynamicContList" v-for="(item,key) in list" :key="key">
+                            <template v-if="type == 'downresumedt'">
+                                <p>{{item.comusername}}</p>
+                                <span>{{item.time}}  下载了 {{item.username}} 的简历</span>
+                            </template>
+                            <template v-if="type == 'useridmsgdt'">
+                                <p>{{item.fname}}</p>
+                                <span>{{item.times}}  邀请 {{item.username}} 面试</span>
+                            </template>
+                            <template v-if="type == 'useridjobdt'">
+                                <p>{{item.username}}</p>
+                                <span>{{item.times}}  申请 {{item.job_name}} 职位</span>
+                            </template>
+                            <template v-if="type == 'lookjobdt'">
+                                <p>{{item.username}}</p>
+                                <span>{{item.times}}  浏览了 {{item.jobname}} 职位</span>
+                            </template>
+                            <template v-if="type == 'lookresumedt'">
+                                <p>{{item.comusername}}</p>
+                                <span>{{item.times}}  浏览了 {{item.username}} 的简历</span>
+                            </template>
+                            <template v-if="type == 'favjobdt'">
+                                <p>{{item.username}}</p>
+                                <span>{{item.times}}  收藏了 {{item.job_name}} 职位</span>
+                            </template>
+                            <template v-if="type == 'companylogdt'">
+                                <p>{{item.username}}</p>
+                                <span>{{item.ctime_n}}  {{item.content}}</span>
+                            </template>
+                            <template v-if="type == 'resumelogdt'">
+                                <p>{{item.username}}</p>
+                                <span>{{item.ctime_n}}  {{item.content}}</span>
+                            </template>
+                        </div>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noDt: false,
+
+                type: 'downresumedt'
+            }
+        },
+        created() {
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                    type: that.type
+                };
+
+                $.post('index.php?m=admin_webdt&c=index', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noDt = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noDt = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+
+                }, 'json');
+            },
+            setNav: function (e) {
+                this.type = e;
+                this.getList('refresh');
+            }
+        }
+    });
+</script>
+</body>
+</html>

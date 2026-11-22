@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script>var weburl = '{yun:}$config.sy_weburl{/yun}';</script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script language="javascript">
+        function priceCk(obj){
+            obj.value = obj.value.replace(/[^0-9.]/g,'');// 去除数字和.以外其他字符
+            obj.value = obj.value.replace(/^\./g,'');// 验证第一个字符是数字
+            obj.value = obj.value.replace(/\.{2,}/g,'.');// 只保留第一个.
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');// 只能输入两位小数
+        }
+        function checkform(myform){
+            if ($("#title").val()=="") {
+                parent.layer.msg('请填写标题！', 2,8);return false;
+            }
+            if ($("#price").val()=="") {
+                parent.layer.msg('请填写现价！', 2,8);return false;
+            }
+            if ($("#telphone").val()=="") {
+                parent.layer.msg('请填写电话！', 2,8);return false;
+            }
+            if ($("#desc").val()=="") {
+                parent.layer.msg('请填写副标题！', 2,8);return false;
+            }
+            var content = UE.getEditor('myEditor').getContent();
+            if (content=="") {
+                parent.layer.msg('请填写简介内容！', 2,8);return false;
+            }
+            loadlayer();
+            $("#newsform").submit();
+        }
+    </script>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <title>后台管理</title>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <style>
+        .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 0 !important;margin-bottom: 10px;}
+    </style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+
+        <div class="clear"></div>
+        <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+        <form id="newsform" name="myform" target="supportiframe" action="index.php?m=skill_list&c=addskill" method="post" encType="multipart/form-data" class="layui-form">
+            <div class="enterNewsAll">
+                <div class="admin_bold">添加课程</div>
+
+                <table width="100%" class="table_form">
+                    <tr class="admin_table_trbg">
+                        <th>课程标题：</th>
+                        <td>
+                            <div class="layui-input-inline t_w480">
+                                <input type="text" name="title" id="title" size="60" lay-verify="required" value="{yun:}$info.title{/yun}" autocomplete="off" class="layui-input" placeholder="请输入标题">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th >副标题：</th>
+                        <td>
+                            <div class="layui-input-block t_w480">
+                                <textarea name="desc"  id="desc" cols="60" rows="3" class="layui-textarea" placeholder="请输入描述">{yun:}$info.desc{/yun}</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th>课程现价：</th>
+                        <td>
+                            <div class="layui-input-inline t_w480">
+                                <input type="text" name="price" id="price" lay-verify="required" value="{yun:}$info.price{/yun}" size="60" autocomplete="off" class="layui-input" placeholder="请输入价格" onKeyUp="priceCk(this)">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th>课程原价：</th>
+                        <td>
+                            <div class="layui-input-inline t_w480">
+                                <input type="text" name="prices" id="prices" lay-verify="required" value="{yun:}$info.prices{/yun}" size="60" autocomplete="off" class="layui-input" placeholder="请输入价格" onKeyUp="priceCk(this)">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>手机号码：</th>
+                        <td>
+                            <div class="layui-input-inline t_w480">
+                                <input type="text" name="telphone" id="telphone" lay-verify="required" value="{yun:}$info.telphone{/yun}" size="60" autocomplete="off" class="layui-input" placeholder="请输入号码">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>课程类别：</th>
+                        <td>
+                            <div class=" ">
+                                <div class="layui-input-inline t_w480">
+                                    <select name="lesson" id="lesson" lay-filter="exp">
+                                        <option value="">请选择</option>
+                                        {yun:}foreach from=$lesson item=v{/yun}
+                                        <option value="{yun:}$v.id{/yun}" {yun:}if $info.lesson == $v.id{/yun}selected{yun:}/if{/yun}>{yun:}$v.name{/yun}</option>
+                                        {yun:}/foreach{/yun}
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th style="float: right;">简  介：</th>
+                        <td>
+                            <script id="myEditor" name="introduce" type="text/plain" style="width:800px;height:300px;">{yun:}$info.introduce{/yun} </script>
+                        </td>
+                    </tr>
+
+                    <tr class="admin_table_trbg">
+                        <th width="120" style="float: right;">课程标签：</th>
+                        <td>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                <span class="" id="addwelfarelist" style="padding-top: 0;">
+                                    {yun:}foreach from=$info.welfare_n key=key item=tv{/yun}
+                                    <input name="welfare[]" value="{yun:}$tv{/yun}" checked="checked" type="checkbox" title="{yun:}$tv{/yun}" data-tag="{yun:}$tv{/yun}" class="changewelfare" lay-skin="primary">
+                                    {yun:}/foreach{/yun}
+                                </span>
+                                    <div style="width:76%; overflow: hidden;">
+                                        <div class="addwelfare_bb" style="height:80px;margin-top: 0;">
+                                            <div class="addwelfare_b_d1">
+                                                <input class="admin_comedity_text" type="text" tabindex="1000" id="addwelfare" style="margin-top: -2px;">
+                                                <a class="addwelfarebox" style="color:#fff">添加标签</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>报名基数：</th>
+                        <td>
+                            <div class="layui-input-inline t_w480">
+                                <input type="text" name="bnum" id="bnum" lay-verify="required" value="{yun:}$info.bnum{/yun}"  class="layui-input" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="120" style="float: right;">缩略图：</th>
+                        <td>
+
+                            <button id="noupload" type="button" class="yun_bth_pic" lay-data="{imgid: 'imgpcicon'}">上传图片</button>
+                            <input type="hidden" name="cover" value="{yun:}$info.cover{/yun}"/>
+                            <img id="imgpcicon" src="{yun:}$info.cover_n{/yun}" width="288px" height="160px" {yun:}if !$info.cover{/yun}class="none"{yun:}/if{/yun}>
+
+                            <span class="admin_web_tip" style="margin-left: 10px;">尺寸：750*457px</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="120" style="float: right;">联系人二维码：</th>
+                        <td>
+
+                            <button id="noupload3" type="button" class="yun_bth_pic" lay-data="{imgid: 'imgewm'}">上传图片</button>
+                            <input type="hidden" name="wx_qr_code" value="{yun:}$info.wx_qr_code{/yun}"/>
+                            <img id="imgewm" src="{yun:}$info.wx_qr_code_n{/yun}" width="80px" height="80px" {yun:}if !$info.wx_qr_code{/yun}class="none"{yun:}/if{/yun}>
+
+                            <span class="admin_web_tip" style="margin-left: 10px;">尺寸：160*160px</span>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th style="border-bottom:none;">&nbsp;</th>
+                        <td align="left" style="border-bottom:none;">
+                            {yun:}if $info.id{/yun}
+                            <input type="hidden" name="id" size="40" value="{yun:}$info.id{/yun}" />
+                            <input type="hidden" name="updateskill" value="1">
+                            <input type="hidden" name="lasturl" value="{yun:}$lasturl{/yun}">
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;更 新&nbsp;" />
+                            {yun:}else{/yun}
+                            <input type="hidden" name="skilladd" value="1">
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;添 加&nbsp;" />
+                            {yun:}/if{/yun}
+                            <input class="layui-btn tty_cz" type="reset" name="reset" value="&nbsp;重 置 &nbsp;" /></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .layui-form-item {
+        margin-bottom: 0px;
+        clear: both;
+    }
+</style>
+{yun:}include file="$adminstyle/checkdomain.htm"{/yun}
+<script type="text/javascript">
+    var ue = UE.getEditor('myEditor');
+</script>
+<script>
+    layui.use(['layer', 'form', 'laydate'], function() {
+        var layer = layui.layer,
+            form = layui.form,
+            laydate = layui.laydate,
+            $ = layui.$;
+    });
+    $(document).ready(function() {
+
+        //添加标签
+        $('.addwelfarebox').click(function() {
+
+            var welfare = $('#addwelfare').val();
+            var error = 0;
+
+            if (welfare.length >= 2 && welfare.length <= 8) {
+
+                //判断信息是否已经存在
+                $('.changewelfare').each(function() {
+                    var otag = $(this).attr('data-tag');
+                    if (welfare == otag) {
+                        layer.msg('相同标签已存在，请选择或重新填写！', 2, 8);
+                        error = 1;
+                    }
+                });
+                if (error == 0) {
+                    $('#addwelfarelist').append('<input name="welfare[]" value="' + welfare + '" checked="checked"  type="checkbox" title="' + welfare + '" data-tag="' + welfare + '" class="changewelfare" lay-skin="primary">');
+
+                    layui.use(['layer', 'form'], function() {
+                        var layer = layui.layer,
+                            form = layui.form,
+                            $ = layui.$;
+                        form.render('checkbox');
+                    });
+
+                }
+
+                $('#addwelfare').val('');
+
+            } else {
+                layer.msg('请输入2-8个标签字符！', 2, 8);
+            }
+        });
+    });
+
+    layui.use('upload', function() {
+        var $ = layui.$,
+            upload = layui.upload,
+            layer = layui.layer;
+        var layaccept = 'images',
+            layexts = 'jpg|png|gif|bmp|jpeg';
+        upload.render({
+            elem: '#noupload',
+            auto: false,
+            bindAction: '#test9', //触发上传的对象，暂未用到
+            accept: layaccept,
+            field: 'cover',
+            exts: layexts,
+            choose: function(obj) {
+                var imgid = this.imgid;
+                obj.preview(function(index, file, result){
+                    if(imgid && $('#'+imgid).length>0){
+                        $('#'+imgid).removeClass('none');
+                        $('#'+imgid).attr('src', result); //图片链接（base64）
+                    }
+                });
+            }
+        });
+        upload.render({
+            elem: '#noupload3',
+            auto: false,
+            bindAction: '#test9', //触发上传的对象，暂未用到
+            accept: layaccept,
+            field: 'wx_qr_code',
+            exts: layexts,
+            choose: function(obj) {
+                var imgid = this.imgid;
+                obj.preview(function(index, file, result){
+                    if(imgid && $('#'+imgid).length>0){
+                        $('#'+imgid).removeClass('none');
+                        $('#'+imgid).attr('src', result); //图片链接（base64）
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+</body>
+
+</html>

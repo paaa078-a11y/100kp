@@ -1,0 +1,61 @@
+{yun:}include file="$trainstyle/header.htm"{/yun}
+<div class="clear"></div>
+<div class="training_content training_w980">
+	<div class="training_cur ftl">
+		<div class="training_cur_l ftl"><a href="{yun:}url m=train{/yun}">首页</a> > 培训课程 </div>
+	</div>
+	{yun:}include file="$trainstyle/top2.htm"{/yun}
+	<div class="Courses_content_box  ftl ">
+		<div class="Courses_Table_detail ftl mt10" style="width:1200px; background:#f8f8f8;">
+			{yun:}if $rows{/yun}
+				<div class="train_class2">
+					<ul>
+						{yun:}foreach item=v from=$rows{/yun}
+							<li>
+								<div class="train_class_img">
+									<a href="{yun:}url m=train c=subshow id='`$v.id`'{/yun}">	
+										<img style="width:372px;height:225px;" src="{yun:}$v.pic{/yun}" onerror="showImgDelay(this,'{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_pxsubject_icon{/yun}',2);"/>
+									</a>
+								</div>
+								<div class="train_class_tit">
+									<a href="{yun:}url m=train c=subshow id='`$v.id`'{/yun}" style="font-size: 16px; line-height: 30px;">{yun:}$v.name|mb_substr:0:30:'utf-8'{/yun}</a>
+								</div>
+								<div class="train_class_lb">类别：{yun:}$subject_name[$v.tnid]{/yun}</div>
+								<div class="train_class_dw">
+									<div class="train_class_tm">联系QQ：70466670</div>
+									<div class="train_class_my"><i class="train_class_my" style="font-size: 18px; line-height: 36px;">￥{yun:}$v.price{/yun}.00元/月</i></div>
+									<div class="Courses_Table_list_g courses_bb">
+    <a href="{yun:}url m=train c=subshow id='`$v.id`'{/yun}" class="Courses_Table_list_g_bth2">购买</a>
+</div>
+								</div>
+							</li>	
+						{yun:}/foreach{/yun}
+					</ul>
+					<div class="clear"></div>
+					<div class="pages">{yun:}$pagenav{/yun}</div>
+				</div>
+			{yun:}else{/yun}
+				<div class="Courses_Table_detail_other">
+					<div class="com_msg_no">
+						<p>当前没有培训课程信息</p>
+					</div>
+				</div>
+			{yun:}/if{/yun}
+		</div>
+	</div>
+
+</div>
+
+{yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script> 
+<script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>var weburl="{yun:}$config.sy_weburl{/yun}";</script>
+<!--[if IE 6]>
+<script src="{yun:}$config.sy_weburl{/yun}/js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+DD_belatedPNG.fix('.png,.pagination li a ');
+</script>
+<![endif]-->
+{yun:}include file="$trainstyle/footer.htm"{/yun} 

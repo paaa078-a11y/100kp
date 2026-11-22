@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+</head>
+
+<body>
+<div id="crmManageApp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachInpt">
+            <el-input placeholder="请输入内容" @keyup.enter.native="handleSearch" v-model="search.keyword" class="input-with-select" size="small" clearable>
+                <el-select v-model="search.type" slot="prepend" placeholder="请选择">
+                    <el-option label="业务员" value="1"></el-option>
+                    <el-option label="工号" value="2"></el-option>
+                </el-select>
+            </el-input>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSearch">查询</el-button>
+        </div>
+        <div class="moduleSeachButn">
+            <el-button type="primary" icon="el-icon-document-add" size="mini" @click="addCrm">添加业务员</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%" ref="multipleTable" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading" :empty-text="emptytext">
+            <el-table-column prop="uid" label="工号" width="80"></el-table-column>
+            <el-table-column prop="name" label="业务员" min-width="120"></el-table-column>
+            <el-table-column prop="" label="职业形象照" min-width="120">
+                <template slot-scope="props">
+                    <div class="layuiSmallImg">
+                        <a href="javascript:;" class="layuiSmallImgUp" @click="makeLogo(props.row.uid, props.row.name, 2);">
+                            <el-image :src="props.row.photo" style="width:48px;height:48px">
+                                <div slot="error" class="image-slot">
+                                    <img src="../../../admin/images/imaheg.png" alt="">
+                                </div>
+                            </el-image>
+                            <div v-if="!props.row.photo">
+                                <a href="javascript:;" class="layui-btn layui-btn-small layuiSmallImgDwon" style="font-size: 12px;;" @click="makeLogo(props.row.uid, props.row.name, 1)">生成/上传</a>
+                            </div>
+                        </a>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="allNum" label="客户总数" width="110" align="center"></el-table-column>
+            <el-table-column prop="concernedNum" label="已跟进" width="110" align="center"></el-table-column>
+            <el-table-column prop="vitNum" label="计划跟进" width="110" align="center"></el-table-column>
+            <el-table-column label="剩余名额" width="110" align="center">
+                <template slot-scope="props"><span style="color: red;">{{props.row.syNum}}</span></template>
+            </el-table-column>
+            <el-table-column prop="vipNum" label="成交客户" width="110" align="center"></el-table-column>
+            <el-table-column prop="orderNum" label="签单数" width="110" align="center"></el-table-column>
+            <el-table-column prop="orderPrice" label="签单金额" width="130" align="center">
+                <template slot-scope="props"><span style="color: red;">￥{{props.row.orderPrice}}</span></template>
+            </el-table-column>
+            <el-table-column prop="departName" label="所属部门" width="100" align="center"></el-table-column>
+            <el-table-column label="客户保护" width="110" align="center">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.kh_n" active-color="#1890FF" inactive-color="#B8BDC9" @change="changeKh(scope)"></el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column label="在职/离职" width="110" align="center">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.status_n" active-color="#1890FF" inactive-color="#B8BDC9" @change="changeStatus(scope)"></el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="200" align="center">
+                <template slot-scope="scope">
+                    <div class="moduleElTaCaoz">
+                        <el-button size="mini" @click="editCrm(scope.row)">修改信息</el-button>
+                        <el-button size="mini" @click="customerList(scope.row.uid)">客户列表</el-button>
+                        <el-button size="mini" @click="assignCustomer(scope.row.uid, scope.row.name)">分配客户</el-button>
+                        <el-button size="mini" @click="shiftCustomer(scope.row.uid, scope.row.name,scope.row.allNum)">转移客户</el-button>
+                        <el-button size="mini" @click="allFollowLog(scope.row.uid)">跟进记录</el-button>
+                        <el-button size="mini" @click="showOptionBox(scope.row.uid)">操作记录</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size.sync="pageSize" :page-sizes="pageSizes" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        </div>
+    </div>
+
+    <!-- 离职设置 -->
+    <div class="modluDrawer">
+        <el-dialog title="客户信息" :visible.sync="statusBoxShow" :with-header="true" :modal-append-to-body="false" :show-close="true" width="300px">
+            <div style="padding: 20px 0;">
+                <span>释放客户：</span>
+                <el-radio v-model="isRelease" label="1">释放</el-radio>
+                <el-radio v-model="isRelease" label="2">保留</el-radio>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="statusBoxShow = false" size="mini">取 消</el-button>
+                <el-button type="primary" size="mini" @click="setStatus">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+
+    <!-- 添加修改 -->
+    <div class="modluDrawer">
+        <el-drawer :close-on-press-escape="false" :wrapper-closable="false" :title="crmBoxTitle" :visible.sync="crmBoxShow" :modal-append-to-body="false" :show-close="true" :with-header="true" size="750px">
+            <add :user="info" :week="week" :group="group" source="crmAdd" @complete="completeAdd"></add>
+        </el-drawer>
+    </div>
+
+    <!--客户列表-->
+    <div class="modluDrawer">
+        <el-drawer title="客户列表" :visible.sync="drawerCustomeList" direction="rtl" :append-to-body="true" :modal-append-to-body="false" size="90%">
+            <customer-list :simple="true" :page_type="'all'" :other_params="customerListParams"></customer-list>
+        </el-drawer>
+    </div>
+
+    <!--分配客户-->
+    <div class="modluDrawer">
+        <el-drawer :title="assignTitle" :visible.sync="assignBoxShow" direction="rtl" :append-to-body="true" :modal-append-to-body="false" size="80%">
+            <assign-list ref="assignList"></assign-list>
+        </el-drawer>
+    </div>
+
+    <!--转移客户-->
+    <div class="modluDrawer">
+        <el-drawer :title="shiftTitle" :visible.sync="shiftBoxShow" direction="rtl" :append-to-body="true" :modal-append-to-body="false" size="80%">
+            <shift-list ref="shiftList"></shift-list>
+        </el-drawer>
+    </div>
+
+    <!--操作记录-->
+    <div class="modluDrawer">
+        <el-drawer title="业务员操作记录" :visible.sync="optionBoxShow" direction="rtl" :append-to-body="true" :modal-append-to-body="false" size="80%">
+            <option-log ref="optLog"></option-log>
+        </el-drawer>
+    </div>
+
+    <!--跟进记录-->
+    <div class="modluDrawer">
+        <el-drawer title="跟进记录" :visible.sync="drawerFollowLog" direction="rtl" :append-to-body="true" :modal-append-to-body="false" size="80%">
+            <div class="followLogDivs">
+                <follow-log :log_tab="0" :uid="follow_uid"></follow-log>
+            </div>
+        </el-drawer>
+    </div>
+
+    <!--职业形象照-->
+    <div class="modluDrawer">
+        <el-dialog title="职业形象照" :visible.sync="drawerlogo" append-to-body :modal-append-to-body="false" width="530px">
+            <el-tabs v-model="logoActiveName" @tab-click="handleLogoTabClick">
+                <el-tab-pane label="智能生成" name="autologo">
+                    <div>
+                        <div class="tw_tip" v-if="tw_tip != ''">
+                            <el-alert :title="tw_tip" type="warning" show-icon :closable="false"></el-alert>
+                        </div>
+                        <div class="wxsettip_small ">文字说明</div>
+                        <el-input placeholder="在此输入名称最多四个汉字" v-model="logocname"></el-input>
+                        <div class="wxsettip_small">背景模板</div>
+                        <ul style="display: flex;">
+                            <li style="margin-right: 10px" v-for="(item, index) in hbBgA" :key="index" @click="logobg = index + 1">
+                                <img :class="logobg == index + 1 ? 'logo_box_img_cur' : 'logo_box_img'" :src="item" width="40" height="40" />
+                            </li>
+                        </ul>
+                        <div style="padding:18px 0;">
+                            <el-alert title="可点击颜色选择背景模板" type="info" show-icon :closable="false"></el-alert>
+                        </div>
+                    </div>
+                    <div style="display: flex;align-content: center;justify-content: center;text-align: center;padding-bottom: 18px;">
+                        <el-button type="primary"  @click="makeLogoHb" style="width:200px;">{{ logobt }}</el-button>
+                        <el-button type="text"  icon="el-icon-thumb"  @click="previewLogoHb">预览</el-button>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="上传图片" name="uplogo">
+                    <div class="center">
+                        <div>
+                            <el-upload class="avatar-uploader" :action="upurl" :show-file-list="false" :data="logodata" :on-success="handleAvatarSuccess" :accept="pic_accept">
+                                <img v-if="uplogopic" :src="uplogopic" class="logoavatar">
+                                <i v-else class="el-icon-plus logoavatar-uploader-icon"></i>
+                            </el-upload>
+                            <div style="padding:18px 0;">
+                                <el-alert title="直接上传职业形象照图片即可,正方形效果最佳" type="info" show-icon :closable="false">
+                                </el-alert>
+                            </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </el-dialog>
+    </div>
+
+    <!--职业形象照-->
+    <div class="modluDrawer">
+        <el-dialog title="职业形象照" :visible.sync="drawerlogopreview" append-to-body :modal-append-to-body="false" width="260px">
+            <div class="center">
+                <el-image style="width: 200px; height: 200px" :src="logopreview" fit="fill"></el-image>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script>
+    const crmManageApp = new Vue({
+        el: '#crmManageApp',
+        data: function () {
+            return {
+                pic_accept: localStorage.getItem("pic_accept"),
+                pytoken: localStorage.getItem("pytoken"),
+                emptytext: '暂无数据',
+                loading: false,
+                search: {
+                    type: '1',
+                    keyword: ''
+                },
+                tableData: [],
+                total: 0,
+
+                currentPage: 1,
+                prevPage: 0,
+                pageSize: 0,
+                pageSizes: [],
+
+                picPreUrl: '',
+                picMaxSize: '',
+                picType: '',
+
+                // 批量选择
+                checkAll: false,
+                isIndeterminate: false,
+                selectedItem: [],
+
+                crmBoxShow: false,
+                crmBoxTitle: '添加业务员',
+                info: {},
+                group: [],
+                week: {},
+
+                statusBoxShow: false,
+                isRelease: '',
+                crmObj: {},
+
+                assignBoxShow: false,
+                assignTitle: '客户分配',
+
+                shiftBoxShow: false,
+                shiftTitle: '客户转移',
+
+                optionBoxShow: false,
+                btDisabled: false,
+                drawerCustomeList: false,
+                customerListParams: {},
+
+                follow_uid: '',
+                drawerFollowLog: false,
+
+                curr_uid: '',
+                tw_tip: '',
+                logocname: '',
+                logobg: '',
+                logobt: '',
+                drawerlogo: false,
+                logopreview: '',
+                drawerlogopreview: false,
+                hbBgA: [],
+                upurl: baseUrl + 'm=crm&c=salesman&a=upPhoto',
+                uplogopic: '',
+                logodata: null,
+                logoActiveName: 'autologo',
+            }
+        },
+        components: {
+            'assign-list': httpVueLoader('./component/assignList.vue'),
+            'shift-list': httpVueLoader('./component/shiftList.vue'),
+            'option-log': httpVueLoader('./component/optionLog.vue'),
+            'customer-list': httpVueLoader('../component/customerList.vue'),
+            'follow-log': httpVueLoader('../component/followLog.vue'),
+            'add': httpVueLoader('../../component/admin_add.vue'),
+        },
+        created(){
+            let that = this;
+			this.getStaticData();
+            that.getCrmList();
+            this.getCacheFun();
+        },
+        methods: {
+            allFollowLog: function(uid){
+                this.follow_uid = uid
+                this.drawerFollowLog = true
+            },
+            customerList: function(uid){
+                this.customerListParams = {crm_uid: uid}
+                this.drawerCustomeList = true
+            },
+			getStaticData(){
+			    var that = this
+				let params = {}
+			    httpPost('m=crm&c=salesman&a=getIndexStaticData',params,{hideloading:true}).then((result) => {
+					var res = result.data;
+					if (res.error == 0) {
+						that.group = res.data.group
+						that.week = res.data.week
+						that.picPreUrl = res.data.picPreUrl;
+						that.picMaxSize = res.data.picMaxSize;
+						that.picType = res.data.picType;
+					}
+			    });
+			},
+            getCrmList() {
+                var that = this;
+                var params = JSON.parse(JSON.stringify(this.search));
+                params.pageSize = that.pageSize;
+                params.page = that.currentPage;
+                that.loading = true;
+                that.emptytext = "数据加载中";
+                httpPost('m=crm&c=salesman&a=getList', params).then(function (res) {
+                    let data = res.data.data;
+                    that.tableData = data.list;
+                    that.total = data.total;
+                    that.pageSize = parseInt(data.pageSize);
+                    that.pageSizes = data.pageSizes;
+                    if(that.prevPage != that.currentPage){
+                        that.prevPage = that.currentPage;
+                        that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                    }
+                    that.loading = false;
+                    if (that.tableData.length === 0){
+                        that.emptytext = "暂无数据";
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            getCacheFun(){
+                let that = this;
+                httpPost('m=crm&c=salesman&a=getCache', {},{hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        that.hbBgA = res.data.hbBgA;
+                    }
+                })
+            },
+            addCrm: function(){
+                let _this = this;
+                _this.crmBoxTitle = '添加业务员';
+                _this.info = {};
+                _this.crmBoxShow = true;
+            },
+            editCrm: function(row){
+                let _this = this;
+                _this.crmBoxTitle = '修改业务员';
+                _this.info = deepClone(row);
+                _this.crmBoxShow = true;
+            },
+            completeAdd() {
+                this.crmBoxShow = false;
+                this.getCrmList();
+            },
+
+            sortChange: function (e) {
+                this.search.t = e.prop;
+                if(e.prop == 'time_n'){
+                    this.search.t = 'ctime';
+                }
+                this.search.order = e.order == 'ascending' ? 'asc' : 'desc';
+                this.handleSearch();
+            },
+            handleSearch: function () {
+                this.currentPage = 1
+                this.getCrmList()
+            },
+            handleSelectionChange(val) {
+                this.selectedItem = val;
+                if (this.selectedItem.length == 0) {
+                    this.isIndeterminate = false;
+                    this.checkAll = false;
+                } else {
+                    if (this.selectedItem.length == this.tableData.length) {
+                        this.isIndeterminate = false;
+                        this.checkAll = true;
+                    } else {
+                        this.isIndeterminate = true;
+                        this.checkAll = false;
+                    }
+                }
+            },
+            changeKh(e) {
+                let _this = this;
+                let khVal = !e.row.kh_n ? 2 : 1;
+                let khBefore = e.row.crm_kh;
+                if (khBefore == khVal) {
+                    return;
+                }
+                let param = {crm_kh: khVal, uid: e.row.uid};
+                httpPost('m=crm&c=salesman&a=setCrmKh', param).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        _this.getCrmList();
+                        message.success(res.msg);
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            changeStatus(e) {
+                let _this = this;
+                e.row.status_n  =   !e.row.status_n;
+                _this.crmObj = e;
+                if (e.row.status_n == true){
+                    _this.statusBoxShow = true;
+                } else{
+                    _this.setStatus();
+                }
+            },
+            setStatus: function(){
+                let _this = this;
+                let statusVal = _this.crmObj.row.status_n ? 2 : 1;
+                let statusBefore = _this.crmObj.row.status;
+                if (statusBefore == statusVal) {
+                    return;
+                }
+                let param = {status: statusVal, uid: _this.crmObj.row.uid, release: _this.isRelease};
+                httpPost('m=crm&c=salesman&a=setCrmStatus', param).then(function (response) {
+                    let res = response.data;
+
+                    _this.statusBoxShow = false;
+                    if (res.error == 0) {
+                        _this.getCrmList();
+                        message.success(res.msg);
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            handleCheckAllChange(val) {
+                val ? this.$refs.releaseLogTable.toggleAllSelection() : this.$refs.releaseLogTable.clearSelection();
+            },
+            assignCustomer: function(uid, name){
+                let _this = this;
+                _this.assignTitle = '客户分配 - '+name;
+                setTimeout(function () {
+                    _this.$nextTick(function () {
+                        _this.$refs.assignList._data.crmUid = uid;
+                        _this.$refs.assignList._data.crmName = name;
+                        _this.$refs.assignList.getCustomer();
+                    });
+                }, 500);
+                _this.assignBoxShow = true;
+            },
+            shiftCustomer: function(uid, name, num){
+                let _this = this;
+                if (parseInt(num) > 0){
+                    _this.shiftTitle = '客户转移 - '+name;
+                    setTimeout(function () {
+                        _this.$nextTick(function () {
+                            _this.$refs.shiftList._data.search.crm_uid = uid;
+                            _this.$refs.shiftList.getCustomer();
+                        });
+                    }, 500);
+                    _this.shiftBoxShow = true;
+                } else {
+                    message.error('暂无可转移客户');
+                    return false;
+                }
+            },
+            toPage: function (uid, type) {
+                window.parent.homeapp.topage({
+                    name: type,
+                    params:{
+                        follow: 'all',
+                        crm_uid: uid
+                    }
+                });
+            },
+            showOptionBox: function(uid){
+                let _this = this;
+                setTimeout(function () {
+                    _this.$nextTick(function () {
+                        _this.$refs.optLog._data.search.crm_uid = uid;
+                        _this.$refs.optLog.getOptionList();
+                    });
+                }, 500);
+                _this.optionBoxShow = true;
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getCrmList();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getCrmList();
+            },
+            handleAvatarSuccess(res) {
+                var that = this
+                if (res.error == 0) {
+                    message.success(res.msg, function () {
+                        that.uplogopic = res.data.url
+                        that.getCrmList()
+                    })
+                } else {
+                    message.error(res.msg)
+                }
+            },
+            // 职业形象照弹窗
+            makeLogo: function (uid, name, type) {
+                var that = this
+                that.uplogopic = '';
+                that.curr_uid = uid;
+                that.logocname = name;
+                if (type == 1) {
+                    that.logobt = '生成'
+                } else if (type == 2) {
+                    that.logobt = '修改'
+                }
+                that.logoActiveName = 'autologo'
+                that.drawerlogo = true
+            },
+            handleLogoTabClick(tab) {
+                if (tab.name == 'uplogo') {
+                    this.logodata = {
+                        pytoken: this.pytoken,
+                        uid: this.curr_uid,
+                    }
+                }
+            },
+            previewLogoHb: function () {
+                var that = this
+                if (that.logocname == '') {
+                    message.error('文字描述不能为空')
+                    return false
+                } else if (that.logocname.length < 1 || that.logocname.length > 4) {
+                    message.error('请填写1-4个字')
+                    return false;
+                } else if (that.logobg == '') {
+                    message.error('请选择背景模板')
+                    return false;
+                }
+                that.logopreview = baseUrl + 'm=crm&c=salesman&a=adminLogoHb&name=' + that.logocname + '&hb=' + that.logobg
+                that.drawerlogopreview = true
+            },
+            makeLogoHb: function () {
+                var that = this
+                if (that.logocname == '') {
+                    message.error('文字描述不能为空')
+                    return false
+                } else if (that.logocname.length < 1 || that.logocname.length > 4) {
+                    message.error('请填写1-4个字')
+                    return false;
+                } else if (that.logobg == '') {
+                    message.error('请选择背景模板')
+                    return false;
+                }
+                httpPost('m=crm&c=salesman&a=adminLogoHb', {
+                    name: that.logocname,
+                    hb: that.logobg,
+                    out: 1
+                }).then(function (result) {
+                    var res = result.data;
+                    if (res.error == 0) {
+                        that.setLogo(res.data)
+                    } else {
+                        message.error(res.msg)
+                        return false
+                    }
+                }).catch(function (e) {
+
+                })
+            },
+            setLogo: function (logo) {
+                var that = this;
+                httpPost('m=crm&c=salesman&a=setLogo', { logo: logo, uid: that.curr_uid }).then(function (result) {
+                    var res = result.data;
+                    if (res.error == 0) {
+                        message.success(res.msg, function () {
+                            that.getCrmList()
+                            that.drawerlogo = false
+                        })
+                    } else {
+                        message.error(res.msg)
+                        return false
+                    }
+                }).catch(function (e) {
+
+                })
+            },
+        }
+    });
+</script>
+<style>
+    .drawerModInfo .el-input{width: 100%;}
+    .crmBoxHuadong{overflow-y: auto;position: relative;width: 100%;height: calc(100% - 85px);}
+    .logo_box_img{opacity:.5}
+    .logo_box_img_cur{opacity:1}
+    .avatar-uploader .el-upload{border:1px dashed #d9d9d9;border-radius:6px;cursor:pointer;position:relative;overflow:hidden}
+    .avatar-uploader .el-upload:hover{border-color:#409eff}
+    .logoavatar-uploader-icon{font-size:28px;color:#8c939d;width:200px;height:200px;line-height:200px;text-align:center}
+    .logoavatar{width:200px;height:200px;display:block}
+    .center{display:flex;align-content:center;justify-content:center;text-align:center;padding-bottom:18px}
+</style>
+</body>
+</html>

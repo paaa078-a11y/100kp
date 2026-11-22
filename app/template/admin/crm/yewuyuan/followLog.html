@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+
+    <script src="../../../admin/js/socketfun.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="followLogApp" class="moduleDome">
+    <div class="allFollowLogPage">
+        <follow_log v-bind:log_tab="1" ref="logOne" :times="times" ywy></follow_log>
+    </div>
+</div>
+<script>
+    const followLogApp = new Vue({
+        el: '#followLogApp',
+        data: function () {
+            return {
+                activeName: 'first',
+                times: '',
+            }
+        },
+        components: {
+            'follow_log': httpVueLoader('../component/followLog.vue'),
+        },
+        created: function () {
+            var that = this;
+            let query = window.parent.homeapp.$route.query;
+            if (!$.isEmptyObject(query)) {
+                if (query.times) {
+                    that.times = query.times;
+                }
+            }
+        },
+        methods: {
+            handleClick(tab, event) {
+                if (tab._props.name == 'first') {
+                    this.$nextTick(function () {
+                        this.$refs.logOne.getFollowLog();
+                    })
+                } else if (tab._props.name == 'second') {
+                    this.$nextTick(function () {
+                        this.$refs.logTwo.getFollowLog();
+                    })
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

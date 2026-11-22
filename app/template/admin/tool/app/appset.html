@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="moduapp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="APP配置" name="appset">
+                <appconfig ref="appset"></appconfig>
+            </el-tab-pane>
+            <el-tab-pane label="版本更新" name="versionupdate">
+                <versionupdate ref="versionupdate"></versionupdate>
+            </el-tab-pane>
+            <el-tab-pane label="首页提示" name="hometip">
+                <hometips ref="hometip"></hometips>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function () {
+            return {
+                activeName: 'appset'
+            }
+        },
+        components: {
+            'appconfig': httpVueLoader('./component/appconfig.vue'),
+            'versionupdate': httpVueLoader('./component/versionupdate.vue'),
+            'hometips': httpVueLoader('./component/hometips.vue'),
+        },
+        created: function(){
+            setTimeout(() => {
+                this.$refs.appset.getinfo();
+            }, 500)
+        },
+        methods: {
+            handleClick(tab) {
+                if (tab.name == 'appset') {
+                    this.$refs.appset.getinfo();
+                } else if (tab.name == 'versionupdate') {
+                    this.$refs.versionupdate.getinfo();
+                } else if (tab.name == 'hometip') {
+                    this.$refs.hometip.getinfo();
+                }
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

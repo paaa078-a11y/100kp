@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" /> 
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script> 
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script> 
+	
+	<title>后台管理</title>
+</head>
+<body class="body_ifm">
+	<div id="subboxdiv" style="width:100%;height:100%;display:none;position: absolute;"></div>
+
+	<div class="infoboxp"> 
+	<div class="tty-tishi_top">
+	 
+		<div class="clear"></div>
+
+			<div id="right" style="display:block">
+				<iframe id="supportiframe"  name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+				<form method="post" target="supportiframe" action="" name="config" class="layui-form">
+					<div>
+						<table width="100%" class="table_form">
+							<tr class="admin_table_trbg">
+								<th colspan="2" class="admin_bold_box">
+									<div class="admin_bold">微信小程序登录设置</div><a href="javascript:void(0);" onclick="addtable()" class="admin_new_cz_tj">+ 增加</a>
+								</th>
+							</tr>
+						</table>
+						<table width="100%" class="table_form" id="base_table">
+							<tr>
+							  <th class="t_fr">appid:</th>
+							  <td>
+									<div class="layui-input-block t_w480">
+										<input name="appid[]" value="{yun:}$base[0]{/yun}" autocomplete="off" class="layui-input" type="text" size="60" maxlength="255" />
+									</div>
+							  </td>
+							</tr>
+							<tr>
+							  <th class="t_fr">appSecret:</th>
+							  <td>
+									<div class="layui-input-block t_w480">
+										<input name="appSecret[]" value="{yun:}$base[1]{/yun}" autocomplete="off" class="layui-input" type="text" size="60" maxlength="255" />
+									</div>
+							  </td>
+							</tr>
+						</table>
+						{yun:}foreach from=$rows key=key item=v{/yun}
+						{yun:}if $key>0{/yun}
+						<table width="100%" class="table_form">
+							<tr>
+							  <th class="t_fr">appid:</th>
+							  <td>
+									<div class="layui-input-block t_w480">
+										<input name="appid[]" value="{yun:}$v[0]{/yun}" autocomplete="off" class="layui-input" type="text" size="60" maxlength="255" />
+									</div>
+							  </td>
+							</tr>
+							<tr>
+							  <th class="t_fr">appSecret:</th>
+							  <td>
+									<div class="layui-input-block t_w480">
+										<input name="appSecret[]" value="{yun:}$v[1]{/yun}" autocomplete="off" class="layui-input" type="text" size="60" maxlength="255" />
+									</div>
+							  </td>
+							</tr>
+						</table>
+						{yun:}/if{/yun}
+						{yun:}/foreach{/yun}
+						<table width="100%" class="table_form" id="end_table">
+							<tr>
+								<th>&nbsp;</th>
+								<td align="left">
+									<input class="tty_sub" id="pay_config" type="submit" name="pay_config" value="&nbsp; 保 存 &nbsp;"  />&nbsp;&nbsp;
+									<input class="tty_cz" type="reset" name="reset" value="&nbsp; 重 置 &nbsp;" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					<input type="hidden" name="pytoken"  id='pytoken' value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		var weburl = "{yun:}$config.sy_weburl{/yun}";
+		layui.use('form', function() {
+			var form = layui.form;
+		});
+		$(function(){
+			
+		})
+		function addtable(){
+			var box = $('#base_table').html();
+			$('#end_table').prepend(box);
+		}
+	</script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script> 
+</body>
+</html>

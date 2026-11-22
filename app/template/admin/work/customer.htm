@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 微群客户</title>
+
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+    .shiTopAllTips span{
+        overflow: hidden;
+        display: block;
+        font-size: 13px;
+        color: #61687c;
+        padding-bottom: 5px;
+    }
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="clear"></div>
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get">
+                <div>
+                    <input name="m" value="admin_workwx_customer" type="hidden"/>
+                    <input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword' class="admin_new_text">
+                    <input type="submit" value="搜索" style="margin-left: 10px;" name='search' class="admin_new_bth">
+                </div>
+                <div class="adminNewEarch">
+                    <div class="admin_statistics">
+                        <em class="admin_statistics_s">客户数量 <a class="ajaxNum">0</a></em>
+                        <em class="admin_statistics_s">去重数量 <a class="ajaxQcNum">0</a></em>
+                        <em class="admin_statistics_s">平台用户 <a class="ajaxRegNum">0</a></em>
+                        <em class="admin_statistics_s">今日新增 <a class="ajaxNewNum">0</a></em>
+                        <em class="admin_statistics_s">今日流失 <a class="ajaxDelNum">0</a></em>
+                        <span>搜索结果：{yun:}$total{/yun}</span>
+                        <div class="addEnterp" style="width: 96px;">
+                            <a href="javascript:;" onclick="syncCustomer(50, 1, '');">同步企微</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="tty-tishi_top">
+        <div style="margin-top: 10px;overflow: hidden;padding: 20px 0 20px 20px;">
+            <div class="shiTopAllTips">
+                <span><em style="font-weight: bold">数量统计 - 去重数量：</em>存在多个员工添加统一客户情况，去重数量为实际客户数量总数</span>
+                <span><em style="font-weight: bold">客户状态 - 流失客户：</em>1-配置了客户联系功能的成员删除外部联系人；2-配置了客户联系功能的成员被外部联系人删除</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="tty_table-bom">
+        <div class="tty_table-bom" style="padding: 0px 15px 0px 15px;">
+            <div class="table-list">
+                <div class="admin_table_border tableBorderAll">
+                    <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                    <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                        <input name="m" value="admin_" type="hidden"/>
+                        <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+                        <table width="100%">
+                            <thead>
+                            <tr class="admin_table_top" align="left">
+                                <th width="50">
+                                    <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label>
+                                </th>
+                                <th>客户信息</th>
+                                <th>平台信息</th>
+                                <th>是否入群</th>
+                                <th>客户状态</th>
+                                <th align="center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tableBackColorTwo">
+                            {yun:}foreach item=v key=key from=$list{/yun}
+                            <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                                <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                                <td style="display: flex;">
+                                    <div onclick="showLarge('{yun:}$v.avatar{/yun}');">
+                                        <img src="{yun:}$v.avatar{/yun}" width="40" height="40" style="border-radius: 50%; margin-right: 5px;;">
+                                    </div>
+                                    <div style="display: flex;flex-direction: column;">
+                                        <span>{yun:}$v.name{/yun}</span>
+                                        <span style="padding-top: 3px;">{yun:}$v.name_sub{/yun}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {yun:}if $v.uid{/yun}
+                                    {yun:}if $v.usertype == 1{/yun}
+                                    个人：<a href="index.php?m=user_member&keytype=5&keyword={yun:}$v.uid{/yun}">{yun:}$v.r_name{/yun}</a>
+                                    {yun:}else if $v.usertype == 2{/yun}
+                                    企业：<a href="index.php?m=admin_company&type=6&keyword={yun:}$v.uid{/yun}">{yun:}$v.com_name{/yun}</a>
+                                    {yun:}else{/yun}
+                                    暂未绑定企业、暂未创建简历
+                                    {yun:}/if{/yun}
+                                    <div>
+                                        注册：{yun:}$v.reg_date_n{/yun}
+                                    </div>
+                                    {yun:}else{/yun}
+                                    <span>尚未注册</span>
+                                    {yun:}/if{/yun}
+                                </td>
+                                <td>{yun:}if $v.chat_num > 0 {/yun}已入{yun:}$v.chat_num{/yun}群{yun:}else{/yun}尚未入群{yun:}/if{/yun}</td>
+
+                                <td>{yun:}$v.del_n{/yun}</td>
+                                <td align="center">
+                                    <div class="operationSeries">
+                                        <a href="index.php?m=admin_workwx_customer&c=info&userid={yun:}$v.external_userid{/yun}">详情</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {yun:}/foreach{/yun}
+
+                            {yun:}if $total > $config.sy_listnum {/yun}
+                            <tr>
+                                {yun:}if $pagenum==1{/yun}
+                                <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum *
+                                    $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条
+                                </td>
+                                {yun:}else if $pagenum == $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到
+                                    {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条
+                                </td>
+                                {yun:}/if{/yun}
+                                <td colspan="4" class="digg">{yun:}$pagenav{/yun}</td>
+                            </tr>
+                            {yun:}/if{/yun}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = 'index.php?m=admin_workwx_customer&c=customerNum';
+        $.get(url, function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.customerNum) {
+                $('.ajaxNum').html(datas.customerNum);
+            }
+            if (datas.qcNum) {
+                $('.ajaxQcNum').html(datas.qcNum);
+            }
+            if (datas.regNum) {
+                $('.ajaxRegNum').html(datas.regNum);
+            }
+            if (datas.newNum) {
+                $('.ajaxNewNum').html(datas.newNum);
+            }
+            if (datas.delNum) {
+                $('.ajaxDelNum').html(datas.delNum);
+            }
+        });
+    });
+    function syncCustomer(limit, page, cursor)
+    {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('客户信息同步中，请稍候。。。', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_customer&c=syncCustomer", {
+            pytoken: pytoken,
+            limit: limit,
+            page: page,
+            cursor: cursor
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+            if (data.cursor || parseInt(data.page) > parseInt(page)) {
+
+                syncCustomer(limit, data.page, data.cursor)
+            } else if (data.errcode == 0){
+
+                parent.layer.close(ii);
+                parent.layer.alert('客户信息同步成功', 9);
+                location.reload();
+            }else{
+
+                parent.layer.close(ii);
+                parent.layer.alert(data.errmsg, 8);
+            }
+        })
+    }
+    function showLarge(src) {
+        layer.photos({
+            photos:{
+                'data':[
+                    {
+                        'src': src,
+                    }
+                ],
+            },
+            anim: 0
+        });
+    }
+</script>
+</body>
+
+</html>

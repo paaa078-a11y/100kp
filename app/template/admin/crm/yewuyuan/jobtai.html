@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <!--防止页面显示模板标签-->
+    <link rel="stylesheet" href="../../../admin/js/cloak.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+</head>
+<body>
+<div id="moduapp" class="moduleDome workjobSubject" style="display: initial;" v-cloak v-loading="pageLoading">
+    <div class="workjobLefts" v-show="!pageLoading">
+        <div class="workjobriTop">
+            <div class="workjobriTopList workjobriTopListbg1">
+                <div class="workjobriTopTite">
+                    <span>今日通话量</span>
+                </div>
+                <div class="workjobriTopInfo">
+                    <div class="workjobriTopNum">
+                        <span>{{leftTopData.call_num ? leftTopData.call_num : 0}}</span>
+                    </div>
+                    <div class="workjobriToProg">
+                        <el-progress type="circle" :stroke-width="8" text-color="#131212" color="#2D57E5" :percentage="leftTopData.call_num_rate ? leftTopData.call_num_rate > 100 ? 100 : leftTopData.call_num_rate : 0" :width="70"></el-progress>
+                    </div>
+                </div>
+                <div class="workjobriTopTips">
+                    <p v-if="leftTopData.user.call_num && leftTopData.user.call_num > 0">
+                        日目标<span>{{leftTopData.user.call_num}}</span>
+                    </p>
+                    <p>
+                        有效通话<span>{{leftTopData.call_num_valid_rate ? leftTopData.call_num_valid_rate : 0}}%</span>
+                    </p>
+                </div>
+            </div>
+            <div class="workjobriTopList workjobriTopListbg2">
+                <div class="workjobriTopTite">
+                    <span>今日跟进量</span>
+                </div>
+                <div class="workjobriTopInfo">
+                    <div class="workjobriTopNum">
+                        <span>{{leftTopData.follow_num ? leftTopData.follow_num : 0}}</span>
+                    </div>
+                    <div class="workjobriToProg">
+                        <el-progress type="circle" :stroke-width="8" color="#53C590" text-color="#131212" :percentage="leftTopData.follow_num_rate ? leftTopData.follow_num_rate > 100 ? 100 : leftTopData.follow_num_rate : 0" :width="70"></el-progress>
+                    </div>
+                </div>
+                <div class="workjobriTopTips">
+                    <p v-if="leftTopData.user.follow_num && leftTopData.user.follow_num > 0">日目标<span>{{leftTopData.user.follow_num ? leftTopData.user.follow_num : 0}}</span></p>
+                </div>
+            </div>
+            <div class="workjobriTopList workjobriTopListbg3">
+                <div class="workjobriTopTite">
+                    <span>今日拓新量</span>
+                </div>
+                <div class="workjobriTopInfo">
+                    <div class="workjobriTopNum">
+                        <span>{{leftTopData.tuoxin_num ? leftTopData.tuoxin_num : 0}}</span>
+                    </div>
+                    <div class="workjobriToProg">
+                        <el-progress type="circle" :stroke-width="8" text-color="#131212" :percentage="leftTopData.tuoxin_num_rate ? leftTopData.tuoxin_num_rate > 100 ? 100 : leftTopData.tuoxin_num_rate : 0" :width="70"></el-progress>
+                    </div>
+                </div>
+                <div class="workjobriTopTips">
+                    <p v-if="leftTopData.user.tuoxin_num && leftTopData.user.tuoxin_num > 0">日目标<span>{{leftTopData.user.tuoxin_num ? leftTopData.user.tuoxin_num : 0}}</span></p>
+                    <p>新增岗位<span>{{leftTopData.job_num ? leftTopData.job_num : 0}}</span></p>
+                </div>
+            </div>
+            <div class="workjobriTopList workjobriTopListbg4">
+                <div class="workjobriTopTite">
+                    <span>今日成交额</span>
+                </div>
+                <div class="workjobriTopInfo">
+                    <div class="workjobriTopNum">
+                        <span>{{leftTopData.deal_num ? leftTopData.deal_num : 0}}</span>
+                    </div>
+                    <div class="workjobriToProg">
+                        <el-progress type="circle" color="#9965e6" :stroke-width="8" text-color="#131212" :percentage="leftTopData.deal_num_rate ? leftTopData.deal_num_rate > 100 ? 100 : leftTopData.deal_num_rate : 0" :width="70"></el-progress>
+                    </div>
+                </div>
+                <div class="workjobriTopTips">
+                    <p v-if="leftTopData.user.deal_num && leftTopData.user.deal_num > 0">日目标<span>{{leftTopData.user.deal_num ? leftTopData.user.deal_num : 0}}</span></p>
+                    <p v-if="leftTopData.user.month_deal_num && leftTopData.user.month_deal_num > 0">月目标<span>{{leftTopData.user.month_deal_num ? leftTopData.user.month_deal_num : 0}}</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="workjobriKehu">
+            <div class="workjobBioti">
+                <span>我的客户</span>
+            </div>
+            <div class="workriKehuCont">
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'jxgj', '急需跟进')">
+                    <div class="workriKehuTite">
+                        <span>急需跟进</span>
+                        <el-tooltip class="item" effect="dark" content="系统设定的跟进周期内即将超期被释放的用户" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.jxgj_num ? leftCenterData1.jxgj_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'gyx', '高意向用户')">
+                    <div class="workriKehuTite">
+                        <span>高意向用户</span>
+                        <el-tooltip class="item" effect="dark" v-if="leftCenterData1.gyx_cycle" :content="leftCenterData1.gyx_cycle + '天内未跟进，过期的会员最近有登录或非会员触发权益提醒'" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.gyx_num ? leftCenterData1.gyx_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'hy', '活跃用户')">
+                    <div class="workriKehuTite">
+                        <span>活跃用户</span>
+                        <el-tooltip class="item" effect="dark" v-if="leftCenterData1.hy_cycle" :content="leftCenterData1.hy_cycle + '天内未跟进，一周内有登录，且未开通会员或会员（CRM设置的成交会员）已过期'" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.hy_num ? leftCenterData1.hy_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'jdq', '将过期用户')">
+                    <div class="workriKehuTite">
+                        <span>将过期用户</span>
+                        <el-tooltip class="item" effect="dark" v-if="leftCenterData1.jgq_cycle" :content="leftCenterData1.jgq_cycle + '天内未跟进，15天内将过期的用户（CRM设置的成交会员）'" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.jdq_num ? leftCenterData1.jdq_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'qz', '潜在用户')">
+                    <div class="workriKehuTite">
+                        <span>潜在用户</span>
+                        <el-tooltip class="item" effect="dark" v-if="leftCenterData1.qz_cycle" :content="leftCenterData1.qz_cycle + '天内未跟进，近期无活跃，岗位在招的非会员'" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.qz_num ? leftCenterData1.qz_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openMyCustomer('mykh', 'bq', '跟进计划')">
+                    <div class="workriKehuTite">
+                        <span>跟进计划</span>
+                        <el-tooltip class="item" effect="dark" content="在跟进计划内，未跟进的用户" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                        <span @click.stop="addBqcustomer" class="workriKehu_set"><i class="el-icon-s-tools"></i>设置</span>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData1.bq_num ? leftCenterData1.bq_num : 0}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="workjobriKehu">
+            <div class="workjobBioti">
+                <span>公海客户</span>
+            </div>
+            <div class="workriKehuCont">
+                <div class="workriKehuList" @click="openKhgh('new', '新客户')">
+                    <div class="workriKehuTite">
+                        <span>新客户</span>
+                        <el-tooltip class="item" effect="dark" content="当天新注册的企业" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.new_num ? leftCenterData2.new_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openKhgh('gyx', '高意向用户')">
+                    <div class="workriKehuTite">
+                        <span>高意向用户</span>
+                        <el-tooltip class="item" effect="dark" content="过期的会员最近有登录或非会员触发权益提醒" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.gyx_num ? leftCenterData2.gyx_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openKhgh('hy', '活跃用户')">
+                    <div class="workriKehuTite">
+                        <span>活跃用户</span>
+                        <el-tooltip class="item" effect="dark" content="一周内有登录，且未开通会员或会员（CRM设置的成交会员）已过期" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.hy_num ? leftCenterData2.hy_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openKhgh('dq', '过期用户')">
+                    <div class="workriKehuTite">
+                        <span>过期用户</span>
+                        <el-tooltip class="item" effect="dark" content="历史有开通会员（CRM设置的成交会员）但未续费" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.dq_num ? leftCenterData2.dq_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openKhgh('qz', '潜在用户')">
+                    <div class="workriKehuTite">
+                        <span>潜在用户</span>
+                        <el-tooltip class="item" effect="dark" content="近期无活跃，岗位在招的非会员" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.qz_num ? leftCenterData2.qz_num : 0}}</span>
+                    </div>
+                </div>
+                <div class="workriKehuList" @click="openKhgh('jqsf', '近期释放')">
+                    <div class="workriKehuTite">
+                        <span>近期释放</span>
+                        <el-tooltip class="item" effect="dark" content="近一周释放的用户" placement="right-start">
+                            <i class="el-icon-warning-outline"></i>
+                        </el-tooltip>
+                    </div>
+                    <div class="workriKehuNum">
+                        <span>{{leftCenterData2.jqsf_num ? leftCenterData2.jqsf_num : 0}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="workjobLeTons">
+            <div class="workjobKehToji">
+                <div class="workjobBioti">
+                    <span>我的客户统计</span>
+                </div>
+                <!--隐藏数据数据-->
+                <div class="workjob_tjtipbox" v-if="!leftBottomData1Show">
+                    <div class="workjob_tjtipimg">
+                        <img src="../../images/tjmh1.png" alt="">
+                    </div>
+                    <div class="work_tjtip">
+                        <!-- 查看我的客户统计 -->
+                        <el-button type="primary"
+                            @click="leftBottomData1Show = true;getData(5)">查看我的客户统计</el-button>
+                    </div>
+                </div>
+                <!--隐藏数据数据-->
+                <!--有数据-->
+                <div class="workjobKehCont">
+                    <div class="workjobKehList workjobKehCurs">
+                        <div class="workjobKehBoit">
+                            <span>本月新增客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'new', '本月新增客户')">
+                            <span>{{leftBottomData1.new_num ? leftBottomData1.new_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps">
+                            <span>总客户</span>
+                            <b style="color: #f90;">{{leftBottomData1.all_num ? leftBottomData1.all_num : 0}}</b>
+                            <span>剩余</span>
+                            <b style="color: #f90;">{{leftBottomData1.sy_num != 0 ? leftBottomData1.sy_num : '不限'}}</b>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>本月成交客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'deal', '本月成交客户')">
+                            <span>{{leftBottomData1.deal_num ? leftBottomData1.deal_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps">
+                            <span>成交总量</span>
+                            <b style="color: #f90;">{{leftBottomData1.deal_all_num ? leftBottomData1.deal_all_num : 0}}</b>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>本月暂停客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'zt', '本月暂停客户')">
+                            <span>{{leftBottomData1.zt_num ? leftBottomData1.zt_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps">
+                            <span>暂停总量</span>
+                            <b style="color: #f90;">{{leftBottomData1.zt_all_num ? leftBottomData1.zt_all_num : 0}}</b>
+                        </div>
+                    </div>
+
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>本月续费客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'xf', '本月续费客户')">
+                            <span>{{leftBottomData1.xf_num ? leftBottomData1.xf_num : 0}}</span>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>本月已过期客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'dq', '本月已过期客户')">
+                            <span>{{leftBottomData1.dq_num ? leftBottomData1.dq_num : 0}}</span>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>将过期客户</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openMyCustomer('mykhtj', 'jdq', '将过期客户')">
+                            <span>{{leftBottomData1.jdq_num ? leftBottomData1.jdq_num : 0}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--有数据-->
+            </div>
+            <div class="workjobKehToji">
+                <div class="workjobBioti">
+                    <span>我的跟进统计</span>
+                </div>
+
+                <!--隐藏数据数据-->
+                <div class="workjob_tjtipbox" v-if="!leftBottomData2Show">
+                    <div class="workjob_tjtipimg">
+                        <img src="../../images/tjmh2.png" alt="">
+                    </div>
+                    <div class="work_tjtip work_tjtip2">
+                        <!-- 查看我的客户统计 -->
+                        <el-button type="primary" @click="leftBottomData2Show = true;getData(6)">查看我的跟进统计</el-button>
+                    </div>
+                </div>
+                <!--隐藏数据数据-->
+                <!--有数据-->
+                <div class="workjobKehCont">
+                    <div class="workjobKehList workjobKehCurs">
+                        <div class="workjobKehBoit">
+                            <span>本月跟进</span>
+                        </div>
+                        <div class="workjobKehSuzi" @click="openFollowlog('month')">
+                            <span>{{leftBottomData2.follow_num ? leftBottomData2.follow_num : 0}}</span>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>昨日跟进</span>
+                            <!-- <el-tooltip class="item" effect="dark" content="昨日跟进日志总数" placement="right-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
+                        </div>
+                        <div class="workjobKehSuzi" @click="openFollowlog('yesterday')">
+                            <span>{{leftBottomData2.followy_num ? leftBottomData2.followy_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps" v-if="leftBottomData2.followy_num_ratio">
+                            <span>完成率</span>
+                            <b v-if="leftBottomData2.followy_num_ratio > 0" style="color: #FBBA61;">{{leftBottomData2.followy_num_ratio}}%</b>
+                            <b v-else style="color: #53C590;">{{leftBottomData2.followy_num_ratio}}%</b>
+                            <img v-if="leftBottomData2.followy_num_ratio > 0" src="../../images/shans1.png" alt="">
+                            <img v-else src="../../images/shans2.png" alt="">
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>7日内跟进</span>
+                            <!-- <el-tooltip class="item" effect="dark" content="7日内跟进日志总数" placement="right-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
+                        </div>
+                        <div class="workjobKehSuzi" @click="openFollowlog('day7')">
+                            <span>{{leftBottomData2.followd7_num ? leftBottomData2.followd7_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps" v-if="leftBottomData2.followd7_num_ratio">
+                            <span>完成率</span>
+                            <b v-if="leftBottomData2.followd7_num_ratio > 0" style="color: #FBBA61;">{{leftBottomData2.followd7_num_ratio}}%</b>
+                            <b v-else style="color: #53C590;">{{leftBottomData2.followd7_num_ratio}}%</b>
+                            <img v-if="leftBottomData2.followd7_num_ratio > 0" src="../../images/shans1.png" alt="">
+                            <img v-else src="../../images/shans2.png" alt="">
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>本月通话</span>
+                            <!-- <el-tooltip class="item" effect="dark" content="本月通话数量" placement="right-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
+                        </div>
+                        <div class="workjobKehSuzi" @click="openCalllog('month')">
+                            <span>{{leftBottomData2.call_num ? leftBottomData2.call_num : 0}}</span>
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>昨日通话</span>
+                            <!-- <el-tooltip class="item" effect="dark" content="昨日通话数量" placement="right-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
+                        </div>
+                        <div class="workjobKehSuzi" @click="openCalllog('yesterday')">
+                            <span>{{leftBottomData2.cally_num ? leftBottomData2.cally_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps" v-if="leftBottomData2.cally_num_ratio">
+                            <span>完成率</span>
+                            <b v-if="leftBottomData2.cally_num_ratio > 0" style="color: #FBBA61;">{{leftBottomData2.cally_num_ratio}}%</b>
+                            <b v-else style="color: #53C590;">{{leftBottomData2.cally_num_ratio}}%</b>
+                            <img v-if="leftBottomData2.cally_num_ratio > 0" src="../../images/shans1.png" alt="">
+                            <img v-else src="../../images/shans2.png" alt="">
+                        </div>
+                    </div>
+                    <div class="workjobKehList">
+                        <div class="workjobKehBoit">
+                            <span>7日内通话</span>
+                            <!-- <el-tooltip class="item" effect="dark" content="7日内通话数量" placement="right-start">
+                                <i class="el-icon-info"></i>
+                            </el-tooltip> -->
+                        </div>
+                        <div class="workjobKehSuzi" @click="openCalllog('day7')">
+                            <span>{{leftBottomData2.calld7_num ? leftBottomData2.calld7_num : 0}}</span>
+                        </div>
+                        <div class="workjobKehUps" v-if="leftBottomData2.calld7_num_ratio">
+                            <span>完成率</span>
+                            <b v-if="leftBottomData2.calld7_num_ratio > 0" style="color: #FBBA61;">{{leftBottomData2.calld7_num_ratio}}%</b>
+                            <b v-else style="color: #53C590;">{{leftBottomData2.calld7_num_ratio}}%</b>
+                            <img v-if="leftBottomData2.calld7_num_ratio > 0" src="../../images/shans1.png" alt="">
+                            <img v-else src="../../images/shans2.png" alt="">
+                        </div>
+                    </div>
+                    <!--有数据-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="workjobRight" v-show="!pageLoading">
+        <div class="workjobNavs" v-loading="!leftTopData.greetings">
+            <div class="workjobNavName">
+                <div class="workjobNavLouudy">
+                    <h3>{{leftTopData.greetings}}，{{leftTopData.user.name ? leftTopData.user.name : leftTopData.user.username}}！</h3>
+                    <span>最近登录时间：{{leftTopData.login_time}}</span>
+                </div>
+                <div class="workjobNavLiaskie" v-if="leftTopData.adminUserList.length > 0">
+                    <el-select size="mini" v-model="crm_uid" @change="bindUserChange" clearable placeholder="查看下属">
+                        <el-option v-for="auser in leftTopData.adminUserList" :key="auser.uid" :label="auser.name ? auser.name : auser.username" :value="auser.uid"></el-option>
+                    </el-select>
+                </div>
+            </div>
+            <div class="workjobNavTite">
+                <span>快捷菜单</span>
+            </div>
+            <div class="workjobNavTubia">
+                <div class="workjobDivs" @click="openFupan">
+                    <img src="../../images/navicon1.png" alt="">
+                    <span>复盘</span>
+                </div>
+                <div class="workjobDivs" @click="addcustomer">
+                    <img src="../../images/navicon2.png" alt="">
+                    <span>录客户</span>
+                </div>
+                <div class="workjobDivs" @click="recjob">
+                    <img src="../../images/navicon3.png" alt="">
+                    <span>推职位</span>
+                </div>
+                <div class="workjobDivs" @click="adddeal">
+                    <img src="../../images/navicon4.png" alt="">
+                    <span>录订单</span>
+                </div>
+                <div class="workjobDivs" @click="addfollow">
+                    <img src="../../images/navicon5.png" alt="">
+                    <span>写跟进</span>
+                </div>
+                <!--<div @click="addworklog">-->
+                <!--    <img src="../../images/navicon6.png" alt="">-->
+                <!--    <span>写日志</span>-->
+                <!--</div>-->
+                <div @click="openNotice" class="workjobDivs">
+                    
+                    <el-badge :value="leftTopData.rating_notice" :max="99" :hidden="!leftTopData.rating_notice || leftTopData.rating_notice == 0" class="item">
+                        <img src="../../images/navicon6.png" alt="">
+                        <span>权益提醒</span>
+                    </el-badge>
+                </div>
+            </div>
+        </div>
+        <div class="workjobChenban">
+            <div class="workjobChenTabs">
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane label="成交榜" name="first">
+                        <div v-if="rankingNoPermissions">
+                            <el-empty description="暂无榜单查看权限"></el-empty>
+                        </div>
+                        <div v-else class="workjobCheLirba">
+                            <ul>
+                                <li v-for="(ditem, dkey) in dealRanking.data">
+                                    <div class="workjobMincgd">
+                                        <div class="workjobIcon">
+                                            <span>{{dkey + 1}}</span>
+                                        </div>
+                                        <div class="workjobTits">
+                                            <span>{{ditem.name}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="workjobMoney">
+                                        <el-link :underline="false" @click="tocrmaudit(ditem.crm_uid)"><span>{{ditem.total}}</span></el-link>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="workjobCheHeji" v-if="dealRanking.total && dealRanking.total > 0">
+                            <span>合计： {{dealRanking.total}}</span>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="新客榜" name="second">
+                        <div v-if="rankingNoPermissions">
+                            <el-empty description="暂无榜单查看权限"></el-empty>
+                        </div>
+                        <div v-else class="workjobCheLirba">
+                            <ul>
+                                <li v-for="(ncitem, nckey) in newCustomerRanking.data">
+                                    <div class="workjobMincgd">
+                                        <div class="workjobIcon">
+                                            <span>{{nckey + 1}}</span>
+                                        </div>
+                                        <div class="workjobTits">
+                                            <span>{{ncitem.name}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="workjobMoney">
+                                        <el-link :underline="false" @click="tocustomerlist(ncitem.crm_uid)"><span>{{ncitem.khnum}}</span></el-link>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="workjobCheHeji" v-if="newCustomerRanking.total && newCustomerRanking.total > 0">
+                            <span>合计： {{newCustomerRanking.total}}</span>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+            <div class="workjobChenTime">
+                <el-date-picker size="mini" v-model="monthRanking" type="month" value-format="yyyy-MM" @change="getData(typeRanking)" :editable="false" :clearable="false" placeholder="选择月份"></el-date-picker>
+            </div>
+        </div>
+    </div>
+
+    <!--复盘-->
+    <el-dialog title="复盘" width="450px" :visible.sync="fupan_show" append-to-body>
+        <fupan></fupan>
+    </el-dialog>
+
+    <!--录客户-->
+    <div class="modluDrawer">
+        <el-drawer title="录入客户" :close-on-press-escape="false" :wrapper-closable="false" :visible.sync="addcustomer_show" append-to-body size="60%">
+            <addcustomer :key="timer" @close-update="closeAddcustomer" v-if="addcustomer_show"></addcustomer>
+        </el-drawer>
+    </div>
+
+    <!--写跟进-->
+    <el-drawer title="联系跟进" :visible.sync="follow_show" append-to-body :wrapper-closable="false" size="600px">
+        <crmnewfollow :key="timer" @close-update="closeAddfollow" v-if="follow_show"></crmnewfollow>
+    </el-drawer>
+
+    <!--录订单-->
+    <el-dialog title="录订单" :close-on-click-modal="false" width="560px" :visible.sync="deal_show" append-to-body>
+        <crmnewdeal :key="timer" @close-update="closeAdddeal" v-if="deal_show"></crmnewdeal>
+    </el-dialog>
+
+    <!--写日志-->
+    <el-dialog title="新建工作日志" :close-on-click-modal="false" width="560px" :visible.sync="worklog_show" append-to-body>
+        <crmnewworklog :key="timer" @close-update="closeAddworklog" v-if="worklog_show"></crmnewworklog>
+    </el-dialog>
+
+    <div class="modluDrawer">
+        <el-drawer title="权益提醒" :visible.sync="notice_show" append-to-body :show-close="true" :with-header="true"
+                   size="80%" @close="closeNotice">
+            <div class="noticequanyi">
+                <notice :crm_uid="crm_uid"></notice>
+            </div>
+        </el-drawer>
+
+        <!--推职位-->
+        <el-drawer title="推荐职位" :visible.sync="recjob_show" append-to-body size="90%">
+            <crmjob :key="timer" v-if="recjob_show"></crmjob>
+        </el-drawer>
+
+        <!-- 跟进计划 -->
+        <el-drawer title="跟进计划" size="50%" :visible.sync="bqcustomer_show" @close="closeBqcustomer" append-to-body>
+            <jobtai_bqset :crm_uid="crm_uid"></jobtai_bqset>
+        </el-drawer>
+
+        <!--我的客户-->
+        <el-drawer :title="wdTitle" :visible.sync="my_customer_show" append-to-body size="90%" @close="closeMyCustomer">
+            <my_customer source="jobtai" :source_data="my_customer_data" simple></my_customer>
+        </el-drawer>
+
+        <!-- 公海客户 -->
+        <el-drawer :title="ghTitle" :visible.sync="crm_customer_show" append-to-body size="90%" @close="closeMyCustomer">
+            <crm_customer source="jobtai" :source_data="crm_customer_data" simple></crm_customer>
+        </el-drawer>
+
+        <!-- 我的跟进 -->
+        <el-drawer title="我的跟进" :visible.sync="follow_log_show" append-to-body size="90%" @close="closeMyCustomer">
+            <follow_log drawer source="jobtai" :log_tab="1" :source_data="follow_log_data"></follow_log>
+        </el-drawer>
+
+        <!-- 外呼记录 -->
+        <el-drawer title="外呼记录" :visible.sync="calllog_show" append-to-body size="90%">
+            <calllog drawer source="jobtai" :source_data="calllog_data"></calllog>
+        </el-drawer>
+
+        <!-- 成交记录 -->
+        <el-drawer title="成交记录" :visible.sync="cj_amount_show" append-to-body size="90%">
+            <cj_amount drawer source="jobtai" :source_data="cj_amount_data"></cj_amount>
+        </el-drawer>
+
+        <!-- 新客记录 -->
+        <el-drawer title="客户列表" :visible.sync="customer_list_show" append-to-body size="90%" @close="closeMyCustomer">
+            <customer_list drawer simple source="jobtai" :other_params="customer_list_data" page_type="all"></customer_list>
+        </el-drawer>
+    </div>
+</div>
+<script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    crm_uid: '',
+                    pageLoading: true,
+                    wdTitle: '我的客户',
+                    ghTitle: '公海客户',
+                    // 右上角欢迎信息
+                    welcomeData: {
+                        user: {}
+                    },
+                    timer: 0,
+                    addcustomer_show: false,
+                    follow_show: false,
+                    worklog_show: false,
+                    notice_show: false,
+                    deal_show: false,
+                    recjob_show: false,
+
+                    // 复盘
+                    fupan_show: false,
+
+                    // 左边第一栏 今日相关统计
+                    leftTopData: {
+                        user: {},
+                        adminUserList: [],
+                    },
+                    // 左边中间第一栏 我的客户
+                    leftCenterData1: {},
+                    // 左边中间第二栏 公海客户
+                    leftCenterData2: {},
+                    // 左边最下方第一栏 我的客户统计
+                    leftBottomData1Show: false,
+                    leftBottomData1: {},
+                    // 左边最下方第二栏 我的跟进统计
+                    leftBottomData2Show: false,
+                    leftBottomData2: {},
+
+
+                    // 右边排行榜
+                    activeName: 'first',
+                    typeRanking: 7, // 加载数据的标识
+                    monthRanking: formatMonth(new Date()), // 排行榜月份
+                    dealRanking: {}, // 成交榜
+                    dealMonth: formatMonth(new Date()),
+                    newCustomerRanking: {}, // 新客榜
+                    newCustomerMonth: formatMonth(new Date()),
+                    rankingNoPermissions: false,
+
+                    // 我的客户
+                    my_customer_show: false,
+                    my_customer_data: null,
+
+                    // 公海客户
+                    crm_customer_show: false,
+                    crm_customer_data: null,
+
+                    // 我的跟进
+                    follow_log_show: false,
+                    follow_log_data: null,
+
+                    // 外呼记录
+                    calllog_show: false,
+                    calllog_data: null,
+
+                    // 跟进计划
+                    bqcustomer_show: false,
+
+                    // 成交记录
+                    cj_amount_show: false,
+                    cj_amount_data: null,
+                    // 新客记录
+                    customer_list_show: false,
+                    customer_list_data: null,
+                }
+            },
+            components: {
+                'fupan': httpVueLoader('./component/jobtai_fupan.vue'),
+                'addcustomer': httpVueLoader('../component/addcustomer.vue'),
+                'crmnewfollow': httpVueLoader('../component/crmnewfollow.vue'),
+                'crmnewworklog': httpVueLoader('../component/crmnewworklog.vue'),
+                'crmnewdeal': httpVueLoader('../component/crmnewdeal.vue'),
+                'notice': httpVueLoader('../component/notice.vue'),
+                'crmjob': httpVueLoader('../component/crmjob.vue'),
+                'jobtai_bqset': httpVueLoader('../component/jobtai_bqset.vue'),
+                'my_customer': httpVueLoader('../component/my_customer.vue'),
+                'crm_customer': httpVueLoader('../component/crm_customer.vue'),
+                'follow_log': httpVueLoader('../component/followLog.vue'),
+                'calllog': httpVueLoader('../component/calllog.vue'),
+                'cj_amount': httpVueLoader('../component/cjAmount.vue'),
+                'customer_list': httpVueLoader('../component/customerList.vue'),
+            },
+            mounted() {
+                let that = this;
+                this.loadData([2, 3, 4, 7])
+                setTimeout(function () {
+                    that.pageLoading = false;
+                }, 300)
+            },
+            created: function () {
+
+            },
+            methods: {
+                bindUserChange() {
+                    this.loadData([2, 3, 5, 6])
+                },
+                loadData(arr) {
+                    let that = this;
+                    arr.forEach(item => {
+                        that.getData(item);
+                    })
+                },
+                getData(type) {
+                    let that = this,
+                        params = { type: type };
+
+                    if (type == 5 && !that.leftBottomData1Show) { // 隐藏状态下，不加载我的客户统计
+                        return false;
+                    }
+                    if (type == 6 && !that.leftBottomData2Show) { // 隐藏状态下，不加载我的跟进统计
+                        return false;
+                    }
+                    if (type == 7 || type == 8) {
+                        if (that.rankingNoPermissions) { // 没权限后续不触发排行榜数据
+                            return false;
+                        }
+                        params.time = that.monthRanking;
+                    }
+
+                    if (that.crm_uid) {
+                        params.crm_uid = that.crm_uid;
+                    }
+
+                    let url = 'm=crm&c=crm_index&a=',
+                        url_arr = {'2': 'getTodayData', '3': 'myCustomer', '4': 'ghCustomer', '5': 'myCustomerMonth', '6': 'myFollow', '7': 'getDealRanking', '8': 'getNewCustomerRanking'};
+
+                        url += url_arr[type];
+
+                    httpPost(url, params, { hideloading: true }).then((response) => {
+                        var res = response.data;
+                        if (res.error == 0) {
+                            if (type == 1) { // 右上角欢迎信息
+                                // that.welcomeData = res.data; // 已和今日相关合并为同一个接口返回
+                            } else if (type == 2) { // 左边第一栏 今日相关统计
+                                that.leftTopData = res.data;
+                            } else if (type == 3) { // 左边中间第一栏 我的客户
+                                that.leftCenterData1 = res.data;
+                            } else if (type == 4) { // 左边中间第二栏 公海客户
+                                that.leftCenterData2 = res.data;
+                            } else if (type == 5) { // 左边最下方第一栏 我的客户统计
+                                that.leftBottomData1 = res.data;
+                            } else if (type == 6) { // 左边最下方第二栏 我的跟进统计
+                                that.leftBottomData2 = res.data;
+                            } else if (type == 7) { // 成交榜
+                                that.dealRanking = res.data;
+                            } else if (type == 8) { // 新客榜
+                                that.newCustomerRanking = res.data;
+                            }
+                        } else if (res.error == 403) {
+                            if (type == 7 || type == 8) { // 成交榜
+                                that.rankingNoPermissions = true;
+                            }
+                        }
+                    })
+                },
+                handleClick(tab, event) {
+                    if (tab.name == 'first') {
+                        this.newCustomerMonth = this.monthRanking;
+                        this.monthRanking = this.dealMonth;
+                        this.typeRanking = 7;
+                    } else if (tab.name == 'second') {
+                        this.dealMonth = this.monthRanking;
+                        this.monthRanking = this.newCustomerMonth;
+                        this.typeRanking = 8;
+                        console.log(typeof this.newCustomerRanking.total, 999)
+                        if (typeof this.newCustomerRanking.total == 'undefined') {
+                            this.getData(8);
+                        }
+                    }
+                },
+
+                // 复盘
+                openFupan: function () {
+                    this.fupan_show = true;
+                },
+
+                // 录客户
+                addcustomer: function () {
+                    this.timer = new Date().getTime();
+                    this.addcustomer_show = true;
+                },
+                closeAddcustomer: function () {
+                    this.addcustomer_show = false;
+                    let arr = [2, 3, 5, 8];
+                    this.loadData(arr); // 需要重载的版块
+                },
+
+                // 推职位
+                recjob: function () {
+                    this.timer = new Date().getTime();
+                    this.recjob_show = true;
+                },
+
+                // 录订单
+                adddeal: function () {
+                    this.timer = new Date().getTime();
+                    this.deal_show = true;
+                },
+                closeAdddeal: function (e) {
+                    this.deal_show = false;
+                    if (typeof e.id != 'undefined' && e.id) {
+                        let arr = [2, 3, 5, 7];
+                        this.loadData(arr); // 需要重载的版块
+                    }
+                },
+
+                // 写跟进
+                addfollow: function () {
+                    this.timer = new Date().getTime();
+                    this.follow_show = true;
+                },
+                closeAddfollow: function () {
+                    this.follow_show = false;
+                    let arr = [2, 3, 6];
+                    this.loadData(arr); // 需要重载的版块
+                },
+
+                // 写日志
+                addworklog: function () {
+                    this.timer = new Date().getTime();
+                    this.worklog_show = true;
+                },
+                closeAddworklog: function () {
+                    this.worklog_show = false;
+                },
+
+                // 权益提醒
+                openNotice: function () {
+                    this.notice_show = true;
+                },
+                closeNotice: function () {
+                    this.notice_show = false;
+                    let arr = [2, 3, 4, 5, 6, 7, 8];
+                    this.loadData(arr); // 需要重载的版块
+                },
+
+                // 跟进计划
+                addBqcustomer: function () {
+                    this.bqcustomer_show = true;
+                },
+                closeBqcustomer: function () {
+                    this.bqcustomer_show = false;
+                    this.getData(3);
+                },
+
+                // 成交榜 数字触发
+                tocrmaudit: function (uid) {
+                    this.cj_amount_data = {
+                        crm_uid: uid,
+                        mtime: this.monthRanking
+                    };
+                    this.cj_amount_show = true;
+                },
+                // 新客榜 数字触发
+                tocustomerlist: function (uid) {
+                    this.customer_list_data = {
+                        crm_uid: uid,
+                        crm_time: this.monthRanking
+                    };
+                    this.customer_list_show = true;
+                },
+
+                // 我的客户/我的客户统计
+                openMyCustomer(module, type, title) {
+                    this.my_customer_data = {
+                        module: module,
+                        type: type,
+                        crm_uid: this.crm_uid
+                    };
+                    this.wdTitle = title;
+                    this.my_customer_show = true;
+                },
+                closeMyCustomer() {
+                    let arr = [2, 3, 4, 5, 6, 7, 8];
+
+                    this.loadData(arr); // 需要重载的版块
+                },
+
+                // 客户公海
+                openKhgh(type, title) {
+                    this.crm_customer_data = {
+                        type: type
+                    };
+                    this.ghTitle = title;
+                    this.crm_customer_show = true;
+                },
+                closeMyKhgh() {
+                    console.log('关闭客户公海页面')
+                },
+
+                // 我的跟进
+                openFollowlog(type) {
+                    this.follow_log_data = {
+                        crm_uid: this.crm_uid,
+                        times: type
+                    };
+                    this.follow_log_show = true;
+                },
+                // 我的跟进-通话记录
+                openCalllog(type) {
+                    this.calllog_data = {
+                        crm_uid: this.crm_uid,
+                        times: type
+                    };
+                    this.calllog_show = true;
+                },
+            }
+        });
+    </script>
+</body>
+</html>

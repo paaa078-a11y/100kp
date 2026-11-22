@@ -1,0 +1,531 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$config.sy_weburl{/yun}/app/template/chat/css/chat.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+				<div class="admin_new_search_box">
+					<form action="index.php" name="myform" method="get" style="float:left" onsubmit="return ckmobliemsg()">
+						<div>
+							<input name="m" value="admin_chat_log" type="hidden" />
+							<input type="hidden" name="state" value="{yun:}$smarty.get.state{/yun}" />
+							<div class="admin_Filter_text formselect" did="dtype">
+								<input type="button" {yun:}if $smarty.get.type=='' ||$smarty.get.type=='1' {/yun} value="发送人用户名" {yun:}elseif
+								$smarty.get.type=='2' {/yun} value="接收人用户名" {yun:}elseif $smarty.get.type=='3' {/yun} value="内容" {yun:}elseif $smarty.get.type=='4' {/yun} value="企业名称" {yun:}elseif $smarty.get.type=='5' {/yun} value="姓名" {yun:}elseif $smarty.get.type=='6' {/yun} value="手机号" {yun:}/if{/yun}
+								class="admin_Filter_but" id="btype" />
+								<input type="hidden" name="type" id="type" {yun:}if $smarty.get.type=='' {/yun} value="1" {yun:}else{/yun}value="{yun:}$smarty.get.type{/yun}"{yun:}/if{/yun}/>
+								<div class="admin_Filter_text_box" style="display:none" id="dtype">
+									<ul>
+										<li><a href="javascript:void(0)" onClick="formselect('1','type','发送人用户名')">发送人用户名</a></li>
+										<li><a href="javascript:void(0)" onClick="formselect('2','type','接收人用户名')">接收人用户名</a></li>
+										<li><a href="javascript:void(0)" onClick="formselect('3','type','内容')">内容</a></li>
+										<li><a href="javascript:void(0)" onClick="formselect('4','type','企业名称')">企业名称</a></li>
+										<li><a href="javascript:void(0)" onClick="formselect('5','type','姓名')">姓名</a></li>
+										<li><a href="javascript:void(0)" onClick="formselect('6','type','手机号')">手机号</a></li>
+									</ul>
+								</div>
+							</div>
+							<input class="admin_Filter_search" type="text" name="keyword" size="25" style="float:left;width: 170px;" value="{yun:}$smarty.get.keyword{/yun}" placeholder="请输入你要搜索的关键字" />
+							<div class="layui-input-inline" style="float: left;">
+								<input class="admin_Filter_search" type="text" name="date" id="date" style="float:left; width: 210px;" value="{yun:}$smarty.get.date{/yun}" placeholder="请输入时段" />
+								<i class="t_tc_icon_time"></i>
+							</div>
+							<input class="admin_new_bth" type="submit" name="news_search" value="查询" />
+						</div>
+					</form>
+					{yun:}include file="admin/admin_search.htm"{/yun}
+				</div>
+				<div class="clear"></div>
+			</div>
+
+		<div class="tty_table-bom">
+		<div class="table-list">
+			<div class="admin_table_border">
+				<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+				<form action="index.php?m=admin_chat_log&c=del" target="supportiframe" name="myform" method="post" id='myform'>
+					<table width="100%">
+						<thead>
+							<tr class="admin_table_top" align="left">
+								<th>
+									<label for="chkall">
+										<input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' />
+									</label>
+								</th>
+								<th>
+									{yun:}if $smarty.get.t=="id" && $smarty.get.order=="asc"{/yun}
+									<a href="{yun:}searchurl order=desc t=id m=admin_chat_log untype='order,t'{/yun}"class="admin_px">编号</a>
+									{yun:}else{/yun}
+									<a href="{yun:}searchurl order=asc t=id m=admin_chat_log  untype='order,t'{/yun}"class="admin_px2">编号</a>
+									{yun:}/if{/yun}
+								</th>
+								<th>发送人</th>
+								<th>接收人</th>
+								<th>内容</th>
+								<th>
+									{yun:}if $smarty.get.t=="sendTime" && $smarty.get.order=="asc"{/yun}
+									<a href="{yun:}searchurl order=desc t=sendTime m=admin_chat_log untype='order,t'{/yun}">时间</a>
+									{yun:}else{/yun}
+									<a href="{yun:}searchurl order=asc t=sendTime m=admin_chat_log untype='order,t'{/yun}">时间</a>
+									{yun:}/if{/yun}
+								</th>
+								<th align="center">操作</th>
+							</tr>
+						</thead>
+						<tbody class="tableBackColorTwo">
+
+							{yun:}foreach item=v key=key from=$rows{/yun}
+							<tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+								<td>
+									<input type="checkbox" value="{yun:}$v.id{/yun}" name='del[]' onclick='unselectall()' rel="del_chk" />
+								</td>
+								<td><span>{yun:}$v.id{/yun}</span></td>
+								<td>{yun:}$v.fname{/yun}</td>
+								<td>{yun:}$v.tname{/yun}</td>
+								<td>
+									{yun:}if $v.mtype=='img'{/yun}
+										<a href="javascript:void(0)" class="preview admin_n_img" url="{yun:}$v.content{/yun}"></a>
+									{yun:}else if $v.mtype=='voice'{/yun}
+										<div onclick="playVoice_admin(this)" data-id="{yun:}$v.id{/yun}" data-voice="{yun:}$v.content{/yun}">
+											<div>
+												<div class="chat_logo_zt">
+												<i id="onplay_{yun:}$v.id{/yun}" class="yuyinbox_wt"></i>{yun:}$v.voicelength{/yun}</div>
+											</div>
+										</div>
+									{yun:}else{/yun}
+										{yun:}$v.content|mb_substr:0:30:"utf-8"{/yun}
+										{yun:}if mb_strlen($v.content)>30{/yun}
+										...<span class="show_content" style="padding-left:5px;color:#2778f8; cursor: pointer;" data-msg="{yun:}$v.content{/yun}">更多</span>
+										{yun:}/if{/yun}
+									{yun:}/if{/yun}
+								</td>
+								<td>{yun:}$v.sendTime|date_format:"%Y-%m-%d %H:%M"{/yun}</td>
+								<td align="center">
+									<div class="operationSeries">
+										<a href="javascript:void(0);" onclick="showChat('{yun:}$v.id{/yun}')">查看</a>
+										<a href="javascript:void(0)" onClick="layer_del('确定要删除？', 'index.php?m=admin_chat_log&c=del&id={yun:}$v.id{/yun}');">删除</a>
+									</div>
+								</td>
+							</tr>
+							{yun:}/foreach{/yun}
+							<tr>
+								<td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' /></td>
+								<td colspan="9">
+									<label for="chkAll2">全选</label>&nbsp;
+									<input class="admin_button" type="button" name="delsub" value="删除所选" onClick="return really('del[]')" />
+								</td>
+							</tr>
+							{yun:}if $total > $config.sy_listnum {/yun}
+							<tr>
+								{yun:}if $pagenum==1{/yun}
+								<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+								{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun} <td colspan="3"> 从 {yun:}($pagenum-1) *
+									$config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+									{yun:}else if $pagenum == $pages{/yun}
+									<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共
+										{yun:}$total{/yun} 条</td>
+									{yun:}/if{/yun}
+									<td colspan="7" class="digg">{yun:}$pagenav{/yun}</td>
+							</tr>
+							{yun:}/if{/yun}
+						</tbody>
+
+					</table>
+					<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+				</form>
+				<div id="chatvoice" class="none"></div>
+				<div id="show_more" style="display:none;margin:20px;"></div>
+			</div>
+		</div>
+		</div>
+		</div>
+		
+		<div id="chat_box" class="chat_box_all" style="display:none;height:500px;">
+			<div id="chatapp">
+				<div id="chat_content" class="chat_sendcontent">
+					<ul v-if="chatlog.length>0">
+						<li v-if="morelog" id="chat_more" class="chat_more" onclick="adminMoreChat()"><div class="chat_comjobtip"><span class="chat_comjobtip_p">查看更多消息</span></div></li>
+				
+						<li v-for="(msg, ck) in chatlog" :key="ck" class="chat_li">
+							<div v-if="msg.time" class="chat_sendtime"><span class="chat_sendtime_b">{{msg.time}}</span></div>
+							<!--消息撤回-->
+							<div v-if="msg.msgtype=='recall'" class="chat_recall chatRecalls"><span class="chat_recall_b">{{msg.content}}</span></div>
+							<div v-if="msg.msgtype=='char' || msg.msgtype=='voice' || msg.msgtype=='spview' || msg.msgtype=='map'">
+								<!--我方消息-->
+								<div v-if="msg.mine" @click="recall(msg.chatid,msg.sendTime);" class="chat_sendcont">
+									<!--头像-->
+									<div class="chat_sendcont_pic"><img :src="msg.avatar"></div>
+									<!--面试邀请-->
+									<span v-if="msg.inviteid" class="chat_sendcont_p" @click.stop="inviteShow(msg.inviteid)">
+										<em class="chat_sendcont_yqbox">发送了面试邀请<i class="chat_sendcont_yq"></i></em>
+									</span>
+									<!--语音-->
+									<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p">
+										<div  @click.stop="playVoice(msg.chatid,ck)">
+											<div class="yuyinboxright"><i :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+											<div>
+												<audio :id="'voice_'+msg.chatid">
+													<source :src="msg.voice" type="audio/mpeg">
+												</audio>
+											</div>
+										</div>	
+									</span>
+									<!--我发的图片-->
+									<span v-else-if="msg.image" class="chat_sendcont_p">
+										<img class="chat_photos" :src="msg.image">
+									</span>
+									
+									<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p">
+										<div class="spqxboxtwo" v-if="msg.content == 'closesp'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+										<div class="spqxboxtwo" v-else-if="msg.content == 'refused'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+										<div class="spqxboxtwo" v-else><i class="spqx2"></i>{{msg.content}}</div>
+									</div>
+									<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p"><img class="chat_photos" :src="msg.url"></span>
+				
+									<span v-else class="chat_sendcont_p">
+										<span v-for="(cn, cnk) in msg.content" :key="cnk">
+											<!--表情-->
+											<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+											<!--文字-->
+											<span v-else-if="cn.t == 'char'">
+												<em>{{cn.n}}</em>
+											</span>
+										</span>
+									</span>
+								</div>
+								<!--对方消息-->
+								<div v-else class="chat_other_say">
+									<!--头像-->
+									<div class="chat_other_pic"><img :src="msg.avatar"></div>
+									<!--面试邀请-->
+									<span v-if="msg.inviteid" class="chat_sendcont_p2" @click.stop="inviteShow(msg.inviteid)">
+										<em class="chat_sendcont_jsbox">发送了面试邀请<i class="chat_sendcont_jsyq"></i></em>
+									</span>
+									<!--语音-->
+									<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p2">
+										<div  @click="playVoice(msg.chatid,ck)">
+											<div class="yuyinbox"><i  :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+											<div>
+												<audio :id="'voice_'+msg.chatid">
+													<source :src="msg.voice" type="audio/mpeg">
+												</audio>
+											</div>
+											<div v-if="msg.voicestatus != 1" class="xxwd"></div>
+										</div>
+									</span>
+									<!--我收到的图片-->
+									<span v-else-if="msg.image" class="chat_sendcont_p2">
+										<img class="chat_photos" :src="msg.image">
+									</span>
+									<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p2">
+										<div class="spqxbox" v-if="msg.content == 'closesp'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+										<div class="spqxbox" v-else-if="msg.content == 'refused'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+										<div class="spqxbox" v-else><i class="spqx"></i>{{msg.content}}</div>
+									</div>
+									<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p2"><img class="chat_photos" :src="msg.url"></span>
+				
+									<span v-else class="chat_sendcont_p2">
+										<span v-for="(cn, cnk) in msg.content" :key="cnk">
+											<!--表情-->
+											<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+											<!--文字-->
+											<span v-else-if="cn.t == 'char'">
+												<em>{{cn.n}}</em>
+											</span>
+										</span>
+									</span>
+								</div>
+							</div>
+							<div v-else-if="msg.msgtype == 'ask'">
+								<div v-if="msg.mine"  class="chat_hdh">
+									<span><div class="chat_hdh_p">{{msg.asktext}}</div></span>
+								</div>
+								<div v-else class="chat_hhyq">
+									<div class="chat_hhyq_p chat_hhyq_pq">
+										<i :class="msg.asktype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.asktext}}
+									</div>
+									<div v-if="msg.askstatus == '1'" :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth"><span class="wxyty">已同意</span></div>
+									<div v-if="msg.askstatus == '2'" :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth"><span class="wxyty">已拒绝</span></div>
+									<div v-else :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth">
+										<div  @click="confirmAsk(msg.asktype, msg.chatid)" class="bh_bth bh_bthline">同意</div>
+										<span @click="refuseAsk(msg.asktype, msg.chatid)" class="bh_bth">拒绝</span>
+									</div>
+								</div>
+							</div>
+							<div v-else-if="msg.msgtype == 'confirm' && msg.askvalue" class="chat_hhyq">
+								<div class="chat_hhyq_p"><i :class="msg.confirmtype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.askmsg}}{{msg.askvalue}}</div>
+								<div @click="copyMsg(msg.askvalue)"  class="chat_hhyq_bth">
+									<span class="">{{msg.confirmtype=='wx'?'复制微信号':'复制手机号'}}</span>
+								</div>
+							</div>
+							<div v-else-if="msg.msgtype == 'refuse' && msg.refusetext" class="chat_hdh">
+								<span><div class="chat_hdh_p">{{msg.refusetext}}</div></span>
+							</div>
+							<div v-else-if="(msg.msgtype == 'job' || msg.msgtype == 'adminjob') && msg.job" class="chat_yx_job" @click="toShow(msg.job.weburl)">
+								<span>
+									<div class="chat_yx_job_name">{{msg.job.name}}</div>
+									<span class="chat_yx_xz">{{msg.job.job_salary}}</span>
+									<div class="chat_yx_com_name">{{msg.job.com_name}}</div>
+									<div class="">
+										{{msg.job.job_city_one}}{{msg.job.job_city_two?'-'+msg.job.job_city_two:''}}
+										{{msg.job.job_exp?'.'+msg.job.job_exp+'经验':''}}
+										{{msg.job.job_edu?'.'+msg.job.job_edu+'学历':''}}
+									</div>
+									<div class="chat_yx_time" v-if="msg.newjob">{{msg.ctime}} {{msg.newjob_tip}}</div>
+								</span>
+							</div>
+							<div v-else-if="msg.msgtype == 'resume'" class="chat_userresume" @click="toShow(expect.weburl)">
+								<span>
+									<div class="chat_userresume_name">{{expect.uname}}<span class="chat_userresume_ys">{{expect.sex_n}},{{expect.age}}岁</span></div>
+									<div class="chat_userresume_info">{{expect.exp_n}} . {{expect.edu_n}} </div>
+									<div class="chat_userresume_want">期望职位 <span class="chat_userresume_wantjob">{{expect.name}}</span> </div>
+									<div class="chat_userresume_pic"><img :src="expect.photo"></div>
+								</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script>
+
+			var weburl = "{yun:}$config.sy_weburl{/yun}",
+			cantel = '',
+			canwx = '';
+
+			layui.use(['laydate'], function() {
+				var laydate = layui.laydate,
+					$ = layui.$;
+				laydate.render({
+					elem: '#date',
+					range: '~'
+				});
+			});
+
+			function ckmobliemsg() {
+				var sdate = $("#sdate").val();
+				var edate = $("#edate").val();
+				if (sdate && edate && toDate(edate) < toDate(sdate)) {
+					layer.msg("结束时间必须大于开始时间！", 2, 8);
+					return false;
+				}
+			}
+			$(document).ready(function() {
+				
+				
+				$(".preview").hover(function(){  
+					var pic_url=$(this).attr('url');
+					layer.tips("<img src="+pic_url+" style='max-width:380px'>", this, {
+						maxWidth: '380px'
+					});
+				},function(){layer.closeAll('tips');});  
+
+				$(".msgreturn").hover(function() {
+					var msg = $(this).attr('msg');
+					if ($.trim(msg) != '') {
+						layer.tips(msg, this, {
+							guide: 1,
+							style: ['background-color:#5EA7DC; color:#fff;top:-7px', '#5EA7DC']
+						});
+						$(".xubox_layer").addClass("xubox_tips_border");
+					}
+				}, function() {
+					var msg = $(this).attr('msg');
+					if ($.trim(msg) != '') {
+						layer.closeAll('tips');
+					}
+				});
+			})
+
+			//播放语音
+			function playVoice_admin(obj) {
+				var chatid = $(obj).attr('data-id');
+				var voiceurl = $(obj).attr('data-voice');
+				var onplay = false;
+				if ($('.yuyinbox_onplay')) {
+					$('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+				}
+				if (isIELowVision) {
+					var head = document.head || document.getElementsByTagName('head')[0];
+					var bgsound = document.getElementsByTagName('bgsound')[0];
+					
+					if (!bgsound) {
+
+						var player = document.createElement('bgsound');
+						head.appendChild(player);
+						player.src = voiceurl;
+						onplay = true;
+
+					}else{
+						if (bgsound.src == '') {
+							bgsound.src = voiceurl;
+							onplay = true;
+						} else {
+							bgsound.src = '';
+						}
+					}
+				} else {
+					var audio = $("#player")[0];
+					if(audio && !audio.paused && audio.src==voiceurl){
+						audio.pause();
+						audio.currentTime = 0;
+					}else{
+						$("#chatvoice").html("")
+				        //来一个audio内容，看好这里已经给src赋值了
+				        var aud = $('<audio id="player"  src="' + voiceurl + '" hidden></audio>')
+				        //放到容器里区
+				        $("#chatvoice").html(aud)
+				        //获取当前audio
+				        audio = $("#player")[0];
+				        //局部load()一下
+				        aud.load();
+
+						audio.play(); // 播放 
+
+						onplay = true;
+					}
+					audio.addEventListener("play", function() { //开始播放时触发
+						//console.log('开始播放');
+					});
+					audio.addEventListener("pause", function() { // 暂停时会触发，当播放完一首歌曲时也会触发
+						//console.log('播放暂停');
+					})
+					audio.addEventListener("ended", function() {
+						//console.log('播放结束');
+						$('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+					}, false);
+				}
+				if (onplay) {
+					$('#onplay_' + chatid).attr('class', 'yuyinbox_onplay');
+				} else {
+					$('#onplay_' + chatid).attr('class', 'yuyinbox_wt');
+				}
+
+			}
+			
+			var chatpage = 1;
+			var isAdmin = true,
+				inviteid = '',
+				jid = '',
+				mine = {id: '',usertype: ''},
+				adminchatid = '';
+			
+			function showChat(id){
+				adminchatid = id;
+				adminMoreChat(id);
+				$.layer({
+					type : 1,
+					title : '聊天记录',
+					area : ['500px','500px'],
+					page : {dom :"#chat_box"},
+					close: function(){
+						chatpage = 1;
+						chatapp.$data.morelog = false;
+						chatapp.$data.chatlog = [];
+					}
+				});
+			}
+			function adminMoreChat(id){
+				if(!id){
+					id = adminchatid;
+				}
+				var pytoken = $("#pytoken").val();
+				$.ajax({
+					url: 'index.php?m=admin_chat_log&c=userchat',
+					type: 'POST',
+					data: {pytoken:pytoken, id: id, page: chatpage},
+					dataType: 'json',
+					success: function (res) {
+						
+						if (res) {
+							if(res.msg){
+								return layer.msg(res.msg, 2, 8);
+							}
+							if(res.fuser && res.tuser){
+								chatapp.$data.linkman = res.tuser.nickname;
+								var title = res.fuser.nickname + '和' + res.tuser.nickname + '的聊天记录';
+								$('.layui-layer-title').text(title);
+							}
+							chatpage = chatpage + 1;
+								
+							var scroll = null;
+							if (chatpage > 2) {
+								// 第二页开始，记录前一次滚动距离
+								scroll = document.getElementById('chat_content').scrollHeight;
+							}
+							
+							if (res.code == 0) {
+								var list = [];
+								if(res.joblist){
+									chatapp.$data.joblist = res.joblist;
+								}
+								var chatlog = res.data;
+								chatapp.$data.expect = res.expect;
+								if (chatlog.length > 0) {
+									
+									pastSend = chatlog[0].sendTime;
+									chatapp.$data.morelog = false;
+						
+									for (var i in chatlog) {
+										chat = renderPast(chatlog[i],i);
+										if(chat){
+											list.push(chat);
+										}
+										// 最后一条时，如还有历史消息，增加更多消息
+										if (i == chatlog.length - 1 && res.ismore) {
+											chatapp.$data.morelog = true;
+											lastid = chatlog[i]['id'];
+										}
+									}
+						
+									list.reverse();
+									chatapp.$data.chatlog = list.concat(chatapp.$data.chatlog);
+									
+									if (scroll) {
+										chatapp.$nextTick(function(){
+											// 渲染后，滚动到上一页的距离
+											var newScroll = document.getElementById('chat_content').scrollHeight;
+											chatScrollTo(newScroll - scroll);
+										})
+									}
+								}else{
+									chatapp.$data.morelog = false;
+								}
+							}
+							moreReady = true;
+						}
+					}
+				});
+			}
+            // 显示更多内容
+            $(".show_content").click(function(){
+                var msg = $(this).attr('data-msg')
+                $('#show_more').text(msg)
+                var msglayer = layer.open({
+                    type: 1,
+                    title: '',
+                    closeBtn: 1,
+                    border: [10, 0.3, '#000', true],
+                    area: ['550px', 'auto'],
+                    content: $("#show_more"),
+                    cancel:function(){
+                        layer.close(msglayer)
+                    }
+                });
+            });
+		</script>
+		<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/yunliao/websocket.js?v={yun:}$config.cachecode{/yun}"></script>
+	</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 新建企微客户群活码</title>
+
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/xm-select-v1.2.4/dist/xm-select.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <style>
+        * {margin: 0;padding: 0;}
+        body, div {margin: 0;padding: 0;}
+    </style>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="ttyTishiTopAll">
+            <h3>配置客户群「加入群聊」方式 —— 客户群活码</h3>
+            <div class="shiTopAllTips">
+                <span>1、企业可通过此接口为具有客户联系功能的成员生成专属的群二维码。</span>
+                <span>2、客户通过扫描二维码或点击小程序上的按钮，即可加入特定的客户群。</span>
+                <span>3、如果配置的是小程序按钮，并且开启使用，小程序职位详情页广告位将会替换成该插件。</span>
+                <span style="font-weight: bold;">注：通过该API添加的配置不会在管理端进行展示。</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+        <form id="qrcodeform" name="myform" target="supportiframe" action="index.php?m=admin_workwx_qrcode&c=save" method="post" encType="multipart/form-data" class="layui-form">
+            <table width="100%" class="table_form" style="background:#fff;">
+                <tr>
+                    <th width="120">活码名称：</th>
+                    <td>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" id="name" lay-verify="required" placeholder="请填写微群活码名称" value="{yun:}$info.name{/yun}" maxlength="30" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">入群场景：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input name="scene" value="2" id="scene2" {yun:}if empty($info) || $info.scene==2{/yun}checked{yun:}/if{/yun} title="二维码" type="radio" lay-filter="scene"/>
+                            <input name="scene" value="1" id="scene1" {yun:}if $info.scene==1{/yun}checked{yun:}/if{/yun} title="小程序" type="radio" lay-filter="scene"/>
+                        </div>
+                        <span>&nbsp;&nbsp;&nbsp;选择小程序场景时，可以通过微信小程序职位详情页面点击入群。</span>
+                    </td>
+                </tr>
+                <tr class="xcxTr" style="{yun:}if $info.scene!=1{/yun}display: none;{yun:}/if{/yun}">
+                    <th width="120">开启应用：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input type="checkbox" {yun:}if $info.xcx_use == 1{/yun}checked{yun:}/if{/yun} name="xcx_use" lay-skin="switch" lay-filter="xcx_use" lay-text="开启|关闭">
+                        </div>
+                        <span>&nbsp;&nbsp;&nbsp;开启应用，其他客户群活码小程序插件会立即关闭。</span>
+                    </td>
+                </tr>
+                <tr class="xcxTr" style="{yun:}if $info.scene!=1{/yun}display: none;{yun:}/if{/yun}">
+                    <th width="120">应用图标：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input type="hidden" id="laynoupload" value="1">
+                            <button type="button" class="yun_bth_pic noupload" lay-data="{imgid: 'xcxIcon'}">上传图标</button>
+                            <img id="xcxIcon" src="{yun:}$config.sy_ossurl{/yun}/{yun:}$info.xcx_icon{/yun}" width="38px" height="38px"  {yun:}if !$info.xcx_icon{/yun}class="none"{yun:}/if{/yun}>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xcxTr" style="{yun:}if $info.scene!=1{/yun}display: none;{yun:}/if{/yun}">
+                    <th width="120">应用标题：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input type="text" name="xcx_title" id="xcx_title" lay-verify="required" placeholder="例如：微信求职群" value="{yun:}$info.xcx_title{/yun}" maxlength="15" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                        <span>&nbsp;&nbsp;&nbsp;最多15个字。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">入群备注：</th>
+                    <td>
+                        <div class="layui-input-inline">
+                            <input type="text" name="remark" id="remark" lay-verify="required" placeholder="请填写入群备注信息" value="{yun:}$info.remark{/yun}" maxlength="30" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                        <span>入群联系方式的备注信息，用于助记</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">对应群聊：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480" id="group_select"></div>
+                        <span>&nbsp;&nbsp;&nbsp;使用该配置的客户群列表，支持5个，配置群聊请勿开启入群验证。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">自动新建：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input name="auto_create_room" value="1" id="auto_create_room1" {yun:}if empty($info) || $info.auto_create_room==1{/yun}checked{yun:}/if{/yun} title="是" type="radio" lay-filter="auto_create_room"/>
+                            <input name="auto_create_room" value="2" id="auto_create_room2" {yun:}if $info.auto_create_room==2{/yun}checked{yun:}/if{/yun} title="否" type="radio" lay-filter="auto_create_room"/>
+                        </div>
+                        <span>&nbsp;&nbsp;&nbsp;当群满了后，是否自动新建群。</span>
+                    </td>
+                </tr>
+
+                <tr {yun:}if $info.auto_create_room =="2"{/yun}style="display: none;"{yun:}/if{/yun} class="autoCreate">
+                    <th width="120">群名称前缀：</th>
+                    <td>
+                        <div class="layui-input-inline">
+                            <input type="text" name="room_base_name" id="room_base_name" lay-verify="required" placeholder="请填写入群名称前缀" value="{yun:}$info.room_base_name{/yun}" maxlength="40" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                        <span>自动建群的群名前缀</span>
+                    </td>
+                </tr>
+                <tr {yun:}if $info.auto_create_room =="2"{/yun}style="display: none;"{yun:}/if{/yun} class="autoCreate">
+                    <th width="120">群起始序号：</th>
+                    <td>
+                        <div class="layui-input-inline">
+                            <input type="number" name="room_base_id" id="room_base_id" lay-verify="required" placeholder="请填写群起始序号" value="{yun:}$info.room_base_id{/yun}" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                        <span>自动建群的群起始序号</span>
+                    </td>
+                </tr>
+                <tr {yun:}if $info.auto_create_room =="2"{/yun}style="display: none;"{yun:}/if{/yun} class="autoCreate">
+                    <th width="120"></th>
+                    <td>
+                        <span>群名称前缀 和 群起始序号 两个配合使用，用于指定自动新建群的群名<br></span>
+                        <span>例如，假如 群名称前缀 = "销售客服群", 群起始序号 = 10<br></span>
+                        <span>那么，自动创建的第一个群，群名为“销售客服群10”；自动创建的第二个群，群名为“销售客服群11”，依次类推</span>
+                    </td>
+                </tr>
+                <tr class="admin_table_trbg">
+                    <th width="120"></th>
+                    <td align="left">
+                        {yun:}if is_array($info){/yun}
+                            <input type="hidden" name="config_id" value="{yun:}$info.config_id{/yun}"/>
+                            <input type="hidden" name="state" value="{yun:}$info.state{/yun}"/>
+                            <input type="hidden" name="id" value="{yun:}$info.id{/yun}"/>
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;更 新&nbsp;"/>
+                        {yun:}else{/yun}
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;添 加&nbsp;"/>
+                        {yun:}/if{/yun}
+                        <input class="layui-btn tty_cz" type="reset" name="reset" value="&nbsp;重 置 &nbsp;"/>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+        </form>
+    </div>
+</div>
+<style>
+    .layui-form-item {margin-bottom: 0px;clear: both;}
+    .layui-form-label {width: 60px;padding: 9px 1px;}
+</style>
+
+<script language="javascript">
+
+    var weburl = '{yun:}$config.sy_weburl{/yun}';
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer,
+            form = layui.form,
+            element = layui.element,
+            $ = layui.$;
+
+        form.on('radio(auto_create_room)', function (data) {
+
+            if (data.value == 1){
+
+                $('.autoCreate').show();
+            }else if (data.value == 2){
+
+                $('.autoCreate').hide();
+            }
+        });
+        form.on('radio(scene)', function (data) {
+
+            if (data.value == 1){
+
+                $('.xcxTr').show();
+            }else if (data.value == 2){
+
+                $('.xcxTr').hide();
+            }
+        });
+    });
+
+
+    var groupSelect = xmSelect.render({
+        el: '#group_select',
+        name: 'chat_id',
+        theme: {
+            color: '#2778f8',
+        },
+        filterable: true,
+        max: 5,
+        on: function (data) {
+        },
+        data: []
+    })
+    $(document).ready(function() {
+
+        var id = '{yun:}$info.id{/yun}';
+            pytoken = $('#pytoken').val();
+        $.ajax({
+            url	 : 'index.php?m=admin_workwx_qrcode&c=getWorkGroup',
+            data : {id: id, pytoken: pytoken},
+            type : 'post',
+            dataType : 'JSON',
+            async : false,
+            success : function(data) {
+
+                groupSelect.update({
+                   data: data,
+                    autoRow: true,
+                });
+            }
+        });
+    })
+
+    function checkform() {
+
+        if ($("#name").val() == "") {
+
+            parent.layer.msg('请填写客户群活码名称！', 2, 8);
+            return false;
+        }
+
+        var scene = $("input[name=scene]:checked").val();
+
+        if (scene == 1){
+
+            var xcxUse = $("input[name=xcx_use]:checked").val();
+
+            if (xcxUse == 'on'){
+
+                var xcxIcon = $("#xcxIcon").attr('src');
+
+                if (xcxIcon == '' || xcxIcon == undefined){
+
+                    parent.layer.msg('请上传应用标题！', 2, 8);
+                    return false;
+                }
+                var xcxTitle = $("#xcx_title").val();
+
+                if (xcxTitle == ''){
+
+                    parent.layer.msg('请填写应用标题！', 2, 8);
+                    return false;
+                }
+            }
+        }
+
+        var auto = $("input[name=auto_create_room]:checked").val();
+
+        if (auto == ''){
+
+            parent.layer.msg('请选择群满时，是否自动新建群！', 2, 8);
+            return false;
+        }
+        if (auto == 1){
+            var baseName =  $("#room_base_name").val();
+            if (baseName == ''){
+                parent.layer.msg('请填写自动新建群前缀！', 2, 8);
+                return false;
+            }
+            var baseId =  $("#room_base_id").val();
+            if (baseId == ''){
+                parent.layer.msg('请填写自动新建群起始序号！', 2, 8);
+                return false;
+            }
+        }
+
+        var group = xmSelect.get('#group_select', true);
+        if (group.getValue('nameStr') == ''){
+            parent.layer.msg('请选择客户群！', 2, 8);
+            return false;
+        }
+
+        $("#qrcodeform").submit();
+    }
+
+</script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+
+</body>
+</html>

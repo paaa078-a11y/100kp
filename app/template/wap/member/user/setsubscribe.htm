@@ -1,0 +1,145 @@
+{yun:}include file="$wapstyle/member/header.htm"{/yun}
+<link href="{yun:}$wap_style{/yun}/css/cmc.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+<div id="yunvue" class="none">
+    <div class="wap_member_box">
+        <form id="editchildForm">
+
+
+            <div class="yun_from_list">
+                <div class="from_list_tite">
+                    <span>发送周期</span>
+                </div>
+                <div class="from_list_cont">
+                    <span :class="time==1?'time_choosed':'time_unchoosed'" @click="time=1">每天 </span>
+                    <span :class="time==3?'time_choosed':'time_unchoosed'" @click="time=3">3天 </span>
+                    <span :class="time==7?'time_choosed':'time_unchoosed'" @click="time=7">7天</span>
+                </div>
+            </div>
+            <div @click="classBox('job')" class="yun_from_list">
+                <div class="from_list_tite">
+                    <span>工作职能</span>
+                </div>
+                <div class="from_list_cont">
+                    <div class="yun_create_select" id="jobnameshow">{{jobname}}</div>
+                    <div class="yun_create_fx">
+                        <img src="{yun:}$wap_style{/yun}/images/yunfx.png" alt="" width="100%" height="100%">
+                    </div>
+                    <input type="hidden" id="job_classid" name="job_classid" :value="jobclassid" />
+                </div>
+            </div>
+
+            <div class="security_bth">
+                <div class="security_bth_but" name="submit" @click="saveEdit" style="text-align:center">确认</div>
+                &nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{yun:}$plusstyle{/yun}/job.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$plusstyle{/yun}/jobparent.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+{yun:}include file="$wapstyle/member/public/resume_city_job.htm"{/yun}
+<script>
+    var cmcJs = null;
+    var id = parseInt('{yun:}$smarty.get.id{/yun}');
+    var jobclass = '',
+        jobclassname = '',
+        jobclassidData = [];
+
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data: {
+
+            id: id ? id : '',
+
+            time: '',
+
+            jobname: '',
+            jobclassid: '',
+        },
+        created() {
+            if (id != '') {
+                this.getinfo();
+            }
+        },
+        methods: {
+            getinfo: function () {
+                var that = this;
+                var paramer = { id: that.id };
+                showLoading();
+                $.post('{yun:}url d=wxapp h=user m=subscribe c=getSubscribe{/yun}', paramer, function (data) {
+
+                    hideLoading();
+
+                    if (data) {
+                        var info = data.data.info;
+                        that.time = info.time;
+                        that.jobname = info.jobname_n ? info.jobname_n : '';
+                        that.jobclassid = info.jobclass_id ? info.jobclass_id : '';
+
+                        cityjobVue.$data.jobnameArr = info.jobnameArr;
+                        
+                        jobclass = info.jobclass_id;
+                        jobclassname = info.jobname_n;
+                        jobclassidData = [];
+                        for (let i in info.jobclass) {
+                            jobclassidData.push({
+                                value: info.jobclass[i]
+                            });
+                        }
+
+                    }
+                    $("#yunvue").css('display', 'block');
+                }, 'json');
+            },
+            saveEdit: function () {
+                var that = this;
+                var formData = {};
+
+                var time = that.time;
+                var jobclassid = that.jobclassid;
+
+                if (time == '') {
+                    return showToast('请选择发送周期!');
+                }
+                if (jobclassid == '') {
+                    return showToast('请选择工作职能!');
+                }
+
+                formData.id = that.id;
+                formData.time = time;
+                formData.jobclass_id = jobclassid;
+                showLoading('保存中...');
+                $.post('{yun:}url d=wxapp h=user m=subscribe c=saveSub{/yun}', formData, function (data) {
+                    hideLoading();
+                    if (data.errcode == 9) {
+                        showToast(data.msg, 2, function () {
+                            goBack();
+                        });
+                    } else {
+                        showModal(data.msg);
+                    }
+                }, 'json');
+            },
+            classBox: function (type) {
+                cityjobVue.$data.jobheader = '职位类别选择';
+                cityjobVue.$data[type + 'Show'] = true;
+
+                // 加载职位、地区多选js
+                if (cmcJs) {
+                    cmcJs.remove();
+                }
+                if (typeof zn_search !== "undefined") {
+                    delete (zn_search);
+                    $('.zn_search').off('input', '.inputListener');
+                    $('.classTap').off('change', 'input');
+                }
+                cmcJs = document.createElement('script');
+                cmcJs.src = "{yun:}$wap_style{/yun}/js/cmc.js?v={yun:}$config.cachecode{/yun}";
+                document.body.appendChild(cmcJs);
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="优质简历" name="first" :lazy="true">
+                    <youzhijl :reportarr="reportArr" :typearr="typeArr" :status="status"></youzhijl>
+                </el-tab-pane>
+                <el-tab-pane label="简历库" name="second" :lazy="true">
+                    <jianlku></jianlku>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    status: '',
+                    reportArr:{},
+                    typeArr:{},
+                    uri: "m=user&c=",
+                }
+            },
+            components: {
+                'youzhijl': httpVueLoader('./component/youzhijl.vue'),
+                'jianlku': httpVueLoader('./component/jianlku.vue'),
+            },
+            created() {
+                var that = this
+                let query = window.parent.homeapp.$route.query;
+                if (query.status) {
+                    that.status = query.status;
+                }
+                if (query.tabs) {
+                    that.activeName = query.tabs;
+                }
+                this.reportFun();
+                this.typeFun();
+            },
+            methods: {
+                reportFun:function () {
+                    let url = this.uri +"admin_height_user&a=ltar"
+                    let _this = this;
+                    httpPost(url, {},{hideloading: true}).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            _this.reportArr = res.data.data;
+                        }
+                    })
+
+                },
+                typeFun:function () {
+                    let url = this.uri +"admin_height_user&a=ltarry"
+                    let _this = this;
+                    httpPost(url, {},{hideloading: true}).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            _this.typeArr = res.data.data;
+                        }
+                    })
+                },
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

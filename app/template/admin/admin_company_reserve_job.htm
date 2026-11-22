@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>后台管理 - 职位管理 - 预约刷新</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+    .layui-form-select dl{
+        max-height: 146px;
+    }
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+
+    <div id="upReserveJob" style="display:none;width:450px;padding: 10px 0;">
+        <div style="overflow:auto;width:450px;">
+            <form class="layui-form" name="formstatus" action="index.php?m=admin_company_job&c=upReserveJob" target="supportiframe" onsubmit="return checkForm();" method="post">
+                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                <table cellspacing='1' cellpadding='1' class="admin_examine_table">
+                    <tr>
+                        <th>刷新状态：</th>
+                        <td align="left">
+                            <input type="radio" name="status" value="1" title="开启" />
+                            <input type="radio" name="status" value="2" title="关闭" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="t_fr">刷新间隔：</th>
+                        <td align="left">
+                            <div style="width: 180px;">
+                                <select id="intervalId" name="intervalId" lay-filter="intervalId">
+                                    <option value="60">每隔1小时</option>
+                                    <option value="120">每隔2小时</option>
+                                    <option value="180">每隔3小时</option>
+                                    <option value="240">每隔4小时</option>
+                                    <option value="300">每隔5小时</option>
+                                    <option value="360">每隔6小时</option>
+                                    <option value="420">每隔7小时</option>
+                                    <option value="480">每隔8小时</option>
+                                    <option value="1">自定义刷新间隔</option>
+                                </select>
+                                <div style="margin-top: 5px; display: none" id="intervalDiv">
+                                    <input name="interval" id="interval" class="input-text" type="text" ><em style="margin-left: -45px;">分钟</em>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="t_fr">截止日期：</th>
+                        <td align="left"><input name="end_time" id="end_time" class="input-text" type="text"></td>
+                    </tr>
+                    <tr>
+                        <th class="t_fr">刷新时间段：</th>
+                        <td align="left">
+                            <input name="s_time" id="s_time" class="input-text" style="width: 76px;" type="text" />
+                            <input name="e_time" id="e_time" class="input-text" style="width: 76px;" type="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='2' align="center">
+                            <input id="job_id" name="job_id" value="0" type="hidden">
+                            <input id="uid" name="uid" value="0" type="hidden">
+                            <input type="submit" value='确认' class="admin_examine_bth">
+                            <input type="button" onClick="layer.closeAll();" class="admin_examine_bth_qx" value='取消'>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div class="tty-tishi_top">
+        <div class="tabs_info">
+            <ul>
+                <li><a href="index.php?m=admin_company_job&uid={yun:}$smarty.get.uid{/yun}">全职职位</a></li>
+                <li class="curr"><a href="index.php?m=admin_company_job&c=reserveJob&uid={yun:}$smarty.get.uid{/yun}">预约刷新</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="admin_new_search_box">
+            <form id="jobFormSearch" action="index.php" name="myform" method="get">
+                <div>
+                    <input type="hidden" name="m" value="admin_company_job" />
+                    <input type="hidden" name="c" value="reserveJob" />
+                    <div class="admin_Filter_text formselect" did='dtype'>
+                        <input type="button" value="{yun:}if $smarty.get.type=='1' || $smarty.get.type==''{/yun}公司名称{yun:}else if $smarty.get.type=='2'{/yun}职位名称{yun:}/if{/yun}" class="admin_new_select_text" id="btype">
+                        <input type="hidden" id='type' value="{yun:}if $smarty.get.type=='1' || $smarty.get.type==''{/yun}1{yun:}else{/yun}2{yun:}/if{/yun}" name='type'>
+                        <div class="admin_Filter_text_box" style="display:none" id='dtype'>
+                            <ul>
+                                <li><a href="javascript:void(0)" onClick="formselect('1','type','公司名称')">公司名称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('2','type','职位名称')">职位名称</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="输入你要搜索的关键字" name="keyword" class="admin_new_text">
+                    <input type="submit" value="搜索" class="admin_new_bth">
+                </div>
+                <div class="admin_statistics">
+                    <span class="tty_sjtj_color">数据统计：</span>
+                    <span>{yun:}$total{/yun}</span>
+                </div>
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="clear"></div>
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" id='myform' target="supportiframe">
+                    <input name="m" value="admin_company_job" type="hidden" />
+                    <input name="c" value="del" type="hidden" />
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th>
+                                <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' /></label>
+                            </th>
+                            {yun:}if $smarty.get.t=="id" && $smarty.get.order=="asc"{/yun}
+                            <th><a href="{yun:}searchurl order=desc t=id m=admin_company_job c=reserveJob untype='order,t'{/yun}"class="admin_px">职位编号</a></th>
+                            {yun:}else{/yun}
+                            <th><a href="{yun:}searchurl order=asc t=id m=admin_company_job c=reserveJob untype='order,t'{/yun}"class="admin_px2">职位编号</a></th>
+                            {yun:}/if{/yun}
+                            <th>职位名称/发布企业</th>
+                            <th>时间间隔</th>
+                            <th>开始时间</th>
+                            <th>截止日期</th>
+                            <th>刷新周期</th>
+                            <th>刷新时间</th>
+                            <th align="center" width="130">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$rows{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td>
+                            <input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" data-lastupdate="{yun:}$v.lastupdate{/yun}" data-status="{yun:}$v.status{/yun}" data-state="{yun:}$v.state{/yun}" data-rstatus="{yun:}$v.r_status{/yun}" name='del[]' onclick='unselectall()' rel="del_chk" />
+                        </td>
+                        <td><span>{yun:}$v.id{/yun}</span></td>
+                        <td>
+                            <div class="">
+                                <a href="{yun:}$v.joburl{/yun}" target="_blank">{yun:}$v.name{/yun}</a>
+                                <div class="temsFlexDispy">
+                                    <a href="{yun:}$v.comurl{/yun}" target="_blank" class="admin_cz_sc">{yun:}$v.com_name{/yun}</a>
+                                </div>
+                                <div class="admin_mp5 admincom_dj">
+                                    {yun:}if $v.rating_name{/yun}{yun:}$v.rating_name{/yun}{yun:}/if{/yun}
+                                </div>
+                            </div>
+                        </td>
+                        <td>{yun:}$v.reserve_interval{/yun}分钟</td>
+                        <td>{yun:}$v.reserve_start{/yun}</td>
+                        <td>{yun:}$v.reserve_end{/yun}</td>
+                        <td>{yun:}$v.sx_time_n{/yun}</td>
+                        <td>{yun:}$v.lastupdate_n{/yun}</td>
+                        <td align="center">
+                            <div class="operationSeries">
+                                <a href="javascript:;" onClick="upReserveJob('{yun:}$v.id{/yun}', '{yun:}$v.uid{/yun}','{yun:}$v.reserve_status{/yun}','{yun:}$v.reserve_interval{/yun}','{yun:}$v.reserve_end{/yun}','{yun:}$v.s_time{/yun}','{yun:}$v.e_time{/yun}');">调整</a>
+                                <a href="javascript:;" onClick="layer_del('确定要关闭预约刷新？', 'index.php?m=admin_company_job&c=closeReserve&id={yun:}$v.id{/yun}');">关闭</a>
+                                <a href="javascript:;" onClick="layer_del('确定要删除？', 'index.php?m=admin_company_job&c=del&id={yun:}$v.id{/yun}');">删除</a>
+                            </div>
+                        </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' /></td>
+                            <td colspan="11">
+                                <label for="chkAll2">全选</label>
+                                <input class="admin_button" type="button" name="delsub" value="删除" onClick="return really('del[]')" />
+                                <input class="admin_button" type="button" name="delsub" value="关闭预约" onClick="return closeReserve('del[]')" />
+                            </td>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="9" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var needLoad = false, form = null, laydate = null;
+    layui.use(['form', 'laydate'], function() {
+        laydate = layui.laydate;
+        form = layui.form;
+
+        laydate.render({
+            elem: '#end_time'
+            , type: 'date'
+            , min: 1
+            , btns: ['clear', 'confirm']
+        });
+        laydate.render({
+            elem: '#s_time'
+            , type: 'time'
+            , format: 'HH:mm'
+        });
+        laydate.render({
+            elem: '#e_time'
+            , type: 'time'
+            , format: 'HH:mm'
+        });
+        form.on('select(intervalId)', function(data){
+            if (data.value == 1){
+
+                $('#intervalDiv').show();
+                $('#interval').val(0);
+            }else{
+
+                $('#intervalDiv').hide();
+                $('#interval').val(data.value);
+            }
+        });
+    });
+
+    var weburl = "{yun:}$config.sy_weburl{/yun}";
+
+    function upReserveJob(id,uid,status,interval,end,s_time, e_time) {
+        $('#job_id').val(id);
+        $('#uid').val(uid);
+        $("input[name=status][value='"+status+"']").prop("checked",true);
+        var intervalArr = ['60', '120', '180', '240', '300', '360', '420', '480'];
+
+        if (intervalArr.indexOf(interval) > 0){
+
+            $('#intervalDiv').hide();
+            $('#intervalId').find("option[value="+interval+"]").attr("selected", true);
+        }else{
+
+            $('#intervalDiv').show();
+            $('#intervalId').find("option[value=1]").attr("selected", true);
+        }
+        $('#interval').val(interval);
+        $('#end_time').val(end);
+        $('#s_time').val(s_time);
+        $('#e_time').val(e_time);
+        form.render();
+        $.layer({
+            type: 1,
+            title: '预约刷新',
+            closeBtn: [0, true],
+            offset: ['180px', ''],
+            border: [10, 0.3, '#000', true],
+            area: ['450px', '372px'],
+            page: {
+                dom: '#upReserveJob'
+            }
+        });
+    }
+
+    function checkForm() {
+
+        var status = $("input[name=status]:checked").val();
+        var s_time = $('#s_time').val();
+        var e_time = $('#e_time').val();
+
+        if (status == '' || status == 0 || status == undefined) {
+            parent.layer.msg('请选择预约状态', 2, 8);
+            return false;
+        } else if (status == 1) {
+            if (interval == '') {
+                parent.layer.msg('请填写刷新时间间隔', 2, 8);
+                return false;
+            }
+            if (s_time.length > 0 && e_time.length > 0) {
+                var stime = s_time.split(':');
+                var etime = e_time.split(':');
+                if (parseInt(stime[0]) > parseInt(etime[0]) || (parseInt(stime[0]) == parseInt(etime[0]) && parseInt(stime[1]) >= parseInt(etime[1]))) {
+                    parent.layer.msg('请合理设置刷新时间段', 2, 8);
+                    return false;
+                }
+            }
+        }
+    }
+
+    function closeReserve() {
+
+        var codewebarr = "";
+        $(".check_all:checked").each(function() {
+            if (codewebarr == "") {
+                codewebarr = $(this).val();
+            } else {
+                codewebarr = codewebarr + "," + $(this).val();
+            }
+        });
+        if (codewebarr == "") {
+            parent.layer.msg("请选择要关闭的职位！", 2, 8);
+            return false;
+        } else {
+            loadlayer();
+            $.post("index.php?m=admin_company_job&c=closeReserve", {
+                ids: codewebarr,
+                pytoken: $('#pytoken').val()
+            }, function(data) {
+                parent.layer.closeAll('loading');
+                parent.layer.msg("关闭成功！", 2, 9, function() {
+                    location.reload();
+                });
+                return false;
+            })
+        }
+    }
+
+    $(document).ready(function() {
+        var pytoken = $('#pytoken').val();
+        $.ajax({
+            url	 : 'index.php?m=admin_company_job&c=ajaxCloseReserve',
+            data : {pytoken : pytoken},
+            type : 'post',
+            dataType : 'JSON',
+            async : false,
+            success : function(data) {
+                return false;
+            }
+        })
+    });
+</script>
+</body>
+</html>

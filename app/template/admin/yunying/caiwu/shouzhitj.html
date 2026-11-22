@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <section id="shouzapp" class="moduleShouz">
+        <!--     组件加上时间 start   -->
+        <cwszinfo :time="time"></cwszinfo>
+        <bingtu :time="time"></bingtu>
+        <bintutwo :time="time"></bintutwo>
+        <!--  组件加上时间  end     -->
+    </section>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#shouzapp',
+        data: function() {
+            return {
+                timeType: '1',
+                uri: "m=yunying&c=",
+               // gengzs time  start
+                time: []
+                // gengzs time  end
+            }
+        },
+        components: {
+            'cwszinfo': httpVueLoader('./component/cwszinfo.vue'),
+            'szmxtable': httpVueLoader('./component/szmxtable.vue'),
+            'bingtu': httpVueLoader('./component/bingtu.vue'),
+            'bintutwo': httpVueLoader('./component/bintutwo.vue'),
+        },
+        created() {
+            var $time = parseInt(Date.now());
+            let endTime = timestampToTime($time);
+            let sT = $time - (86400 * 7 * 1000);
+            let startTime = timestampToTime(sT);
+            this.time = [startTime, endTime];
+        }
+    });
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+        // var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+        // var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+        // var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+        // strDate = Y+M+D+h+m+s;
+        strDate = Y + M + D;
+        return strDate;
+
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"
+		 type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+				<div class="tabs_info">
+					<ul>
+						<li class="curr"><a href="index.php?m=admin_lt_rating">等级设置</a></li>
+						<li><a href="index.php?m=admin_lt_rating&c=server" class="report_uaer_list_on">增值服务</a> </li>
+					</ul>
+				</div>
+
+				<div class="clear"></div>
+
+
+				<div class="admin_new_search_box">
+					<div class="searchBoxStr">
+						<div class="searchBoxStrOne">
+							<span>增值套餐服务</span>
+						</div>
+						<div class="searchBoxStrTwo">
+							<em>猎头可设置的等级包括：普通会员，高级会员，钻石会员等等，按照实际情况去设置等级的区分，会员等级需满足的条件和享受的优惠</em>
+							<!-- <div class="searchBoxStrTwoRight searchBoxBorder">
+								<a href="javascript:;" onclick="pinyin('未设置拼音的相关分类将根据中文名称自动生成拼音？','2','0','100');">生成拼音</a>
+							</div>
+							<div class="searchBoxStrTwoRight searchBoxBorder">
+								<a href="javascript:;" onclick="chachong('0','')">一键查重</a>
+							</div> -->
+							<div class="searchBoxStrTwoRight" style="width: 125px;">
+								<a href="index.php?m=admin_lt_rating&c=rating">设置会员等级</a>
+							</div>
+						</div>
+					</div>
+			  	</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="tty_table-bom">
+				<div class="table-list">
+					<div class="admin_table_border">
+						<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+						<form action="index.php?m=admin_lt_rating&c=delrating" name="myform" method="post" id='myform' target="supportiframe">
+							<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+							<table width="100%">
+								<thead>
+									<tr class="admin_table_top" align="left">
+										<th width="50">
+											<label for="chkall">
+												<input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' />
+											</label>
+										</th>
+										<th>编号</th>
+										<th>会员名称</th>
+										<th>会员模式</th>
+										<th>购买金额</th>
+										<th>服务时间</th>
+										<th>套餐信息</th>
+										<th>状态</th>
+										<th width="120" align="center">操作</th>
+									</tr>
+								</thead>
+								<tbody class="tableBackColorTwo">
+
+									{yun:}foreach item=v key=key from=$list{/yun}
+									<tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+										<td><input type="checkbox" value="{yun:}$v.id{/yun}" name='del[]' onclick='unselectall()' rel="del_chk" /></td>
+										<td><span>{yun:}$v.id{/yun}</span></td>
+										<td align="left">{yun:}$v.name{/yun}</td>
+										<td>{yun:}$v.type_n{/yun}</td>
+										<td>{yun:}$v.service_price{/yun}元</td>
+										<td>{yun:}if $v.service_time!=""{/yun}{yun:}$v.service_time{/yun}天{yun:}else{/yun}不限{yun:}/if{/yun}</td>
+										<td align="left">
+											<div class="setMealht">
+												{yun:}if $v.type ==1{/yun}
+												<span>发布职位：{yun:}$v.lt_job_num{/yun}份</span>
+												<span>刷新职位：{yun:}$v.lt_breakjob_num{/yun}份</span>
+												<span>下载简历：{yun:}$v.lt_resume{/yun}份</span>
+												<span>{yun:}$config.sy_chat_name{/yun}：{yun:}$v.chat_num{/yun}位</span>
+												{yun:}else if $v.type ==2{/yun}
+												<span>发布职位：{yun:}if $v.lt_job_num ==0 {/yun}不限{yun:}else{/yun}每日{yun:}$v.lt_job_num{/yun}份{yun:}/if{/yun}</span>
+												<span>刷新职位：{yun:}if $v.lt_breakjob_num ==0 {/yun}不限{yun:}else{/yun}每日{yun:}$v.lt_breakjob_num{/yun}份{yun:}/if{/yun}</span>
+												<span>下载简历：{yun:}if $v.lt_resume ==0 {/yun}不限{yun:}else{/yun}每日{yun:}$v.lt_resume{/yun}份{yun:}/if{/yun}</span>
+												<span>{yun:}$config.sy_chat_name{/yun}：{yun:}if $v.chat_num ==0 {/yun}不限{yun:}else{/yun}每日{yun:}$v.chat_num{/yun}位{yun:}/if{/yun}</span>
+												{yun:}/if{/yun}
+											</div>
+										</td>
+										<td>
+											{yun:}if $v.display eq 1{/yun}
+											<span class="admin_ysh">已启用</span>
+											{yun:}else{/yun}
+											<span class="admin_wsh">未启用</span>
+											{yun:}/if{/yun}
+										</td>
+										<td align="center">
+											<div class="operationSeries">
+												<a href="index.php?m=admin_lt_rating&c=rating&id={yun:}$v.id{/yun}">编辑</a>
+												<a href="javascript:void(0)" onClick="layer_del('确定要删除？', 'index.php?m=admin_lt_rating&c=delrating&id={yun:}$v.id{/yun}');">删除</a>
+											</div>
+											
+										</td>
+									</tr>
+									{yun:}/foreach{/yun}
+									<tr>
+										<td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' /></td>
+										<td colspan="8">
+											<label for="chkAll2">全选</label>&nbsp;
+											<input class="admin_button" type="button" name="delsub" value="删除所选" onclick="return really('del[]')" /></td>
+									</tr>
+								</tbody>
+
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+	</body>
+</html>

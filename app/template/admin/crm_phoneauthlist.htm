@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - CRM - 客勤 - 手机号授权记录</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tabs_info">
+            <ul>
+                <li><a href="index.php?m=crm_chat">拥有简历</a></li>
+                <li><a href="index.php?m=crm_chat&c=noresume">没有简历</a></li>
+                <li class='curr'><a href="index.php?m=crm_chat&c=phoneAuthList">手机号授权</a></li>
+                <li><a href="index.php?m=crm_chat&c=inviteList">面试回访</a></li>
+                <li><a href="index.php?m=crm_chat&c=follow">跟进记录</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get">
+                <div>
+                    <input name="m" value="crm_chat" type="hidden"/>
+                    <input name="c" value="phoneAuthList" type="hidden"/>
+                    <div class="admin_Filter_text formselect" did='dkeytype'>
+                        <input type="button" id="bkeytype" {yun:}if $smarty.get.keytype=='' ||$smarty.get.keytype=='1' {/yun} value="手机号码" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="个人姓名" {yun:}elseif $smarty.get.keytype=='3' {/yun} value="企业名称"{yun:}elseif $smarty.get.keytype=='4' {/yun} value="用户ID" {yun:}/if{/yun} class="admin_Filter_but" >
+                        <input type="hidden" name="keytype" id="keytype" {yun:}if $smarty.get.keytype=='' ||$smarty.get.keytype=='1' {/yun} value="1" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="2" {yun:}elseif $smarty.get.keytype=='3' {/yun} value="3"{yun:}elseif $smarty.get.keytype=='4' {/yun} value="4" {yun:}/if{/yun}/>
+                        <div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+                            <ul>
+                                <li><a href="javascript:void(0)" onClick="formselect('1','keytype','手机号码')">手机号码</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('2','keytype','个人姓名')">个人姓名</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('3','keytype','手机号')">企业名称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('4','keytype','用户ID')">用户ID</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword' class="admin_new_text">
+                    <div class="layui-input-inline" style="float: left;">
+                        <input class="admin_Filter_search t_w200" type="text" autocomplete='off' name="date" id="date" style="float:left;" value="{yun:}$smarty.get.date{/yun}" placeholder="请输入时段" />
+                        <i class="t_tc_icon_time"></i>
+                    </div>
+                    <input type="submit" value="搜索" name='search' class="admin_new_bth">
+                    <a href="javascript:void(0)" onclick="$('.admin_screenlist_box').toggle();" class="admin_new_search_gj">筛选</a>
+                    <span class="admin_web_tip">小程序内手机号授权时，手机号未注册的记录</span>
+                </div>
+                <div class="adminNewEarch">
+                    <div class="admin_statistics">
+                        <em class="admin_statistics_s">总数：<a href="index.php?m=crm_chat&c=phoneAuthList" class="ajaxnum">0</a></em>
+                        <em class="admin_statistics_s">已注册：<a href="index.php?m=crm_chat&c=phoneAuthList&status=4" class="ajaxnum1">0</a></em>
+                        <em class="admin_statistics_s">未注册：<a href="index.php?m=crm_chat&c=phoneAuthList&status=3" class="ajaxnum2">0</a></em>
+                        <em class="admin_statistics_s">已发布简历：<a href="index.php?m=crm_chat&c=phoneAuthList&status=2" class="ajaxnum3">0</a></em>
+                        搜索结果：<span>{yun:}$total{/yun}</span>
+                    </div>
+                </div>
+            </form>
+            {yun:}include file="admin/admin_search.htm"{/yun}
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" target="supportiframe" name="myform" method="get" id='myform'>
+                    <input name="m" value="crm_chat" type="hidden"/>
+                    <input name="c" value="delPhoneAuth" type="hidden"/>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th><label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label></th>
+                            <th width="100">
+                                {yun:}if $smarty.get.t=="id" && $smarty.get.order=="asc"{/yun}
+                                <a href="index.php?m=crm_chat&c=phoneAuthList&order=desc&t=id" class="admin_px">编号</a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_chat&c=phoneAuthList&order=asc&t=id" class="admin_px2">编号</a>
+                                {yun:}/if{/yun}
+                            </th>
+                            <th>用户信息</th>
+                            <th>手机号</th>
+                            <th>简历</th>
+                            <th>授权时间</th>
+                            <th>来源</th>
+                            <th>授权次数</th>
+                            <th>打电话</th>
+                            <th>备注信息</th>
+                            <th align="center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$userrows{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg" {yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                            <td width="50">{yun:}$v.id{/yun}</td>
+                            <td><em style="color:#009688;font-weight: bold;">「{yun:}$v.usertype_n{/yun}」</em>{yun:}$v.name_n{/yun}</td>
+                            <td><span class="admin_new_sj">{yun:}$v.phone{/yun}</span></td>
+                            <td>
+                                {yun:}if $v.usertype == 1{/yun}
+                                    {yun:}if $v.resume>0{/yun}
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_chat&c=previewResume&uid={yun:}$v.uid{/yun}', '51%');" class="admin_cz_sc">预览</a>
+                                    {yun:}else{/yun}
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_chat&c=newResume&uid={yun:}$v.uid{/yun}', '50%');" class="admin_cz_sc">添加</a>
+                                    {yun:}/if{/yun}
+                                {yun:}else{/yun}
+                                    --
+                                {yun:}/if{/yun}
+                            </td>
+                            <td>{yun:}$v.atime_n{/yun}</td>
+                            <td>{yun:}$v.source_n{/yun}</td>
+                            <td>{yun:}$v.num{/yun}</td>
+                            <td>
+                                <a href='javascript:void(0);' class="contact_customer crm_submit_ddh" msg="点击图标，可使用虚拟号联系客户" data-phone="{yun:}$v.phone{/yun}" data-usertype="{yun:}$v.usertype{/yun}" data-uid="{yun:}$v.uid{/yun}" data-resume="{yun:}$v.resume{/yun}">打电话</a>
+                            </td>
+                            <td>{yun:}$v.remark{/yun}</td>
+                            <td align="center">
+                                <div class="operationSeries">
+                                    <a href="javascript:void(0);" onclick="crmLabel('{yun:}$v.id{/yun}','{yun:}$v.remark{/yun}')">{yun:}if empty($v.remark){/yun}备注{yun:}else{/yun}查备{yun:}/if{/yun}</a>
+                                    <a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=crm_chat&c=delPhoneAuth&del={yun:}$v.id{/yun}');">删除</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/></td>
+                            <td colspan="14">
+                                <label for="chkAll2">全选</label>
+                                <input class="admin_button" type="button" name="delsub" value="删除" onClick="return really('del[]')" />
+                            </td>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="6"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="6"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="6"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="6" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="label_div" style="display:none;">
+    <div class="" style="margin-top: 10px;">
+        <form class="layui-form" action="index.php?m=crm_chat&c=phoneauthRemark" target="supportiframe" method="post" id="formlabel">
+            <table cellspacing='1' cellpadding='1' class="admin_examine_table" align="center">
+                <tr>
+                    <th class="t_fr">&nbsp;</th>
+                    <td align="left">
+                        <textarea id="content" name="content" class="admin_explain_textarea" style="width:278px;height:100px;"></textarea>
+                    </td>
+                </tr>
+                <tr height="50px">
+                    <td colspan='2' align="center">
+                        <input type="submit" onclick="loadlayer();" value='确认' class="admin_examine_bth">
+                        <input type="button" onClick="layer.closeAll();" class="admin_examine_bth_qx" value='取消'>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+            <input name="id" id="labelid" value="0" type="hidden">
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'laydate'], function () {
+        var layer = layui.layer,
+            form = layui.form,
+            laydate = layui.laydate,
+            $ = layui.$;
+
+        laydate.render({
+            elem: '#date',
+            range: '~'
+        });
+    });
+
+    function crmLabel(id, content) {
+        $("#labelid").val(id);
+        $("#content").text(content);
+        $.layer({
+            type: 1,
+            title: '备注',
+            closeBtn: [0, true],
+            border: [10, 0.3, '#000', true],
+            area: ['380px', 'auto'],
+            page: {
+                dom: "#label_div"
+            }
+        });
+    }
+
+    $(".contact_customer").hover(function () {
+        var msg = $(this).attr('msg');
+        if (msg != '') {
+            layer.tips(msg, this, {
+                guide: 1,
+                style: ['background-color:#5EA7DC; color:#fff;top:-7px', '#5EA7DC'],
+                area: ['200px', 'auto'],
+                time: 5000
+            });
+            $(".xubox_layer").addClass("xubox_tips_border");
+        }
+    }, function () {
+        layer.closeAll('tips');
+    });
+    // 虚拟号联系客户
+    $('.contact_customer').click(function () {
+        var phone = $(this).attr('data-phone');
+        var uid = $(this).attr('data-uid');
+        var usertype = $(this).attr('data-usertype');
+        var resume = $(this).attr('data-resume');
+        layer.confirm('确定联系客户吗？', function () {
+            layer.load('连接中，请稍候...', 4);
+            layer.closeAll();
+            var url = 'index.php?m=crm_chat&c=authContactCustomer'
+            $.post(url, {
+                mobile: phone,
+                uid: uid,
+                usertype: usertype,
+                pytoken: $("#pytoken").val()
+            }, function (data) {
+                layer.closeAll();
+                var datas = JSON.parse(data)
+                if (datas.code == 200) {
+                    if (usertype == 1 && resume == 0){
+                        layer.msg(datas.msg, 2, 9, function () {
+
+                            iframfunct('index.php?m=crm_chat&c=newResume&uid='+uid, '50%');
+                        });
+                    }else {
+                        layer.msg(datas.msg, 2, 9);
+                    }
+                } else {
+                    layer.msg(datas.msg, 2, 8);
+                }
+            });
+        });
+    })
+
+    $(document).ready(function () {
+        $.get("index.php?m=crm_chat&c=phoneAuthNum", function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.authAllNum) {
+                $('.ajaxnum').html(datas.authAllNum);
+            }
+            if (datas.authNum1) {
+                $('.ajaxnum1').html(datas.authNum1);
+            }
+            if (datas.authNum2) {
+                $('.ajaxnum2').html(datas.authNum2);
+            }
+            if (datas.authNum3) {
+                $('.ajaxnum3').html(datas.authNum3);
+            }
+        });
+    });
+
+</script>
+</body>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

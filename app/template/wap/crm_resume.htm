@@ -1,0 +1,161 @@
+{yun:}include file="$wapstyle/header.htm"{/yun}
+<script src="{yun:}$wap_style{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$wap_style{/yun}/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config_wapdomain{/yun}/js/vant/lib/vant.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config_wapdomain{/yun}/js/vant/phpyun_vant.js?v={yun:}$config.cachecode{/yun}"></script>
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/manager.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/clipboard/clipboard.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<style>
+    .recbox{max-width: 740px;margin: auto;overflow-x: hidden;}
+    .top_return{max-width: 740px;}
+</style>
+<div id="recVue" class="recbox none" style="overflow-x: hidden;">
+    <div class="manager_top">
+        <div class="card-wrap">
+            <div class="top_return"><div>推荐简历</div></div>
+            <div class="card-box">
+                <div class="card-info">
+                    <div class="info_top">
+                        <div class="top_left">
+                            <img class="headpic" :src="Info.crm_photo">
+                            <div class="peo_info">
+                                <div class="info_name">{{Info.crm_name}}</div>
+                                <div class="info_gw">金牌招聘顾问</div>
+                            </div>
+                        </div>
+                        <div class="top_right" @click="wxBoxShow = true" v-if="Info.w_show==1">加我微信</div>
+                    </div>
+                    <div class="info_bottom">
+                        <div class="bottom_item">
+                            <div class="bottom_num">{{Info.showNum}}</div>
+                            <div class="bottom_info">求职简历</div>
+                        </div>
+                        <div class="bottom_item">
+                            <div class="bottom_num">{{Info.time_n}}</div>
+                            <div class="bottom_info">简历已更新</div>
+                        </div>
+                        <div class="bottom_item">
+                            <div class="bottom_num">{{Info.hits}}</div>
+                            <div class="bottom_info">最近访客</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content_sec">
+        <a class="sec_item" :href="'tel:'+Info.crm_phone">
+            <div class="sec_top">
+                <img class="sec_img" src="{yun:}$wap_style{/yun}/images/manager_phone.png">
+                拨打电话
+            </div>
+            <div class="sec_bottom">
+                {{Info.crm_phone}}
+            </div>
+        </a>
+        <div class="sec_item" style="flex: 1;margin-left: 8px;">
+            <div class="sec_top">
+                <img class="sec_img" src="{yun:}$wap_style{/yun}/images/manager_address.png">
+                公司地址
+            </div>
+            <div class="sec_bottom">
+                {{Info.crm_address}}
+            </div>
+        </div>
+    </div>
+    <div class="yun_newedition_resume">
+        <div class="yun_newedition_resumelist" v-for="(item, k) in resumeList" :key="item.id">
+            <a :href="item.url">
+                <div class="yun_newedition_resumepic">
+                    <img :src="item.photo_n">
+                    <span class="user_tj_xg" v-if="item.sex==1"></span>
+                    <span class="user_tj_xb" v-if="item.sex==2"></span>
+                </div>
+                <div class="yun_newedition_resume_wantjob">
+                    <span class="yun_newedition_resume_wantjob_n">{{item.uname}}</span>
+                </div>
+                <div class="new_userlist_info">{{item.exp_n}}经验 · {{item.edu_n}} · {{item.age_n}}岁</div>
+                <div class="new_userlist_p">
+                    求职期望 {{item.name}}，{{item.salary}}
+                    <span class="yun_newedition_resume_zd">{{item.lastupdate_n}}</span>
+                </div>
+                <div class="user_undergo_box" v-if="item.edu_content || item.work_content">
+                    <div class="user_undergo user_undergo_a" v-if="item.edu_content">{{item.edu_content}}</div>
+                    <div class="user_undergo user_undergo_b" v-if="item.work_content">{{item.work_content}}</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="detail_mask" v-show="wxBoxShow">
+        <div class="mask_box">
+            <div class="close" @click="wxBoxShow = false">
+                <img src="{yun:}$wap_style{/yun}/images/mask_close.png" alt="">
+            </div>
+            <div class="mask_title">
+                加微信直接聊
+            </div>
+            <div class="mask_imgbox" v-if="Info.crm_ewm">
+                <img :src="Info.crm_ewm" alt="">
+            </div>
+            <div class="mask_tipbox">
+                <div class="mask_tip" v-if="Info.crm_ewm">
+                    长按保存二维码
+                </div>
+                <div class="vx_num" v-if="Info.crm_wx">
+                    微信号：{{Info.crm_wx}}
+                </div>
+            </div>
+            <div class="mask_btn copyWx" data-clipboard-action="copy" :data-clipboard-text="Info.crm_wx" v-if="Info.crm_wx" >
+                复制微信号
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var id = '{yun:}$id{/yun}';
+    var recVue = new Vue({
+        el: '#recVue',
+        data: {
+            id: id ? id: '',
+            resumeList: [],
+            Info: [],
+            wxBoxShow: false
+        },
+        created() {
+            $("#recVue").css('display', 'block');
+            this.getList();
+        },
+        methods: {
+            getList: function () {
+
+                var that = this;
+
+                var paramer = {
+                    type: 1,
+                    id: that.id
+                };
+                $.post('index.php?m=upush', paramer, function (res) {
+                    that.loading = false;
+                    that.Info = res.data.info;
+                    var newList = res.data.list;
+                    if (newList.length > 0) {
+                        newList.forEach(item => {
+                            that.resumeList.push(item);
+                        });
+                    }
+                }, 'json');
+            }
+        }
+    })
+    $(function () {
+        var clipboard = new ClipboardJS(".copyWx");
+        clipboard.on('success', function(e) {
+            showToast('复制成功！');
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+        });
+    });
+</script>

@@ -1,0 +1,1971 @@
+body {
+    position: relative;
+    min-width: 375px;
+    max-width: 750px;
+    margin: 0 auto !important;
+    font-family: Arial, Helvetica;
+    background-color: #f3f3f3;
+
+}
+
+@media screen and (min-width:750px) {
+    html {
+        font-size: 75px !important;
+    }
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    display: block !important;
+}
+
+.resume_management_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 320px;
+    max-width: 750px;
+    width: 100%;
+    height: 4rem;
+    background-color: #2778F8;
+    padding-top: .373333rem;
+    z-index: 9;
+}
+
+.resume_management_title_text {
+    position: relative;
+    font-size: .453333rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.resume_management_body {
+   
+    width: 100%;
+    padding-left: .32rem;
+    padding-right: .32rem;
+}
+
+.management_header_title {
+    width: 100%;
+    height: .453333rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #2778F8;
+    align-items: center;
+    z-index: 9999;
+}
+
+.management_header_title_icon {
+    position: absolute;
+    top: 0;
+    left: .32rem;
+    width: .28rem;
+    height: .453333rem;
+}
+
+.resume_management_body_card {
+    width: 100%;
+    overflow: hidden;
+}
+
+.management_body_card_title {
+  
+    z-index: 99;
+    background-color: #2778F8;
+}
+
+.management_body_card_title>ul {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: .72rem;
+    padding-right: .72rem;
+    align-items: center;
+}
+
+.management_body_card_title>ul>li {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: .426667rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    opacity: 0.4;
+}
+
+.management_body_card_content {
+    margin-top: 1.32rem;
+    width: 100%;
+
+}
+
+.body_card_content_box {
+    width: 100%;
+}
+
+.body_card_content_box>div:last-child {
+    margin-bottom: 0;
+}
+
+.management_body_card_content>.active {
+    border-bottom: 0;
+}
+
+.active_resume {
+    border-bottom: .053333rem solid #fff;
+}
+
+.card_content_box_particulars {
+    position: relative;
+    width: 100%;
+    height: 2.4rem;
+    box-shadow: 0 .053333rem .293333rem .026667rem rgba(212, 212, 212, 0.18);
+    background-color: #fff;
+    margin-bottom: .266667rem;
+    border-radius: .213333rem;
+    padding: .4rem;
+    display: flex;
+}
+
+.particulars_icon {
+    position: absolute;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: .4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.particulars_concise {
+    margin-left: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.particulars_concise_top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .133333rem;
+}
+
+.concise_top_name_box {
+    display: flex;
+    align-items: center;
+}
+
+.concise_top_name {
+    font-size: .4rem;
+    font-weight: bold;
+    color: #333333;
+    margin-right: .266667rem;
+}
+
+.concise_top_icon {
+    width: .813333rem;
+    height: .266667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.concise_top_stateicon {
+    width: 1.24rem;
+    height: .493333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.concise_top_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #CCCCCC;
+}
+
+.particulars_concise_center>ul {
+    display: flex;
+}
+
+.particulars_concise_center>ul>li {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.particulars_concise_bom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.concise_bom_desired_position {
+    display: flex;
+}
+
+.concise_bom_desired {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+    margin-right: .066667rem;
+}
+
+.concise_bom_position {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.concise_bom_icon_box {
+    display: flex;
+}
+
+.concise_bom_icon {
+    width: .64rem;
+    height: .64rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 发布职位 */
+.issue_post_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 375px;
+    max-width: 750px;
+    background-color: #2778F8;
+    width: 100%;
+    height: 1.173333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9;
+}
+
+.post_header_icon {
+    position: absolute;
+    top: 50%;
+    left: .32rem;
+    transform: translateY(-50%);
+    width: .28rem;
+    height: .453333rem;
+
+}
+
+.post_header_title {
+    font-size: .453333rem;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.issue_post_body {
+    margin-top: 1.293333rem;
+    padding: .32rem;
+
+}
+
+.issue_post_body_card {
+    width: 100%;
+    background-color: #fff;
+    border-radius: .213333rem;
+    padding: .48rem .333333rem .52rem .4rem;
+}
+
+.issue_post_body_card>div:last-child {
+    margin-bottom: 0;
+}
+
+.post_body_card_job {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .586667rem;
+}
+
+.body_card_job_box {
+    display: flex;
+    align-items: center;
+    width: 90%;
+}
+
+.body_card_job_icon {
+    width: .586667rem;
+    height: .586667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post_body_card_job_left {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.post_body_card_job_right {
+    width: 1.186667rem;
+    height: .746667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card_job_box_post {
+    width: 25%;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.card_job_box_Recruitment {
+    width: 60%;
+}
+
+.card_job_box_Recruitment>input {
+    width: 100%;
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.card_job_box_name {
+    width: 60%;
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.card_job_box_name_require {
+    width: 60%;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.card_job_box_require {
+    width: 70%;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #333333;
+    /* 多行文本溢出。。。显示 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.card_job_box_name>input {
+    width: 100%;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #333333;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.issue_post_body_btn {
+    margin-top: .533333rem;
+    width: 100%;
+    height: 1.28rem;
+    background-color: #2778F8;
+    border-radius: .213333rem;
+    font-size: .453333rem;
+    font-weight: bold;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.workplace_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 375px;
+    max-width: 750px;
+    background-color: #2778F8;
+    width: 100%;
+    height: 1.173333rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: .32rem;
+    padding-right: .373333rem;
+}
+
+.workplace_header_left {
+    width: .28rem;
+    height: .453333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.workplace_header_center {
+    font-size: .453333rem;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.workplace_header_right {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.workplace_body {
+    margin-top: 1.466667rem;
+    padding-left: .32rem;
+    padding-right: .32rem;
+    width: 100%;
+
+}
+
+.workplace_body_card {
+    width: 100%;
+    padding: .533333rem .4rem;
+    background-color: #fff;
+    border-radius: .213333rem;
+}
+
+.workplace_select {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .8rem;
+}
+
+.workplace_select_left {
+    display: flex;
+    width: 95%;
+}
+
+.select_left_q {
+    margin-right: .4rem;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.select_left_a {
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 70%;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.workplace_select_right {
+    width: .24rem;
+    height: .426667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.workplace_location_title {
+    margin-bottom: .4rem;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.workplace_location_map {
+    width: 100%;
+    height: 8.8rem;
+}
+
+.Search_jobs_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 375px;
+    max-width: 750px;
+    background-color: #fff8;
+    width: 100%;
+    height: 1.173333rem;
+    display: flex;
+    align-items: center;
+    padding-left: .32rem;
+    padding-right: .32rem;
+}
+
+.Search_jobs_input {
+    position: relative;
+    height: 100%;
+    flex: 1;
+    margin-right: .4rem;
+    display: flex;
+    align-items: center;
+}
+
+.Search_jobs_icon {
+    position: absolute;
+    top: 50%;
+    left: .306667rem;
+    transform: translateY(-50%);
+    width: .586667rem;
+    height: .586667rem;
+}
+
+.Search_jobs_input>input {
+    width: 100%;
+    height: .88rem;
+    background-color: #F6F6F6;
+    border-radius: .44rem;
+    padding-left: 1.093333rem;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.Search_jobs_cancel {
+    font-size: .373333rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.Search_jobs_body {
+    background-color: #fff;
+    margin-top: 1.173333rem;
+    padding-right: .32rem;
+    padding-left: .32rem;
+    padding-top: .493333rem;
+}
+
+.jobs_body_title {
+    font-size: .426667rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.jobs_body_label {
+    margin-top: .466667rem;
+}
+
+.jobs_body_label>ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.jobs_body_label>ul>li {
+    width: 2.133333rem;
+    height: .853333rem;
+    background-color: #f6f6f6;
+    margin-right: .266667rem;
+    margin-bottom: .266667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.jobs_body_label>ul>li:nth-child(4n+4) {
+    margin-right: 0;
+}
+
+/* 职位下一步 */
+.issue_post_require_card {
+    padding-top: .533333rem;
+    margin-top: .266667rem;
+    width: 100%;
+    height: 3.733333rem;
+    background-color: #fff;
+    border-radius: .213333rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.require_card_title {
+    width: 5.013333rem;
+    height: .4rem;
+}
+
+.require_card_box {
+    width: 100%;
+    height: 100%;
+    margin-top: .8rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.require_card_box_left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card_box_left_q {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.card_box_left_a {
+    margin-top: .333333rem;
+    font-size: .453333rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.more_position_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 375px;
+    max-width: 750px;
+    padding-left: .32rem;
+    padding-right: .32rem;
+    width: 100%;
+    height: 1.173333rem;
+    background-color: #2778F8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+}
+
+.position_header_back {
+    width: .28rem;
+    height: .466667rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.position_header_issue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.position_header_serch {
+    flex: 1;
+    margin-left: .213333rem;
+    margin-right: .2rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.position_header_serch>input {
+    width: 100%;
+    height: .88rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: .44rem;
+    padding-left: .4rem;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.header_issue_text {
+    font-size: .293333rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.none_position_body {
+    margin-top: 4.066667rem;
+    padding-left: .6rem;
+    padding-right: .6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.none_position_body_img {
+    width: 100%;
+    height: 6.08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.none_position_body_text {
+    margin-top: .133333rem;
+    font-size: .426667rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.none_position_body_btn {
+    margin-top: .533333rem;
+    width: 4rem;
+    height: 1.066667rem;
+    background: #2778F8;
+    border-radius: .533333rem;
+    font-size: .426667rem;
+    font-weight: bold;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header_issue_icon {
+    width: .586667rem;
+    height: .586667rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_card_job_begin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.body_card_job_begin_top {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.body_card_job_begin_bom {
+    margin-top: .333333rem;
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.body_card_job_to {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+
+.position_body_card {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 .053333rem .293333rem .026667rem rgba(212, 212, 212, 0.18);
+    border-radius: .213333rem;
+    padding: .4rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .266667rem;
+}
+
+.position_body_card_top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.body_card_top_box {
+    display: flex;
+    width: 80%;
+}
+
+.body_card_top_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #CCCCCC;
+}
+
+.body_card_top_name {
+    max-width: 80%;
+    font-size: .426667rem;
+    font-weight: bold;
+    color: #181818;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.body_card_top_icon {
+    margin-left: .2rem;
+    width: .6rem;
+    height: .56rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.position_body_card_center {
+    margin-top: .426667rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.body_card_center_left {
+    display: flex;
+    flex-direction: column;
+}
+
+.more_position_quantity {
+    display: flex;
+}
+
+.position_quantity_exposure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: .733333rem;
+}
+
+.quantity_exposure_q,
+.quantity_exposure_a,
+.more_position_deliver {
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.more_position_new_time {
+    display: flex;
+    align-items: flex-end;
+    margin-top: .333333rem;
+}
+
+.body_card_center_right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.more_position_deliver_number {
+    font-size: .64rem;
+    font-weight: bold;
+    color: #2778F8;
+}
+
+.position_body_card_moonlight {
+    margin-top: .4rem;
+}
+
+.position_body_card_moonlight>ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.position_body_card_moonlight>ul>li {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.body_card_bom_icon {
+    width: .64rem;
+    height: .64rem;
+    margin-bottom: .133333rem;
+}
+
+.body_card_bom_name {
+    font-size: .293333rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.body_card_bom_hot {
+    position: absolute;
+    top: 0;
+    left: .566667rem;
+    width: .64rem;
+    height: .32rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.body_card_content_box {
+    width: 100%;
+}
+
+.body_card_content_box>div:last-child {
+    margin-bottom: 0;
+}
+
+.card_content_box_particulars {
+    position: relative;
+    width: 100%;
+    height: 2.4rem;
+    box-shadow: 0 .053333rem .293333rem .026667rem rgba(212, 212, 212, 0.18);
+    background-color: #fff;
+    margin-bottom: .266667rem;
+    border-radius: .213333rem;
+    padding: .4rem;
+    display: flex;
+}
+
+.particulars_concise {
+    margin-left: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.particulars_concise_top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .133333rem;
+}
+
+.concise_top_name {
+    font-size: .4rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.concise_top_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #CCCCCC;
+}
+
+.particulars_concise_center>ul {
+    display: flex;
+}
+
+.particulars_concise_center>ul>li {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.particulars_concise_bom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.concise_bom_desired_position {
+    display: flex;
+}
+
+.concise_bom_desired {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+    margin-right: .066667rem;
+}
+
+.concise_bom_position {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #333333;
+}
+
+.concise_bom_icon {
+    width: .64rem;
+    height: .64rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.interview_invitation_card {
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 .053333rem .293333rem .026667rem rgba(212, 212, 212, 0.18);
+    border-radius: .213333rem;
+    padding: .4rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .266667rem;
+}
+
+.invitation_card_name {
+    width: 100%;
+    height: 1.066667rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_name_box_head {
+    position: relative;
+    width: 1.066667rem;
+    height: 1.066667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card_name_box {
+    display: flex;
+}
+
+.card_name_box_synthesize {
+    margin-left: .333333rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card_name_box_set {
+    position: absolute;
+    top: .00667rem;
+    right: 0;
+    width: .4rem;
+    height: .4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box_synthesize_name {
+    font-size: .4rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.box_synthesize_require {
+    margin-top: .12rem;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.card_name_state {
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #2778F8;
+}
+
+.card_name_accepted {
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.invitation_card_time {
+    margin-top: .4rem;
+    display: flex;
+    align-items: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.invitation_card_job {
+    margin-top: .52rem;
+    display: flex;
+    align-items: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.invitation_card_contact {
+    margin-top: .44rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.invitation_card_contact_box {
+    display: flex;
+    align-items: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+}
+
+.invitation_card_contact_icon {
+    width: .64rem;
+    height: .64rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.invitation_card_time_q {
+    margin-right: .666667rem;
+}
+
+.Resume_details_header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1.173333rem;
+    background-color: #fff;
+    min-width: 375px;
+    max-width: 750px;
+    padding-left: .32rem;
+    padding-right: .32rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+}
+
+.Resume_details_icons {
+    display: flex;
+}
+
+.Resume_details_back {
+    width: .28rem;
+    height: .453333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Resume_details_icon {
+    width: .586667rem;
+    height: .586667rem;
+    margin-left: .4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.personal_details_min_body {
+    width: 100%;
+    margin-top: 1.173333rem;
+    background-color: #f3f3f3;
+    padding: .266667rem;
+    padding-bottom: 1.633333rem;
+}
+
+.personal_details_card {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    border-radius: .213333rem;
+    padding: .4rem;
+
+}
+
+.Edit_your_resume_card_name {
+    position: relative;
+    width: 100%;
+    margin-bottom: .266667rem;
+}
+
+.Edit_your_resume_card_name_logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.Edit_your_resume_card_name_skill_top {
+    display: flex;
+    margin-bottom: .2rem;
+}
+
+.Edit_your_job_seeker_name {
+    font-size: .586667rem;
+    font-family: PingFang SC;
+    font-weight: bold;
+    color: #333333;
+    margin-right: .4rem;
+}
+
+.Edit_your_job_seeker_skill {
+    padding: .106667rem .12rem .12rem .12rem;
+    border: .013333rem solid #2778F8;
+    border-radius: .053333rem;
+    font-size: .293333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #2778F8;
+    display: flex;
+}
+
+.Edit_your_resume_card_name_skill_bom>ul {
+    display: flex;
+}
+
+.Edit_your_resume_card_name_skill_bom>ul>li {
+    font-size: .373333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+    margin-right: .2rem;
+}
+
+.Edit_your_resume_card_contact_way {
+    width: 100%;
+    display: flex;
+    height: .533333rem;
+    line-height: .533333rem;
+}
+
+.Edit_your_resume_card_iphone {
+    position: relative;
+    padding-left: .666667rem;
+    margin-right: .666667rem;
+}
+
+.Edit_your_resume_card_iphone_icon {
+    position: absolute;
+    top: 0;
+    left: -0.106667rem;
+    width: .533333rem;
+    height: .533333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Edit_your_resume_card_iphone_number {
+    font-size: .346667rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+}
+
+.Preview_your_resume_intention {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.Preview_your_resume_header {
+    position: relative;
+}
+
+
+
+.Preview_your_resume_word {
+    font-size: .426667rem;
+    font-family: PingFang SC;
+    font-weight: bold;
+    color: #181818;
+}
+
+.Preview_your_resume_require {
+    margin-top: .533333rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Preview_your_resume_require_left>ul {
+    display: flex;
+}
+
+.Preview_your_resume_require_left>ul>li {
+    font-size: .373333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+    margin-right: .133333rem;
+}
+
+.Preview_your_resume_require_right {
+    font-size: .4rem;
+    font-family: PingFang SC;
+    font-weight: bold;
+    color: #2778F8;
+}
+
+.Preview_your_resume_category {
+    margin-top: .4rem;
+    font-size: .32rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #999999;
+}
+
+.Preview_your_resume_experience {
+    margin-top: 1rem;
+}
+
+.resume_experience_company {
+    margin-top: .533333rem;
+    font-size: .4rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #181818;
+}
+
+.resume_experience_linetiem {
+    display: flex;
+    margin-top: .2rem;
+    margin-bottom: .266667rem;
+}
+
+.resume_experience_linetiem>div {
+    font-size: .373333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #333333;
+    margin-right: .4rem;
+}
+
+.resume_experience_word {
+    font-size: .346667rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+    margin-bottom: .333333rem;
+}
+
+.Preview_your_resume_education {
+    margin-top: 1.066667rem;
+    width: 100%;
+
+}
+
+.Preview_your_resume_education_school {
+    margin-top: .466667rem;
+    font-size: .4rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #181818;
+}
+
+.Preview_your_resume_education_linetime {
+    margin-top: .4rem;
+    display: flex;
+    font-size: .373333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #333333;
+}
+
+.education_linetime_major>ul {
+    display: flex;
+}
+
+.education_linetime_major>ul>li {
+    font-size: .373333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #333333;
+    margin-right: .2rem;
+}
+
+.education_linetime_major {
+    margin-left: .386667rem;
+}
+
+.Preview_your_resume_professional_skill {
+    margin-top: 1rem;
+}
+
+.resume_professional_skill_word>ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.resume_professional_skill_word>ul>li {
+    font-size: .4rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #181818;
+    margin-right: .4rem;
+}
+
+.resume_professional_skill_word {
+    margin-top: .426667rem;
+}
+
+.Preview_your_resume_certificate {
+    margin-top: 1.066667rem;
+}
+
+.Preview_your_resume_name {
+    margin-top: .533333rem;
+    font-size: .346667rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+}
+
+.Preview_your_resume_book>ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: .4rem;
+}
+
+.Preview_your_resume_book>ul>li {
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-bottom: .266667rem;
+    margin-right: .266667rem;
+}
+
+.Preview_your_resume_production {
+    margin-top: 1.066667rem;
+}
+
+.Preview_your_resume_production_img>ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: .533333rem;
+}
+
+.Preview_your_resume_production_img>ul>li {
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-right: .266667rem;
+
+}
+
+.Preview_your_resume_advantage {
+    margin-top: 1.066667rem;
+}
+
+.Preview_your_resume_advantage_word {
+    margin-top: .533333rem;
+    margin-bottom: .4rem;
+    font-size: .346667rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #666666;
+
+}
+
+.Preview_your_resume_advantage_label>ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Preview_your_resume_advantage_label>ul>li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.133333rem;
+    height: .853333rem;
+    background-color: rgba(67, 134, 244, .2);
+    border-radius: .133333rem;
+    font-size: .32rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #2778F8;
+    margin-right: .266667rem;
+    margin-bottom: .266667rem;
+}
+
+.tail_nav {
+    min-width: 320px;
+    max-width: 750px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1.306667rem;
+    background-color: #fff;
+    display: flex;
+    padding-left: .346667rem;
+    padding-right: .346667rem;
+}
+
+.tail_nav_left {
+    width: 30%;
+    height: 100%;
+    display: flex;
+}
+
+.tail_nav_left>div {
+    flex: 1;
+    margin-right: .666667rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: .133333rem;
+    padding-bottom: .133333rem;
+}
+
+.tail_nav_left_icon {
+    width: 100%;
+    height: .64rem;
+}
+
+.tail_nav_left_word {
+    font-size: .293333rem;
+    font-family: PingFang SC;
+    font-weight: 500;
+    color: #181818;
+}
+
+.tail_nav_right {
+    width: 70%;
+    height: 1.04rem;
+    background: linear-gradient(270deg, #19B7FF, #2778F8, #2778F8);
+    border-radius: .533333rem;
+    font-size: .4rem;
+    font-family: PingFang SC;
+    font-weight: bold;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.career_fair_title {
+    width: 100%;
+    height: 3.12rem;
+    background: url(../images/career_fair_banner.png) no-repeat;
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.career_fair_box {
+    width: 100%;
+}
+
+.career_fair_state {
+    width: 2rem;
+    height: .533333rem;
+    border-radius: .213333rem .213333rem .213333rem 0;
+    background-color: #2778F8;
+    font-size: .293333rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.career_fair_time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .293333rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: .206667rem;
+}
+
+.career_fair_word {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .4rem;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
+.career_fair_bom {
+    position: relative;
+    width: 100%;
+    height: .8rem;
+    background-color: rgba(243, 243, 243, 0.1);
+}
+
+.career_fair_bom>ul {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.career_fair_bom>ul>li {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: .293333rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.halving_line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: .013333rem;
+    height: .266667rem;
+    background: #ccc;
+}
+
+.career_fair_tab {
+    margin-top: .533333rem;
+    width: 100%;
+}
+
+.career_fair_tab_title>ul {
+    display: flex;
+    width: 100%;
+}
+
+.career_fair_tab_title>ul>li {
+    width: 1.866667rem;
+    height: .8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: .4rem;
+    background-color: #fff;
+    border-radius: .4rem;
+    font-size: .4rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.career_fair_tab_title>ul>.fair_tab_pitch_on {
+    font-size: .4rem;
+    font-weight: bold;
+    color: #181818;
+}
+
+.career_fair_tab_body {
+    width: 100%;
+    height: 1000px;
+    margin-top: .266667rem;
+}
+
+.fair_tab_body_card {
+    padding: .4rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 3.706667rem;
+    background-color: #fff;
+    border-radius: .213333rem;
+    margin-bottom: .266667rem;
+}
+
+.tab_body_card_top {
+    display: flex;
+    margin-bottom: .4rem;
+}
+
+.tab_body_card_top_logo {
+    width: 2.666667rem;
+    height: 1.866667rem;
+    margin-right: .4rem;
+}
+
+.tab_body_card_top_word {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card_top_word_title {
+    width: 100%;
+    font-size: .373333rem;
+    font-weight: 500;
+    color: #333333;
+    /* 多行文本溢出。。。显示 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.card_top_word_time {
+    display: flex;
+    align-items: center;
+}
+
+.word_time_icon {
+    width: .293333rem;
+    height: .293333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: .133333rem;
+}
+
+.word_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.tab_body_card_bom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_bom_number {
+    display: flex;
+    align-items: flex-end;
+    font-size: .346667rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.card_bom_state {
+    width: 1.6rem;
+    height: .64rem;
+    background-color: #2778F8;
+    border-radius: .08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.card_bom_reserve {
+    width: 1.6rem;
+    height: .64rem;
+    background-color: #FEA54F;
+    border-radius: .08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.card_bom_finish {
+    width: 1.6rem;
+    height: .64rem;
+    background-color: #CCCCCC;
+    border-radius: .08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .32rem;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.particulars_header {
+    position: relative;
+    width: 100%;
+    height: 3.733333rem;
+    background-color: #2778F8;
+}
+
+.particulars_header_title {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 375px;
+    max-width: 750px;
+    width: 100%;
+    height: 1.173333rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: .4rem;
+    padding-right: .32rem;
+    background-color: #2778F8;
+    z-index: 99;
+
+}
+
+.header_title_icon1 {
+    width: .28rem;
+    height: .453333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header_title_text {
+    font-size: .48rem;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.header_title_icon {
+    width: .586667rem;
+    height: .586667rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.particulars_body {
+    position: absolute;
+    top: 1.6rem;
+    left: 0;
+    width: 100%;
+    height: 1000px;
+    padding-left: .32rem;
+    padding-right: .32rem;
+}
+
+.particulars_body_card {
+    width: 100%;
+    height: 4.266667rem;
+    background-color: #fff;
+    border-radius: .213333rem;
+    padding: .373333rem .4rem 0 .4rem;
+}
+.particulars_card_title{
+    display: flex;
+}
+.card_content_box_share {
+    position: relative;
+    width: 100%;
+    box-shadow: 0 .053333rem .293333rem .026667rem rgba(212, 212, 212, 0.18);
+    background-color: #fff;
+    margin-bottom: .266667rem;
+    border-radius: .213333rem;
+    padding: .4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.share_top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.share_top_name {
+    width: 80%;
+    /* 超过文本长度。。。显示 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: .426667rem;
+    font-weight: bold;
+    color: #181818;
+}
+
+.share_top_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #CCCCCC;
+}
+
+.share_cen {
+    margin-top: .4rem;
+    width: 100%;
+}
+
+.share_cen>ul {
+    display: flex;
+}
+
+.share_cen>ul>li {
+    display: flex;
+    align-items: center;
+    margin-right: .733333rem;
+}
+
+.share_cen_q {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #666666;
+    margin-right: .133333rem;
+}
+
+.share_cen_a {
+    font-size: .4rem;
+    font-weight: 500;
+    color: #2778F8;
+}
+
+.share_bom {
+    width: 100%;
+    margin-top: .4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.share_bom_box {
+    display: flex;
+    align-items: center;
+}
+
+.share_bom_icon {
+    width: .64rem;
+    height: .64rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card_content_title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_title_left {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card_title_right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card_right_number {
+    font-size: .64rem;
+    font-weight: bold;
+    color: #2778F8;
+    margin-bottom: .133333rem;
+}
+
+.card_right_resume {
+    font-size: .293333rem;
+    font-weight: 500;
+    color: #999999;
+}
+
+.card_content_bom {
+    margin-top: .333333rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_content_time {
+    font-size: .32rem;
+    font-weight: 500;
+    color: #CCCCCC;
+}
+
+.card_content_del {
+    width: .64rem;
+    height: .373333rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

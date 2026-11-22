@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/app/template/chat/css/chat.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <title>后台管理</title>
+	<style>
+		.yj_chlose{padding:15px}
+		.yj_chlose a{display:inline-block;margin-right:10px;padding:2px 6px}
+		.yj_chlose_a{background-color:#2778f8;color:#fff;border-radius:3px}
+		.yj_chlose_text{width:200px;height:30px;border-radius:3px;border:1px solid #eee}
+		.yj_chlose_bth{width:60px;height:30px;border:none;background-color:#2778f8;color:#fff;border-radius:3px}
+	</style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+				<table width="100%">
+					<thead>
+						<tr class="admin_table_top">
+							<th align="left">{yun:}if !in_array($smarty.get.type, array('addjob','refreshjob','comloginlog','comweblog')){/yun}求职者{yun:}else{/yun}企业{yun:}/if{/yun}UID</th>
+							{yun:}if !in_array($smarty.get.type, array('addjob','refreshjob','comloginlog','comweblog')){/yun}
+							<th align="left">姓名</th>
+							{yun:}/if{/yun}
+							{yun:}if !in_array($smarty.get.type, array('loginlog','weblog')){/yun}
+							<th align="left">企业名称</th>
+							{yun:}/if{/yun}
+							{yun:}if !in_array($smarty.get.type, array('chatlog','loginlog','weblog','lookresume','downresume','jobprivacylog','comchatlog','comloginlog','comweblog','downdel','companytel')){/yun}
+							<th align="left">职位名称</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('notviewresume')){/yun}
+							<th align="left">简历查看状态</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('tdclass')){/yun}
+							<th align="left">职位类别</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('loginlog','comloginlog')){/yun}
+							<th align="left">端口</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('lookjob','tellog','loginlog', 'lookresume','weblog','comloginlog','comweblog')){/yun}
+							<th align="left">IP</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('lookjob','tellog','loginlog', 'lookresume','weblog','comloginlog','comweblog')){/yun}
+							<th align="left">IP归属地</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('weblog','comweblog')){/yun}
+							<th align="left">总量</th>
+							{yun:}/if{/yun}
+							<th align="left">时间</th>
+							{yun:}if in_array($smarty.get.type, array('chatlog','comchatlog')){/yun}
+							<th align="center">查看记录</th>
+							{yun:}/if{/yun}
+						</tr>
+					</thead>
+					<tbody class="tableBackColorTwo">
+						{yun:}foreach item=v from=$rows{/yun}
+						<tr align="left">
+							<td align="left">{yun:}$v.uid{/yun}</td>
+							{yun:}if !in_array($smarty.get.type, array('addjob','refreshjob','comloginlog','comweblog')){/yun}
+							<td align="left" onclick="showuser('{yun:}$v.uid{/yun}')" style="cursor: pointer;">{yun:}$v.name{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if !in_array($smarty.get.type, array('loginlog','weblog')){/yun}
+							<td align="left" onclick="showcom('{yun:}$v.comid{/yun}')" style="cursor: pointer;">{yun:}$v.comname{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if !in_array($smarty.get.type, array('chatlog','loginlog','weblog','lookresume','downresume','jobprivacylog','comchatlog','comloginlog','comweblog','downdel','companytel')){/yun}
+							<td align="left">{yun:}$v.jobname{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('notviewresume')){/yun}
+							<td align="left">
+								{yun:}if $v.body !=''{/yun}
+									取消申请,原因：{yun:}$v.body{/yun}
+								{yun:}else{/yun}
+									未查看
+								{yun:}/if{/yun}
+							</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('tdclass')){/yun}
+							<td align="left">{yun:}$v.jobclassname{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('loginlog','comloginlog')){/yun}
+							<td align="left">{yun:}$v.content{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('lookjob','tellog','loginlog', 'lookresume','weblog','comloginlog','comweblog')){/yun}
+							<td align="left">{yun:}$v.ip{/yun}</td>
+							{yun:}/if{/yun}{yun:}if in_array($smarty.get.type, array('lookjob','tellog','loginlog', 'lookresume','weblog','comloginlog','comweblog')){/yun}
+							<td align="left">{yun:}$v.city{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('weblog','comweblog')){/yun}
+							<td align="left">{yun:}$v.num{/yun}</td>
+							{yun:}/if{/yun}
+							<td align="left">{yun:}$v.time{/yun}</td>
+							{yun:}if in_array($smarty.get.type, array('chatlog','comchatlog')){/yun}
+							<td align="center">
+								<div class="operationSeries">
+									<a class="logtj" onclick="showChat('{yun:}$v.beginid{/yun}')">查看</a>
+								</div>
+							</td>
+							{yun:}/if{/yun}
+						</tr>
+						{yun:}/foreach{/yun}
+
+						{yun:}if $total > $config.sy_listnum {/yun}
+						<tr>
+							{yun:}if $pagenum==1{/yun}
+							<td colspan="2"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+							<td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum == $pages{/yun}
+							<td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}/if{/yun}
+							<td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+						</tr>
+						{yun:}/if{/yun}
+					</tbody>
+				</table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="admvue">
+	<!--企业管理弹出框-->
+	<div id="manage" class="" style="display:none;">
+		<div class="admin_comtck_box">
+			<div class="admin_comtck_hd">
+				<div class="comtck_hd_name">
+					<a class="name" @click="comPreview" style="cursor: pointer;">{{com.name}}</a>
+					<div class="comtck_hd_btn">
+						<a @click="lock(com.uid,'2')" class="b3" style="cursor: pointer;">锁定账号</a>
+					</div>
+				</div>
+				<div class="comtck_hd_userInfo">
+					<span>用户名：<em>{{com.username}}</em></span>
+					<span>联系电话：<em>{{com.link || '无'}}</em></span>
+					<span>用户ID：<em>{{com.uid}}</em></span>
+					<span>状态：<em>{{com.status}}</em></span>
+				</div>
+			</div>
+	
+			<div class="admin_comtck_md">
+				<ul class="comtck_md_list">
+					<li><a style="cursor: default;"><div>{{com.lookresume_num}}</div><span>简历浏览</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.downresume_num}}</div><span>简历下载</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.downdel_num}}</div><span>删除简历下载记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.yqms_num}}</div><span>邀请面试</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.addjob_num}}</div><span>发布职位</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.refreshjob_num}}</div><span>刷新职位</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.sqjob_num}}</div><span>收到简历</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.sqdel_num}}</div><span>删除收到简历记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.chatlog_num}}</div><span>直聊人数</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.loginlog_num}}</div><span>登录次数</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.privacylog_num}}</div><span>简历隐私号</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.weblog_num}}</div><span>IP活跃次数</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--企业管理弹出框 end-->
+	<!--求职者管理弹出框-->
+	<div id="userbox" class="" style="display:none;">
+		<div class="admin_comtck_box">
+			<div class="admin_comtck_hd">
+				<div class="comtck_hd_name">
+					<a class="name" @click="userPreview" style="cursor: pointer;">{{user.name}}</a>
+					<div class="comtck_hd_btn">
+						<a @click="lock(user.uid,'2')" class="b3" style="cursor: pointer;">锁定账号</a>
+					</div>
+				</div>
+				<div class="comtck_hd_userInfo">
+					<span>用户名：<em>{{user.username}}</em></span>
+					<span>联系电话：<em>{{user.link || '无'}}</em></span>
+					<span>用户ID：<em>{{user.uid}}</em></span>
+					<span>状态：<em>{{user.status}}</em></span>
+				</div>
+			</div>
+	
+			<div class="admin_comtck_md">
+				<ul class="comtck_md_list">
+					<li><a style="cursor: default;"><div>{{user.tdnum_num}}</div><span>简历投递数量</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.tdclass_num}}</div><span>简历投递分类</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.usersqdel_num}}</div><span>删除简历投递记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.lookjob_num}}</div><span>职位浏览</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.tellog_num}}</div><span>职位拨号</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.chatlog_num}}</div><span>直聊人数</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.loginlog_num}}</div><span>登录次数</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.privacylog_num}}</div><span>职位隐私号</span></a></li>
+					<li style="border-right: 1px solid #eee;"><a style="cursor: default;"><div>{{user.weblog_num}}</div><span>IP活跃次数</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--求职者管理弹出框 end-->
+</div>
+
+<div id="chat_box" class="chat_box_all" style="display:none;height:500px;">
+	<div id="chatapp">
+		<div id="chat_content" class="chat_sendcontent">
+			<ul v-if="chatlog.length>0">
+				<li v-if="morelog" id="chat_more" class="chat_more" onclick="adminMoreChat()"><div class="chat_comjobtip"><span class="chat_comjobtip_p">查看更多消息</span></div></li>
+		
+				<li v-for="(msg, ck) in chatlog" :key="ck" class="chat_li">
+					<div v-if="msg.time" class="chat_sendtime"><span class="chat_sendtime_b">{{msg.time}}</span></div>
+					<!--消息撤回-->
+					<div v-if="msg.msgtype=='recall'" class="chat_recall chatRecalls"><span class="chat_recall_b">{{msg.content}}</span></div>
+					<div v-if="msg.msgtype=='char' || msg.msgtype=='voice' || msg.msgtype=='spview' || msg.msgtype=='map'">
+						<!--我方消息-->
+						<div v-if="msg.mine" @click="recall(msg.chatid,msg.sendTime);" class="chat_sendcont">
+							<!--头像-->
+							<div class="chat_sendcont_pic"><img :src="msg.avatar"></div>
+							<!--面试邀请-->
+							<span v-if="msg.inviteid" class="chat_sendcont_p" @click.stop="inviteShow(msg.inviteid)">
+								<em class="chat_sendcont_yqbox">发送了面试邀请<i class="chat_sendcont_yq"></i></em>
+							</span>
+							<!--语音-->
+							<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p">
+								<div  @click.stop="playVoice(msg.chatid,ck)">
+									<div class="yuyinboxright"><i :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+									<div>
+										<audio :id="'voice_'+msg.chatid">
+											<source :src="msg.voice" type="audio/mpeg">
+										</audio>
+									</div>
+								</div>	
+							</span>
+							<!--我发的图片-->
+							<span v-else-if="msg.image" class="chat_sendcont_p">
+								<img class="chat_photos" :src="msg.image">
+							</span>
+							
+							<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p">
+								<div class="spqxboxtwo" v-if="msg.content == 'closesp'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+								<div class="spqxboxtwo" v-else-if="msg.content == 'refused'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+								<div class="spqxboxtwo" v-else><i class="spqx2"></i>{{msg.content}}</div>
+							</div>
+							<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p"><img class="chat_photos" :src="msg.url"></span>
+		
+							<span v-else class="chat_sendcont_p">
+								<span v-for="(cn, cnk) in msg.content" :key="cnk">
+									<!--表情-->
+									<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+									<!--文字-->
+									<span v-else-if="cn.t == 'char'">
+										<em>{{cn.n}}</em>
+									</span>
+								</span>
+							</span>
+						</div>
+						<!--对方消息-->
+						<div v-else class="chat_other_say">
+							<!--头像-->
+							<div class="chat_other_pic"><img :src="msg.avatar"></div>
+							<!--面试邀请-->
+							<span v-if="msg.inviteid" class="chat_sendcont_p2" @click.stop="inviteShow(msg.inviteid)">
+								<em class="chat_sendcont_jsbox">发送了面试邀请<i class="chat_sendcont_jsyq"></i></em>
+							</span>
+							<!--语音-->
+							<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p2">
+								<div  @click="playVoice(msg.chatid,ck)">
+									<div class="yuyinbox"><i  :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+									<div>
+										<audio :id="'voice_'+msg.chatid">
+											<source :src="msg.voice" type="audio/mpeg">
+										</audio>
+									</div>
+									<div v-if="msg.voicestatus != 1" class="xxwd"></div>
+								</div>
+							</span>
+							<!--我收到的图片-->
+							<span v-else-if="msg.image" class="chat_sendcont_p2">
+								<img class="chat_photos" :src="msg.image">
+							</span>
+							<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p2">
+								<div class="spqxbox" v-if="msg.content == 'closesp'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+								<div class="spqxbox" v-else-if="msg.content == 'refused'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+								<div class="spqxbox" v-else><i class="spqx"></i>{{msg.content}}</div>
+							</div>
+							<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p2"><img class="chat_photos" :src="msg.url"></span>
+		
+							<span v-else class="chat_sendcont_p2">
+								<span v-for="(cn, cnk) in msg.content" :key="cnk">
+									<!--表情-->
+									<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+									<!--文字-->
+									<span v-else-if="cn.t == 'char'">
+										<em>{{cn.n}}</em>
+									</span>
+								</span>
+							</span>
+						</div>
+					</div>
+					<div v-else-if="msg.msgtype == 'ask'">
+						<div v-if="msg.mine"  class="chat_hdh">
+							<span><div class="chat_hdh_p">{{msg.asktext}}</div></span>
+						</div>
+						<div v-else class="chat_hhyq">
+							<div class="chat_hhyq_p chat_hhyq_pq">
+								<i :class="msg.asktype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.asktext}}
+							</div>
+							<div v-if="msg.askstatus == '1'" :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth"><span class="wxyty">已同意</span></div>
+							<div v-if="msg.askstatus == '2'" :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth"><span class="wxyty">已拒绝</span></div>
+							<div v-else :id="'hhbtn_'+msg.chatid" class="chat_hhyq_bth">
+								<div  @click="confirmAsk(msg.asktype, msg.chatid)" class="bh_bth bh_bthline">同意</div>
+								<span @click="refuseAsk(msg.asktype, msg.chatid)" class="bh_bth">拒绝</span>
+							</div>
+						</div>
+					</div>
+					<div v-else-if="msg.msgtype == 'confirm' && msg.askvalue" class="chat_hhyq">
+						<div class="chat_hhyq_p"><i :class="msg.confirmtype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.askmsg}}{{msg.askvalue}}</div>
+						<div @click="copyMsg(msg.askvalue)"  class="chat_hhyq_bth">
+							<span class="">{{msg.confirmtype=='wx'?'复制微信号':'复制手机号'}}</span>
+						</div>
+					</div>
+					<div v-else-if="msg.msgtype == 'refuse' && msg.refusetext" class="chat_hdh">
+						<span><div class="chat_hdh_p">{{msg.refusetext}}</div></span>
+					</div>
+					<div v-else-if="(msg.msgtype == 'job' || msg.msgtype == 'adminjob') && msg.job" class="chat_yx_job" @click="toShow(msg.job.weburl)">
+						<span>
+							<div class="chat_yx_job_name">{{msg.job.name}}</div>
+							<span class="chat_yx_xz">{{msg.job.job_salary}}</span>
+							<div class="chat_yx_com_name">{{msg.job.com_name}}</div>
+							<div class="">
+								{{msg.job.job_city_one}}{{msg.job.job_city_two?'-'+msg.job.job_city_two:''}}
+								{{msg.job.job_exp?'.'+msg.job.job_exp+'经验':''}}
+								{{msg.job.job_edu?'.'+msg.job.job_edu+'学历':''}}
+							</div>
+							<div class="chat_yx_time" v-if="msg.newjob">{{msg.ctime}} {{msg.newjob_tip}}</div>
+						</span>
+					</div>
+					<div v-else-if="msg.msgtype == 'resume'" class="chat_userresume" @click="toShow(expect.weburl)">
+						<span>
+							<div class="chat_userresume_name">{{expect.uname}}<span class="chat_userresume_ys">{{expect.sex_n}},{{expect.age}}岁</span></div>
+							<div class="chat_userresume_info">{{expect.exp_n}} . {{expect.edu_n}} </div>
+							<div class="chat_userresume_want">期望职位 <span class="chat_userresume_wantjob">{{expect.name}}</span> </div>
+							<div class="chat_userresume_pic"><img :src="expect.photo"></div>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+	var layer = null;
+	var pytoken = '{yun:}$pytoken{/yun}';
+	var time = "{yun:}$smarty.get.time{/yun}";
+	var app = new Vue({
+		el: '#admvue',
+		data: {
+			user: {},
+			com: {}
+		},
+		created: function() {
+			
+		},
+		methods: {
+			lock: function(uid, type){
+				setTimeout(function(){
+					$('#lockbox').find('textarea').each(function(){
+						$(this).attr('placeholder', '请填写锁定原因');
+					});
+				},500);
+				layer.prompt({
+					id: 'lockbox',
+					formType: 2,
+					value: '',
+					title: '锁定原因',
+					area: ['300px', '100px'] //自定义文本域宽高
+				}, function(value, index, elem){
+					layer.close(index);
+					layer.load();
+					$.post("index.php?m=admin_abnormal&c=lock", {
+						uid: uid,
+						type: type,
+						lock_info: value,
+						pytoken: pytoken
+					}, function(res) {
+						layer.closeAll('loading');
+						layer.msg(res.msg);
+					}, 'json');
+				});
+			},
+			userPreview: function(){
+				layer.open({
+					type: 2,
+					title: '简历预览',
+					area: ['755px', ($(window).height() - 30) +'px'],
+					content: 'index.php?m=admin_resume&c=resumePreview&id='+ this.user.eid
+				});
+			},
+			comPreview: function(){
+				layer.open({
+					type: 2,
+					title: '企业预览',
+					area: ['755px', ($(window).height() - 30) +'px'],
+					content: 'index.php?m=admin_company&c=comPreview&uid='+ this.com.uid
+				});
+			}
+		}
+	});
+	layui.use(['layer'], function () {
+		layer = layui.layer;
+	});
+	function showuser(uid){
+		var i = loadlayer();
+		$.post("index.php?m=admin_abnormal&c=userstatis", {
+			uid: uid,
+			time: time,
+			pytoken: pytoken
+		}, function(res) {
+			parent.layer.closeAll('loading');
+			app.$data.user = res;
+			$.layer({
+				type : 1,
+				title : '求职者数据  ' + res.time,
+				closeBtn : [ 0, true ],
+				border : [ 10, 0.3, '#000', true ],
+				area : [ '610px', 'auto' ],
+				offset : [ '20px', '' ],
+				page : {
+					dom : "#userbox"
+				}
+			});
+		}, 'json');
+	}
+	function showcom(comid){
+		var i = loadlayer();
+		$.post("index.php?m=admin_abnormal&c=comstatis", {
+			uid: comid,
+			time: time,
+			pytoken: pytoken
+		}, function(res) {
+			parent.layer.closeAll('loading');
+			app.$data.com = res;
+			$.layer({
+				type : 1,
+				title : '企业数据  ' + res.time,
+				closeBtn : [ 0, true ],
+				border : [ 10, 0.3, '#000', true ],
+				area : [ '610px', 'auto' ],
+				offset : [ '20px', '' ],
+				page : {
+					dom : "#manage"
+				}
+			});
+		}, 'json');
+	}
+	
+	var weburl = "{yun:}$config.sy_weburl{/yun}",
+		cantel = '',
+		canwx = '';
+	var chatpage = 1;
+	var isAdmin = true,
+		inviteid = '',
+		jid = '',
+		mine = {id: '',usertype: ''},
+		adminchatid = '';
+		
+	function showChat(beginid){
+		adminchatid = beginid;
+		adminMoreChat(beginid);
+		$.layer({
+			type : 1,
+			title : '聊天记录',
+			offset: ['20px', ''],
+			area : ['500px','500px'],
+			page : {dom :"#chat_box"},
+			close: function(){
+				chatpage = 1;
+				chatapp.$data.morelog = false;
+				chatapp.$data.chatlog = [];
+				chatapp.$data.expect = [];
+				chatapp.$data.joblist = [];
+			}
+		});
+	}
+		
+	function adminMoreChat(beginid){
+		if(!beginid){
+			beginid = adminchatid;
+		}
+		$.post('index.php?m=admin_chat_log&c=userchat', {beginid: beginid, page: chatpage, pytoken: pytoken}, function(res){
+			if(res.msg){
+				return layer.msg(res.msg, 2, 8);
+			}
+			if(res.fuser && res.tuser){
+				chatapp.$data.linkman = res.tuser.nickname;
+				var title = res.fuser.nickname + '和' + res.tuser.nickname + '的聊天记录';
+				$('.layui-layer-title').text(title);
+			}
+			chatpage = chatpage + 1;
+				
+			var scroll = null;
+			if (self.chatpagechatpage > 2) {
+				// 第二页开始，记录前一次滚动距离
+				scroll = document.getElementById('chat_content').scrollHeight;
+			}
+			
+			if (res.code == 0) {
+				var list = [];
+				if(res.joblist){
+					chatapp.$data.joblist = res.joblist;
+				}
+				var chatlog = res.data;
+				chatapp.$data.expect = res.expect;
+				if (chatlog.length > 0) {
+					
+					pastSend = chatlog[0].sendTime;
+					chatapp.$data.morelog = false;
+									
+					for (var i in chatlog) {
+						chat = renderPast(chatlog[i],i);
+						if(chat){
+							list.push(chat);
+						}
+						// 最后一条时，如还有历史消息，增加更多消息
+						if (i == chatlog.length - 1 && res.ismore) {
+							chatapp.$data.morelog = true;
+							lastid = chatlog[i]['id'];
+						}
+					}
+									
+					list.reverse();
+					chatapp.$data.chatlog = list.concat(chatapp.$data.chatlog);
+					
+					if (scroll) {
+						chatapp.$nextTick(function(){
+							// 渲染后，滚动到上一页的距离
+							var newScroll = document.getElementById('chat_content').scrollHeight;
+							chatScrollTo(newScroll - scroll);
+						})
+					}
+				}else{
+					chatapp.$data.morelog = false;
+				}
+			}
+			moreReady = true;
+		},'json');
+	}
+</script>
+<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/yunliao/websocket.js?v={yun:}$config.cachecode{/yun}"></script>
+</html>

@@ -1,0 +1,234 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<!--[if IE 6]>
+	<script src="js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script>
+	  DD_belatedPNG.fix('#bg');
+	</script>
+	<![endif]-->
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"
+		 type="text/css" />
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<title>后台管理</title>
+		<style>
+			.comy_time_text{ float: none !important; width: 90px !important; }
+			.input-h38{
+				height: 38px;
+				line-height: 38px;
+			}
+	</style>
+	</head>
+
+		<body class="admin_tc_bg">
+		<div id="houtai_div">
+			<div class="common-form" style="width:610px;">
+				<form name="myform" action="index.php?m=admin_hotjob&c=save" method="post" id="myform" enctype="multipart/form-data"
+				 onsubmit="return check_form();" target="supportiframe" class="layui-form">
+					<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+					<table width="100%" class="table_form contentWrap" style="border-spacing: 5px 16px;">
+						<tr>
+							<th align="right">企业名称：</th>
+							<td>
+								<div class="layui-form-item" style="margin-bottom: 0px;">
+									<div class="layui-input-inline t_w250">
+										<input type="text" id="name" lay-verify="required" placeholder="请输入企业名称进行搜索" value="" size="60" autocomplete="off" class="tty_input_tc input-h38">
+									</div>
+									<a href="javascript:void(0)" onclick="searchCom()" class="input-h38" style="background:#f60; width:80px;text-align:center;color:#fff;border-radius:3px; display:inline-block;float: left;">搜索</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th align="right">选择企业：</th>
+							<td>
+								<div class="layui-input-inline t_w250">
+									<select name="uid" id='hotjob_com' lay-filter="uid">
+										<option value="">请选择</option>
+									</select>
+								</div>
+								<input name="username" type="hidden" value="">
+								<span class="admin_web_tip">输入企业名称搜索后选择企业</span>
+							</td>
+						</tr>
+						<tr>
+							<th align="right">会员级别：</th>
+							<td id="ratname" align="left">
+								<input type="text" name="show_rating" class="tty_input_tc t_w250 input-h38" disabled value="">
+								<input name="rating" type="hidden" value="">
+								<input name="rating_id" type="hidden" value="">
+							</td>
+						</tr>
+						<tr>
+							<th align="right">服务时间：</th>
+							<td align="left" colspan="4">
+								<div class="layui-input-inline">
+									<input id="time" class="tty_input_tc t_w160 input-h38" type="text" value="" name="time_start" autocomplete="off"/>
+									<i class="t_tc_icon_time"></i>
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" name="time_end" id="time_end" class="tty_input_tc t_w160 input-h38" value="" autocomplete="off"/>
+									<i class="t_tc_icon_time"></i>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th align="right">服务价格：</th>
+							<td align="left">
+								<input type="text" name="service_price" id="service_price" class="tty_input_tc t_w250 input-h38" size="5" value=""
+								 onKeyUp="this.value=this.value.replace(/[^0-9.]/g,'')">
+								元
+							</td>
+
+						</tr>
+						<tr>
+							<th align="right">显示排序：</th>
+							<td align="left">
+								<input class="tty_input_tc t_w250 input-h38" id="sort" value="" name="sort" size="5">
+								大前小后
+							</td>
+						</tr>
+						<tr>
+							<th align="right">企业展示LOGO：</th>
+							<td id="logo" align="left" colspan="4">
+
+								<div id="imgparent" class="com_in_logo none">
+									<img id="imgicon" src="" width="60" height="60" onerror="this.src='images/pic_img.jpg?v={yun:}$config.cachecode{/yun}'">
+								</div>
+								<div class="com_hot_pic_text">
+									<button type="button" class="layui-btn layui-btn-normal noupload" lay-data="{imgid: 'imgicon',parentid: 'imgparent'}">选择图片</button>
+									<input type="hidden" id="laynoupload" value="1" />
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<th align="right" class="t_fl">名企备注：</th>
+							<td id="beizhu1" name="beizhu1" align="left" colspan="4">
+								<textarea style="width: 400px;" id="beizhu" name="beizhu" class="comp_text_textarea" placeholder="200字以内"></textarea>
+							</td>
+						</tr>
+						<tr><th align="right" class="t_fl"> </th>
+							<td colspan="3" align="left" class=" " style="padding:0 15px 0 15px; border: none;">
+								<input name="uid" id="com_uid" type="hidden" value="">
+								<input id="hotjob_id" name="id" type="hidden" value="0">
+								<input class="t_tanc_btn" name="hotad" type="submit" value="提交" id="dosubmit">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<script src="js/show_pub.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script>
+			var weburl = "{yun:}$config.sy_weburl{/yun}";
+            var form;
+			layui.use(['laydate','form'], function() {
+				var laydate = layui.laydate,
+					$ = layui.$;
+                form = layui.form;
+				laydate.render({
+					elem: '#time'
+				});
+
+				laydate.render({
+					elem: '#time_end'
+				});
+
+                form.on('select(uid)', function(data){
+                    var i = loadlayer();
+                    $.post("index.php?m=admin_hotjob&c=gethotjob", {
+                        uid: data.value,
+                        pytoken: $("#pytoken").val()
+                    }, function (res) {
+                        parent.layer.close(i);
+                        var resArr = JSON.parse(res);
+                        $("input[name=rating]").val(resArr['rating']);
+                        $("input[name=show_rating]").val(resArr['rating']);
+                        $("input[name=rating_id]").val(resArr['rating_id']);
+                        $("input[name=username]").val(resArr['username']);
+                        if (resArr['time_start_n']) {
+                            $('#time').val(resArr['time_start_n']);
+                            laydate.render({
+                                elem: '#time'
+                            });
+						}
+                        if (resArr['time_end_n']) {
+                            $('#time_end').val(resArr['time_end_n']);
+                            laydate.render({
+                                elem: '#time_end'
+                            });
+						}
+						if (resArr['service_price']) {
+                            $('#service_price').val(resArr['service_price']);
+						}
+                        if (resArr['sort']) {
+                            $('#sort').val(resArr['sort']);
+                        }
+						if (resArr['hot_pic_n']) {
+						    $('#imgicon').attr('src', resArr['hot_pic_n']);
+                            $('#imgparent').show();
+						}
+						if (resArr['beizhu']) {
+						    $('#beizhu').val(resArr['beizhu']);
+						}
+						if (resArr['uid']) {
+                            $('#com_uid').val(resArr['uid']);
+						}
+                        if (resArr['id']) {
+                            $('#hotjob_id').val(resArr['id']);
+                            $('#dosubmit').val('修改');
+                        }
+                        form.render();
+                    })
+                });
+			});
+
+            function searchCom() {
+                var name = $("#name").val();
+                var pytoken = $("#pytoken").val();
+                var i = loadlayer();
+                $.post("index.php?m=admin_hotjob&c=getComList", {
+                    name: name,
+                    pytoken: pytoken
+                }, function (data) {
+                    parent.layer.close(i);
+                    $("#hotjob_com").html(data);
+                    form.render();
+                })
+            }
+
+			function check_form() {
+				var hot_pic = $("#hot_pic").val();
+				var pic = $("input[name=file]").val();
+				var time = $("#time").val();
+				if (time == "") {
+					parent.layer.msg('名企开始时间不能为空！', 2, 8);
+					return false
+				}
+				var time_end = $("#time_end").val();
+				if (time_end == '') {
+					parent.layer.msg('名企结束时间不能为空！', 2, 8);
+					return false
+				}
+				if (hot_pic == "" && pic == "") {
+					parent.layer.msg('企业展示LOGO不能为空！', 2, 8);
+					return false
+				}
+				var beizhu = $("#beizhu").val();
+				if (beizhu.length > 200) {
+					parent.layer.msg('不能超过200字以内', 2, 8);
+					return false
+				}
+				loadlayer();
+			}
+		</script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+	</body>
+</html>

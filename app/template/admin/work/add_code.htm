@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 新建消息推送任务</title>
+
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/xm-select-v1.2.4/dist/xm-select.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <style>
+        * {margin: 0;padding: 0;}
+        body, div {margin: 0;padding: 0;}
+    </style>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="ttyTishiTopAll">
+            <h3>配置客户联系「联系我」方式 —— 客户渠道码</h3>
+            <div class="shiTopAllTips">
+                <span>1、使用人员需要配置了客户联系功能。。</span>
+                <span>2、配置的使用成员必须在企业微信激活且已经过实名认证。</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+        <form id="codeform" name="myform" target="supportiframe" action="index.php?m=admin_workwx_code&c=save" method="post" encType="multipart/form-data" class="layui-form">
+            <table width="100%" class="table_form" style="background:#fff;">
+                <tr>
+                    <th width="120">渠道码名称：</th>
+                    <td>
+                        <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入渠道码名称" value="{yun:}$info.name{/yun}" size="60" autocomplete="off" class="layui-input input-text t_w480" />
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">方式类型：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input name="type" value="1" id="type1" {yun:}if  empty($info) || $info.type==1{/yun}checked{yun:}/if{/yun} title="单人" type="radio" lay-filter="type"/>
+                            <input name="type" value="2" id="type2" {yun:}if $info.type==2{/yun}checked{yun:}/if{/yun} title="多人" type="radio" lay-filter="type"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">联系备注：</th>
+                    <td>
+                        <div class="layui-input-inline">
+                            <input type="text" name="remark" id="remark" lay-verify="required" placeholder="请填写联系备注信息" value="{yun:}$info.remark{/yun}" maxlength="30" autocomplete="off" class="layui-input input-text t_w480" />
+                        </div>
+                        <span>联系备注信息，用于助记</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th width="120">好友验证：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480">
+                            <input type="checkbox" {yun:}if empty($info) || $info.skip_verify == 1{/yun}checked{yun:}/if{/yun} name="skip_verify" lay-skin="switch" lay-filter="skip_verify" lay-text="开|关">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr {yun:}if $info.type == 2{/yun}style="display: none;"{yun:}/if{/yun} class="Type Type_1">
+                    <th width="120">选择员工：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480" id="userid_select"></div>
+                    </td>
+                </tr>
+
+                <tr {yun:}if empty($info) || $info.type == 1{/yun}style="display: none;"{yun:}/if{/yun} class="Type Type_2">
+                    <th width="120">选择员工：</th>
+                    <td>
+                        <div class="layui-input-inline t_w480" id="user_select"></div>
+                    </td>
+                </tr>
+
+                <tr class="admin_table_trbg">
+                    <th width="120"></th>
+                    <td align="left">
+                        {yun:}if is_array($info){/yun}
+                            <input type="hidden" name="config_id" value="{yun:}$info.config_id{/yun}"/>
+                            <input type="hidden" name="state" value="{yun:}$info.state{/yun}"/>
+                            <input type="hidden" name="id" value="{yun:}$info.id{/yun}"/>
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;更 新&nbsp;"/>
+                        {yun:}else{/yun}
+                            <input class="layui-btn tty_sub" type="button" onclick="checkform()" value="&nbsp;添 加&nbsp;"/>
+                        {yun:}/if{/yun}
+                        <input class="layui-btn tty_cz" type="reset" name="reset" value="&nbsp;重 置 &nbsp;"/>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+        </form>
+    </div>
+</div>
+<style>
+    .layui-form-item {margin-bottom: 0px;clear: both;}
+    .layui-form-label {width: 60px;padding: 9px 1px;}
+</style>
+
+<script language="javascript">
+
+    var weburl = '{yun:}$config.sy_weburl{/yun}';
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer,
+            form = layui.form,
+            element = layui.element,
+            $ = layui.$;
+
+        form.on('radio(type)', function (data) {
+            $('.Type').hide();
+            $('.Type_'+data.value).show();
+        });
+    });
+
+    var userIdSelect = xmSelect.render({
+        el: '#userid_select',
+        name: 'userid',
+        theme: {
+            color: '#2778f8',
+        },
+        radio: true,
+        filterable: true,
+        on: function (data) {
+        },
+        data: []
+    })
+
+    var userSelect = xmSelect.render({
+        el: '#user_select',
+        name: 'user',
+        theme: {
+            color: '#2778f8',
+        },
+        filterable: true,
+        on: function (data) {
+        },
+        data: []
+    })
+
+
+    $(document).ready(function() {
+
+        var id = '{yun:}$info.id{/yun}';
+            pytoken = $('#pytoken').val();
+        $.ajax({
+            url	 : 'index.php?m=admin_workwx_code&c=getWorkUserId',
+            data : {id: id, pytoken: pytoken},
+            type : 'post',
+            dataType : 'JSON',
+            async : false,
+            success : function(data) {
+
+                userIdSelect.update({
+                    data: data,
+                    autoRow: true,
+                });
+            }
+        });
+        $.ajax({
+            url	 : 'index.php?m=admin_workwx_code&c=getWorkUser',
+            data : {id: id, pytoken: pytoken},
+            type : 'post',
+            dataType : 'JSON',
+            async : false,
+            success : function(data) {
+
+                userSelect.update({
+                    data: data,
+                    autoRow: true,
+                });
+            }
+        });
+    })
+
+    function checkform() {
+
+        if ($("#name").val() == "") {
+
+            parent.layer.msg('请填写渠道码名称！', 2, 8);
+            return false;
+        }
+
+        var type = $("input[name=type]:checked").val();
+
+        if (type == ''){
+            parent.layer.msg('请选择联系方式类型！', 2, 8);
+            return false;
+        }else{
+
+            if (type == 1){
+
+                var userid = xmSelect.get('#userid_select', true);
+                if (userid.getValue('nameStr') == ''){
+
+                    parent.layer.msg('请选择员工！', 2, 8);
+                    return false;
+                }
+            }else if (type == 2){
+
+                var user = xmSelect.get('#user_select', true);
+                if (user.getValue('nameStr') == ''){
+
+                    parent.layer.msg('请选择员工！', 2, 8);
+                    return false;
+                }
+            }
+        }
+
+        $("#codeform").submit();
+    }
+</script>
+</body>
+</html>

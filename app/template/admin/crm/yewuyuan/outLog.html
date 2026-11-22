@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+	<link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+	<script src="../../../admin/js/wangeditor/index.js"></script>
+	<script src="../../../../../js/clipboard/clipboard.min.js"></script>
+	<script src="../../../../../data/plus/city.cache.js"></script>
+	<script src="../../../../../data/plus/cityparent.cache.js"></script>
+	<script src="../../../../../data/plus/job.cache.js"></script>
+	<script src="../../../../../data/plus/jobparent.cache.js"></script>
+</head>
+<body>
+<div id="outLogApp">
+    <out_log v-bind:log_tab="logTab" ywy></out_log>
+</div>
+<script>
+    const outLogApp = new Vue({
+        el: '#outLogApp',
+        data: function () {
+            return {
+                activeName: 'first',
+                logTab: 1
+            }
+        },
+        components: {
+            'out_log': httpVueLoader('../component/outLog.vue'),
+        }
+    })
+</script>
+</body>
+</html>

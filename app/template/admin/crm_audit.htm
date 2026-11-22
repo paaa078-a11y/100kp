@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>后台管理 - CRM - 查账助手</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <style>
+        .admin_crmTable ul li {width: 98%;margin-top: 15px;border-radius: 4px;margin-left: 16px;background-color: #F8F9FD;border: 1px solid #E6EAEE;}
+        .admin_crmTable ul li span {font-size: 15px;}
+        .crm_searctime ul li{cursor: pointer;}
+    </style>
+</head>
+<body class="body_ifm" style="padding: 15px;">
+<div class="tty-tishi_top">
+    <div class="crmSearctimeGen">
+        <form class="layui-form" action="index.php" method="get" id='myform'>
+
+            <input type="hidden" name="m" value="crm_audit"/>
+
+            <div class="crm_searctime" style="display: flex;margin-bottom: 8px;">
+                <ul>
+                    <li data-time="" {yun:}if $smarty.get.time==''{/yun}class='curr'{yun:}/if{/yun}>全部</li>
+                    <li data-time="-1" {yun:}if $smarty.get.time==-1{/yun}class='curr'{yun:}/if{/yun}>今天</li>
+                    <li data-time="1" {yun:}if $smarty.get.time==1{/yun}class='curr'{yun:}/if{/yun}>昨天</li>
+                    <li data-time="7" {yun:}if $smarty.get.time==7{/yun}class='curr'{yun:}/if{/yun}>7天内</li>
+                    <li data-time="30" {yun:}if $smarty.get.time==30{/yun}class='curr'{yun:}/if{/yun}>30天内</li>
+                    <li data-time="2" {yun:}if $smarty.get.time==2{/yun}class='curr'{yun:}/if{/yun}>自定义</li>
+                </ul>
+                <input type="hidden" name="time" id="time" value="{yun:}$smarty.get.time{/yun}" />
+                <div {yun:}if $smarty.get.time != 2{/yun}style="display: none;"{yun:}/if{/yun} id="timeDiv">
+                    <div style="display: flex; align-items: center;">
+                        <div class="layui-input-inline">
+                            <input type="text" id="stime" class="comy_time_text" name="stime" placeholder="选择时间" style="width:100px;" value="{yun:}$smarty.get.stime{/yun}" autocomplete="off" />
+                        </div>
+                        <div class="layui-input-inline" style="margin-left: 6px;">
+                            <input type="text" id="etime" class="comy_time_text" name="etime" placeholder="选择时间" style="width:100px;" value="{yun:}$smarty.get.etime{/yun}" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 0;">
+                <div class="layui-input-inline">
+                    <select name="uid" id="uid" lay-filter="uid">
+                        <option value="">客户经理</option>
+                        {yun:}foreach item=v from=$auser{/yun}
+                        <option value="{yun:}$v.uid{/yun}" {yun:}if $smarty.get.uid==$v.uid{/yun}selected{yun:}/if{/yun}>{yun:}$v.name{/yun}</option>
+                        {yun:}/foreach{/yun}
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="submit" value="搜索" class="crm_search_bth">
+                    <button type="reset" class="crm_search_bth crm_search_bth_cz" onclick="location.href='index.php?m=crm_audit'">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="IncomeAndexdr">
+    <div class="IncomeAndexdrAll">
+        <div class="IncomeAndexdrOne">
+            <div class="IncomeAndImage">
+                <img src="images/profit1.png" alt="">
+            </div>
+            <div class="IncomeAndNumber">
+                <span>收入</span>
+                <p style="color: #2778F8;">{yun:}$inTotal{/yun}</p>
+            </div>
+        </div>
+        <div class="IncomeAndexdrOne">
+            <div class="IncomeAndImage">
+                <img src="images/profit2.png" alt="">
+            </div>
+            <div class="IncomeAndNumber">
+                <span>支出</span>
+                <p style="color: #FF7D27;">{yun:}$outTotal{/yun}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="clear"></div>
+<div class="tty_table-bom">
+    <div class="table-list" style="margin-top:10px;">
+        <div class="admin_table_border">
+            <div class="admin_crmTable">
+                <ul>
+                    {yun:}foreach item=v key=key from=$order{/yun}
+                    <li>
+                        <div class="admin_crmTable_title crmTable">
+                            <div class="titleOne">
+                                <p><span>{yun:}$v.day{/yun}</span>&nbsp;/&nbsp;{yun:}$v.month{/yun}&nbsp;/&nbsp;{yun:}$v.year{/yun}</p>
+                            </div>
+                            <div class="titleTwo">
+                                <p>支出<span>-{yun:}$v.out{/yun}</span></p>
+                                <p>收入<span>+{yun:}$v.num{/yun}</span></p>
+                            </div>
+                        </div>
+                        <div class="admin_crmTable_content crmTable ">
+                            {yun:}foreach item=v1 key=k from=$v.orders{/yun}
+                            <div class="Table_contentInfo">
+                                <span>{yun:}if $v1.crm_name{/yun}{yun:}$v1.crm_name{/yun}{yun:}else{/yun}未绑定业务员{yun:}/if{/yun}</span>
+                                <span>收</span>
+                                <span>{yun:}$v1.order_price{/yun}</span>
+                                <span>{yun:}$v1.order_type_n{/yun}</span>
+                                <span>{yun:}$v1.name{/yun}</span>
+                            </div>
+                            {yun:}/foreach{/yun}
+                        </div>
+                    </li>
+                    {yun:}/foreach{/yun}
+                </ul>
+            </div>
+            {yun:}if $total > 10 {/yun}
+            <table width="100%" style="margin-top:10px;">
+                <tbody>
+                <tr>
+                    {yun:}if $pagenum==1{/yun}
+                    <td colspan="3">从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                    {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                    <td colspan="3">从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                    {yun:}else if $pagenum == $pages{/yun}
+                    <td colspan="3">从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                    {yun:}/if{/yun}
+                    <td colspan=6 class="digg">{yun:}$pagenav{/yun}</td>
+                </tr>
+                </tbody>
+            </table>
+            {yun:}/if{/yun}
+        </div>
+    </div>
+</div>
+</div>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var laydate = layui.laydate,
+            form = layui.form,
+            $ = layui.$;
+
+        laydate.render({
+            elem: '#stime'
+            , type: 'date'
+        });
+
+        laydate.render({
+            elem: '#etime'
+            , type: 'date'
+        });
+    });
+    $(document).ready(function () {
+
+        $(".crm_searctime ul li").click(function () {
+
+            $(this).addClass("curr");
+            $(this).siblings('li').removeClass("curr");
+            var time = $(this).attr('data-time');
+            $('#time').val(time);
+            if (time==2){
+
+                $('#timeDiv').show();
+            }else{
+
+                $('#timeDiv').hide();
+                $('#myform').submit();
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

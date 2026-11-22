@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="workQRcodeApp" class="moduleElenAl">
+    <div class="moduleSeachs" style="padding: 12px 12px 12px 12px;">
+        <div class="moduleSeachleft">
+            <div class="  newsinput">
+                <el-input v-model="keyword" placeholder="请输入活码名称关键字" clearable size="small" prefix-icon="el-icon-search"></el-input>
+            </div>
+            <div class="  tableSeachInptsmall newsinput">
+                <el-select v-model="scene" clearable size="small" slot="prepend" placeholder="入群场景" @change="search">
+                    <el-option label="小程序" value="1"></el-option>
+                    <el-option label="二维码" value="2"></el-option>
+                </el-select>
+            </div>
+            <div class="newsbtnbox">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+            </div>
+        </div>
+        <div class="moduleSeachButn" style="display: flex;align-items: center;">
+            <el-button type="primary" icon="el-icon-document-add" size="mini" @click="add({id: ''})">新建活码</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%" ref="multipleTable" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+            <template slot="empty">
+                <p>{{dataText}}</p>
+            </template>
+            <el-table-column prop="id" label="ID" width="120"></el-table-column>
+            <el-table-column prop="name" label="群活码名称" min-width="240"></el-table-column>
+            <el-table-column prop="create_time_n" label="创建时间" width="200"></el-table-column>
+            <el-table-column prop="ruqcjing" label="入群场景" width="150">
+                <template slot-scope="scope">
+                    <span>{{scope.row.scene_n}}</span>
+                    <div style="display:inline-block" v-if="scope.row.scene == '1' && scope.row.xcx_use == '1'">
+                        <el-popover trigger="hover" placement="top">
+                            <p>应用中</p>
+                            <div slot="reference" class="name-wrapper">
+                                <i class="el-icon-question"></i>
+                            </div>
+                        </el-popover>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="in_num" label="入群人数" width="160"></el-table-column>
+            <el-table-column prop="out_num" label="退群人数" width="160"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="300" align="center">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button size="small" @click="setstate(scope.row.state)">数据</el-button>
+                        <el-button size="small" @click="add(scope.row)">编辑</el-button>
+                        <el-button v-if="scope.row.scene == '2'" size="small" @click="previewimg(scope.row.qr_code)">查看</el-button>
+                        <el-button v-if="scope.row.scene == '2'" size="small" @click="downCode(scope.row.qr_code, scope.row.name)">下载</el-button>
+                        <el-button type="danger" size="small" @click="delrow(scope.row.id)">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div></div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+    <!-- 数据弹窗 -->
+    <el-drawer title="渠道码数据统计" :visible.sync="tjdrawer" :direction="direction" :modal-append-to-body="false" size="80%">
+        <div class="qudaoDomeAll">
+            <div class="moduleSeachs">
+                <div class="tableSeachInpt tableSeachInptsmall">
+                    <el-date-picker v-model="time" size="small" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" style="margin-right: 10px; text-align: left;" @change="analyse"></el-date-picker>
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="analyse">查询</el-button>
+                    <el-radio-group v-model="time_type" style="margin-left: 20px;" @input="time_type_change">
+                        <el-radio label="0">今日</el-radio>
+                        <el-radio label="1">昨日</el-radio>
+                        <el-radio label="7">7天内</el-radio>
+                        <el-radio label="30">30天内</el-radio>
+                    </el-radio-group>
+                </div>
+            </div>
+            <div class="nstatisBoxProfit">
+                <div class="com_pay_balance">
+                    <div class="com_pay_balance_data_q">
+                        <div class="balanceFlex">
+                            <div class="com_pay_balance_data_name">今日入群</div>
+                            <div class="com_pay_balance_data_n">
+                                <strong>{{inToday}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="com_pay_balance">
+                    <div class="com_pay_balance_data_q border_blue">
+                        <div class="balanceFlex">
+                            <div class="com_pay_balance_data_name">今日退群</div>
+                            <div class="com_pay_balance_data_n color_blue">
+                                <strong>{{outToday}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="com_pay_balance">
+                    <div class="com_pay_balance_data_q">
+                        <div class="balanceFlex">
+                            <div class="com_pay_balance_data_name">总入群数</div>
+                            <div class="com_pay_balance_data_n">
+                                <strong>{{inAll}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="com_pay_balance">
+                    <div class="com_pay_balance_data_q border_blue">
+                        <div class="balanceFlex">
+                            <div class="com_pay_balance_data_name">总退群数</div>
+                            <div class="com_pay_balance_data_n color_blue">
+                                <strong>{{outAll}}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dataEchatInfo">
+                <div class="dataEchatModul" ref="chart"></div>
+            </div>
+        </div>
+
+    </el-drawer>
+    <!-- 新增、修改弹窗 -->
+    <div class="modluDrawer">
+        <el-drawer :title="dtl.id ? '客户群活码修改' : '客户群活码添加'" :visible.sync="draweradd" :modal-append-to-body="false" :show-close="true" :with-header="true" size="75%">
+            <newqrcode :dtlinfo="dtl" :grouparr="grouparr" :draweradd.sync="draweradd"></newqrcode>
+        </el-drawer>
+    </div>
+    <!-- 二维码预览弹窗 -->
+    <div class="tck_setbox">
+        <el-dialog title="入群二维码" :visible.sync="showqrcode" :with-header="true" :modal-append-to-body="false" :show-close="true" width="300px">
+            <div id="qyQrCode" class="code_img" style="display:flex;justify-content: center;margin-bottom: 15px;">
+                <img :src="previewqrcode" width="200" height="200">
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script>
+    const workQRcodeApp = new Vue({
+        el: '#workQRcodeApp',
+        data: function () {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                scene: '',
+                tjdrawer: false,
+                direction: 'rtl',
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                total: 0,
+                keyword: '',
+                time: ['', ''],
+                inToday: '0',
+                outToday: '0',
+                inAll: '0',
+                outAll: '0',
+                time_type: '30',
+                currstate: '',
+                names: [],
+                values: [],
+                draweradd: false,
+                dtl: {id: ''},
+                grouparr: [],
+                previewqrcode: '',
+                showqrcode: false,
+                islook: false,
+                prevPage: 0
+            }
+        },
+        components: {
+            'newqrcode': httpVueLoader('./component/newqrcode.vue'),
+        },
+        created: function () {
+            let query = getUrlParams();
+            if (query && query.keyword) {
+                this.keyword = query.keyword;
+            }
+            this.getList()
+        },
+        methods: {
+            downCode(url, name) {
+                let image = new Image()
+                image.setAttribute('crossOrigin', 'anonymous')
+                image.src = url
+                image.onload = () => {
+                    let canvas = document.createElement('canvas')
+                    canvas.width = image.width
+                    canvas.height = image.height
+                    let ctx = canvas.getContext('2d')
+                    ctx.drawImage(image, 0, 0, image.width, image.height)
+                    canvas.toBlob((blob) => {
+                        let url = URL.createObjectURL(blob)
+                        download(url, name)
+                        // 用完释放URL对象
+                        URL.revokeObjectURL(url)
+                    })
+                }
+
+                function download(href, name) {
+                    let eleLink = document.createElement('a')
+                    eleLink.download = name
+                    eleLink.href = href
+                    eleLink.click()
+                    eleLink.remove()
+                }
+            },
+            previewimg(img) {
+                this.previewqrcode = img
+                this.showqrcode = true
+            },
+            add(row) {
+                this.draweradd = true
+                if (row.id) {
+                    this.dtl = row
+                    this.dtl.xcx_use = row.xcx_use == '1'
+                } else {
+                    this.dtl = {id: '', xcx_use: false, auto_create_room: '1', scene: '2'}
+                }
+                this.getWorkGroup(row.id);
+            },
+            setstate(state) {
+                this.currstate = state
+                this.time_type_change('30')
+            },
+            initCharts() {
+                var chart = this.$refs.chart
+                var myChart = echarts.init(chart);
+                var option = {
+                    color: ['#39c3d5', '#46a6ff', '#5259F4'],
+                    title: {
+                        text: '客户群活码数据统计',
+                        textStyle: {
+                            color: '#333',
+                            fontWeight: '500',
+                            fontSize: '16'
+                        }
+                    },
+                    legend: {
+                        left: 'right'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    grid: {
+                        top: '12%',
+                        left: '2%',
+                        right: '3%',
+                        bottom: '4%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.names,
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        splitLine: {
+                            lineStyle: {
+                                type: 'dashed',
+                                color: '#f3f3f3'
+                            },
+                            show: true
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        splitLine: { //网格线
+                            lineStyle: {
+                                type: 'dashed',
+                                color: '#f3f3f3'
+                            },
+                            show: true
+                        }
+                    },
+                    series: [
+                        {
+                            name: this.values[0] ? this.values[0].name : '',
+                            data: this.values[0] ? this.values[0].data : [],
+                            type: this.values[0] ? this.values[0].type : 'line',
+                            smooth: true,
+                            areaStyle: {}
+                        },
+                        {
+                            name: this.values[1] ? this.values[1].name : '',
+                            data: this.values[1] ? this.values[1].data : [],
+                            type: this.values[1] ? this.values[1].type : 'line',
+                            smooth: true,
+                            areaStyle: {}
+                        },
+                    ]
+                };
+                myChart.setOption(option);
+                setTimeout(function () {
+                    window.addEventListener("resize", () => {
+                        myChart.resize();
+                    });
+                }, 200);
+            },
+            changeTimeRange(diff) {
+                let date = new Date()
+                // 通过时间戳计算
+                let defalutStartTime = date.getTime() - diff * 24 * 3600 * 1000 // 转化为时间戳
+                let defalutEndTime = date.getTime()
+                if (diff == '1') {// 昨日
+                    defalutEndTime = defalutStartTime
+                }
+                let startDateNs = new Date(defalutStartTime)
+                let endDateNs = new Date(defalutEndTime)
+                // 月，日 不够10补0
+                defalutStartTime = startDateNs.getFullYear() + '-' + ((startDateNs.getMonth() + 1) >= 10 ? (startDateNs.getMonth() + 1) : '0' + (startDateNs.getMonth() + 1)) + '-' + (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
+                defalutEndTime = endDateNs.getFullYear() + '-' + ((endDateNs.getMonth() + 1) >= 10 ? (endDateNs.getMonth() + 1) : '0' + (endDateNs.getMonth() + 1)) + '-' + (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
+                return [defalutStartTime, defalutEndTime]
+            },
+            time_type_change(val) {
+                if (val != '') {
+                    this.time = this.changeTimeRange(val)
+                    this.analyse()
+                }
+            },
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                if (that.scene != '0') {
+                    params.scene = that.scene
+                }
+                that.loading = true;
+                httpPost('m=yunying&c=workwx_qrcode&a=index', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total)
+                        if (that.prevPage != that.currentPage) {
+                            that.prevPage = that.currentPage;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0) {
+                            that.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            async analyse() {
+                let that = this;
+                let params = {}
+                if (that.currstate) {
+                    params.currstate = that.currstate
+                }
+                if (that.time) {
+                    params.time_begin = that.time[0]
+                    params.time_end = that.time[1]
+                }
+                var thirtydays = this.changeTimeRange('30')
+                var sevendays = this.changeTimeRange('7')
+                var yesterday = this.changeTimeRange('1')
+                var today = this.changeTimeRange('0')
+                if (this.time[0] != thirtydays[0] && this.time[1] != thirtydays[1] && this.time[0] != sevendays[0] && this.time[1] != sevendays[1] && this.time[0] != yesterday[0] && this.time[1] != yesterday[1] && this.time[0] != today[0] && this.time[1] != today[1]) {
+                    this.time_type = ''
+                }
+                httpPost('m=yunying&c=workwx_qrcode&a=analyse', params).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.inToday = res.data.inToday
+                        that.outToday = res.data.outToday
+                        that.inAll = res.data.inAll
+                        that.outAll = res.data.outAll
+                        // that.time = that.changeTimeRange(that.time_type)
+                        that.names = res.data.names
+                        that.values = res.data.values
+                        that.tjdrawer = true
+                        setTimeout(function () {
+                            that.initCharts()
+                        }, 500)
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            getWorkGroup(id) {
+                let that = this;
+                let params = {};
+                if (id > 0) {
+                    params.id = id;
+                }
+                httpPost('m=yunying&c=workwx_qrcode&a=getWorkGroup', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.grouparr = res.data
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            delrow(id) {
+                delConfirm(this, id, this.delete);
+            },
+            async delete(id) {
+                let that = this;
+                let params = {
+                    del: id
+                };
+                httpPost('m=yunying&c=workwx_qrcode&a=delQRCode', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success('操作成功');
+                        that.getList();
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+<style scoped>
+    .qudaoDomeAll{overflow:hidden;position:relative;width:100%;height:calc(100% - 20px);padding:0 20px}
+    .nstatisBoxProfit{overflow:hidden;border-radius:4px;padding:0 15px;margin-bottom:15px;height:90px;display:flex;align-items:center;justify-content:space-around;background:#f7f9ff}
+    .com_pay_balance{overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;text-align:center}
+    .nstatisBoxProfit .com_pay_balance_data_q{overflow:hidden;padding-left:0;display:flex;align-items:center;padding-top:2px}
+    .nstatisBoxProfit .com_pay_balance_data_q .balanceFlex{overflow:hidden;padding-left:20px}
+    .nstatisBoxProfit .com_pay_balance_data_q .balanceFlex .com_pay_balance_data_name{overflow:hidden;font-weight:500;font-size:13px;color:#333;padding-bottom:8px}
+    .com_pay_balance_data_n{font-size:16px;color:#2778f8;font-weight:700}
+    .color_blue{color:#fe8302!important}
+    .dataEchatInfo{height:calc(100% - 200px);margin-top:30px}
+    .dataEchatModul{width:100%}
+    .moduleSeachs{padding:12px 0}
+</style>
+</body>
+
+</html>

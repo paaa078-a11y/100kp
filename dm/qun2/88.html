@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en" style="font-size: 100px;">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>人才网</title>
+	</head>
+	<body>
+
+    <style>
+        html{ font-size: 100px; }
+        body { background-image: url("images/pic_01.jpg"); background-color: #fb7381; background-position: center 0; background-repeat: no-repeat; background-size: auto 9.1rem; font-size: .14rem; }
+        a { text-decoration: none; }
+        .content { margin: 0 auto; max-width: 1200px; }
+        .clearfix { overflow: hidden; _zoom: 1; }
+        .header { padding-top: 1.4rem; text-align: center; }
+        .header .pic { max-height: 2.2rem; max-width: 100%; }
+        .header .city-list {padding: .82rem .4rem; color: #fff; font-size: 0; word-break: keep-all; word-break: normal\9; }
+        .header a { position: relative; word-break: keep-all; word-break: normal\9; margin-right: -1px; padding: 0 .14rem; line-height: .4rem; font-size: .19rem; color: #fff; }
+        .header a span { position: absolute; top: 50%; right: 0px; margin-top: -.07rem; height: .16rem; border-right: 1px solid #fff; }
+        .header .empty-line span { border-right: 0; }
+        .main .qrcode { background-image: url("images/border.gif"); background-color: #fff; background-repeat: no-repeat; background-position: center 0; text-align: center; padding-bottom: .6rem;   margin-bottom: .3rem; border-radius: .2rem; text-align: center; }
+        .row { margin:0 -.15rem; overflow: hidden; _zoom: 1; box-sizing: border-box;  }
+        .col-el { padding: 0 .15rem; min-height: 1px; box-sizing: border-box; }
+        .col-xs-6 { width: 50%; float: left; }
+        .qrcode .city { padding: .3rem .1rem; color: #fc364b; font-size: .19rem; }
+        .qrcode .account { font-size: .18rem; margin-bottom: .1rem; padding: 0 .2rem; }
+        .qrcode .btn { margin: 0 auto .32rem; width: 1.8rem; padding: .1rem 0; line-height: 1; vertical-align: middle; text-align: center; font-size: .2rem; color: #fff; background: #6cc426; border-radius: .4rem; cursor: pointer; }
+        .qrcode .pic { width: 2rem; height: 2rem; }
+        @media screen and (max-width: 767px) {
+            .content { width: 700px; width: 7rem; }
+        }
+        @media screen and (min-width: 768px) {
+            .content { width: 700px; width: 7rem; }
+            .col-sm-6 { width: 50%; float: left; }
+        }
+        @media screen and (min-width: 992px) {
+            .content { width: 930px; width: 9.3rem; }
+            .col-md-4 { width: 33.333%; float: left; }
+        }
+        @media screen and (min-width: 1200px) {
+            .content { width: 1140px; width: 11.4rem; }
+            .header a { margin-right: 0;}
+        }
+        @media \0screen\,screen\9 {
+            body{ background-size: auto 910px; font-size: 14px; }
+            .content { width: 1200px; padding: 0 15px; }
+            .col-md-4 { width: 33.333%; float: left; }
+            .header { padding-top: 140px; }
+            .header .pic { max-height: 220px; }
+            .header .city-list { padding: 82px 40px; word-break: initial; }
+            .header a { padding: 0 14px; line-height: 40px; font-size: 20px; word-break: initial; margin-right: 0px;}
+            .header a span { margin-top: -7px; height: 16px; }
+            .main .qrcode { background-color: transparent; padding-bottom: 60px; margin-bottom: 30px; border-radius: 20px; }
+            .row { margin: 0 -15px; }
+            .qrcode .city { padding: 30px 10px; font-size: 40px;}
+            .qrcode .account { font-size: 18px; margin-bottom: 10px; padding: 0 20px; }
+            .qrcode .btn { margin: 0 auto 32px; max-width: 180px; height: 42px; line-height: 42px; font-size: 20px; background-image: url("images/button.gif"); background-repeat: no-repeat; background-position: center 0; background-size: 100%; background-color: transparent; }
+            .qrcode .pic { max-width: 100%; max-height: 200px; }
+        }
+    </style>
+
+
+
+    <div class="page">
+        <div class="header">
+            <div class="content">
+                <img class="pic" src="images/title.png">
+                <div class="city-list">全国省份：
+					<a class="link" href="#">北京<span></span></a>
+                    <a class="link" href="#">上海<span></span></a>
+                    <a class="link" href="#">天津<span></span></a>
+                    <a class="link" href="#">重庆<span></span></a>
+                    <a class="link" href="#">广东<span></span></a>
+                    <a class="link" href="#">福建<span></span></a>
+                    <a class="link" href="#">浙江<span></span></a>
+                    <a class="link" href="#">江苏<span></span></a>
+                    <a class="link" href="#">湖南<span></span></a>
+                    <a class="link" href="#">湖北<span></span></a>
+                    <a class="link" href="#">河南<span></span></a>
+                    <a class="link" href="#">河北<span></span></a>
+					<!--其它省份 -->
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="content">
+                <div class="qrcode-list row">
+						<div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【福州市】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270408115111J.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【福清市】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270417216833A.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【长乐区】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270417474013B.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【闽侯县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270418249106V.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【连江县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270418485298U.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【罗源县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270419197858R.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【闽清县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270420403545Z.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【永泰县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270420287566Z.jpg" alt="">
+                        </div>
+</div>                    <div class="col-xs-6 col-sm-6 col-md-4 col-el">
+                        <div class="qrcode">
+                            <div class="city">【平潭县】597直聘工作推荐群</div>
+                            <img class="pic" src="images/2409270421042497C.jpg" alt="">
+                        </div>
+</div>                </div>
+
+            </div>
+            <div style=" text-align: center;font-size: 18px; color:#fff;">Copyright © 直聘</div>
+        </div>
+
+    </div>
+
+
+
+
+	
+	</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>{yun:}$title{/yun}</title>
+    <meta name="keywords" content="{yun:}$keywords{/yun}" />
+    <meta name="description" content="{yun:}$description{/yun}" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/special/css/job.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/news.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+</head>
+
+<body>
+    {yun:}include file="$tplstyle/header.htm"{/yun}
+    <section class="specialTop">
+        <div class="specialTopLogo">
+            <div class="specialTopLogoImg">
+                <a href="{yun:}$config.sy_weburl{/yun}"><img src="{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_logo{/yun}" alt=""></a>
+            </div>
+            {yun:}if $uid && ($usertype == 1 || $usertype == 2){/yun}
+            <div class="specialTopLogoButt">
+                {yun:}if $usertype == 1{/yun}
+                <a href="{yun:}$config.sy_weburl{/yun}/member/?c=resume">写简历</a>
+                {yun:}elseif $usertype == 2{/yun}
+                <a href="{yun:}$config.sy_weburl{/yun}/member/?c=job">我要招人</a>
+                {yun:}/if{/yun}
+            </div>
+            {yun:}elseif !$uid{/yun}
+            <div class="specialTopLogoButt">
+                <a href="{yun:}url m=login{/yun}">写简历</a>
+                <a href="{yun:}url m=login{/yun}">我要招人</a>
+            </div>
+            {yun:}/if{/yun}
+        </div>
+    </section>
+    <section class="specialPoster">
+        <img src="{yun:}$info.pic_n{/yun}" alt="">
+    </section>
+    <section class="specialSubject">
+        <ul>
+            {yun:}foreach item=v key=key from=$rows{/yun}
+            <li>
+                <div class="specialInfo">
+                    <div class="specialInfoName">
+                        <a href="{yun:}url m=job c=comapply id=$v.jobid{/yun}" target="_blank" class="specialLinks">
+                        <div class="nameOne">
+                            <p>{yun:}$v.name{/yun}</p>
+                            {yun:}if $v.rec_n{/yun}<img src="{yun:}$style{/yun}/images/jobjp.png" alt="">{yun:}/if{/yun}
+                            {yun:}if $v.urgent_n{/yun}<img src="{yun:}$style{/yun}/images/jobtj.png" alt="">{yun:}/if{/yun}
+                        </div>
+                        <div class="nameTwo">
+                            <span>{yun:}$v.add_exp_edu {/yun}</span>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="specialInfoMoney">
+                        <p>{yun:}$v.job_salary{/yun}</p>
+                        <!-- <span>{yun:}$v.lastupdate_n{/yun}</span> -->
+                    </div>
+                    <div class="specialComName">
+                        <p>{yun:}$v.com_name{/yun}</p>
+                        {yun:}if !empty($v.welfareArr){/yun}
+                        <div class="specialWelfare">
+                            {yun:}foreach from=$v.welfareArr item=wv{/yun}
+                            <span>{yun:}$wv{/yun}</span>
+                            {yun:}/foreach{/yun}
+                        </div>
+                        {yun:}/if{/yun}
+                    </div>
+                    <div class="specialToud">
+                        <span>{yun:}$v.lastupdate_n{/yun}</span>
+                    </div>
+                    <div class="specialInfoKan">
+                        {yun:}if $config.sy_chat_open ==1{/yun}
+                            {yun:}if $v.status == 1{/yun}
+                            <span onclick="layer.msg('该职位已下架', 2, 8)">立即沟通</span>
+                            {yun:}else{/yun}
+                            <span onclick="jobChat('{yun:}$v.uid{/yun}','com','{yun:}$usertype{/yun}','{yun:}$v.id{/yun}','{yun:}$config.sy_chat_name{/yun}','{yun:}$config.sy_user_change{/yun}')">立即沟通</span>
+                            {yun:}/if{/yun}
+                        {yun:}/if{/yun}
+                        <span class="toudis tojobdtl" data-url="{yun:}url m=job c=comapply id=$v.jobid{/yun}">立即投递</span>
+                    </div>
+                    
+                </div>
+                <div class="specialTips">
+                    {yun:}foreach from=$v.welfareArr item=wv{/yun}
+                    <span>{yun:}$wv{/yun}</span>
+                    {yun:}/foreach{/yun}
+                </div>
+            </li>
+            {yun:}/foreach{/yun}
+        </ul>
+        <!--<div class="specialGoBack">-->
+            <!--<a class="speciaMore" href="{yun:}url m=job{/yun}">查看更多</a>-->
+        <!--</div>-->
+    </section>
+    {yun:}if !$uid{/yun}
+    <section class="speciaBottom">
+        <div>
+            <a href="{yun:}url m=register{/yun}">
+                <img src="{yun:}$style{/yun}/special/images/ball.png" alt="">
+            </a>
+        </div>
+    </section>
+    {yun:}/if{/yun}
+    <style>
+    .chat_box {
+        bottom: 0px;
+    }
+
+    .go-top {
+        display: none;
+    }
+
+    .hp_head_box {
+        display: none;
+    }
+
+    .zph_footer {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 20px;
+        line-height: 25px;
+        font-size: 12px;
+        color: #666;
+        padding-top: 50px;
+    }
+    </style>
+</body>
+{yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/lazyload.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$style{/yun}/js/pack.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+<script src="{yun:}$style{/yun}/js/comapply.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+<!--[if IE 6]>
+<script src="{yun:}$config.sy_weburl{/yun}/js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    DD_belatedPNG.fix('.png');
+</script>
+<![endif]-->
+{yun:}include file="$tplstyle/public_search/login.htm"{/yun}
+<script>
+    var weburl = '{yun:}$config.sy_weburl{/yun}';
+    var headerfix = '{yun:}$config.sy_header_fix{/yun}';
+    var jobid = '{yun:}$Info.id{/yun}';
+    var companyuid = '{yun:}$Info.uid{/yun}';
+    var jobname = '{yun:}$Info.jobname{/yun}';
+    var com_name = '{yun:}$Info.com_name{/yun}';
+    var jobx = '{yun:}$Info.x{/yun}';
+    var joby = '{yun:}$Info.y{/yun}';
+    var address = '{yun:}$Info.address{/yun}';
+    var eid = '{yun:}$eid{/yun}';
+    $('.tojobdtl').click(function(){
+        var url = $(this).attr('data-url')
+        var a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('target', '_blank');
+        var id = Math.random(10000, 99999);
+        a.setAttribute('id', id);
+        // 防止反复添加
+        if (!document.getElementById(id)) {
+            document.body.appendChild(a);
+        }
+        a.click();
+    })
+</script>
+<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" class="none"></iframe>
+{yun:}include file="$tplstyle/public_search/hb.htm"{/yun}
+{yun:}include file="$temstyle/chat/webim.htm"{/yun}
+{yun:}include file="$tplstyle/footer.htm"{/yun}
+</html>

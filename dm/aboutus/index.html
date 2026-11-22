@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们_人才网简介</title>
+    <meta name="description" id="metaDescription" content="城市是非常漂亮的">
+    <meta name="keywords" id="metaKeywords" content="城市,城市我爱你">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .city-name {
+            color: #764ba2;
+            font-weight: bold;
+        }
+        
+        .content {
+            font-size: 1.5rem;
+            color: #555;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        
+        .city-icon {
+            font-size: 4rem;
+            margin: 20px 0;
+            color: #667eea;
+        }
+        
+        .domain-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .city-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .city-tag {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="city-icon">🏙️</div>
+        <h1><span class="city-name" id="cityName">城市</span>欢迎您123欢迎您123欢迎您123欢迎您123欢迎您123欢迎您123</h1>
+        <div class="content" id="content">内容</div>
+        <div class="domain-info">
+            当前域名: <span id="currentDomain">100kp.com</span>
+        </div>
+        <div class="city-list">
+            <div class="city-tag">sh.100kp.com → 上海</div>
+            <div class="city-tag">bj.100kp.com → 北京</div>
+            <div class="city-tag">gz.100kp.com → 广州</div>
+            <div class="city-tag">sz.100kp.com → 深圳</div>
+        </div>
+    </div>
+<script type="text/javascript" src="domain.js"></script>
+</body>
+</html>

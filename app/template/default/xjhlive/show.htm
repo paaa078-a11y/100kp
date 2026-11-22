@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="keywords" content="{yun:}$keywords{/yun}" />
+    <meta name="description" content="{yun:}$description{/yun}" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/mycss.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <title>{yun:}$title{/yun}</title>
+</head>
+
+<body>
+    {yun:}include file="$tplstyle/header.htm"{/yun}
+    <section class="liveSubjecs">
+        <!-- 左侧内容 -->
+        <div class="liveConter">
+            <div class="liveConterTitle">
+                <div class="liveTitleName">
+                    <span>{yun:}$info.name{/yun}</span>
+                </div>
+                <div class="liveTitleInfo">
+                    <div class="liveTitleInfoDay">
+                        <div><img src="{yun:}$style{/yun}/images/live/Frame1.png?v={yun:}$config.cachecode{/yun}" alt=""><span>{yun:}$info.stime_n{/yun}</span></div>
+                        <div><img src="{yun:}$style{/yun}/images/live/Frame2.png?v={yun:}$config.cachecode{/yun}" alt=""><span id="looknum"><script src="{yun:}url m=xjhlive c=GetHits id=$info.id hits=$info.hits{/yun}"></script></span></div>
+                    </div>
+                    <div class="liveTitleInfoShou">
+                        <i></i>
+                        <span>手机观看</span>
+                    </div>
+                </div>
+            </div>
+            <div class="liveErweima">
+                <div>
+                    <h4>手机观看直播</h4>
+                    <img src="{yun:}url m=xjhlive c=getXjhShowQrcode id=$info.id{/yun}" alt="">
+                    <span>手机扫二维码，即可观看</span>
+                </div>
+            </div>
+            <div class="liveConterVideo live-video" id="livebody">
+				<!--  点播 -->
+				{yun:}if $info.recordurl && $info.playback == 1{/yun}
+				<div id="playered" style="height: 495px;"></div>
+				<input type="hidden" id="playurl" value="{yun:}$info.recordurl{/yun}" />
+				{yun:}else{/yun}
+				
+				<div class="layui-carousel {yun:}if $info.livestatus == 3{/yun}none{yun:}/if{/yun}" id="cover" lay-filter="cover">
+					<div carousel-item=""> 
+						{yun:}foreach item=pic from=$info.picarr{/yun}
+						<img src="{yun:}$pic.url{/yun}" width="880" height="495" />
+						{yun:}/foreach{/yun}
+					</div>
+				</div>
+				<div class="liveEndModular {yun:}if $info.livestatus != 2{/yun}none{yun:}/if{/yun}" id="codvideo">
+					<div class="liveEndModularInfo">
+						<p>直播已结束</p>
+						<span>谢谢您的观看</span>
+					</div>
+				</div>
+				{yun:}/if{/yun}
+            </div>
+			{yun:}if $info.livestatus==1{/yun}
+            <div class="liveConterTimes" id="liveremind">
+                <div class="liveTimesInfo">
+                    <div class="liveTimesTips">
+                        <span>距开播仅剩</span>
+                    </div>
+                    <div class="liveTimesInfoNumber" id="countdown"></div>
+                </div>
+				{yun:}if $substatus==1{/yun}
+					<div class="liveTimesButton" onclick="wxScanXjhyy('{yun:}$info.id{/yun}')">
+					    <img src="{yun:}$style{/yun}/images/live/Vector.png?v={yun:}$config.cachecode{/yun}" alt="">
+					    <span>开播提醒</span>
+					</div>
+				{yun:}elseif $substatus==2{/yun}
+					<div class="liveTimesButton">
+					    <img src="{yun:}$style{/yun}/images/live/Vector.png?v={yun:}$config.cachecode{/yun}" alt="">
+					    <span>您已预约</span>
+					</div>
+				{yun:}/if{/yun}
+            </div>
+			{yun:}/if{/yun}
+			
+			<input type="hidden" id="live_hls" value="{yun:}$info.hls{/yun}" />
+			<input type="hidden" id="live_stime" value="{yun:}$info.stime{/yun}" />
+			<input type="hidden" id="live_poster" value="{yun:}$style{/yun}/images/livewating.jpg" />
+			<input type="hidden" id="live_poster" value="{yun:}$style{/yun}/images/livewating.jpg" />
+			
+            <div class="videoComTabs none" id="xjhbox">
+                <div class="videoTabsLink">
+                    <ul>
+                        <li :class="boxtab == 'xjh' ? 'videoTabCur' : ''" @click="boxClick('xjh')">直播介绍</li>
+                        <li :class="boxtab == 'com' ? 'videoTabCur' : ''" @click="boxClick('com')">招聘企业</li>
+                    </ul>
+                    <div class="videoTabsSearch" v-if="boxtab == 'com'">
+                    	<div class="videoSearchClear"></div>
+                    	<div class="videoSearchButton"></div>
+                    	<div class="videoSearchInput">
+                    		<div class="videoSearShur">
+                    			<input type="" placeholder="输入企业名称" id="comkeyword">
+                    		</div>
+                    		<div class="videoSearSoux" @click.stop="comSearch">
+                    			<button></button>
+                    		</div>
+                    		<div class="videoSearQinc" @click.stop="clearSearch">
+                    			<span>清除</span>
+                    		</div>
+                    	</div>
+                    </div>
+                </div>
+                <div class="videoTabsConts">
+					<!--直播介绍-->
+					<template v-if="boxtab == 'xjh'">
+						<div class="videoTabSynop">
+						    <span v-html="xjhbody"></span>
+						</div>
+					</template>
+					<!--招聘企业-->
+					<template v-if="boxtab == 'com'">
+						<template v-if="comlist.length > 0">
+							<div class="videoCompanyAbout" v-for="(item,comkey) in comlist" :key="comkey" @click="comClick(comkey)">
+							    <div class="videoCompabutInfo">
+							        <div class="videoComNames">
+							            <h3>{{item.comname}}</h3>
+							            <span v-if="item.status == 1">
+							                <img src="{yun:}$style{/yun}/images/live/Vector2.png?v={yun:}$config.cachecode{/yun}" alt="">
+							                <b>讲解中</b>
+							            </span>
+							        </div>
+							        <div class="videoComPosts">
+							            <p>在招职位<span>{{item.jobcount}}</span>个</p>
+							        </div>
+							    </div>
+								<ul :class="item.uid == comShow ? 'videoCompaUles' : ''">
+									<li v-for="(job,jobkey) in item.joblist">
+										<div class="videoCompResuOne">
+											<h3>{{job.name}}</h3>
+											<p>{{job.salary}}</p>
+											<span>{{job.citystr}}·{{job.job_exp}}经验·{{job.job_edu}}学历</span>
+										</div>
+										<div class="videoCompResuTwo">
+											<a :href="job.url" target="_blank">投简历</a>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</template>
+						<template v-else>
+							<div class="zanwuCompany">
+								<div class="zanwuCompInfo">
+									<img src="{yun:}$style{/yun}/images/notip.png?v={yun:}$config.cachecode{/yun}" alt="">
+									<span>暂无企业</span>
+								</div>
+							</div>
+						</template>
+					</template>
+                </div>
+            </div>
+        </div>
+        <!-- 右侧聊天 -->
+        <div class="liveCharts none" id="liveCharts">
+            <div class="liveChartsTops">
+                <span>聊天互动</span>
+            </div>
+            <div class="liveChartsConts" id="chat_content">
+            	<div class="liveChatPrompt" v-if="notice">
+            		<span>{{notice}}</span>
+            	</div>
+                <div class="liveChartsList" v-for="(item,chatkey) in chatlist" :key="chatkey">
+					<template v-if="item.msgtype == 'char'">
+						<div class="liveChartImgs">
+						    <img :src="item.avatar" alt="">
+						</div>
+						<div class="liveChartNeir">
+							<div class="liveChartNames">
+						    	<h4>{{item.username}}</h4>
+						    	<i v-if="item.usertype == 9">官方</i>
+						    </div>
+						    <div class="liveChartNeirText" v-html="item.content"></div>
+						</div>
+					</template>
+					<template v-if="item.msgtype == 'job' && item.job">
+						<div class="liveChartImgs">
+						    <img :src="item.avatar" alt="">
+						</div>
+						<div class="liveChartNeir">
+							<div class="liveChartNames">
+						    	<h4>{{item.username}}</h4>
+						    	<i v-if="item.usertype == 9">官方</i>
+						    </div>
+						    <div class="liveDeliver">
+								<div class="liveDeliverName">
+									<h4>{{item.job.com_name}}</h4>
+									<div class="spanPdiv">
+										<p>{{item.job.name}}</p>
+										<span>{{item.job.salary}}</span>
+									</div>
+									
+									<b>{{item.job.citystr}}·{{item.job.job_exp}}经验·{{item.job.job_edu}}学历</b>
+								</div>
+								<div class="liveDeliverLink">
+									<a :href="item.job.url" target="_blank">查看</a>
+								</div>
+							</div>
+						</div>
+						
+					</template>
+                </div>
+            </div>
+            <!-- 正常状态 -->
+            <div class="liveChartsInput" v-if="nochat == '0'">
+                <div class="liveCharInputAlls">
+                    <img id="face" @click="faceShow" src="{yun:}$style{/yun}/images/live/Frame.png?v={yun:}$config.cachecode{/yun}" alt="" class="sendbq_i">
+					<div id="commonly" class="showbq none"></div>
+                    <input id="send_content" type="text" placeholder="说点什么吧" autocomplete="off">
+                    <span @click="sendChat">发送</span>
+                </div>
+            </div>
+            <!-- 禁言状态 -->
+            <div class="liveChartsInput" v-else>
+                <div class="liveCharInputAlls liveCharInpuNones">
+                    <img src="{yun:}$style{/yun}/images/live/Frame.png?v={yun:}$config.cachecode{/yun}" alt="" class="sendbq_i">
+                    <input type="text" readonly placeholder="全员禁言中，无法发言">
+                    <!-- <span>发送</span> -->
+                </div>
+            </div>
+            <!-- 点赞 -->
+            <div class="liveTelecast">
+		        <div class="liveNumber">
+		            <span v-if="zan>0">{{zan}}</span>
+		        </div>
+		        <div class="clickImage">
+		            <img src="{yun:}$style{/yun}/images/live/givea.png?v={yun:}$config.cachecode{/yun}" class="journal-reward" />
+		        </div>
+		    </div>
+            <!-- ------------------------ -->
+        </div>
+		<input type="text" style="width: 0; height: 0; opacity: 0; position: fixed; left: -10000px;" placeholder="防止Google浏览器自动填充到text文本域，在后面多加一个text input标签，将自动填充的内容转移到这，不能用display:none或者input=hidden" />
+    </section>
+	<div id="xjhbody" class="none">{yun:}$info.body{/yun}</div>
+	<div id="wxcontent" class="none">
+		<div class="xjh_ermtc weChatBand">
+			<div>
+				<div id="wx_login_qrcode_spview" class="wx_bdtck_pic">
+					<img src="">
+					<div id="tcwx_sx" class="none">
+						<div class="wx_login_show_sxbox"><a href="javascript:void(0);" onclick="tcwxlogincode()" class="wx_login_show_sxicon">二维码已失效点击刷新</a></div>
+					</div>
+				</div>
+				
+				<div class="wx_bdtck_p">微信扫描二维码<br>关注公众号，及时接收面试消息</div>
+			</div>
+		</div>
+	</div>
+	<div id="showQrcodeBox" class="none">
+		<div class="job_tel_wx_box">
+			<div id="tel_wxqrcode" class="job_tel_wx_zs">正在获取二维码...</div>
+			<div class="job_tel_wx_p"><span class="job_tel_wx_bth">请使用微信扫一扫</span></div>
+		</div>
+	</div>
+	{yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
+	<!-- <script src="{yun:}$style{/yun}/js/scrollfix.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script> -->
+    <script>
+		'{yun:}if $config.sy_xjhlive_ext == 2{/yun}'
+		var userAgent = navigator.userAgent;
+		var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+		var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+		if(!isIE && !isIE11){
+			document.documentElement.setAttribute('theme', 'dark');
+		}
+		'{yun:}/if{/yun}'
+		
+		// var fix = $(".liveCharts");
+		// fix.scrollFix({distanceTop:50});
+		$(window).scroll(function () {
+            if ($(window).scrollTop() > 100) {
+                $('.liveCharts').addClass('liveChartsCur');
+            } else {
+                $('.liveCharts').removeClass('liveChartsCur');
+            }
+        })
+		$(".liveTitleInfoShou").hover(function() {
+			$(".liveErweima").toggleClass("liveErweimCur");
+		});
+		
+
+		var socketUrl = "{yun:}$config.sy_chat_weburl{/yun}",
+			weburl = "{yun:}$config.sy_weburl{/yun}",
+			mine = {usertype: '{yun:}$usertype{/yun}'},
+			xjhsyncid = '{yun:}$info.syncid{/yun}',
+			xjhid = '{yun:}$info.id{/yun}',
+			chat_name = '{yun:}$config.sy_chat_name{/yun}',
+			uid = '{yun:}$uid{/yun}',
+			usertype = '{yun:}$usertype{/yun}',
+			eid = '{yun:}$eid{/yun}',
+			livestatus = '{yun:}$info.livestatus{/yun}',
+			mbstyle = '{yun:}$style{/yun}',
+			getwxurl = '{yun:}url m=login c=wxlogin{/yun}',
+			getwxstatusurl = '{yun:}url m=login c=getwxloginstatus{/yun}',
+			nochat = '{yun:}$info.nochat{/yun}',
+			vistor_nochat = '{yun:}$info.vistor_nochat{/yun}',
+			zan = '{yun:}$info.zan{/yun}';
+			
+		var zanImages = [
+			'{yun:}$style{/yun}/images/live/apple.png',
+			'{yun:}$style{/yun}/images/live/heart.png',
+			'{yun:}$style{/yun}/images/live/praise.png',
+			'{yun:}$style{/yun}/images/live/star.png',
+			'{yun:}$style{/yun}/images/live/watermelon.png',
+		];
+        function wxScanXjhyy(id){
+            $('#tel_wxqrcode').html('<img src="index.php?m=xjhlive&c=xjhyyQrcode&id='+id+'" width="120" height="120">');
+            $.layer({
+                type: 1,
+                title: '微信扫码预约开播提醒',
+                closeBtn: [0, true],
+                offset: ['100px', ''],
+                border: [10, 0.3, '#000', true],
+                area: ['300px', '320px'],
+                page: {
+                    dom: "#showQrcodeBox"
+                },
+                close: function(){
+                    window.location.reload()
+                }
+            });
+        }
+    </script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	{yun:}if $config.sy_chat_open == 1{/yun}
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/yunliao/xjhsocket.js?v={yun:}$config.cachecode{/yun}"></script>
+	{yun:}/if{/yun}
+	{yun:}if $info.livestatus == 2{/yun}
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/qiniu-web-player-1.2.3.js"></script>
+	{yun:}else{/yun}
+	<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.min.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/hls.min.1.1.5.js"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.v4.6.0.min.js"></script>
+	{yun:}/if{/yun}
+	<script src="{yun:}$style{/yun}/js/xjhlive.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$style{/yun}/js/zhibos.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    {yun:}include file="$tplstyle/public_search/login.htm"{/yun}
+    {yun:}include file="$tplstyle/footer.htm"{/yun}

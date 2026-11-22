@@ -1,0 +1,475 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav coubtInput UserCoubtInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <form onsubmit="return false;">
+                <input type="text" v-model="keyword" placeholder="搜索简历名称/姓名">
+                <button @click="searchsub">搜索</button>
+            </form>
+        </div>
+        <div class="subjectAdd">
+            <a class="claimScreen" href="javascript:void(0)" @click="screenShow = true">
+                <img src="img/serach.png" alt="">
+                <p>筛选</p>
+            </a>
+        </div>
+    </section>
+    <section class="enterNameTab">
+        <div class="enterTabTitle">
+            <a href="javascript:void(0)" @click="statusShow = true">
+                <span>{{statusname}}</span>
+                <img src="img/duob.png">
+            </a>
+            <a href="javascript:void(0)" @click="typeShow = true">
+                <span>{{typename}}</span>
+                <img src="img/duob.png">
+            </a>
+            <a href="javascript:void(0)" @click="adtimeShow = true">
+                <span>{{adtimename}}</span>
+                <img src="img/duob.png">
+            </a>
+            <a href="javascript:void(0)" @click="sourceShow = true">
+                <span>{{sourcename}}</span>
+                <img src="img/duob.png">
+            </a>
+        </div>
+    </section>
+    <section class="positInfo">
+        <ul v-if="!noResume">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                    <li v-for="(item, expkey) in list" :key="expkey">
+                        <div class="positdiv1">
+                            <div class="divSpan1">
+                                <a href="javascript:void(0)" @click="pageTo('index.php?c=admin_resume&a=show&id='+item.id)">{{item.name}}<span>{{item.city_n}}</span> </a>
+                            </div>
+                            <div class="divSpan2">
+                                <p style="color:#07c160" v-if="item.state==1"> </p>
+                                <p style="color: red" v-else-if="item.state==3"><span class="ysd"><i class="wshicon"></i>未通过</span></p>
+                                <p style="color: red" v-else-if="item.state==0"><span class="wsh"><i class="wshicon"></i>未审核</span></p>
+                                <p style="color: red" v-else-if="item.state==2"><span class="wsh"><i class="wshicon"></i>被举报</span></p>
+                            </div>
+                        </div>
+                        <div class="positdiv2">
+                            <div class="coutoty">
+                                <span>{{item.uname}}</span>
+                                <span>{{item.sex_n}}</span>
+                                <span v-if="item.age_n==0">保密</span>
+                                <span v-else>{{item.age_n}}岁</span>
+                                <span v-if="item.edu_n">{{item.edu_n}}学历</span>
+                                <span v-if="item.exp_n">{{item.exp_n}}经验</span>
+                            </div>
+                            <div class="coutspeed">
+                                <p>完整度：</p>
+                                <div class="layuiProgres">
+                                    <div class="lengthTime" :style="'width:'+item.integrity+'%;'"></div>
+                                </div>
+                                <span style="padding-left: 0.2rem; font-size: var(--font-13);">{{item.integrity}}%</span>
+                            </div>
+                            <div class="couzhatai">
+                                <p>简历状态：
+                                    <span v-if="item.status==1">公开</span>
+                                    <span v-else-if="item.status==3">投递企业可见</span>
+                                    <span v-else>隐藏</span>
+                                </p>
+                                <p>更新时间：{{item.lastupdate_n}}</p>
+                            </div>
+                        </div>
+                        <div class="cutoudHref">
+                            <a href="javascript:void(0);" @click="cutoClick(item.id,item.uname,item.label,item.content,item.uid)">备注</a>
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=user&c=users_resume&a=show&id='+item.id)">详细</a>
+                        </div>
+                    </li>
+                </van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-if="noResume" class="noneInfoAll">
+            <div class="nfoAllConu">
+                <img src="img/zwtip.png" alt="">
+                <p>暂无信息</p>
+            </div>
+        </div>
+    </section>
+    <van-popup v-model="labelboxShow" round position="bottom">
+        <section class="customerPopup">
+            <div class="customerAls">
+                <img class="customClose" src="img/close.png" alt="" @click="labelboxShow = false">
+                <div class="customForms">
+                    <h3>备注简历</h3>
+                    <form class="layui-form" onsubmit="return false">
+                        <div class="customSubes">
+                            <p>标记 {{uname}} 的简历</p>
+                            <div class="layui-input-inline mobanshehe">
+                                <input name="labnem" v-model="labselectedname" readonly placeholder="请选择" @click="labelShow = true">
+                            </div>
+                        </div>
+
+                        <div class="customSubes">
+                            <p>备注任务：</p>
+                            <div class="customCont">
+                                <textarea class="follotextarea" v-model="content" placeholder="简要说明跟进内容，与客户的交流情况。"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="customSubes">
+                            <div class="customCont">
+                                <button @click="labelsubmit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <van-popup v-model="labelShow" round position="bottom">
+        <van-picker title="标签" value-key="text"
+                    :default-index="defaultindex" :columns="labelarr" show-toolbar @confirm="labconfirm"
+                    @cancel="labelShow=false"/>
+    </van-popup>
+
+    <van-popup v-model:show="statusShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="statusarr"
+                value-key="name"
+                :default-index="statusid"
+                title="简历状态"
+                @cancel="statusShow = false"
+                @confirm="onStaConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="sourceShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="sourcearr"
+                value-key="name"
+                title="来源选择"
+                @cancel="sourceShow = false"
+                @confirm="onSouConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="typeShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="typearr"
+                value-key="name"
+                title="类型选择"
+                @cancel="typeShow = false"
+                @confirm="onTypConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="adtimeShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="adtimearr"
+                value-key="name"
+                title="发布时间"
+                @cancel="adtimeShow = false"
+                @confirm="onAdtConfirm"
+        />
+    </van-popup>
+    <van-popup v-model="screenShow" closeable position="bottom" round :style="{height:'12.24rem'}">
+        <div class="Gengduos-eject pubtwo screenPupAll">
+            <div class="conditional_screening_box">
+                <div class="conditional_screening_pv">
+                    <div class="conditional_screening_pv">
+                        <div class="conditional_screening_alltit">全部筛选</div>
+                        <div class="conditional_screening_all">
+                            <div class="conditional_screening_cont">
+                                <div class="conditional_screening_tit"><span class="conditional_screening_tit_n">学历要求</span></div>
+                                <ul class="conditional_screening_list" id="Sortedu-Sortedu">
+                                    <li v-for="(item, key) in userdata.user_edu" :key="key" :class="item==edu?'conditional_screening_cur':''" @click="setEdu(item)">
+                                        <a href="javascript:void(0)">{{userclass_name[item]}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="conditional_screening_cont">
+                                <div class="conditional_screening_tit"><span class="conditional_screening_tit_n">经验要求</span></div>
+                                <ul class="conditional_screening_list" id="Sortexp-Sortexp">
+                                    <li v-for="(item, key) in userdata.user_word" :key="key" :class="item==exp?'conditional_screening_cur':''" @click="setExp(item)">
+                                        <a href="javascript:void(0)">{{userclass_name[item]}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="conditional_screening_operation screeningOperationse">
+                                <div class="conditional_screening_operation_left">
+                                    <a href="javascript:void(0)" @click="czSerach" class="conditional_screening_operation_cz">重置</a>
+                                </div>
+                                <div class="conditional_screening_operation_right">
+                                    <a href="javascript:void(0)" @click="qdSerach" class="conditional_screening_operation_ok">确定</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </van-popup>
+</div>
+<script>
+    let state = '{yun:}$smarty.get.state{/yun}';
+    let adtime = '{yun:}$smarty.get.adtime{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noResume: false,
+
+                keyword: '',
+
+                source: [],
+
+                r_status: state,
+
+                statusShow: false,
+                statusarr: [],
+                statusid: state,
+                statusname: '审核状态',
+
+                sourceShow: false,
+                sourcearr: [],
+                sourceid: '',
+                sourcename: '数据来源',
+
+                adtimeShow: false,
+                adtimearr: [],
+                adtimeid: adtime,
+                adtimename: '发布时间',
+
+                typeShow: false,
+                typearr: [],
+                typeid: '',
+                typename: '简历类型',
+
+                eid: '',
+                uid: '',
+                uname: '',
+                labselected: '',
+                labselectedname: '请选择',
+                content: '',
+                userdata: [],
+                userclass_name: [],
+                screenShow: false,
+                edu: '',
+                exp: '',
+
+                labelShow: false,
+                labelarr: [],
+                defaultindex: 0,
+                labelboxShow: false
+            }
+        },
+        created() {
+            this.getStatis();
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                };
+                if (that.typeid) {
+                    param['service'] = that.typeid;
+                }
+                if (that.sourceid) {
+                    param['source'] = that.sourceid;
+                }
+                if (that.adtimeid) {
+                    param['adtime'] = that.adtimeid;
+                }
+                if (that.r_status) {
+                    param['status'] = that.r_status;
+                }
+                if (that.edu) {
+                    param['edu'] = that.edu;
+                }
+                if (that.exp) {
+                    param['exp'] = that.exp;
+                }
+                if (that.keyword) {
+                    param['keyword'] = that.keyword;
+                }
+                $.post('index.php?m=user&c=users_resume', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noResume = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noResume = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+
+                    that.keyword = res.keyword ? res.keyword : '';
+                }, 'json');
+            },
+            getStatis: function () {
+                var that = this;
+                $.post('index.php?m=user&c=users_resume&a=statis', {a: 1}, function (res) {
+                    that.source = res.source ? res.source : [];
+                    that.sourcearr = res.sourcearr ? res.sourcearr : [];
+                    that.typearr = res.typearr ? res.typearr : [];
+                    that.statusarr = res.statusarr ? res.statusarr : [];
+
+                    if (that.statusid) {
+                        that.statusname = that.statusarr[that.statusid - 1].name;
+                    }
+                    that.adtimearr = res.adtimearr ? res.adtimearr : [];
+                    if (that.adtimeid) {
+                        let subrgindex = that.adtimearr.findIndex(item => item.id == that.adtimeid);
+                        that.adtimename = that.adtimearr[subrgindex].name;
+                    }
+                    that.userdata = res.userdata ? res.userdata : [];
+                    that.labelarr = res.labelarr ? res.labelarr : [];
+                    that.userclass_name = res.userclass_name ? res.userclass_name : [];
+                }, 'json');
+            },
+            searchsub: function () {
+                this.getList('refresh');
+            },
+            labelsubmit: function () {
+                var that = this;
+                var param = {
+                    id: that.eid,
+                    uid: that.uid,
+                    label: that.labselected,
+                    content: that.content
+                };
+
+                showLoading('备注中');
+                $.post('index.php?m=user&c=users_resume&a=label', param, function (res) {
+                    hideLoading();
+                    if (res.error == 9) {
+                        that.labelboxShow = false;
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            onAdtConfirm: function (e) {
+                this.adtimeid = e.id;
+                this.adtimename = e.name;
+                this.getList('refresh');
+                this.adtimeShow = false;
+            },
+            onTypConfirm: function (e) {
+                this.typeid = e.id;
+                this.typename = e.name;
+                this.getList('refresh');
+                this.typeShow = false;
+            },
+            onSouConfirm: function (e) {
+                this.sourceid = e.id;
+                this.sourcename = e.name;
+                this.getList('refresh');
+                this.sourceShow = false;
+            },
+            onStaConfirm: function (e) {
+                this.statusid = e.id - 1;
+                this.statusname = e.name;
+                this.r_status = e.id;
+                this.getList('refresh');
+                this.statusShow = false;
+            },
+            cutoClick: function (eid, uname, label, content, uid) {
+                this.uname = uname;
+                this.labselected = label ? label == 0 ? '' : label : '';
+                this.labselectedname = this.userclass_name[label]
+                this.defaultindex = this.userdata['user_label'].indexOf(label);
+
+                this.eid = eid;
+                this.uid = uid,
+                this.content = content ? content : '';
+                this.labelboxShow = true
+
+            },
+            labconfirm: function (e) {
+                this.labselected = e.value;
+                this.labselectedname = this.userclass_name[e.value]
+                this.labelShow = false;
+            },
+            setEdu: function (e) {
+                this.edu = e;
+
+            },
+            setExp: function (e) {
+                this.exp = e;
+            },
+            qdSerach: function () {
+                this.getList('refresh');
+                this.screenShow = false;
+            },
+            czSerach: function () {
+                window.location.href = 'index.php?m=user&c=users_resume';
+                window.history.replaceState({}, "", "index.php?m=user&c=users_resume");
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            }
+        }
+    });
+</script>
+<style type="text/css">
+    .customerPopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .customerPopup .customerAls {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important
+    }
+</style>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<title>后台管理</title>
+	</head>
+
+	<body class="body_ifm">
+		<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+		<form id="chatform" class="layui-form" action="index.php?m=admin_xjhlive_set&c=save" method="post" onsubmit="return ckxjh()" target="supportiframe">
+			<div class="infoboxp">
+				<div class="clear"></div>
+					<div class="tag_box">
+						<div class="tagBboxHeat">
+							<h3>直播设置</h3>
+							<span>可以实现直播相关设置。管理员根据自己运营需求自由设置。</span>
+						</div>
+						<div class="">
+							<table width="100%" class="table_form">
+								<tr>
+									<th width="150">直播提醒时间：</th>
+									<td>
+										<div style="overflow: hidden;display: flex;align-items: center;">
+											<div style="overflow: hidden;border: 1px solid #e6e6e6; border-radius: 3px;">
+												<input class="tty_input t_w160" type="text" name="sy_xjh_subtime" id="sy_xjh_subtime" value="{yun:}$config.sy_xjh_subtime{/yun}" size="10" style="border: none;" />
+												<span style="padding-right: 10px;">分钟</span>
+											</div>
+											<span class="admin_web_tip" style="padding-top: 0; margin-left: 10px;">直播开播前X分钟向预约用户发送微信通知，需结合计划任务处理</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<th width="160">详情页外观：</th>
+									<td>
+										<div class="layui-input-block" style="display: flex;  align-items: center;">
+											<input name="sy_xjhlive_ext" value="1" title="浅色" {yun:}if $config.sy_xjhlive_ext=="1" {/yun} checked {yun:}/if{/yun} type="radio" />
+											<input name="sy_xjhlive_ext" value="2" title="深色" {yun:}if $config.sy_xjhlive_ext=="2" {/yun} checked {yun:}/if{/yun} type="radio" />
+										</div>
+									</td>
+								</tr>
+								 <tr>
+					                <th width="150" class="t_fl">公告内容：</th>
+					                <td><textarea  name="sy_xjh_notice" id="sy_xjh_notice" rows="5" cols='40' maxlength="255" class="layui-textarea t_w480" >{yun:}$config.sy_xjh_notice{/yun}</textarea></td>
+					            </tr>
+								
+								<tr class="admin_table_trbg">
+									<th width="160">App Key：</th>
+									<td>
+										<input name="sy_xjhlive_appkey" id="sy_xjhlive_appkey" autocomplete="off" class="tty_input t_w480" type="text" value="{yun:}$config.sy_xjhlive_appkey{/yun}" size="60" maxlength="50" />
+										<span class="admin_web_tip"><a href="https://u.phpyun.com" target="_blank" style="color: #2778F8;">前往申请直播服务秘钥</a></span>
+									</td>
+								</tr>
+								<tr class="admin_table_trbg">
+									<th width="160">App Secret：</th>
+									<td>
+										<input name="sy_xjhlive_appsecret" id="sy_xjhlive_appsecret" autocomplete="off" class="tty_input" type="text" value="{yun:}$config.sy_xjhlive_appsecret{/yun}" size="60" maxlength="50" />
+									</td>
+								</tr>
+								<tr>
+									<th width="150" id="fwtitle">服务秘钥有效期：</th>
+									<td>
+										<input class="tty_input t_w160" type="text" id="rest_num" value="0" readonly="readonly" size="10" />
+									</td>
+								</tr>
+								<tr class="">
+									<th>&nbsp;</th>
+									<td align="left">
+										<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}"/>
+										<input class="tty_sub" type="submit" name="config" value="提交"/>&nbsp;&nbsp;
+										<input class="tty_cz" type="reset" value="重置" />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<script>
+					layui.use('form', function() {
+						var lform = layui.form;
+					});
+					$(function() {
+						var pytoken = $("#pytoken").val();
+						$.post("index.php?m=admin_xjhlive_set&c=get_restnum",{pytoken : pytoken},function(res){
+							if(res.flow){
+								$("#fwtitle").text('剩余流量（单位：G）');
+								$("#rest_num").val(res.flow);
+							}else if(res.num){
+								$("#rest_num").val(res.num);
+							}else{
+								$("#rest_num").val(0);
+							}
+						},'json');
+					});
+					function ckxjh(){
+						loadlayer();
+					}
+				</script>
+			</div>
+		</form>
+	</body>
+
+</html>

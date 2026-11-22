@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="微信通知" name="first">
+                    <wxtz ref="first"></wxtz>
+                </el-tab-pane>
+                <el-tab-pane label="微信通知设置" name="second">
+                    <wxtzset :config="config" @post-set="postset"></wxtzset>
+                </el-tab-pane>
+              
+				<el-tab-pane label="历史模板设置" name="threed">
+				    <wxtzmbset :config="config" @post-set="postset"></wxtzmbset>
+				</el-tab-pane>
+                <el-tab-pane label="类目模板设置" name="four">
+                    <wxtzlmmb :config="config" @post-set="postset"></wxtzlmmb>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    config:{},
+                }
+            },
+            components: {
+                'wxtz': httpVueLoader('./component/wxtz.vue'),
+                'wxtzset': httpVueLoader('./component/wxtzset.vue'), 
+				'wxtzmbset': httpVueLoader('./component/wxtzmbset.vue'), 
+				'wxtzlmmb': httpVueLoader('./component/wxtzlmmb.vue'), 
+            },
+            created:function(){
+                this.getInfo();
+            },
+            methods: {
+                handleClick(tab, event){
+                    this.$nextTick(() => {
+                        if (tab.name == 'first') {
+                            this.$refs[tab.name].doLayout();
+                        }
+                    });
+                },
+                async getInfo() {
+                    let that = this;
+                    
+                    httpPost('m=tool&c=wxtz&a=index',{}).then((result)=>{
+                        
+                        var res = result.data;
+                        if (res.error == 0) {
+                            
+                            that.config =res.data;
+                            
+                        }
+                        
+                    }).catch(function(e){
+                        console.log(e)
+                    })
+                },
+                async postset(e){
+                    
+                    let that = this;
+                    var config = e.config;
+                    var type = e.type;
+
+                    if(type=='set'){
+                        var param = {
+                            wx_xxtz:config.wx_xxtz,
+                            wx_xxtz_tz:config.wx_xxtz_tz,
+                            sy_msg_tz:config.sy_msg_tz,
+                        };
+                    }else if(type=='mbset'){
+                        
+                        var param = {
+                            wx_mbsqzw:config.wx_mbsqzw,
+                            wx_mbzwsh:config.wx_mbzwsh,
+                            wx_mbyqms:config.wx_mbyqms,
+                            wx_mbjzbm:config.wx_mbjzbm,
+                            wx_mbjzsh:config.wx_mbjzsh,
+                            wx_mbjlsh:config.wx_mbjlsh,
+                            wx_mbcztx:config.wx_mbcztx,
+                            wx_mbreward:config.wx_mbreward,
+                            wx_subscribetpl:config.wx_subscribetpl,
+                            wx_userchangetpl:config.wx_userchangetpl,
+                            wx_mbxjhlive:config.wx_mbxjhlive,
+                            wx_mbspmssh:config.wx_mbspmssh,
+                            wx_mbspview:config.wx_mbspview,
+                        };
+                        if(typeof config.sy_chat_open!='undfined' && config.sy_chat_open==1){
+                            param.wx_mbchat_ex = config.wx_mbchat_ex;
+                            param.wx_mbchat = config.wx_mbchat;
+                        }
+
+                    }else if(type=='lmmbset'){
+                        
+                        var param = {
+                            wx_mbsqzwlm:config.wx_mbsqzwlm,
+                            wx_mbyqmslm:config.wx_mbyqmslm,
+							wx_mbcztxlm:config.wx_mbcztxlm,
+							wx_mbjzbmlm:config.wx_mbjzbmlm,
+							wx_mbzwshlm:config.wx_mbzwshlm,
+							wx_mbzwshsblm:config.wx_mbzwshsblm,
+							wx_mbchatlm:config.wx_mbchatlm,
+                            wx_mbsubscribelm:config.wx_mbsubscribelm
+                        };
+                        
+
+                    }
+
+                    startLoading();
+                    
+                    httpPost('m=tool&c=wxtz&a=save',param).then((result)=>{
+                        
+                        endLoading();
+                        
+                        var res = result.data;
+
+                        message.success(res.msg,this.getInfo);
+
+                    }).catch(function(e){
+                        console.log(e)
+                    })
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

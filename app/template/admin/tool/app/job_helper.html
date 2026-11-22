@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="jobhelperapp" class="moduleDome">
+    <div class="moduleElHight">
+        <div class="moduleTable" style="max-height: calc(100% - (70px + 80px)); padding-top: 12px;">
+            <table class="tableVue">
+                <thead>
+                <tr align="left">
+                    <th width="200">名称</th>
+                    <th width="500">状态</th>
+                    <th>说明</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="TableTite">求职助手头像</div>
+                        </td>
+                        <td>
+                            <div class="TableUpload">
+                                <el-upload class="upload-demo" :accept="pic_accept" action="" :auto-upload="false"
+                                           :show-file-list="false" :on-change="upAvatarChange">
+                                    <el-button slot="trigger" size="small" type="primary" style="margin-right: 8px;">上传图片</el-button>
+                                    <img class="el-upload-list__item-thumbnail" width="50" height="50" v-if="career_counselor_avatar"
+                                         :src="career_counselor_avatar" alt="求职助手头像" />
+                                </el-upload>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>求职助手头像</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">用户头像</div>
+                        </td>
+                        <td>
+                            <div class="TableUpload">
+                                <el-upload class="upload-demo" :accept="pic_accept" action="" :auto-upload="false"
+                                           :show-file-list="false" :on-change="userAvatarChange">
+                                    <el-button slot="trigger" size="small" type="primary" style="margin-right: 8px;">上传图片</el-button>
+                                    <img class="el-upload-list__item-thumbnail" width="50" height="50" v-if="career_counselor_user_avatar"
+                                         :src="career_counselor_user_avatar" alt="用户头像" />
+                                </el-upload>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>用户头像</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">求职助手名称</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input placeholder="请输入求职助手名称" v-model="career_counselor_name">
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">打招呼文案</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input placeholder="请输入打招呼文案" v-model="career_counselor_greet">
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">求职助手分享封面</div>
+                        </td>
+                        <td>
+                            <div class="TableUpload">
+                                <el-upload class="upload-demo" :accept="pic_accept" action="" :auto-upload="false"
+                                           :show-file-list="false" :on-change="shareChange">
+                                    <el-button slot="trigger" size="small" type="primary" style="margin-right: 8px;">上传图片</el-button>
+                                    <img class="el-upload-list__item-thumbnail" width="50" height="50" v-if="career_counselor_share_img"
+                                         :src="career_counselor_share_img" alt="求职助手分享封面" />
+                                </el-upload>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>求职助手分享封面</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">求职助手分享标题</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input placeholder="请输入求职助手分享标题" v-model="career_counselor_share_title">
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">感兴趣的工作类型</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <job_class @confirm="confirmJobSearch" :multiple="true" :selected="jobSelected"></job_class>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="setBasicButn" style="border: none;">
+            <el-button type="primary" size="medium" @click="saveLoading" :loading="save_load">提交</el-button>
+        </div>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#jobhelperapp',
+        data: function () {
+            return {
+                pic_accept: localStorage.getItem("pic_accept"),
+                avatar_file: [],
+                career_counselor_avatar: '',
+                user_avatar_file: [],
+                career_counselor_user_avatar: '',
+                career_counselor_name: '',
+                career_counselor_greet: '',
+                share_file: [],
+                career_counselor_share_img: '',
+                career_counselor_share_title: '',
+                career_counselor_job_classid: [],
+                jobSelected:{},
+                save_load: false,
+            }
+        },
+        components: {
+            'job_class': httpVueLoader('../../component/job_class.vue'),
+        },
+        created: function () {
+            this.getInfo();
+        },
+        methods: {
+            // 搜索职位选择
+            confirmJobSearch(data) {
+                this.career_counselor_job_classid = data.jobId.join(',');
+            },
+            saveLoading() {
+                let that = this;
+                let formData = new FormData();
+                formData.append('name', that.career_counselor_name)
+                formData.append('greet', that.career_counselor_greet)
+                formData.append('share_title', that.career_counselor_share_title)
+                formData.append('job_class', that.career_counselor_job_classid)
+                formData.append('submit', 'submit')
+                if (that.avatar_file.length !== 0) {
+                    formData.append('avatar_file', that.avatar_file)
+                }
+                if (that.user_avatar_file.length !== 0) {
+                    formData.append('user_avatar_file', that.user_avatar_file)
+                }
+                if (that.share_file.length !== 0) {
+                    formData.append('share_file', that.share_file)
+                }
+                that.save_load = true;
+                httpPost('m=tool&c=app_set&a=career_counselor', formData).then(function (res) {
+                    that.save_load = false;
+                    if (res.data.error == 0) {
+                        message.success(res.data.msg)
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                });
+            },
+            // 上传求职助手头像
+            upAvatarChange(file) {
+                // 预览文件处理
+                this.career_counselor_avatar = URL.createObjectURL(file.raw);
+                // 复刻文件信息
+                this.avatar_file = file.raw;
+            },
+            // 上传用户头像
+            userAvatarChange(file) {
+                // 预览文件处理
+                this.career_counselor_user_avatar = URL.createObjectURL(file.raw);
+                // 复刻文件信息
+                this.user_avatar_file = file.raw;
+            },
+            // 上传求职助手分享封面
+            shareChange(file) {
+                // 预览文件处理
+                this.career_counselor_share_img = URL.createObjectURL(file.raw);
+                // 复刻文件信息
+                this.share_file = file.raw;
+            },
+            async getInfo() {
+                let that = this;
+                httpPost('m=tool&c=app_set&a=career_counselor', {}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.career_counselor_avatar = res.data.career_counselor_avatar
+                        that.career_counselor_share_img = res.data.career_counselor_share_img
+                        that.career_counselor_user_avatar = res.data.career_counselor_user_avatar
+                        that.career_counselor_name = res.data.tplapp.career_counselor_name
+                        that.career_counselor_greet = res.data.tplapp.career_counselor_greet
+                        that.career_counselor_share_title = res.data.tplapp.career_counselor_share_title
+                        that.jobSelected = res.data.selectedJobType.length == 0 ?{}:res.data.selectedJobType;
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+        }
+    });
+</script>
+</body>
+</html>

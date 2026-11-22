@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<title>后台管理</title>
+</head>
+
+<body class="body_ifm">
+	<div class="infoboxp">
+
+		<div class="tty-tishi_top">
+
+			<div class="tabs_info">
+				<ul>
+					<li {yun:}if $smarty.get.c=="index"{/yun}class="on" {yun:}/if{/yun}>
+					<a href="index.php?m=admin_xcx_wx">小程序设置</a>
+					</li>
+					<li {yun:}if $smarty.get.c=="tplindex"{/yun}class="on" {yun:}/if{/yun}>
+					<a href="index.php?m=admin_xcx_wx&c=tplindex">订阅消息模板</a>
+					</li>
+					<li class="">
+						<a href="index.php?m=admin_xcx_wx&c=subTplMsgIndex">订阅消息记录</a>
+					</li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+			<div>
+				<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+				<form name="myform" target="supportiframe" action="index.php?m=admin_xcx_wx&c=tplsave" method="post" enctype="multipart/form-data"
+					  class="layui-form">
+					<table width="100%" class="table_form">
+						<tr class="admin_table_trbg">
+							<th width="200">宣讲会开播模板：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline t_w480">
+										<input name="xjh_start_tplid" autocomplete="off" id="xjh_start_tplid" class="layui-input" type="text" value="{yun:}$data.xjh_start_tplid{/yun}"
+											   size="60" maxlength="255" />
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="200">面试邀请模板：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline t_w480">
+										<input name="interview_tplid" autocomplete="off" id="interview_tplid" class="layui-input" type="text" value="{yun:}$data.interview_tplid{/yun}"
+											   size="60" maxlength="255" />
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="200">支付成功模板：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline t_w480">
+										<input name="payment_tplid" autocomplete="off" id="payment_tplid" class="layui-input" type="text" value="{yun:}$data.payment_tplid{/yun}"
+											   size="60" maxlength="255" />
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="200">职位审核模板：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline t_w480">
+										<input name="job_audit_tplid" autocomplete="off" id="job_audit_tplid" class="layui-input" type="text" value="{yun:}$data.job_audit_tplid{/yun}"
+											   size="60" maxlength="255" />
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="200"></th>
+							<td>
+								<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}" />
+								<input class="layui-btn tty_sub" id="wxconfig" type="submit" name="msgconfig" value="提交" />&nbsp;&nbsp;
+								<input class="layui-btn tty_cz" type="reset" value="重置" />
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		layui.use(['layer', 'form'], function() {
+			var layer = layui.layer,
+				form = layui.form,
+				$ = layui.$;
+		});
+	</script>
+</body>
+</html>

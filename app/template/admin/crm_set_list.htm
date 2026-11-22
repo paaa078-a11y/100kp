@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>后台管理 - CRM - 管理员 - CRM设置</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"/>
+
+    <script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <style>
+        .shiTopAllTips span {
+            overflow: hidden;
+            display: block;
+            font-size: 13px;
+            color: #61687c;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body class="body_ifm">
+
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tty-tishi_top ulBox">
+            <div class="tabs_info ">
+                <ul>
+                    <li class="curr">规则配置</li>
+                    <li>其他设置</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="tty-tishi_top" style="margin-top: 10px;">
+        <div style="overflow: hidden;padding: 20px 0 20px 20px;">
+            <div class="shiTopAllTips">
+                <span><em style="font-weight: bold">规则配置：</em>筛选不同会员等级，设定跟进提醒周期、释放周期、成交限定时间、领取客户时间限定以及过期未续费会员的释放保护周期 {yun:}if $add{/yun}<a href="index.php?m=crm_set&c=add" style="font-size: 14px;color:#3a7dff;cursor: pointer;font-weight: bold;">添加配置</a>{yun:}/if{/yun}</span>
+                <span><em style="font-weight: bold">其他设置：</em>轮值方式、体验会员、公海信息、成交会员等规则设置</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bd_box">
+        <div class="tty_table-bom">
+            <form class="layui-form" action="" name="myform" method="get" target="supportiframe">
+                <input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+                <div class="table-list" style="color:#898989; margin-top:10px;">
+                    <div class="admin_table_border">
+                        <table width="100%">
+                            <thead>
+                            <tr class="admin_table_top" align="left">
+                                <th>会员类型</th>
+                                <th>跟进提醒</th>
+                                <th>释放周期</th>
+                                <th>成交限定</th>
+                                <th>领取限定</th>
+                                <th>保护周期</th>
+                                <th width="180" align="center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tableBackColorTwo">
+                            {yun:}foreach item=v key=key from=$list{/yun}
+                            <tr align="left" {yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun}
+                                id="list{yun:}$v.id{/yun}">
+                                <td>{yun:}$v.rating_name{/yun}</td>
+                                <td>{yun:}$v.follow_day{/yun}天</td>
+                                <td>{yun:}$v.release_day{/yun}天</td>
+                                <td>{yun:}$v.deal_day{/yun}天</td>
+                                <td>{yun:}$v.claim_day{/yun}天</td>
+                                <td>{yun:}$v.bh_day{/yun}天</td>
+                                <td align="center">
+                                    <div class="operationSeries">
+                                        <a href="index.php?m=crm_set&c=add&id={yun:}$v.id{/yun}">修改</a>
+                                        <a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=crm_set&c=delSet&id={yun:}$v.id{/yun}');">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {yun:}/foreach{/yun}
+
+                            {yun:}if $total > $config.sy_listnum {/yun}
+                            <tr>
+                                {yun:}if $pagenum==1{/yun}
+                                <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum == $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}/if{/yun}
+                                <td colspan="4" class="digg">{yun:}$pagenav{/yun}</td>
+                            </tr>
+                            {yun:}/if{/yun}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="tty_table-bom" style="display:none;">
+            <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+            <form action="index.php?m=crm_set&c=config" method="post" class="layui-form" name="myform" id="myform" target="supportiframe">
+                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                <table width="100%" class="table_form  ">
+                 
+                    <tr class=" " >
+                        <th width="200" class="t_fr">
+                            <div>轮值安排：</div>
+                        </th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <input name="sy_crm_duty" value="1" title="时间" {yun:}if $config.sy_crm_duty=="1"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                    <input name="sy_crm_duty" value="2" title="区域" {yun:}if $config.sy_crm_duty=="2"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">时间分配 - 按照周一至周末值班人员顺序分配</span>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">区域分配 - 按照人员指定区域划分顺序分配（仅针对企业分配：企业完善基本信息选择对应地区时绑定业务员）</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="admin_table_trbg">
+                        <th width="200" class="t_fr">
+                            <div>体验会员：</div>
+                        </th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <input name="sy_free_id" value="{yun:}$config.sy_free_id{/yun}" class="tty_input t_w160" type="text"/>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">站点会员套餐体系中，免费体验会员ID，用于CRM数据统计</span>
+                                </div>
+                            </div>&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg" >
+                        <th width="200" class="t_fr">
+                            <div>公海信息：</div>
+                        </th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <input name="sy_crm_link" value="1" title="开放" {yun:}if $config.sy_crm_link=="1"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                    <input name="sy_crm_link" value="2" title="关闭" {yun:}if $config.sy_crm_link=="2"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">关闭信息：业务员无法查看公海客户联系方式，无法进入公海客户管理页面</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th width="200" class="t_fr">
+                            <div>每小时领取：</div>
+                        </th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <input name="sy_crm_hour" value="{yun:}$config.sy_crm_hour{/yun}" class="tty_input t_w160" type="text"/>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">说明：1小时内公海池最多领取N个客户，0为不限</span>
+                                </div>
+                            </div>&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg" >
+                        <th width="200" class="t_fr">
+                            <div>排除成交限制：</div>
+                        </th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <input name="sy_crm_deal_open" value="1" title="开启" {yun:}if $config.sy_crm_deal_open=="1"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                    <input name="sy_crm_deal_open" value="2" title="关闭" {yun:}if $config.sy_crm_deal_open=="2"{/yun}checked{yun:}/if{/yun} type="radio"/>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">开启：成交会员将不再计入客户数量限制名额中，剩余名额 = 限定数量 - （当前客户数 - 已成交客户）</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg">
+                        <th width="200" class="t_fr">成交会员：</th>
+                        <td>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    {yun:}foreach item=v from=$ratingList{/yun}
+                                    <input type="checkbox" name="crm_deal_rating[]" value="{yun:}$v.id{/yun}" lay-skin="primary" title="{yun:}$v.name{/yun}" {yun:}if in_array($v.id,$crm_deal_rating){/yun}checked{yun:}/if{/yun}>
+                                    {yun:}/foreach{/yun}
+                                </div>
+                                <span class="admin_web_tip">选中会员：业务员成交客户数量统计、业务员客户数量限制使用</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="admin_table_trbg" >
+                        <th width="200" class="t_fr">推广分享：</th>
+                        <td>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-block">
+                                    <button type="button" class="yun_bth_pic adminupload" lay-data="{name: 'sy_crmrecshare_logo',imgid: 'shareLogo',path: 'logo',source:'back'}">上传图片</button>
+                                    <input type="hidden" id="layupload_type" value="2" />
+                                </div>
+                                <div class="layui-input-block" style="margin-top: 5px;">
+                                    <img id="shareLogo" src="{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_crmrecshare_logo{/yun}" style="max-width:150px;" {yun:}if !$config.sy_crmrecshare_logo{/yun}class="none"{yun:}/if{/yun}>
+                                </div>
+                                <div class="layui-input-block">
+                                    <span class="admin_web_tip">建议尺寸：300px*300px</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td>
+                            <input class="layui-btn tty_sub" type="submit" name="config" value="提交">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.$;
+    });
+
+    var $switchtag = $("div.ulBox ul li");
+    $switchtag.click(function () {
+        $(this).addClass("curr").siblings().removeClass("curr");
+        var index = $switchtag.index(this);
+        $("div.bd_box > div").eq(index).show().siblings().hide();
+    });
+</script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+</body>
+</html>

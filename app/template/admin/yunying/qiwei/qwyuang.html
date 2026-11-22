@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="workUserApp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachInpt">
+            <el-input v-model="keyword" size="small" placeholder="请输入要搜索的员工ID" clearable></el-input>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+        </div>
+        <div class="moduleSeachButn" style="display: flex;align-items: center;">
+            <el-button type="text" @click="drawersm = true">功能说明 <i class="el-icon-question"></i></el-button>
+            <el-button type="primary" icon="el-icon-document-add" size="mini" @click="syncWorkUserId(50, '')">同步企微</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <div class="admin_datatip"><i class="el-icon-document"></i>
+            <template>
+                <span class="admin_datatip_n">员工数量：{{numArr.allNum}} 条 </span>
+                <span class="admin_datatip_n">客户联系数量：{{numArr.sqNum}} 条</span>
+            </template>
+        </div>
+        <el-table :data="tableData" border style="width: 100%" ref="multipleTable" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="calc(100% - 43px)" v-loading="loading">
+            <template slot="empty">
+                <p>{{dataText}}</p>
+            </template>
+            <el-table-column prop="id" label="编号" width="80"></el-table-column>
+            <el-table-column prop="userid" label="员工ID" min-width="120"></el-table-column>
+            <el-table-column prop="zt" label="员工信息" width="150">
+                <template slot-scope="props">
+                    <div class="admin_state">
+                        <div style="display: flex;" v-if="!isNull(props.row.mobile)">
+                            <div>
+                                <img :src="props.row.avatar" width="40" height="40" style="border-radius: 50%; margin-right: 5px;">
+                            </div>
+                            <div style="display: flex;flex-direction: column;">
+                                <span style="padding-top: 3px;">{{props.row.mobile}}</span>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <img style="padding-right: 3px;" src="../../../../../app/template/admin/images/state1.png">未授权
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column label="客户数量" width="110" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <a style=" padding-top: 10px;display:block;" href="javascript:void(0)" @click="openKehu(scope.row)">
+                        <el-badge v-if="scope.row.customer_num > 0" :value="scope.row.customer_num" :max="99" class="item">查看</el-badge>
+                        <span v-else>查看</span>
+                    </a>
+                </template>
+            </el-table-column>
+            <el-table-column prop="zt" label="客户联系" width="130">
+                <template slot-scope="props">
+                    <div class="admin_state" v-if="props.row.is_follow == '1'">
+                        <img style="padding-right: 3px;" src="../../../../../app/template/admin/images/state2.png"><span class="admin_state1">已配置</span>
+                    </div>
+                    <div class="admin_state" v-else>
+                        <img style="padding-right: 3px;" src="../../../../../app/template/admin/images/state1.png"><span class="admin_state2">未配置</span>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="create_time_n" label="导入时间" width="220"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="160" align="center">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button size="small" @click="setuid(scope.row.userid, 1)" type="">同步</el-button>
+                        <el-button size="small " @click="setuid(scope.row.userid, 2)">详情</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        </div>
+    </div>
+    <!-- 员工详情弹窗 -->
+    <yuanginfo ref="yginfo"></yuanginfo>
+
+    <div class="modluDrawer">
+        <!-- 功能说明弹窗 -->
+        <el-dialog title="功能说明" :visible.sync="drawersm" :with-header="true" :modal-append-to-body="false" :show-close="true" width="500px">
+            <div class="gongnengsuomin">
+                <div class="gongnenTite"> 员工信息</div>
+                <div class="gongnenTexts">企业员工通过扫码授权，获取员工信息（头像、手机号等）；未授权不展示员工信息； <span class="codebtn" @click="drawershowcode">授权二维码</span></div>
+                <div class="gongnenTite"> 客户数量</div>
+                <div class="gongnenTexts">员工已添加的客户数量，可通过列表后操作‘同步’，获取最新客户信息</div>
+                <div class="gongnenTite"> 客户联系</div>
+                <div class="gongnenTexts">企业微信后台 - 客户联系 - 权限配置 - 客户联系和客户群，员工在使用范围内即表示“已授权”</div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="drawersm = false">取 消</el-button>
+                <el-button type="primary" @click="drawersm = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 授权二维码 -->
+        <el-dialog title="信息授权" :visible.sync="showcode" :with-header="true" :modal-append-to-body="false" :show-close="true" width="360px">
+            <div style="width: 320px;padding-bottom:15px;">
+                <div style="text-align: center;width: 100%; padding: 5px 0 10px 0;">请使用“企业微信”扫码授权</div>
+                <div class="admin_census">
+                    <img :src="baseUrl + 'm=yunying&c=workwx_list&a=getUrlCode&pytoken=' + pytoken" width="140" height="140">
+                </div>
+                <div class="admin_census_bd">请将此二维码发送给员工</div>
+                <div class="admin_census_bd">授权完成刷新页面即可获取最新信息</div>
+            </div>
+        </el-dialog>
+        <!--客户列表-->
+        <el-drawer title="客户列表" :visible.sync="drawerKehu" append-to-body @closed="closedKehu" size="60%">
+            <kehu :userid="detail.userid"></kehu>
+        </el-drawer>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const workUserApp = new Vue({
+        el: '#workUserApp',
+        data: function () {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                drawer: false,
+                drawersm: false,
+                direction: 'rtl',
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                total: 0,
+                keyword: '',
+                numArr: {},
+                curruid: '',
+                code_url: '',
+                showcode: false,
+                pytoken: '',
+                baseUrl: '',
+                islook: false,
+
+                detail: {},
+
+                // 客户列表
+                drawerKehu: false,
+                prevPage: 0
+            }
+        },
+        components: {
+            'yuanginfo': httpVueLoader('./component/yuanginfo.vue'),
+            'kehu': httpVueLoader('./component/qwkehu.vue'),
+        },
+        created: function () {
+            let query = getUrlParams();
+            if (query && query.keyword) {
+                this.keyword = query.keyword;
+            }
+            this.getList();
+            this.getBaseData();
+            this.pytoken = localStorage.getItem('pytoken');
+            this.baseUrl = baseUrl;
+        },
+        methods: {
+            drawershowcode() {
+                this.drawersm = false
+                this.showcode = true
+            },
+            setuid(uid, type) {
+                this.curruid = uid
+                if (type == 1) {
+                    let that = this;
+                    message.confirm('确定要同步信息？', function () {
+                        that.syncCustomer(100, '');
+                    })
+                } else {
+                    this.$refs.yginfo.time = ''
+                    this.$refs.yginfo.getinfo()
+                }
+            },
+            syncWorkUserId(limit, cursor) {
+                var that = this
+                var ii = that.$message.warning({
+                    message: '员工信息同步中，请稍候',
+                    duration: 5000
+                });
+                httpPost('m=yunying&c=workwx_list&a=syncWorkUserId', {
+                    limit: limit,
+                    cursor: cursor
+                }).then(function (result) {
+                    var res = result.data
+                    ii.close();
+                    if (res.errcode == 0) {
+                        if (res.next_cursor) {
+                            that.syncWorkUserId(limit, res.next_cursor)
+                        } else {
+                            that.$message.success('员工信息同步成功')
+                            that.getList();
+                        }
+                    } else {
+                        that.$message.error(res.errmsg ? res.errmsg : '员工信息同步失败');
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            syncCustomer(limit, cursor) {
+                var that = this
+                var ii = that.$message.warning({
+                    message: '客户信息同步中，请稍候',
+                    duration: 5000
+                });
+                if (!that.curruid) {
+                    that.$message.error('id不能为空')
+                    return false
+                }
+                httpPost('m=yunying&c=workwx_list&a=syncCustomer', {
+                    limit: limit,
+                    cursor: cursor,
+                    id: that.curruid
+                }).then(function (result) {
+                    var res = result.data
+                    ii.close();
+                    if (res.errcode == 0) {
+                        if (res.next_cursor) {
+                            that.syncCustomer(limit, res.next_cursor)
+                        } else {
+                            that.$message.success('客户信息同步成功')
+                            that.getList();
+                        }
+                    } else {
+                        that.$message.error(res.errmsg);
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            isNull(str) {
+                return !str && str !== 0 && typeof str !== "boolean" ? true : false;
+            },
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                that.loading = true;
+                httpPost('m=yunying&c=workwx_list&a=index', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total)
+                        that.code_url = res.data.code_url
+                        if (that.prevPage != that.currentPage) {
+                            that.prevPage = that.currentPage;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0) {
+                            that.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            getBaseData() {
+                let _this = this;
+                httpPost('m=yunying&c=workwx_list&&a=index_base_data', {}, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    _this.numArr = Object.freeze(res.data.numArr);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            // 打开客户列表
+            openKehu(row) {
+                this.detail = row;
+                this.drawerKehu = true;
+            },
+            closedKehu() {
+                this.getList();
+            },
+        }
+    });
+</script>
+<style scoped>
+    .admin_census_bd{width:100%;text-align:center;padding-top:10px}
+    .admin_census{width:140px;height:140px;line-height:140px;margin:0 auto;border:1px solid #eee;text-align:center;padding:10px}
+    .codebtn{font-size:14px;color:#3a7dff;cursor:pointer;font-weight:700}
+    .adminNewEarch{display:flex;align-items:center}
+    .admin_statistics{padding:0;font-size:12px;color:#647386;background:#fff;border-radius:5px;height:32px;display:flex;align-items:center}
+    .admin_statistics_s{padding-left:10px;font-size:12px;color:#647386;background:#fff;border-radius:5px;height:32px;display:flex;align-items:center}
+    .shiTopAllTips span{overflow:hidden;display:block;font-size:13px;color:#61687c;padding-bottom:5px}
+</style>
+</body>
+</html>

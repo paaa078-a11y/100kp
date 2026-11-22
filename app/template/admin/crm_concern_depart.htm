@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>后台管理 - CRM - 业务员 - 下属跟进</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <style>
+        .crm_searctime ul li{cursor: pointer;}
+        .log_img img{width: 100%; max-width: 150px; height: auto;}
+    </style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tabs_info">
+            <ul>
+                <li><a href="index.php?m=crm_concern">我的跟进</a></li>
+                <li class="curr"><a href="index.php?m=crm_concern&c=depart">下属的跟进</a></li>
+            </ul>
+        </div>
+        <div class="crmSearctimeGen">
+            <form class="layui-form" action="index.php" name="myform" method="get" id="searchForm">
+                <input type="hidden" name="m" value="crm_concern" />
+                <input type="hidden" name="c" value="depart"/>
+                <div class="crm_searctime" style="display: flex;margin-bottom: 8px;">
+                    <ul>
+                        <li data-day="0" {yun:}if $smarty.get.day==''{/yun}class='curr'{yun:}/if{/yun}>全部</li>
+                        <li data-day="1" {yun:}if $smarty.get.day==1{/yun}class='curr'{yun:}/if{/yun}> 今天 </li>
+                        <li data-day="2" {yun:}if $smarty.get.day==2{/yun}class='curr'{yun:}/if{/yun}> 昨天 </li>
+                        <li data-day="3" {yun:}if $smarty.get.day==3{/yun}class='curr'{yun:}/if{/yun}> 本周 </li>
+                        <li data-day="4" {yun:}if $smarty.get.day==4{/yun}class='curr'{yun:}/if{/yun}> 本月 </li>
+                        <li data-day="5" {yun:}if $smarty.get.day==5{/yun}class='curr'{yun:}/if{/yun}">自定义 </li>
+                    </ul>
+                    <input type="hidden" name="day" id="day" value="{yun:}$smarty.get.day{/yun}" />
+                    <div {yun:}if $smarty.get.day != 5{/yun}style="display: none;"{yun:}/if{/yun} id="timeDiv">
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" name="stime" id="stime" value="{yun:}$smarty.get.stime{/yun}" class="layui-input" placeholder="开始日期" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" autocomplete="off" name="etime" id="etime" value="{yun:}$smarty.get.etime{/yun}" class="layui-input" placeholder="结束日期" style="margin-left: 5px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {yun:}if $adminUserList{/yun}
+                <div class="layui-inline ">
+                    <div class="layui-input-inline" style="width: 174px;">
+                        <select name="crmmanager" id="crmmanager" lay-filter=''>
+                            <option value="" {yun:}if !$smarty.get.uid{/yun}selected{yun:}/if{/yun}>下属成员</option>
+                            {yun:}foreach from = $adminUserList key=key item = v{/yun}
+                            <option value="{yun:}$v.uid{/yun}" {yun:}if $smarty.get.crmmanager==$v.uid{/yun}selected{yun:}/if{/yun}>{yun:}$v.name{/yun}</option>
+                            {yun:}/foreach{/yun}
+                        </select>
+                    </div>
+                </div>
+                {yun:}/if{/yun}
+                <div class="layui-inline">
+                    <div class="layui-input-inline" style="width: 174px;margin-left: 6px;">
+                        <select name="linktype" id="linktype" lay-filter='linktype'>
+                            <option value="">跟进方式</option>
+                            {yun:}foreach from = $cache.crmdata.follow_way key=key item = v{/yun}
+                            <option value="{yun:}$v{/yun}" {yun:}if $smarty.get.linktype==$v{/yun}selected{yun:}/if{/yun}>{yun:}$cache.crmclass_name[$v]{/yun}</option>
+                            {yun:}/foreach{/yun}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" name="keyword" placeholder="请输入关键词检索" value="{yun:}$smarty.get.keyword{/yun}" class="layui-input" style="width: 174px;margin-left: 6px;" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="submit" value="搜索" class="crm_search_bth">
+                        <button type="reset" class="crm_search_bth crm_search_bth_cz" onclick="location.href='index.php?m=crm_concern&c=depart'">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="tty_table-bom">
+        <div class="table-list" style=" margin-top:10px;">
+            <div class="admin_table_border">
+                <table width="100%">
+                    <thead>
+                    <tr class="admin_table_top" align="left">
+                        <th>客户信息</th>
+                        <th>跟进结果</th>
+                        <th>是否录音</th>
+                        <th>其他信息</th>
+                        <th align="center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tableBackColorTwo" id="layer-pic">
+                    {yun:}foreach from=$rows item=v{/yun}
+                    <tr align="left">
+                        <td>
+                            <a href="javascript:;" {yun:}if in_array($v.crm_uid, $crmUidArr){/yun}onclick="iframfunct('index.php?m=crm_my_customer&c=com&id={yun:}$v.uid{/yun}', '80%');"{yun:}/if{/yun} class="admin_com_name" style="margin-bottom: 5px;">{yun:}$v.name{/yun}</a>
+                            <div class="admin_mb5" style="font-size:12px">跟进人：{yun:}$v.aname{/yun}</div>
+                            {yun:}if $v.crm_name{/yun}
+                            {yun:}if $v.crm_uid == $v.auid{/yun}
+                            <div class="admin_mb5" style="font-size:12px">业务员：{yun:}$v.crm_name{/yun}</div>
+                            {yun:}else{/yun}
+                            <div class="admin_mb5" style="font-size:12px">业务员：{yun:}$v.crm_name{/yun}<em style="color:#FF5722;">【已变更】</em></div>
+                            {yun:}/if{/yun}
+                            {yun:}else{/yun}
+                            <div class="admin_mb5" style="font-size:12px;">业务员：<em style="color:#ff002a;">【已释放】</em></div>
+                            {yun:}/if{/yun}
+                        </td>
+                        <td>
+                            <div style="line-height: 1.8; max-width: 420px; white-space: pre-line;">{yun:}$v.content{/yun}</div>
+                            <div class="log_img">
+                                {yun:}foreach from=$v.imgArr item=img {/yun}
+                                <img src="{yun:}$img{/yun}" lay-src="{yun:}$img{/yun}"/>
+                                {yun:}/foreach{/yun}
+                            </div>
+                        </td>
+                        <td>
+                            {yun:}if $v.oss_record_path{/yun}
+                            <div class="lbbox" onclick="playVoice(this)" data-id="{yun:}$v.id{/yun}" data-voice="{yun:}$v.oss_record_path{/yun}">
+                                <div class="lybf"  >
+                                    <i id="onplay_{yun:}$v.id{/yun}" class="yuyinbox_wt"></i>{yun:}$v.time_length_n{/yun}
+                                </div>
+                            </div>
+                            {yun:}else{/yun}否{yun:}/if{/yun}
+                        </td>
+                        <td style="flex-wrap: wrap;">
+                            <div class="admin_mb5" style="font-size:12px">联 系 人 ：{yun:}$v.link_man{/yun} {yun:}$v.link_tel{/yun}</div>
+                            <div class="admin_mb5" style="font-size:12px">跟进方式：{yun:}$v.type_n{/yun}</div>
+                            <div class="admin_mb5" style="font-size:12px">跟进时间：{yun:}$v.ftime_n{/yun}</div>
+                            <div class="admin_mb5" style="font-size:12px">录入时间：{yun:}$v.atime_n{/yun}</div>
+                        </td>
+                        <td align="center">
+                            <div class="operationSeries">
+                                {yun:}if in_array($v.crm_uid, $crmUidArr){/yun}
+                                <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer&c=com&id={yun:}$v.uid{/yun}', '80%');">管理</a>
+                                {yun:}/if{/yun}
+                                <a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=crm_concern&c=del&id={yun:}$v.id{/yun}');">删除</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {yun:}foreachelse{/yun}
+                    <tr align="center">
+                        <td class="ud" colspan="8">
+                            <div class="admin_notip">暂无跟进记录~</div>
+                        </td>
+                    </tr>
+                    {yun:}/foreach{/yun}
+
+                    {yun:}if $total > $config.sy_listnum {/yun}
+                    <tr>
+                        {yun:}if $pagenum==1{/yun}
+                        <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                        <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}else if $pagenum == $pages{/yun}
+                        <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}/if{/yun}
+                        <td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+                    </tr>
+                    {yun:}/if{/yun}
+                    </tbody>
+                    <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}"/>
+                </table>
+                <div id="recordvoice" class="none"></div>
+            </div>
+        </div>
+    </div>
+    <div id="show_more" style="display:none;margin:20px; white-space: pre-line;"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".crm_searctime ul li").click(function () {
+
+            $(this).addClass("curr");
+            $(this).siblings('li').removeClass("curr");
+            var day = $(this).attr('data-day');
+            $('#day').val(day);
+            if (day==5){
+                $('#timeDiv').show();
+            }else{
+                $('#timeDiv').hide();
+                $('#searchForm').submit();
+            }
+        });
+    });
+
+    var isIELowVision = false;
+    var ossUrl="{yun:}$contactOssUrl{/yun}";
+    $(document).ready(function() {
+        isIELowVision = IEVersion();
+    })
+
+    layui.use(['layer', 'laydate', 'element'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , element = layui.element
+            , $ = layui.$;
+
+        laydate.render({
+            elem: '#stime',
+            type: 'date'
+        });
+
+        laydate.render({
+            elem: '#etime',
+            type: 'date'
+        });
+
+        layer.photos({
+            photos: '#layer-pic'
+            ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+
+        form.render();
+    });
+
+    function IEVersion() {
+        //取得浏览器的userAgent字符串
+        var userAgent = navigator.userAgent;
+        //判断是否IE浏览器
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+        if (isIE) {
+            var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+            reIE.test(userAgent);
+            var fIEVersion = parseFloat(RegExp["$1"]);
+            if (fIEVersion < 10) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+    //播放语音
+    function playVoice(obj) {
+        var chatid = $(obj).attr('data-id');
+        var voiceurl = ossUrl + $(obj).attr('data-voice');
+        var onplay = false;
+        if ($('.yuyinbox_onplay')) {
+            $('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+        }
+        if (isIELowVision) {
+            var head = document.head || document.getElementsByTagName('head')[0];
+            var bgsound = document.getElementsByTagName('bgsound')[0];
+            if (!bgsound) {
+                var player = document.createElement('bgsound');
+                head.appendChild(player);
+                player.src = voiceurl;
+                onplay = true;
+            }else{
+                if (bgsound.src == '') {
+                    bgsound.src = voiceurl;
+                    onplay = true;
+                } else {
+                    bgsound.src = '';
+                }
+            }
+        } else {
+            var audio = $("#player")[0];
+            if(audio && !audio.paused && audio.src==voiceurl){
+                audio.pause();
+                audio.currentTime = 0;
+            }else{
+                $("#recordvoice").html("")
+                var aud = $('<audio id="player"  src="' + voiceurl + '" hidden></audio>')
+                $("#recordvoice").html(aud)
+                //获取当前audio
+                audio = aud[0];
+                audio.play(); // 播放
+                onplay = true;
+            }
+            audio.addEventListener("play", function() { //开始播放时触发
+                //console.log('开始播放');
+            });
+            audio.addEventListener("pause", function() { // 暂停时会触发，当播放完一首歌曲时也会触发
+                //console.log('播放暂停');
+            })
+            audio.addEventListener("ended", function() {
+                //console.log('播放结束');
+                $('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+            }, false);
+        }
+        if (onplay) {
+            $('#onplay_' + chatid).attr('class', 'yuyinbox_onplay');
+        } else {
+            $('#onplay_' + chatid).attr('class', 'yuyinbox_wt');
+        }
+    }
+</script>
+{yun:}include file="$adminstyle/crm_public.htm"{/yun}
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</body>
+</html>

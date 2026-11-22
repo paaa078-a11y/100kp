@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <xcxother style="margin-top:10px;" ref="other"></xcxother>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'other'
+                }
+            },
+            components: {
+                'xcxother': httpVueLoader('./component/xcxother.vue'),
+            },
+            created: function(){
+                setTimeout(() => {
+                    this.$refs.other.getinfo();
+                }, 500)
+            },
+            methods: {
+
+            }
+        });
+    </script>
+</body>
+
+</html>

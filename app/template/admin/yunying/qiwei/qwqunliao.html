@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="workGroupApp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachInpt">
+            <el-input v-model="keyword" size="small" placeholder="请输入要搜索的群聊名称" clearable></el-input>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+        </div>
+        <div class="moduleSeachButn" style="display: flex;align-items: center;">
+            <el-button type="primary" icon="el-icon-document-add" size="mini" @click="syncGroupChat('', 1, 1)">同步企微</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%" ref="multipleTable" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+            <template slot="empty">
+                <p>{{dataText}}</p>
+            </template>
+            <el-table-column prop="name" label="群聊名称" min-width="220"></el-table-column>
+            <el-table-column prop="owner_name" label="群主" width="140"></el-table-column>
+            <el-table-column prop="number" label="群人数" width="120"></el-table-column>
+            <el-table-column prop="real_num" label="留存人数" width="120"></el-table-column>
+            <el-table-column prop="new_num" label="今日新增" width="120"></el-table-column>
+            <el-table-column prop="del_num" label="今日退群" width="120"></el-table-column>
+            <el-table-column prop="reg_num" label="注册用户" width="120"></el-table-column>
+            <el-table-column prop="exp_num" label="简历数" width="120"></el-table-column>
+            <el-table-column prop="time_n" label="创建时间" width="160"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button type=" " size="small" @click="setcurrchatid(scope.row.chat_id, 1)">详情</el-button>
+                        <el-button type=" " size="small" @click="setcurrchatid(scope.row.chat_id, 2)">同步</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        </div>
+    </div>
+    <!-- 群聊详情弹窗 -->
+    <chatinfo ref="chatinfo"></chatinfo>
+</div>
+<script>
+    const workGroupApp = new Vue({
+        el: '#workGroupApp',
+        data: function () {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                total: 0,
+                keyword: '',
+                prevPage: 0
+            }
+        },
+        components: {
+            'chatinfo': httpVueLoader('./component/chatinfo.vue'),
+        },
+        created: function () {
+            this.getList()
+        },
+        methods: {
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                that.loading = true;
+                httpPost('m=yunying&c=workwx_group&a=index', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total);
+                        if (that.prevPage != that.currentPage) {
+                            that.prevPage = that.currentPage;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0) {
+                            that.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            // 设置当前操作的群聊id并进行详情或同步操作
+            setcurrchatid(cid, type) {
+                this.$refs.chatinfo.chatid = cid
+                if (type == 1) {
+                    this.$refs.chatinfo.getinfo()
+                } else {
+                    this.$refs.chatinfo.syncGroupNotice(2)
+                }
+            },
+            syncGroupChat(cursor, page, limit) {
+                var that = this
+                var ii = that.$message.warning({
+                    message: '信息同步中，请稍候。。。',
+                    duration: 5000
+                });
+                httpPost('m=yunying&c=workwx_group&a=sync', {
+                    cursor: cursor,
+                    page: page,
+                    limit: limit
+                }).then(function (result) {
+                    var res = result.data
+                    ii.close();
+                    if (res.errcode == 0) {
+                        if (res.cursor || parseInt(res.page) > parseInt(page)) {
+                            that.syncGroupChat(res.cursor, res.page, limit)
+                        } else {
+                            that.$message.success('客户群聊列表信息同步成功')
+                            that.getList();
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

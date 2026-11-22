@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * $Author ：PHPYUN开发团队
+ *
+ * 官网: http://www.phpyun.com
+ *
+ * 版权所有 2009-2022 宿迁鑫潮信息技术有限公司，并保留所有权利。
+ *
+ * 软件声明：未经授权前提下，不得用于商业运营、二次开发以及任何形式的再次发布。
+ */
+
+class recharge_controller extends adminCommon
+{
+
+    function index_action()
+    {
+
+        if (isset($_POST['insert'])) {
+
+            $OrderM     =   $this->MODEL('companyorder');
+
+            $userarr    =   str_replace('，', ',', trim($_POST['userarr']));
+            $userarr    =   @explode(',', trim($userarr));
+
+            $post       =   array(
+                'fs'        =>  intval($_POST['fs']),
+                'integral' =>  trim($_POST['integral']),
+                'order_price'   =>   $_POST['order_price'],
+                'remark'    =>  trim($_POST['remark'])
+            );
+
+            $return     =   $OrderM->PayMember($userarr, $post);
+
+            $this->ACT_layer_msg($return['msg'], $return['errcode'], $_SERVER['HTTP_REFERER'], 2, 1);
+        } else {
+
+            $RatingM    =   $this->MODEL('rating');
+            $rating_list=   $RatingM->getList(array('category' => 1), array('field' => 'id,name,service_price,service_time'));
+            $this->yunset("rating_list", $rating_list);
+
+            $service_list = $RatingM	->	getComServiceList(array('display'=>'1','orderby'=>'sort,desc'));
+            $this->yunset("service_list", $service_list);
+        }
+
+        $this->yuntpl(array('admin/admin_recharge'));
+    }
+
+    /**
+     * 后台开通会员
+     */
+    function comvip_action()
+    {
+        $OrderM =   $this->MODEL('companyorder');
+
+        $post   =   array(
+            
+            'username'  =>  trim($_POST['username']),
+            'comname'   =>  trim($_POST['comname']),
+            'ratingid'  =>  intval($_POST['ratingid']),
+            'vipprice'  =>  $_POST['vipprice'],
+            'leijia'    =>  intval($_POST['leijia']),
+            'remark'    =>  $_POST['remark'],
+            'uid'       =>  intval($_POST['uid']),
+            'vipetime'       =>  $_POST['vipetime']?$_POST['vipetime']:'不限',
+        );
+        
+        $return =   $OrderM->ComVip($post);
+        $this->ACT_layer_msg($return['msg'], $return['errcode'], $_SERVER['HTTP_REFERER'], 2, 1);
+    }
+    function comservice_action(){
+        $OrderM =   $this->MODEL('companyorder');
+
+        $post   =   array(
+
+            'username'  =>  trim($_POST['username2']),
+            'comname'   =>  trim($_POST['comname2']),
+            'serviceid'  =>  intval($_POST['serviceid']),
+            'service_package'=>intval($_POST['service_package']),
+            'service_price'=>$_POST['service_price'],
+            'uid'       =>  intval($_POST['uid'])
+        );
+
+        $return =   $OrderM->comservice($post);
+        $this->ACT_layer_msg($return['msg'], $return['errcode'], $_SERVER['HTTP_REFERER'], 2, 1);
+    }
+    function getservice_action(){
+        $ratingM	=	$this	->	MODEL('rating');
+        $info		=	$ratingM	->	getComSerDetailList(array('type'=>$_POST['type'],'orderby'=>'sort,desc'));
+        echo json_encode($info);
+        die;
+    }
+    function searchname_action()
+    {
+
+        $name   =   $this->post_trim($_POST['username']);
+        $OrderM =   $this->MODEL('companyorder');
+        $return =   $OrderM->SearchName($name);
+        echo json_encode($return);
+        die;
+    }
+
+    function searchcom_action()
+    {
+
+        $name   =   $this->post_trim($_POST['comname']);
+        $OrderM =   $this->MODEL('companyorder');
+        $return =   $OrderM->SearchCom($name);
+        echo json_encode($return);
+        die;
+    }
+}
+
+?>

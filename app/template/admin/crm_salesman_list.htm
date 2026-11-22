@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>后台管理 - CRM - 管理员 - 业务员管理</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<style>
+		.shiTopAllTips span{overflow: hidden;display: block;font-size: 13px;color: #61687c;padding-bottom: 5px;}
+	</style>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+		<div class="admin_new_search_box">
+			<form action="index.php" name="myform" method="get">
+				<div>
+					<input name="m" value="crm_salesman_list" type="hidden"/>
+					<div class="admin_Filter_text formselect" did='dkeytype'>
+						<input type="button" {yun:}if $get_type.keytype==''||$get_type.keytype=='1'{/yun} value="业务员"  {yun:}elseif $get_type.keytype=='2'{/yun} value="工号"{yun:}/if{/yun} class="admin_Filter_but" id="bkeytype">
+						<input type="hidden" name="type" id="keytype" {yun:}if $get_type.keytype==''||$get_type.keytype=='1'{/yun} value="1"  {yun:}elseif $get_type.keytype=='2'{/yun} value="2" {yun:}/if{/yun}/>
+						<div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+							<ul>
+								<li><a href="javascript:void(0)" onClick="formselect('1','keytype','业务员')">业务员</a></li>
+								<li><a href="javascript:void(0)" onClick="formselect('2','keytype','工号')">工号</a></li>
+							</ul>
+						</div>
+					</div>
+					<input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword'class="admin_new_text">
+					<input type="submit" value="查询" name='search'  class="admin_new_bth" style="margin-left: 10px;">
+				</div>
+				<div class="adminNewEarch" style="float: right;">
+					<div class="admin_statistics">
+						<div class="addEnterp">
+							<a href="index.php?m=admin_user&c=add">添加业务员</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="tty-tishi_top">
+		<div style="margin-top: 10px;overflow: hidden;padding: 20px 0 20px 20px;">
+			<div class="shiTopAllTips">
+				<span><em style="font-weight: bold">待&nbsp;跟&nbsp;进&nbsp;：</em> 所属客户尚未添加跟进记录的客户数量</span>
+				<span><em style="font-weight: bold">待&nbsp;回&nbsp;访&nbsp;：</em> 针对所属客户有计划性任务的存在的客户数量</span>
+				<span><em style="font-weight: bold">员工离职：</em> 设置业务员离职，该业务员账号将无法再次登录使用；离职选择释放客户，该业务员所有客户自动释放到客户公海</span>
+				<span><em style="font-weight: bold">客户保护：</em> 开启客户保护，业务员所属客户不受释放规则控制，永久保留</span>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="tty_table-bom">
+		<iframe id="supportiframe"  name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+		<form class="layui-form" action="index.php" name="myform" method="post" id='myform' target="supportiframe">
+			<input type="hidden" name="pytoken"  id='pytoken' value="{yun:}$pytoken{/yun}">
+			<input name="m" value="crm_salesman_list" type="hidden"/>
+			<div class="table-list" style="color:#898989; margin-top:10px;">
+				<div class="admin_table_border">
+					<table width="100%">
+						<thead>
+						<tr class="admin_table_top" align="left">
+							<th>工号</th>
+							<th>业务员</th>
+							<th>待跟进</th>
+							<th>已跟进</th>
+							<th>待回访</th>
+							<th>签单数</th>
+							<th>签单金额</th>
+							<th>所属部门</th>
+							<th>客户保护</th>
+							<th>在职/离职</th>
+							<th align="center" width="210">操作</th>
+						</tr>
+						</thead>
+
+						<tbody class="tableBackColorTwo">
+						{yun:}foreach item=v key=key from=$userrows{/yun}
+						<tr align="left" {yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.uid{/yun}">
+							<td>{yun:}$v.uid{/yun}</td>
+							<td><a class="admin_com_name">{yun:}$v.name{/yun}</a></td>
+							<td>{yun:}$v.concernNum{/yun}</td>
+							<td>{yun:}$v.concernedNum{/yun}</td>
+							<td>{yun:}$v.returnVisitNum{/yun}</td>
+							<td>{yun:}$v.orderNum{/yun}</td>
+							<td>{yun:}$v.orderPrice{/yun}</td>
+							<td>{yun:}if $v.departname{/yun}{yun:}$v.departname{/yun}{yun:}else{/yun} -- {yun:}/if{/yun}</td>
+							<td><input id="crm_kh_switch_{yun:}$v.uid{/yun}" type="checkbox" {yun:}if $v.crm_kh == 1{/yun}checked{yun:}/if{/yun} lay-skin="switch" lay-text="开启|关闭" lay-filter="crm_kh_switch" value="{yun:}$v.uid{/yun}"></td>
+							<td><input id="status_switch_{yun:}$v.uid{/yun}" type="checkbox" {yun:}if $v.status == 1{/yun}checked{yun:}/if{/yun} lay-skin="switch" lay-text="在职|离职" lay-filter="status_switch" value="{yun:}$v.uid{/yun}"></td>
+							<td align="center">
+								<div class="operatioScipot">
+									<a href="index.php?m=admin_user&c=add&uid={yun:}$v.uid{/yun}">修改信息</a>
+									<a {yun:}if $v.cNum gt 0 {/yun} href="index.php?m=crm_salesman_list&c=customer_list&auid={yun:}$v.uid{/yun}" {yun:}else{/yun} href="javascript:void(0);" onclick="layer.msg('暂无分配客户');" {yun:}/if{/yun}> 客户列表</a>
+									<a href="index.php?m=crm_salesman_list&c=assign_company&uid={yun:}$v.uid{/yun}" pid="{yun:}$v.uid{/yun}" status="{yun:}$v.status{/yun}" );" >分配客户</a>
+									<a {yun:}if $v.concernNum gt 0{/yun} href="index.php?m=crm_salesman_list&c=shift_company&uid={yun:}$v.uid{/yun}"  {yun:}else{/yun}  href="javascript:void(0);" onclick="layer.msg('没有可转移客户');" {yun:}/if{/yun} >转移客户</a>
+									<a {yun:}if $v.concernedNum gt 0{/yun} href="index.php?m=crm_concernall&uid={yun:}$v.uid{/yun}" {yun:}else{/yun} href="javascript:void(0);" onclick="layer.msg('暂无跟进记录',2,8);" {yun:}/if{/yun}>跟进记录</a>
+									<a href="index.php?m=crm_index&c=log&uid={yun:}$v.uid{/yun}">操作记录</a>
+								</div>
+							</td>
+						</tr>
+						{yun:}/foreach{/yun}
+						{yun:}if $total > $config.sy_listnum {/yun}
+						<tr>
+							{yun:}if $pagenum==1{/yun}
+							<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+							<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum == $pages{/yun}
+							<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}/if{/yun}
+							<td colspan="8" class="digg">{yun:}$pagenav{/yun}</td>
+						</tr>
+						{yun:}/if{/yun}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+	var form = null;
+	// 设置离职、在职
+	function setStatus(uid, status, release){
+		var pytoken = $('#pytoken').val();
+		$.post('index.php?m=crm_salesman_list&c=status',{uid:uid,status:status,release:release,pytoken:pytoken},function(data){
+			var dataJson = eval("(" + data + ")");
+			if(dataJson.st=='9'){
+				parent.layer.msg(dataJson.msg, 2, 9);
+			}else{
+				parent.layer.msg(dataJson.msg, 2, 8);
+			}
+		})
+	}
+	layui.use([ 'layer', 'form' ], function() {
+		form = layui.form;
+		var layer = layui.layer,
+				$ = layui.$;
+		form.on('checkbox(allCrm)', function (data) {
+			$("input[name='del[]']").each(function () {
+				this.checked = data.elem.checked;
+			});
+			form.render('checkbox');
+		});
+		form.on('switch(status_switch)', function(data){
+			var uid = data.value,
+					status = data.elem.checked ? 1: 2;
+			if (status == 2) {// 设置成离职，询问是否要保留客户
+				//$("input[name=uid]").val(uid);
+				layer.open({
+					content: '<form class="layui-form"><table cellspacing="1" cellpadding="1" class="admin_examine_table">\n' +
+							'\t\t\t\t<tr>\n' +
+							'\t\t\t\t\t<th width="80">释放客户：</th>\n' +
+							'\t\t\t\t\t<td align="left">\n' +
+							'\t\t\t\t\t\t<div class="layui-input-block">\n' +
+							'\t\t\t\t\t\t\t<input name="release" id="release1" value="1" title="释放" checked type="radio"/>\n' +
+							'\t\t\t\t\t\t\t<input name="release" id="release0" value="0" title="保留" type="radio"/>\n' +
+							'\t\t\t\t\t\t</div>\n' +
+							'\t\t\t\t\t</td>\n' +
+							'\t\t\t\t</tr>\n'+
+							'\t\t\t</table></form>',
+					btn: ['确认', '取消'],
+					btnAlign: 'c',
+					yes: function(index, layero){
+						setStatus(uid, status, $("input[name=release]:checked").val())
+						layer.closeAll();
+					},
+					btn2: function(index, layero){
+						$('#status_switch_'+uid).attr('checked','checked');
+						form.render();
+					},
+					cancel: function(){
+						$('#status_switch_'+uid).attr('checked','checked');
+						form.render();
+					}
+				});
+				form.render();
+			} else {
+				setStatus(uid, status, 0);
+			}
+		});
+		form.on('switch(crm_kh_switch)', function(data){
+			var uid = data.value,
+					crm_kh = data.elem.checked ? 1: 2;
+			setCrmKh(uid, crm_kh);
+		});
+	});
+	function setCrmKh(uid, crmKh) {
+		var pytoken = $('#pytoken').val();
+		$.post('index.php?m=crm_salesman_list&c=crmKh', {
+			uid: uid,
+			crm_kh: crmKh,
+			pytoken: pytoken
+		}, function (data) {
+			var dataJson = eval("(" + data + ")");
+			if (dataJson.st == '9') {
+				parent.layer.msg(dataJson.msg, 2, 9);
+			} else {
+				parent.layer.msg(dataJson.msg, 2, 8);
+			}
+		})
+	}
+</script>
+</body>
+</html>

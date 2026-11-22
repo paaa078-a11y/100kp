@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../header.js"></script>
+    <script src="../../httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <!--防止页面显示模板标签-->
+    <link rel="stylesheet" href="../../../admin/js/cloak.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+
+    <script src="../../../admin/js/socketfun.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="crmDataBoardApp" class="moduleDome dataBoarSubject" v-cloak v-if="islook">
+        <div class="dataBoarkehu_box">
+            <div class="dataBoarkehu dataBoarkell" style="width: calc(70% - 24px - 6px);">
+                <div class="dataBoarsTite">
+                    <span>数据汇总</span>
+                </div>
+                <ul>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_all')">
+                            <span>总客户数</span>
+                            <b>{{dataArr.allCustomerNum}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_gh')">
+                            <span>公海客户</span>
+                            <b>{{dataArr.pubCustomerNum}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_xs')">
+                            <span>线索数</span>
+                            <b>{{dataArr.xsNum}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_cj')">
+                            <span>成交客户</span>
+                            <b>{{dataArr.cjNum}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_gq')">
+                            <span>过期客户</span>
+                            <b>{{dataArr.doneNum}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne" @click="customerCtl('data_dxf')">
+                            <span>待续费客户</span>
+                            <b>{{dataArr.willDoneNum}}</b>
+                        </div>
+                    </li>
+                    <!-- <li>
+                        <div class="dataBokehuOne">
+                            <span>成交总额</span>
+                            <b>{{dataArr.dealAmount}}</b>
+                        </div>
+                    </li> -->
+                </ul>
+            </div>
+            <div class="dataBoarkehu" style="width: calc(30% - 24px - 6px);">
+                <div class="dataBoarsTite">
+                    <span>今日概况</span>
+                </div>
+                <ul>
+                    <li>
+                        <div class="dataBokehuOne">
+                            <span>今日新增</span>
+                            <b>{{dataArr.newNum}}</b>
+                        </div>
+                    </li>
+                    <!-- <li>
+                        <div class="dataBokehuOne">
+                            <span>今日成交</span>
+                            <b>{{dataArr.dealNew}}</b>
+                        </div>
+                    </li> -->
+                    <li>
+                        <div class="dataBokehuOne">
+                            <span>今日跟进</span>
+                            <b>{{dataArr.newFollow}}</b>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dataBokehuOne">
+                            <span>今日通话</span>
+                            <b>{{dataArr.newCall}}</b>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="workjobriKehu dataBoarJindu">
+            <div class="dataBoarsTite">
+                <span>待跟进汇总</span>
+            </div>
+            <div class="workriKehuCont">
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('jxgj')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>急需跟进</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.jxgj_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai1.png" alt="">
+                    </div>
+                </div>
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('gyx')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>高意向客户</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.gyx_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai2.png" alt="">
+                    </div>
+                </div>
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('hy')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>活跃客户</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.hy_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai3.png" alt="">
+                    </div>
+                </div>
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('gq')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>过期客户</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.dq_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai4.png" alt="">
+                    </div>
+                </div>
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('qz')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>潜在客户</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.qz_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai5.png" alt="">
+                    </div>
+                </div>
+                <div class="workriKehuList workriKehuSuxan" @click="customerCtl('dxf')">
+                    <div>
+                        <div class="workriKehuTite">
+                            <span>将过期用户</span>
+                        </div>
+                        <div class="workriKehuNum">
+                            <span>{{dataArr.gj_dxf_num}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="../../images/imgoai6.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dataBoarBaobiao xiaolvBaoConts">
+            <div class="dataBoarTites">
+                <div class="dataBoarMics">
+                    <span>效率报表</span>
+                </div>
+                <div class="dataBoarFrom">
+                    <div class="guiDontaDays" style="cursor: pointer;">
+                        <span @click="doYesterday" :class="isyesterday == '1' ? 'ontaDayCur' : ''">昨日</span>
+                    </div>
+                    <div class="dataBoaInt">
+                        <el-date-picker v-model="ymd" value-format="yyyy-MM-dd" size="small" placeholder="选择日期">
+                        </el-date-picker>
+                    </div>
+                    <div class="dataBoaInt">
+                        <el-button icon="el-icon-search" size="mini" type="primary" @click="getXlData">查询</el-button>
+                    </div>
+                </div>
+            </div>
+            <div class="dataBoarTables">
+                <el-table :data="tableDataXl" border :header-cell-style="{ background: '#f5f7fa', color: '#606266' }" style="width: 100%" height="100%">
+                    <el-table-column label="头像" width="80">
+                        <template slot-scope="scope">
+                            <div class="dataBoarTouxia">
+                                <el-image :src="scope.row.photo"></el-image>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="业务员" min-width="120">
+                    </el-table-column>
+                    <el-table-column label="完成进度" width="80">
+                        <template slot-scope="scope">
+                            <div class="dataBoarGress">
+                                <el-popover placement="right" width="260" trigger="hover">
+                                    <div class="jindubBaoDomes">
+                                        <div class="jindubDomeTite">
+                                            <span>{{scope.row.name}}</span>
+                                        </div>
+                                        <div class="jindubDomeinfo">
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">通话量</span>
+                                                <span class="spantwo">{{scope.row.total_call_num}}/{{scope.row.target_call_num ? scope.row.target_call_num : 0}}</span>
+                                                <span class="spanthre">{{scope.row.call_num_rate}}%</span>
+                                            </div>
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">有效通话</span>
+                                                <span class="spantwo">{{scope.row.yx_call_num}}/{{scope.row.total_call_num}}</span>
+                                                <span class="spanthre">{{scope.row.yx_rate}}%</span>
+                                            </div>
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">跟进量</span>
+                                                <span class="spantwo">{{scope.row.follow_num}}/{{scope.row.target_follow_num}}</span>
+                                                <span class="spanthre">{{scope.row.follow_num_rate}}%</span>
+                                            </div>
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">拓新量</span>
+                                                <span class="spantwo">{{scope.row.new_num}}/{{scope.row.target_tuoxin_num}}</span>
+                                                <span class="spanthre">{{scope.row.new_num_rate}}%</span>
+                                            </div>
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">成交额(元)</span>
+                                                <span class="spantwo">{{scope.row.price_num}}/{{scope.row.target_deal_num}}</span>
+                                                <span class="spanthre">{{scope.row.price_num_rate}}%</span>
+                                            </div>
+                                            <div class="jindubDomeLieba">
+                                                <span class="spanone">新增岗位</span>
+                                                <span class="spantwo">{{scope.row.job_num}}个</span>
+                                                <span class="spanthre"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div slot="reference" >
+                                        <el-progress type="circle" :percentage="scope.row.avg_rate" :text-color="scope.row.avg_rate_color_val" :color="scope.row.avg_rate_color_val" :width="45" :stroke-width="5"></el-progress>
+                                    </div>
+                                </el-popover>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="通话量" width="110">
+                        <template slot-scope="scope">
+                            <div class="dataBoarTexts">
+                                <b>{{scope.row.total_call_num}}/{{scope.row.target_call_num ? scope.row.target_call_num : 0}}</b>
+                                <span :class="scope.row.call_num_color">{{scope.row.call_num_rate}}%</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="跟进量" width="110">
+                        <template slot-scope="scope">
+                            <div class="dataBoarTexts">
+                                <b>{{scope.row.follow_num}}/{{scope.row.target_follow_num}}</b>
+                                <span :class="scope.row.follow_num_color">{{scope.row.follow_num_rate}}%</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="拓新量" width="110">
+                        <template slot-scope="scope">
+                            <div class="dataBoarTexts">
+                                <b>{{scope.row.new_num}}/{{scope.row.target_tuoxin_num}}</b>
+                                <span :class="scope.row.new_num_color">{{scope.row.new_num_rate}}%</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="logintime" label="当天首次登录" min-width="160">
+                    </el-table-column>
+                    <el-table-column prop="hot_index" label="活跃指数" width="110">
+                    </el-table-column>
+                    <el-table-column prop="kx_index" label="空闲指数" width="110">
+                    </el-table-column>
+                    <el-table-column prop="add_num" label="最大空闲" min-width="150">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.kx_dis ? scope.row.kx_dis + 'h' : ''}} {{scope.row.kx_range}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="150">
+                        <template slot-scope="scope">
+                            <div class="dataBoarCaozuo">
+                                <el-button size="mini" type="text" @click="dtl(scope.row.uid)">详情图表</el-button>
+                                <el-button size="mini" type="text" @click="gjshow(scope.row.uid)">轨迹动态</el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="dataBoarBaobiao">
+            <div class="dataBoarTites">
+                <div class="dataBoarMics">
+                    <el-tooltip class="item" effect="dark" content="当剩余名额为负数时，表示已超出限定客户数量" placement="right">
+                        <span>业务报表 <i class="el-icon-info"></i></span>
+                    </el-tooltip>
+                </div>
+                <div class="dataBoarFrom">
+                    <div class="dataBoaInt">
+                        <el-date-picker v-model="ym" value-format="yyyy-MM" size="small" type="month" placeholder="选择月份">
+                        </el-date-picker>
+                    </div>
+                    <div class="dataBoaInt">
+                        <el-button icon="el-icon-search" size="mini" type="primary" @click="getYwData">查询</el-button>
+                    </div>
+                </div>
+            </div>
+            <div class="dataBoarTables">
+                <el-table :data="tableDataYw" border :header-cell-style="{ background: '#f5f7fa', color: '#606266' }" style="width: 100%" height="100%">
+                    <el-table-column prop="name" label="业务员"></el-table-column>
+                    <el-table-column prop="kh_num" label="客户总数"></el-table-column>
+                    <el-table-column prop="cj_num" label="成交客户"></el-table-column>
+                    <el-table-column prop="zt_num" label="暂停客户"></el-table-column>
+                    <el-table-column prop="dq_num" label="到期客户"></el-table-column>
+                    <el-table-column prop="ty_num" label="体验客户"></el-table-column>
+                    <el-table-column prop="follow_num" label="本月跟进"></el-table-column>
+                    <el-table-column prop="total_call_minutes" label="本月通话(分钟)"></el-table-column>
+                    <el-table-column prop="yx_call_minutes" label="有效通话(分钟)"></el-table-column>
+                    <el-table-column prop="add_num" label="本月新增"></el-table-column>
+                    <el-table-column prop="new_num" label="拓新量"></el-table-column>
+                    <el-table-column prop="job_num" label="新增岗位"></el-table-column>
+                    <el-table-column prop="sy_num" label="剩余客户"></el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <!-- 弹窗 -->
+        <div class="modluDrawer">
+            <el-drawer title="详情图表" :visible.sync="chatdrawer" append-to-body size="80%">
+                <showchart ref="showchart" :cuid="uid" :searchday="ymd"></showchart>
+            </el-drawer>
+        </div>
+        <div class="modluDrawer">
+            <el-drawer title="轨迹动态" :visible.sync="gjdrawer" append-to-body size="750px">
+                <guijitais ref="showgj" :cuid="uid" :searchtime="ymd"></guijitais>
+            </el-drawer>
+        </div>
+        <!--客户列表-->
+        <div class="modluDrawer">
+            <el-drawer :title="cusTit" :visible.sync="customerShow" :modal-append-to-body="false" append-to-body :show-close="true" :with-header="true" size="90%">
+                <customer-list :simple="true" :page_type="'all'" :other_params="crmParams"></customer-list>
+            </el-drawer>
+        </div>
+        <!--权益提醒-->
+        <div class="modluDrawer">
+            <el-drawer title="权益提醒" :visible.sync="noticeShow" :modal-append-to-body="false" append-to-body :show-close="true" :with-header="true" size="80%">
+                <notice v-if="noticeShow" :all="1"></notice>
+            </el-drawer>
+        </div>
+    </div>
+    <script>
+    const crmDataBoardApp = new Vue({
+        el: '#crmDataBoardApp',
+        data: function() {
+            return {
+                islook: false,
+                yesterday: '',
+                dataArr: {
+                    allCustomerNum: 0,
+                    newNum: 0,
+                    newNumRate: '-',
+                    pubCustomerNum: 0,
+                    dealAmount: 0,
+                    dealNew: 0,
+                    dealNewRate: '-',
+                    newFollow: 0,
+                    newFollowRate: '-',
+                    newCall: 0,
+                    newCallRate: '-',
+                    noLogin: 0,
+                    willDoneNum: 0,
+                    recentFollow: 0,
+                    noFollow: 0,
+                    ratingNum: 0,
+                    jxgj_num: 0,
+                    gyx_num: 0,
+                    hy_num: 0,
+                    dq_num: 0,
+                    qz_num: 0,
+                    gj_dxf_num: 0,
+                    xsNum: 0,
+                    cjNum: 0,
+                },
+                cusTit: '',
+                customerShow: false,
+                crmParams: {},
+                noticeShow: false,
+                ym: '',
+                ymd: '',
+                uid: '',
+                chatdrawer: false,
+                gjdrawer: false,
+                tableDataYw: [],
+                tableDataXl: []
+            }
+        },
+        components: {
+            'showchart': httpVueLoader('./component/showchat.vue'),
+            'guijitais': httpVueLoader('./component/guijitais.vue'),
+            'customer-list': httpVueLoader('../component/customerList.vue'),
+            'notice': httpVueLoader('../component/notice.vue'),
+        },
+        created() {
+            var that = this
+            this.islook = false
+            this.getCrmData()
+            const date = new Date();
+            var year = date.getFullYear()
+            var month = (date.getMonth() + 1) >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
+            // var day = date.getDate()
+            this.ym = year + '-' + month
+            this.ymd = formatDate(date)
+            setTimeout(function () {
+                that.getXlData()
+            }, 500);
+            setTimeout(function () {
+                that.getYwData()
+            }, 500);
+            this.yesterday = formatDate(new Date(date.getTime() - 24 * 3600 * 1000))
+        },
+        computed: {
+            isyesterday: function(){
+                if (this.ymd != '' && this.ymd == this.yesterday) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
+        },
+        methods: {
+            doYesterday: function(){
+                this.ymd = this.yesterday
+                this.getXlData()
+            },
+            gjshow: function(uid) {
+                this.gjdrawer = true
+                this.uid = uid
+                this.$nextTick(function() {
+                    if (this.$refs.showgj) {
+                        this.$refs.showgj.time = this.ymd
+                        this.$refs.showgj.currentPage = 1
+                        this.$refs.showgj.getList()
+                    }
+                })
+            },
+            dtl: function(uid) {
+                this.chatdrawer = true
+                this.uid = uid
+                this.$nextTick(function() {
+                    if (this.$refs.showchart) {
+                        this.$refs.showchart.getChatData()
+                    }
+                })
+            },
+            showNotice: function() {
+                this.noticeShow = true;
+            },
+            // 数据汇总、进度提醒
+            getCrmData() {
+                var that = this;
+                httpPost('m=crm&c=dataBoard&a=getCrmDataV2', { rand: Math.random() }).then(function(res) {
+                    let data = res.data.data;
+                    that.dataArr = data;
+                    that.islook = true
+                }).catch(function(error) {
+                    console.log(error);
+                })
+            },
+            // 业务报表
+            getYwData() {
+                var that = this;
+                httpPost('m=crm&c=dataBoard&a=getYwData', { y_m: that.ym }).then(function(res) {
+                    let data = res.data.data;
+                    that.tableDataYw = data;
+                }).catch(function(error) {
+                    console.log(error);
+                })
+            },
+            // 效率报表
+            getXlData() {
+                var that = this;
+                httpPost('m=crm&c=dataBoard&a=getXlData', { y_m_d: that.ymd }).then(function(res) {
+                    let data = res.data.data;
+                    that.tableDataXl = data;
+                }).catch(function(error) {
+                    console.log(error);
+                })
+            },
+            customerCtl: function(type) {
+                this.crmParams = {}
+                this.crmParams.type = type
+                if (type == 'jxgj') {
+                    this.cusTit = '急需跟进'
+                } else if (type == 'gyx') {
+                    this.cusTit = '高意向客户'
+                } else if (type == 'hy') {
+                    this.cusTit = '活跃客户'
+                } else if (type == 'gq') {
+                    this.cusTit = '过期客户'
+                } else if (type == 'qz') {
+                    this.cusTit = '潜在客户'
+                } else if (type == 'dxf') {
+                    this.cusTit = '将过期用户'
+                } else if (type == 'data_all') {
+                    this.crmParams.type = ''
+                    this.cusTit = '总客户数'
+                } else if (type == 'data_gh') {
+                    this.cusTit = '公海客户'
+                } else if (type == 'data_xs') {
+                    this.cusTit = '线索数'
+                } else if (type == 'data_cj') {
+                    this.cusTit = '成交客户'
+                } else if (type == 'data_gq') {
+                    this.cusTit = '过期客户'
+                } else if (type == 'data_dxf') {
+                    this.cusTit = '待续费客户'
+                }
+                this.customerShow = true
+            },
+        }
+    });
+    </script>
+    <style scoped>
+        .rate_green{
+            color: #53C590;background: rgba(83, 197, 144, 0.08)
+        }
+        .rate_orange{
+            color: #FBBA61;background: rgba(251, 186, 97, 0.08)
+        }
+        .rate_red{
+            color: #EC5F5F;background: rgba(236, 95, 95, 0.08)
+        }
+    </style>
+</body>
+
+</html>

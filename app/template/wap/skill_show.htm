@@ -1,0 +1,173 @@
+{yun:}include file="$wapstyle/header_cont.htm"{/yun}
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/skill.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+    <section class=" ">
+        <!-- 培训详情--top -->
+        <div class="trainTopAll">
+            <div class="trainTopImg">
+                <img src="{yun:}$res.cover_n{/yun}" alt="">
+            </div>
+            <div class="trainTopInfo">
+                <div class="trainTopTit">
+                    <h3>{yun:}$res.title{/yun}</h3>
+                    {yun:}if $res.welfare{/yun}
+                    <div class="trainTopTips">
+                        {yun:}foreach from=$res.welfare_n key=wkey item=wval{/yun}
+                        <span>{yun:}$wval{/yun}</span>
+                        {yun:}/foreach{/yun}
+                    </div>
+                    {yun:}/if{/yun}
+                </div>
+                <div class="trainTopPay">
+                    <div class="trainTopMoney">
+                        {yun:}if $res.price != 0{/yun}
+                        <span>¥{yun:}$res.price{/yun}</span>
+                        {yun:}else{/yun}
+                        <span>免费</span>
+                        {yun:}/if{/yun}
+                        {yun:}if $res.prices > 0{/yun}
+                        <span class="yuanao">¥{yun:}$res.prices{/yun}</span>
+                        {yun:}/if{/yun}
+                    </div>
+                    {yun:}if $res.bm_num>0{/yun}
+                    <div class="trainTopNum">
+                        <span>{yun:}$res.bm_num{/yun}人喜欢</span>
+                    </div>
+                    {yun:}/if{/yun}
+                </div>
+            </div>
+        </div>
+        <!-- 培训详情--cont -->
+        <div class="trainCentec">
+            <div class="trainCentTitle">
+                <span>课程介绍</span>
+            </div>
+            <div class="trainCentText">
+                <span>
+                    {yun:}$res.introduce{/yun}
+                </span>
+            </div>
+           
+        </div>
+
+        <div class="trainBaom">
+            <div class="trainPopServe">
+                <img src="{yun:}$wap_style{/yun}/images/serve1.png" alt="">
+                <span>咨询</span>
+            </div>
+            <div class="trainPopLinks">
+                <a class="baomiClick" href="javascript:void(0);">我要报名</a>
+            </div>
+        </div>
+        <!-- 弹窗 -->
+        <div class="trainBaomPopup">
+            <div class="trainPopCon">
+                <div class="trainPopTitle">
+                    <span>报名信息</span>
+                    <img class="imgClick" src="{yun:}$wap_style{/yun}/images/opacitas_close.png" alt="">
+                </div>
+                <div class="trainPopFrom">
+                    <form method="post" action="" onsubmit="return false;">
+                        <div class="trainPopFromInt">
+                            <span>姓 名：</span>
+                            <input type="text" id="name" name="name" autocomplete="off" placeholder="请输入姓名">
+                        </div>
+                        <div class="trainPopFromInt">
+                            <span>手机号：</span>
+                            <input type="text" id="tel" name="tel" autocomplete="off"
+                                   onkeyup="this.value=this.value.replace(/[^0-9-]/g,'')" placeholder="请输入手机号">
+                        </div>
+                        <div class="trainPopFromBut">
+                            <input type="hidden" id="skill_id" name="skill_id" value="{yun:}$res.id{/yun}">
+                            <button onclick="sub()">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- 弹窗2 -->
+
+        <div class="trainServPopup">
+            <div class="trainServConts">
+                <div class="trainServTitle">
+                    <span>立即咨询</span>
+                    <img class="imgServClick" src="{yun:}$wap_style{/yun}/images/opacitas_close.png" alt="">
+                </div>
+                <div class="trainServWeChat">
+                    <img src="{yun:}$res.wx_qr_code_n{/yun}" alt="">
+                    <span>长按保存微信二维码</span>
+                </div>
+                <div class="trainServInfo">
+                    <img src="{yun:}$wap_style{/yun}/images/tell1.png" alt="">
+                    <span onclick="callTel('{yun:}$res.telphone{/yun}')">{yun:}$res.telphone{/yun}</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- jquery -->
+{yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    layui.use(['layer'], function() {
+        var layer = layui.layer,
+            $ = layui.$;
+    });
+    $(document).ready(function () {
+        $(".imgClick").click(function () {
+            $(".trainBaomPopup").hide();
+        });
+        $(".baomiClick").click(function () {
+            $(".trainBaomPopup").show();
+        });
+        $(".imgServClick").click(function () {
+            $(".trainServPopup").hide();
+        });
+        $(".trainPopServe").click(function () {
+            $(".trainServPopup").show();
+        });
+    });
+
+    function sub() {
+        var skill_id = $("#skill_id").val(),
+            name = $("#name").val(),
+            tel = $("#tel").val();
+        if (name=="" || $.trim(name) == '') {
+            showToast('请填写姓名！');
+            return false;
+        }
+        if (tel=="" || $.trim(tel) == '') {
+            showToast('请填写手机号！');
+            return false;
+        }
+        var reg= /^[1][3456789]\d{9}$/;
+        if (!reg.test(tel)) {
+            showToast('请填写正确的手机号！');
+            return false;
+        }
+
+        var params = {
+            skill_id: skill_id,
+            name: name,
+            tel: tel
+        };
+
+        $.post('{yun:}url m=wap c=skill a=baoming{/yun}', params, function (res) {
+            if (res.st == 9) {
+                showToast(res.msg, 2, function(){
+                    window.location.reload();
+                })
+            } else {
+                showToast(res.msg)
+            }
+        }, 'json')
+    }
+
+    function callTel(tel) {
+        window.location.href='tel://' + tel;
+    }
+    </script>
+</body>
+
+</html>

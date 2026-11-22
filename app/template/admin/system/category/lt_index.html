@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="systemlt">
+        <div class="setDomeAll setDomehuiyuan">
+            <!--猎头分类-->
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="会员" name="ltclass" :lazy="true">
+                    <ltclass></ltclass>
+                </el-tab-pane>
+                <el-tab-pane label="行业" name="lthy_class" :lazy="true">
+                    <lthy_class></lthy_class>
+                </el-tab-pane>
+                <el-tab-pane label="职位" name="ltjob_class" :lazy="true">
+                    <ltjob_class></ltjob_class>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+
+    <script>
+        const custoapp = new Vue({
+            el: '#systemlt',
+            data: function () {
+                return {
+                    activeName: 'ltclass'
+                }
+            },
+            mounted() {
+            },
+            components: {
+                'ltclass': httpVueLoader('./component/ltclass.vue'),
+                'lthy_class': httpVueLoader('./component/lthy_class.vue'),
+                'ltjob_class': httpVueLoader('./component/ltjob_class.vue'),
+            },
+            methods: {
+                handleClick(tab, event) {
+                }
+            }
+        });
+    </script>
+</body>
+<style>
+    .el-table {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .el-table .el-table__body-wrapper {
+        flex: 1;
+    }
+</style>
+</html>

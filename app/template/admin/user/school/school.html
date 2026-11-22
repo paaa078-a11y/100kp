@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+    <script src="../../js/base64ToFile.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="应届生职位" name="graduate">
+                    <graduate ref="graduate" :state="state"></graduate>
+                </el-tab-pane>
+                <el-tab-pane label="院校管理" name="academy">
+                    <academy ref="academy"></academy>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'graduate',
+                state: '',
+            }
+        },
+        components: {
+            'academy': httpVueLoader('./component/academy.vue'),
+            'graduate': httpVueLoader('./component/graduate.vue'),
+        },
+        created: function() {
+            var that = this;
+            let query = window.parent.homeapp.$route.query;
+            if (query.state) {
+                that.state = query.state;
+            }
+
+            setTimeout(function() {
+                that.$refs[that.activeName].getList()
+            }, 500)
+        },
+        methods: {
+            handleClick(tab, event) {
+                this.$refs[this.activeName].getList()
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>

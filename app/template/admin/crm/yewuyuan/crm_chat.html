@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+
+	<script src="../../../../../data/plus/city.cache.js"></script>
+	<script src="../../../../../data/plus/cityparent.cache.js"></script>
+	<script src="../../../../../data/plus/job.cache.js"></script>
+	<script src="../../../../../data/plus/jobparent.cache.js"></script>
+
+	<script src="../../../admin/js/socketfun.js"></script>
+
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte" style="height: initial;">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="拥有简历" name="first">
+                    <yyjianli :ly="ly"></yyjianli>
+                </el-tab-pane>
+                <el-tab-pane label="没有简历" name="second" :lazy="true">
+                    <nonejianli></nonejianli>
+                </el-tab-pane>
+                <el-tab-pane label="手机号授权" name="three" :lazy="true">
+                    <iphonesq></iphonesq>
+                </el-tab-pane>
+                <el-tab-pane label="面试回访" name="fourth" :lazy="true">
+                    <mshuifan></mshuifan>
+                </el-tab-pane>
+                <el-tab-pane label="跟进记录" name="fifth" :lazy="true">
+                    <genjinlog></genjinlog>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    ly: '',
+                }
+            },
+            components: {
+                'yyjianli': httpVueLoader('./component/yyjianli.vue'),
+                'nonejianli': httpVueLoader('./component/nonejianli.vue'),
+                'iphonesq': httpVueLoader('./component/iphonesq.vue'),
+                'mshuifan': httpVueLoader('./component/mshuifan.vue'),
+                'genjinlog': httpVueLoader('./component/genjinlog.vue'),
+            },
+            created() {
+                let query = getUrlParams(window.parent.location);
+                if (query.ly) {
+                    this.ly = query.ly;
+                }
+            },
+            methods: {
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

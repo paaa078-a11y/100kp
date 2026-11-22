@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl moduleElenAuto">
+        <performance :depart="1"></performance>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+
+                }
+            },
+            components: {
+                'performance': httpVueLoader('../component/performance.vue'),
+            },
+            mounted() {
+
+            },
+            methods: {
+
+
+            }
+        });
+    </script>
+</body>
+
+</html>

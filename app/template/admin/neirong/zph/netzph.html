@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../js/base64ToFile.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="网络招聘会" name="zph">
+                    <netzphlist ref="zph"></netzphlist>
+                </el-tab-pane>
+                <el-tab-pane label="参会企业" name="com">
+                    <netzphcom ref="com"></netzphcom>
+                </el-tab-pane>
+                <el-tab-pane label="区域管理" name="cd">
+                    <netzphcd ref="cd"></netzphcd>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'zph'
+            }
+        },
+        components: {
+            'netzphlist': httpVueLoader('./component/netzphlist.vue'),
+            'netzphcom': httpVueLoader('./component/netzphcom.vue'),
+            'netzphcd': httpVueLoader('./component/netzphcd.vue'),
+        },
+        created: function() {
+            var that = this
+            setTimeout(function() {
+                that.$refs[that.activeName].getList()
+            }, 200)
+        },
+        methods: {
+            handleClick(tab) {
+                this.$refs[tab.name].getList()
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>

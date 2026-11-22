@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="crmOrderApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="订单审批" name="first">
+                <order-approval></order-approval>
+            </el-tab-pane>
+            <el-tab-pane label="订单分配" name="second" :lazy="true">
+                <order-allocation></order-allocation>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+    const crmOrderApp = new Vue({
+        el: '#crmOrderApp',
+        data: function () {
+            return {
+                activeName: 'first'
+            }
+        },
+        components: {
+            'order-approval': httpVueLoader('./component/orderApproval.vue'),
+            'order-allocation': httpVueLoader('./component/orderAllocation.vue'),
+        },
+        methods: {
+            handleClick(tab, event) {
+
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,567 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav coubtInput UserCoubtInput layerDemo">
+            <!--<a href="javascript:goBack()"><i class="fa fa-angle-left"></i></a>-->
+            <a href="index.php">
+                <img src="img/fh.png" alt="">
+            </a>
+            <form onsubmit="return false;">
+                <input type="text" v-model="keyword" placeholder="搜索企业名称/简称/手机号">
+                <button @click="searchsub">搜索</button>
+            </form>
+        </div>
+        <div class="subjectAdd">
+            <a class="claimScreen" href="javascript:void(0)" @click="screenShow = true">
+                <img src="img/serach.png" alt="">
+                <p>筛选</p>
+            </a>
+        </div>
+    </section>
+    <section class="enterNameTab">
+        <div class="enterTabTitle">
+            <a href="javascript:void(0)" @click="ratingShow = true"><span>{{ratingname}}</span><img src="img/duob.png"></a>
+            <a href="javascript:void(0)" @click="regtimeShow = true"><span>{{regtimename}}</span><img src="img/duob.png"></a>
+            <a href="javascript:void(0)" @click="statusShow = true"><span>{{statusname}}</span><img src="img/duob.png"></a>
+            <a href="javascript:void(0)" @click="sourceShow = true"><span>{{sourcename}}</span><img src="img/duob.png"></a>
+        </div>
+    </section>
+    <section class="enterpriseInfo">
+        <ul v-if="!noCom">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                    <li v-for="(item, comkey) in list" :key="comkey">
+                        <div class="enterTitle">
+
+							   <a :href="item.wapadmin_url">
+								   <div class="enterTitleLeft">
+                                <img class="enterLogo" :src="item.logo"/>
+                                <div>
+                                    <p v-if="item.name">{{item.name}}</p>
+                                    <p v-else>{{item.username}}</p>
+                                    <span style="font-size:var(--font-13); color:#999">来源：{{source[item.source]}}</span>
+                                </div>
+                            </div>
+							</a>
+                        </div>
+                        <div class="enterMess">
+                            <div class="enterMessList">
+                                <p v-if="item.linktel">联系方式：{{item.linktel}}</p>
+                                <p v-else-if="item.linkphone">联系方式：{{item.linkphone}}</p>
+                                <a href="javascript:void(0)"  v-if="item.r_status==1"> </a>
+                                <a href="javascript:void(0)"  v-else-if="item.r_status==2"><span class="ysd"><i class="wshicon"></i>已锁定</span></a>
+                                <a href="javascript:void(0)"  v-else-if="item.r_status==3"><span class="ysd"><i class="wshicon"></i>未通过</span></a>
+                                <a href="javascript:void(0)" v-else-if="item.r_status==4"><span class="ysd"><i class="wshicon"></i>已暂停</span></a>
+                                <a href="javascript:void(0)"  v-else><span class="wsh"><i class="wshicon"></i>未审核</span></a>
+                            </div>
+                            <div class="enterMessList">
+                                <p>注册时间：{{item.reg_date_n}}</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>会员等级：{{item.rating_name}}</p>
+                                <p v-if="item.vip_expt > 0" style="color: #f30;">{{item.vip_etime_n}}</p>
+                                <p v-else-if="item.vipetime > 0">{{item.vip_etime_n}}</p>
+                                <p v-else>不限</p>
+                            </div>
+                            <div class="enterMessList">
+                                <p>企业顾问：<span v-if="item.crm_name">{{item.crm_name}}</span><span v-else>暂未分配</span></p>
+                            </div>
+                            <div class="positionNum">
+                                <p v-if="item.jobnum>0">{{item.jobnum}}</p>
+                                <p v-else>0</p>
+                                <span>职位数</span>
+                            </div>
+                        </div>
+                        <p style="background-color: #f7f8ff; font-size: 14px; line-height:28px;; padding-left: 8px; position: relative; margin-bottom: 10px; margin-top:5px ; ;">
+                        <span style="color:#999" v-if="item.fact_status=='1'"> 已实地核验 </span>
+                        <span style="color:#f00" v-else>! 未实地核验</span>  <a href="javascript:void(0)" @click="factrz(item)" style="color: #0555f6; text-decoration: underline; display: inline-block; position: absolute;right:10px;top:0px;">实地核验</a></p>
+                        <div class="enterClick">
+                            <div>
+
+                                <a href="javascript:void(0)" @click="fpgw(item.uid)">分配</a>
+                                <a href="javascript:void(0)" @click="pageTo('index.php?m=user&c=company&a=company_log&uid='+item.uid)">日志</a>
+                                <a href="javascript:void(0)" @click="pageTo('index.php?m=user&c=admin_weblog&usertype=2&uid='+item.uid)">轨迹</a>
+                                <a href="javascript:void(0)" @click="pageTo('index.php?m=user&c=company&a=show&com_id='+item.uid)">详细</a>
+                            </div>
+
+                        </div>
+                    </li>
+                </van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-if="noCom" class="noneInfoAll">
+            <div class="nfoAllConu">
+                <img src="img/zwtip.png" alt="">
+                <p>暂无信息</p>
+            </div>
+        </div>
+    </section>
+
+    <van-popup v-model:show="ratingShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="ratingcol"
+                value-key="name"
+                title="会员等级选择"
+                @cancel="ratingShow = false"
+                @confirm="onRatConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="regtimeShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="regtimearr"
+                value-key="name"
+                title="注册日期"
+                @cancel="regtimeShow = false"
+                @confirm="onRegConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="sourceShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="sourcearr"
+                value-key="name"
+                title="来源选择"
+                @cancel="sourceShow = false"
+                @confirm="onSouConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="statusShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="statusarr"
+                value-key="name"
+                :default-index="statusid"
+                title="审核状态"
+                @cancel="statusShow = false"
+                @confirm="onStaConfirm"
+        />
+    </van-popup>
+    <van-popup v-model="screenShow" closeable position="bottom" round :style="{height:'12.24rem'}">
+        <div class="Gengduos-eject pubtwo screenPupAll">
+            <div class="conditional_screening_box">
+                <div class="conditional_screening_pv">
+                    <div class="conditional_screening_pv">
+                        <div class="conditional_screening_alltit">全部筛选</div>
+                        <div class="conditional_screening_all">
+                            <div class="conditional_screening_cont">
+                                <div class="conditional_screening_tit"><span class="conditional_screening_tit_n">名企</span></div>
+                                <ul class="conditional_screening_list" id="Sortexp-Sortexp">
+                                    <li v-for="(item, key) in isrecarr" :key="key" :class="item.id==isrecid?'conditional_screening_cur':''" @click="setRec(item.id)"><a href="javascript:void(0)">{{item.name}}</a></li>
+                                </ul>
+                            </div>
+                            <div class="conditional_screening_cont">
+                                <div class="conditional_screening_tit"><span class="conditional_screening_tit_n">会员到期</span></div>
+                                <ul class="conditional_screening_list" id="">
+                                    <li v-for="(item, key) in edtimearr" :key="key" :class="item.id==edtimeid?'conditional_screening_cur':''" @click="setTime(item.id)"><a href="javascript:void(0)">{{item.name}}</a></li>
+                                </ul>
+                            </div>
+                            <div class="conditional_screening_operation screeningOperationse">
+                                <div class="conditional_screening_operation_left"><a href="javascript:void(0)" @click="czSerach" class="conditional_screening_operation_cz">重置</a></div>
+                                <div class="conditional_screening_operation_right"><a href="javascript:void(0)" @click="qdSerach" class="conditional_screening_operation_ok">确定</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </van-popup>
+    <van-popup v-model="factShow" closeable position="bottom" round>
+        <div class="modiPopupAll" style="position:relative !important">
+            <div class="modiListAll">
+                <div class="modiClose" @click="factClose">
+                    <img src="img/close.png" alt="">
+                </div>
+                <div class="modiListLink">
+                    <ul>
+                        <h3>实地核验</h3>
+                        <li>
+                            <van-uploader v-model="factList" multiple :max-count="3" :before-delete="beforedel" :after-read="afterRead" />
+
+                        </li>
+                        <li>
+                            <van-checkbox v-model="fact_status">通过实地核验</van-checkbox>
+                        </li>
+                    </ul>
+                </div>
+                <div class="conditional_screening_operation_right" style="width:100%; padding-bottom: 30px;;"><a href="javascript:void(0)" @click="factSave" class="conditional_screening_operation_ok">保存</a></div>
+            </div>
+        </div>
+    </van-popup>
+
+    <van-popup v-model:show="fpgwShow" round position="bottom">
+        <van-picker
+                show-toolbar
+                :columns="gwlist"
+                value-key="name"
+                title="分配顾问"
+                @cancel="fpgwShow = false"
+                @confirm="onFpgwConfirm"
+        />
+    </van-popup>
+</div>
+<script>
+    let r_status = '{yun:}$smarty.get.r_status{/yun}';
+    var adtime = '{yun:}$smarty.get.adtime{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+
+                list: [],
+                loading: false,
+                finished: false,
+                page: 1,
+                limit: 10,
+
+                refreshing: false,
+
+                noCom: false,
+
+                source: [],
+                keyword: '',
+                r_status: r_status,
+
+                ratingShow: false,
+                ratingcol: [],
+                rating: '',
+                ratingname: '会员等级',
+
+                sourceShow: false,
+                sourcearr: [],
+                sourceid: '',
+                sourcename: '数据来源',
+
+                edtimeShow: false,
+                edtimearr: [],
+                edtimeid: '',
+                edtimename: '会员到期',
+
+                regtimeShow: false,
+                regtimeid:'',
+                regtimename: '注册日期',
+                regtimearr: [],
+
+                statusShow: false,
+                statusarr: [],
+                statusid: r_status,
+                statusname: '审核状态',
+
+                screenShow: false,
+                isrecid: '',
+                isrecarr: [],
+
+                factShow:false,
+                factuid:'',
+                fact_status:false,
+                factList:[],
+                factDel: [],
+                factAdd: [],
+                gwlist: [],
+                fpgwShow: false,
+                comid: ''
+            }
+        },
+        created() {
+            this.getStatis();
+            if (adtime == 1) {
+                this.regtimeid = 1;
+            }
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                };
+                if (that.rating) {
+                    param['rating'] = that.rating;
+                }
+                if (that.sourceid) {
+                    param['source'] = that.sourceid;
+                }
+                if (that.edtimeid) {
+                    param['time'] = that.edtimeid;
+                }
+                if (that.regtimeid) {
+                    param['reg_time'] = that.regtimeid;
+                }
+                if (that.isrecid) {
+                    param['rec'] = that.isrecid;
+                }
+                if (that.keyword) {
+                    param['keyword'] = that.keyword;
+                }
+                if (that.r_status) {
+                    param['r_status'] = that.r_status;
+                }
+                // if (adtime) {
+                //     param['adtime'] = adtime;
+                // }
+                $.post('index.php?m=user&c=company', param, function (res) {
+
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noCom = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noCom = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+                    that.keyword = res.keyword ? res.keyword : '';
+                }, 'json');
+            },
+
+            getStatis: function () {
+
+                var that = this;
+                $.post('index.php?m=user&c=company&a=statis', {a: 1}, function (res) {
+                    that.source = res.source ? res.source : [];
+                    that.sourcearr = res.sourcearr ? res.sourcearr : [];
+                    that.edtimearr = res.edtimearr ? res.edtimearr : [];
+                    that.regtimearr = res.regtimearr ? res.regtimearr : [];
+                    that.statusarr = res.statusarr ? res.statusarr : [];
+                    that.isrecarr = res.isrecarr ? res.isrecarr : [];
+                    if (that.statusid) {
+                        that.statusname = that.statusarr[that.statusid - 1].name;
+                    }
+                    that.gwlist = res.gwinfo
+                    that.ratingcol = res.ratingarr ? res.ratingarr : [];
+                }, 'json');
+            },
+            factrz:function(com){
+                var that = this;
+                var factList = [];
+                if (com.factpics && com.factpics.length > 0) {
+                    
+                    for (let i = 0; i < com.factpics.length; i++) {
+                        
+                        let temp = {
+                            'url': com.factpics[i].pic_n,
+                            'id': com.factpics[i].id
+                        };
+                        factList.push(temp);
+                    }
+                }
+                that.fact_status = com.fact_status=='1'?true:false;
+                that.factuid = com.uid;
+                that.factList = factList;
+                this.factShow = true;
+            },
+            factClose:function(){
+                this.factShow = false;
+                this.fact_status=false;
+                this.factList=[];
+                this.factuid = '';
+                this.factDel= [];
+                this.factAdd= [];
+            },
+            beforedel(file, detail) {
+                var self = this;
+                var noupload = true;
+                self.factAdd.forEach(function(val,index){
+                    if(val.index == detail.index){
+                        // 删除的是本次选择的，不是已经上传的
+                        noupload = false;
+                        self.factAdd.splice(index, 1);
+                    }
+                });
+                if(noupload){
+                    // 删除已经上传的，需要记录
+                    self.factDel.push(file);
+                }
+                return true;
+            },
+            
+            afterRead(file,detail) {
+                
+                if (file.length > 1){
+                    var index = 0;
+                    file.forEach(item=>{
+                        let obj = {
+                            error: true,
+                            url: item.content,
+                            file: item.file,
+                            index: index
+                        };
+                        index++;
+                        this.factAdd.push(obj);
+                    });
+                }else{
+                    let obj = {
+                        error: true,
+                        url: file.content,
+                        file: file.file,
+                        index: 0
+                    };
+                    this.factAdd.push(obj);
+                }
+
+            },
+            factSave: function() {
+                let that = this;
+                let factAdd = that.factAdd;
+                let factDel = that.factDel;
+                var fact_status = that.fact_status?1:0;
+                var params = new FormData();
+                
+                var fact_delid = [];
+
+                if (factDel.length > 0) {
+                    for (let i = 0; i < factDel.length; i++) {
+                        if (factDel[i].id) {
+                            fact_delid.push(factDel[i].id);
+                        }
+                    }
+                }
+                for (let j in factAdd) {
+                    if (factAdd[j].file) {
+                        params.append('newpic[]', factAdd[j].file);
+                    }
+                }
+                params.append('uid',that.factuid);
+                params.append('fact_status',fact_status);
+                params.append('fact_delid',fact_delid);
+
+                showLoading();
+                $.ajax({
+                    url: 'index.php?m=user&c=company&a=savefact',
+                    type: 'post',
+                    data: params,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(data) {
+
+                        hideLoading();
+                        var data = JSON.stringify(data);
+                        var res = JSON.parse(data);
+                        
+                        if (res.error == '9') {
+                            showToast(res.msg, 2, function () {
+                                that.factClose();
+                                that.getList('refresh');
+                            });
+                        } else{
+                            showToast(res.msg);
+                        }
+                    }
+                })
+            },
+            searchsub: function () {
+                this.getList('refresh');
+            },
+            onRatConfirm: function (e) {
+
+                this.rating = e.id;
+                this.ratingname = e.name;
+                this.getList('refresh');
+                this.ratingShow = false;
+            },
+            onEdtConfirm: function (e) {
+
+                this.edtimeid = e.id;
+                this.edtimename = e.name;
+                this.getList('refresh');
+                this.edtimeShow = false;
+            },
+            onRegConfirm: function (e) {
+
+                this.regtimeid = e.id;
+                this.regtimename = e.name;
+                this.getList('refresh');
+                this.regtimeShow = false;
+            },
+            onSouConfirm: function (e) {
+
+                this.sourceid = e.id;
+                this.sourcename = e.name;
+                this.getList('refresh');
+                this.sourceShow = false;
+            },
+            onStaConfirm: function (e) {
+
+                this.statusid = e.id - 1;
+                this.r_status = e.id;
+                this.statusname = e.name;
+                this.getList('refresh');
+                this.statusShow = false;
+            },
+            setRec: function (e) {
+                this.isrecid = e;
+            },
+            setTime: function (e) {
+                this.edtimeid = e;
+            },
+            qdSerach: function () {
+                this.getList('refresh');
+                this.screenShow = false;
+            },
+            czSerach: function () {
+
+                window.location.href = 'index.php?m=user&c=company';
+                window.history.replaceState({}, "", "index.php?m=user&c=company");
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            },
+            fpgw: function(uid){
+                this.comid = uid
+                this.fpgwShow = true
+            },
+            onFpgwConfirm: function (e) {
+                var that = this
+                var params = {gid: e.id, comid: that.comid}
+                showLoading();
+                $.post('index.php?m=user&c=company&a=checkguwen', params, function (res) {
+                    hideLoading();
+                    if (res.error == '0') {
+                        showToast(res.msg, 2, function () {
+                            that.fpgwShow = false;
+                            that.getList('refresh');
+                        });
+                    } else{
+                        showToast(res.msg);
+                    }
+                }, 'json');
+            },
+        }
+    });
+</script>
+</body>
+</html>

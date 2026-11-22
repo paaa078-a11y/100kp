@@ -1,0 +1,402 @@
+﻿
+/*header-nav*/
+.header-nav {
+    height: 64px !important;
+    border-bottom: none;
+    background: rgba(255,255,255,1) !important;
+    box-shadow: 0px 3px 6px 0px rgba(150,150,150,0.16) !important;
+    width: 100% !important;
+}
+
+
+.hrader_searce_btn {
+    float: right;
+    width: 59px;
+    height: 32px;
+    background: #FF5700;
+    line-height: 32px;
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.hrader_searce_btnfb {
+    float: left;
+    margin-left: 16px;
+    margin-top: 15px;
+}
+
+    .hrader_searce_btnfb a {
+        width: 96px;
+        height: 34px;
+        line-height: 34px;
+        background: #FF5700;
+        font-size: 14px;
+        font-family: PingFangSC-Regular,PingFang SC;
+        font-weight: 400;
+        color: rgba(255,255,255,1);
+        text-align: center;
+        display: block;
+        border-radius: 10px;
+    }
+
+        .hrader_searce_btnfb a:hover {
+            color: rgba(255,255,255,1);
+        }
+
+
+
+       * {
+            margin: 0;
+            padding: 0;
+            border: 0 solid #000000;
+        }
+
+        .layerdemo {
+            border-radius: 15px;
+        }
+
+        .toptitleBox {
+            margin-top: 70px;
+        }
+
+        .title1 {
+            position: relative;
+            z-index: 5;
+            font-weight: 600;
+            font-size: 32px;
+            color: #132053;
+        }
+
+        .titlebg {
+            width: 130px;
+            height: 20px;
+            background: #FFF0CA;
+            border-radius: 2px 2px 2px 2px;
+            position: relative;
+            top: -19px;
+        }
+
+        .clearBoth {
+            clear: both;
+        }
+
+        .floor-2 {
+            background: #F3F5F8;
+            width: 100%;
+            padding: 50px 0;
+        }
+
+        .floor-3 {
+            width: 1200px;
+            margin: 0 auto 37px;
+        }
+
+        .tuiguang .firm-vip-wrapper {
+            height: 545px;
+        }
+
+        .firm-vip-wrapper-margin {
+            margin-right: 14px;
+            float: left;
+        }
+
+        .cuxiao-tab1 {
+            position: absolute;
+            right: 0;
+            background: linear-gradient(137deg, #FCB13B 0%, #F6720E 47%);
+            font-size: 12px;
+            font-family: PingFang SC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #FFFFFF;
+            width: 64px;
+            height: 29px;
+            line-height: 29px;
+            border-radius: 0 12px;
+            text-align: center;
+        }
+
+        .firm-vip-wrapper {
+            width: 224px;
+            height: 560px;
+            background: linear-gradient(180deg, #EEF5F6 0%, #CED6D9 100%);
+            border-radius: 14px;
+            position: relative;
+            border: 1px solid #fff;
+            transition: height 250ms;
+        }
+
+            .firm-vip-wrapper.show.haveDrop {
+                height: 660px;
+            }
+
+        .firm-vip-box1-img {
+            position: absolute;
+            left: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+        }
+
+        .section1-box-item {
+            width: 198px;
+            height: 444px;
+            margin: 0 auto;
+            position: relative;
+            top: 62px;
+            cursor: pointer;
+        }
+
+        .section1-box-item-top-p1 {
+            height: 20px;
+            line-height: 20px;
+            font-size: 20px;
+            font-family: PingFang SC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #26335F;
+            padding: 0;
+            position: absolute;
+            top: -37px;
+            margin: 0px auto 0 auto;
+            text-align: center;
+        }
+
+        .section1-box-item-top {
+            position: relative;
+            top: 5px;
+            height: 170px;
+            background: linear-gradient(142deg, rgba(241,248,255,0.8) 0%, #FFFFFF 51%, #FFFFFF 100%);
+            box-shadow: 0px 3px 10px 0px rgba(64,70,123,0.2);
+            border-radius: 6px;
+        }
+
+        .section1-box-item-top, .section1-box-item-bottom {
+            width: unset;
+        }
+
+        .section1-box-item-top-p3 {
+            padding-top: 16px;
+            color: #F52303;
+            word-spacing: -12px;
+            height: 44px;
+            font-size: 40px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            line-height: 44px;
+            margin: 7px auto 0 auto;
+            text-align: center;
+        }
+
+        .section1-box-item-top-p3-small {
+            height: 22px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #3C2003;
+            line-height: 22px;
+        }
+
+        .section1-box-item-top-p5 {
+            color: #625F5F;
+            font-size: 14px;
+            width: 100%;
+            text-align: center;
+            font-family: PingFangSC-Regular, PingFang SC;
+            margin-top: 10px;
+        }
+
+        .section1-box-item-top-p2 {
+            margin-top: 12px;
+            height: 17px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #3C2003;
+            line-height: 17px;
+            margin: 6px auto 0 auto;
+            text-align: center;
+        }
+
+        .dl-count {
+            font-size: 14px;
+            font-weight: 400;
+            color: #42270A;
+            line-height: 14px;
+            text-align: center;
+            margin: 10px 0 2px 0;
+        }
+
+            .dl-count span {
+                color: rgba(245, 35, 3, 1);
+            }
+
+        .section1-box-item-top-p4 {
+            text-align: center;
+        }
+
+            .section1-box-item-top-p4 > a {
+                display: inline-block;
+                width: 172px;
+                height: 34px;
+                background: linear-gradient(262deg, #212F5A 0%, #4A4D85 100%);
+                border-radius: 91px;
+                color: #FFF0CA;
+                padding: 0;
+                line-height: 34px;
+                text-align: center;
+                margin-top: 14px;
+                font-size: 14px;
+                font-family: PingFangSC-Semibold, PingFang SC;
+                font-weight: 600;
+                transition: all 250ms;
+            }
+
+                .section1-box-item-top-p4 > a:hover {
+                    background: linear-gradient(262deg, #3B476E 0%, #595D8E 100%);
+                    transform: scale(1.1);
+                }
+
+        .tuiguang .section1-box-item-bottom {
+            height: 285px;
+        }
+
+        .section1-box-item-bottom {
+            height: 295px;
+            background: linear-gradient(142deg, rgba(255,255,255,0.7) 0%, #FFFFFF 51%, #FFFFFF 100%);
+            border-radius: 6px;
+            opacity: 1;
+            overflow: hidden;
+            transition: height 250ms;
+        }
+
+            .section1-box-item-bottom.show {
+                height: 400px;
+            }
+
+        .description-title {
+            height: 20px;
+            font-size: 14px;
+            font-family: PingFang SC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #1F1A1B;
+            line-height: 20px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .section1-box-item-bottom-p {
+            padding-left: 16px;
+            text-align: unset;
+        }
+
+        .vip-range-line {
+            display: inline-block;
+            width: 3px;
+            height: 14px;
+            background: linear-gradient(360deg, #212F5A 0%, #4A4D85 100%);
+            border-radius: 91px;
+            vertical-align: -2px;
+        }
+
+        .section1-box-item-bottom-p {
+            padding-left: 16px;
+            text-align: unset;
+        }
+
+        .font-black {
+            height: 26px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #000000;
+            line-height: 26px;
+        }
+
+        .vip-range-dui {
+            float: right;
+            margin-right: 16px;
+            width: 12px;
+            height: 10px;
+            color: #2EBF3C;
+            margin-top: -23px;
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-stroke-width: 0.2px;
+            -moz-osx-font-smoothing: grayscale;
+            opacity: 1;
+        }
+
+        .font-yellow {
+            color: #D58516;
+            height: 26px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            line-height: 26px;
+        }
+
+        .margin-top-8 {margin-top: 8px; }
+        .firm-vip-box2 {background: linear-gradient(90deg, #F2EDF5 0%, #D9CED5 100%);}
+        .firm-vip-box3 {background: linear-gradient(149deg, #e5e4fd 0%, #FFFBE8 61%, #E9C47C 100%);}
+        .firm-vip-box4 {background: linear-gradient(135deg, #fffcf4 0%, #F5CF73 61%, #dff795  100%);}
+        .firm-vip-box5 {background: linear-gradient(116deg, #d07334 0%, #e57b26 100%); }
+        .firm-vip-box6 {background: linear-gradient(149deg, #eec6c6 0%, #FFFBE8 61%, #E9C47C 100%);}
+        .firm-vip-box7 {background: linear-gradient(135deg, #9de1b1 0%, #a4ff9b 61%, #7de337 100%);}
+        .firm-vip-box8 {background: linear-gradient(116deg, #8bead7 0%, #bfe7ff 100%);}
+        .section1-box-item .section1-box-item-top-p5 .iconfont {
+            color: #FF0000;
+            font-size: 16px;
+            position: relative;
+            line-height: 10px;
+            margin-left: 3px;
+        }
+
+            .section1-box-item .section1-box-item-top-p5 .iconfont .tip {
+                white-space: nowrap;
+                padding: 10px;
+                font-size: 12px;
+                color: #A5A5A5;
+                position: absolute;
+                top: -16px;
+                left: 32px;
+                -ms-text-align-last: left;
+                text-align-last: left;
+                border: 1px solid #DCDCDC;
+                background: #FFFFFF;
+                z-index: 5;
+                border-radius: 4px;
+                display: none;
+                line-height: 20px;
+            }
+
+            .section1-box-item .section1-box-item-top-p5 .iconfont:hover .tip {
+                display: block;
+            }
+
+            .section1-box-item .section1-box-item-top-p5 .iconfont .tip:before {
+                /* display: block; */
+                content: '';
+                position: absolute;
+                border-right: 1px solid #DCDCDC;
+                border-top: 1px solid #DCDCDC;
+                width: 12px;
+                height: 12px;
+                transform: rotate(-135deg);
+                left: -7px;
+                top: 20px;
+                background: #FFFFFF;
+            }
+
+        .fontfont {
+            width: 100px;
+            text-align: right;
+        }

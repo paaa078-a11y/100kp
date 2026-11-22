@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<!--[if IE 6]>
+	<script src="./js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script>
+		DD_belatedPNG.fix('.png,.admin_infoboxp_tj,');
+	</script>
+	<![endif]-->
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script type="text/javascript" src="js/admin_public.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<title>后台管理</title>
+</head>
+
+<body class="body_ifm" style="background-color: #fff;">
+   	<div class="infoboxp" style="background-color: #fff;">
+		<div style="width: 810px;">
+			<form id="logSubmit" class="layui-form" onsubmit="return logSubmit();" autocomplete="off">
+			    <div style="font-size: 16px; font-weight:bold; padding-bottom: 5px;color:#000;">年度报告数据</div>
+				<div style="font-size: 14px; color:#999;">可自定义年度报告数据 </div>
+				
+				<table class="table_form contentWrap" width="100%" style="background: #fff;">
+					<tr>
+						<th align="right" width="80">企业名称：</th>
+						<td>
+							{yun:}$row.com_name{/yun}
+						</td>
+					</tr>
+					<tr>
+						<th align="right">发布职位数：</th>
+						<td>
+							<input type="text" name="job" size="15" value="{yun:}$row.job{/yun}" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" />
+						</td>
+						<th align="right" class="comp_hotjob_line">职位浏览人数：</th>
+						<td>
+							<input type="text" name="lookjob" size="15" value="{yun:}$row.lookjob{/yun}" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" />
+						</td>
+					</tr>
+					<tr class="admin_table_trbg">
+						<th align="right">直聊次数：</th>
+						<td><input type="text" name="chatnum" value="{yun:}$row.chatnum{/yun}" size="15" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" /></td>
+						<th align="right" class="comp_hotjob_line">直聊人数：</th>
+						<td><input type="text" name="chatuser" value="{yun:}$row.chatuser{/yun}" size="15" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" /></td>
+					</tr>
+					<tr>
+						<th align="right">登录天数：</th>
+						<td>
+							<input type="text" name="login" value="{yun:}$row.login{/yun}" size="15" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" />
+						</td>
+						<th align="right" class="comp_hotjob_line">深夜工作天数：</th>
+						<td>
+							<input type="text" name="nightwork" value="{yun:}$row.nightwork{/yun}" size="15" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" />
+						</td>
+					</tr>
+					<tr>
+						<th align="right">邀请面试数：</th>
+						<td><input type="text" name="yq" value="{yun:}$row.yq{/yun}" size="15" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" /></td>
+						<th align="right">最晚工作时间</th>
+						<td>
+							<input type="text" name="lastwork" value="{yun:}if $row.lastwork{/yun}{yun:}$row.lastwork|date_format:"%Y-%m-%d  %H:%M:%S"{/yun}{yun:}/if{/yun}" id="lastwork" class="tty_input t_w150" />
+						</td>
+					</tr>
+					<tr class="admin_table_trbg">
+						<th align="right" class="comp_hotjob_line">收到简历数：</th>
+						<td><input type="text" name="sqjob" size="15" value="{yun:}$row.sqjob{/yun}" class="tty_input t_w150" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" /></td>
+					</tr>
+					
+					<tr>
+						<th align="center" colspan="4" style="text-align: center; border-right: 0px;">
+							<div style="margin-top: 20px;;"><input type="submit" value='修改' class="tty_sub" /></div>
+						</th>
+					</tr>
+				</table>
+				<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+				<input name="id" value="{yun:}$row.id{/yun}" type="hidden">
+			</form>
+		</div>
+	</div>
+	<script>
+		layui.use([ 'form','laydate' ], function() {
+			var form = layui.form,
+				laydate = layui.laydate;
+			form.render();
+			laydate.render({
+				elem: '#lastwork',
+				type: 'datetime',
+				ready: function () {},
+			});
+		});
+		
+		function logClose(){
+			parent.iframCloe();
+		}
+		function logSubmit(){
+			loadlayer();
+			var itemForm = $("#logSubmit").eq(0);
+			
+			var nameIndex = {}, //数组 name 索引
+				field = {},
+				fieldElem = itemForm.find('input') //获取所有表单域
+			
+			fieldElem.each(function(_, item) {
+				var init_name; //初始 name
+			
+				item.name = (item.name || '').replace(/^\s*|\s*&/, '');
+				if (!item.name) return;
+				//用于支持数组 name
+				if (/^.*\[\]$/.test(item.name)) {
+					var key = item.name.match(/^(.*)\[\]$/g)[0];
+					nameIndex[key] = nameIndex[key] | 0;
+					init_name = item.name.replace(/^(.*)\[\]$/, '$1[' + (nameIndex[key]++) + ']');
+				}
+				field[init_name || item.name] = item.value;
+			});
+			$.post('index.php?m=admin_hr_log&c=editsave', field, function(res){
+				parent.layer.closeAll('loading');
+				parent.layer.msg('修改成功', 2, 9 , function(){
+					parent.location.reload();
+				});
+			},'json');
+			
+			return false;
+		}
+	</script>
+</body>
+</html>

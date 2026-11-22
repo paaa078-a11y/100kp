@@ -1,0 +1,69 @@
+# 环境与密钥
+/config/db.config.php
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+/weixin/apiclient_*
+/api/wxapp/shell.config.php
+/api/wxpay/lib/wxpay_data.php
+/api/uc/**/data/cache/
+/api/uc_php7/**/data/cache/
+/api/uc/uc_client/data/
+/api/uc_php7/uc_client-old/data/
+/api/uc_php7/uc_client/data/
+/api/baiduPay/*demo*.php
+
+# 运行时数据、用户上传和生成缓存
+/data/*
+!/data/index.htm
+/uploads/*
+!/uploads/.gitkeep
+*.log
+
+# 数据库及备份
+*.sql
+*.sql.gz
+*.bak
+*.old
+*.orig
+*.save
+*.swp
+*~
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+
+# 构建产物和移动端安装包
+*.apk
+*.ipa
+*.aab
+node_modules/
+vendor/
+
+# 历史备份副本和编码异常副本
+/app/controller/**/index.class-*.php
+/app/model/*.model-*.php
+/admin/model/msgconfiglist.class-*.php
+/app/template/**/*-副本.*
+/app/template/**/*-鍓*.*
+/app/template/admin/admin_skill_add.htm?*
+/app/include/init.php?*
+/app/controller/wap/*澶嶅埗.php
+/app/template/admin/*鍓*
+/dm/jl/*-鍓*.*
+
+# 系统与编辑器文件
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 自动生成的 SEO 文件
+/sitemap*.xml
+/robots.txt.bak

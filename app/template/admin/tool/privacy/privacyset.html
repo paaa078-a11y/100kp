@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+            <div class=" moduleTable" v-if="islook" style="max-height: calc(100% - (60px + 25px));">
+        		
+				<div class="tableDome_tip" style="margin-top: 12px;">
+				    <el-alert title="当前隐私号采用云信小号业务接口，开通业务需要提供企业营业执照以及法人身份证，云信官网：www.winnerlook.com 可联系PHPYUN授权顾问推送云信业务专员，适当降低预充标准，减少试用成本" type="success"
+				        :closable="false">
+				    </el-alert>
+				</div>
+				<el-divider content-position="left">隐私号设置</el-divider>
+                <table class="tableVue">
+                    <thead>
+                        <tr align="left">
+                            <th width="200">名称</th>
+                            <th  >管理</th>
+                            <th >说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        				<tr>
+        				    <td>
+        				        <div class="TableTite">appID</div>
+        				    </td>
+        				    <td>
+        				        <div class="TableInpt">
+                                    <el-input v-model="sy_privacy_appid"></el-input>
+                                </div>
+        				    </td>
+        				    <td>
+            				    <div class="TableShuom">
+            				        <span>应用-我的应用 查看</span>
+            				    </div>
+        				    </td>
+        				</tr>
+                        <tr>
+                            <td>
+                                <div class="TableTite">TOKEN</div>
+                            </td>
+                            <td>
+                                <div class="TableInpt">
+                                    <el-input v-model="sy_privacy_token"></el-input>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="TableShuom">
+                                    <span>应用-我的应用 查看</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="TableTite">有效期</div>
+                            </td>
+                            <td>
+                                <div class="TableInpt">
+                                    <el-input v-model="sy_privacy_time" @input="inputIntNumber($event, 'sy_privacy_time')"></el-input>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="TableShuom">
+                                    <span>单位：秒 建议控制120秒以内，有效期越低号码复用率越高，所需号码量越少</span>
+                                </div>
+                            </td>
+        			    </tr>
+                        <tr>
+                            <td>
+                                <div class="TableTite">通话录音</div>
+                            </td>
+                            <td>
+                                <div class="TableButn">
+                                    <el-switch v-model="sy_privacy_callrec" active-text="开启" inactive-text="关闭" active-value="1"></el-switch>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="TableShuom">
+                                    <span>开启录音会额外计算通信费用</span>
+                                </div>
+                            </td>
+                        </tr>
+				    </tbody>
+                </table>    
+                <el-divider content-position="left">简历隐私号设置</el-divider>
+        	    <table class="tableVue">
+                    <thead>
+                        <tr align="left">
+                            <th width="200">名称</th>
+                            <th  >管理</th>
+                            <th >说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="TableTite">隐私号开关</div>
+                            </td>
+                            <td>
+                                <div class="TableButn">
+                                    <el-switch v-model="sy_privacy_open" active-text="开启" inactive-text="关闭" active-value="1"></el-switch>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="TableShuom">
+                                    <span></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="TableTite">简历隐私模式</div>
+                            </td>
+                            <td>
+                                <div class="TableButn">
+                                    <el-radio v-model="sy_privacy_type" label="1">全部简历</el-radio>
+                                    <el-radio v-model="sy_privacy_type" label="2">未投递简历</el-radio> 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="TableShuom">
+                                    <span>全部简历：所有简历联系方式一律采用隐私号模式</span><br>
+                                    <span>未投递简历：主动投递并且企业有查看权限的简历开放真实号码，未投递简历采用隐私号</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+        	    </table>    
+        	    <el-divider content-position="left">企业隐私号设置</el-divider>
+        	    <table class="tableVue">
+    	            <thead>
+    	                <tr align="left">
+    	                   <th width="200">名称</th>
+    	                   <th  >状态</th>
+    	                   <th >说明</th>
+    	                </tr>
+    	            </thead>
+    	            <tbody>
+    					<tr>
+    					    <td>
+    					        <div class="TableTite">隐私号开关</div>
+    					    </td>
+    					    <td>
+    					        <div class="TableButn">
+    					           <el-switch v-model="sy_comprivacy_open" active-text="开启" inactive-text="关闭" active-value="1"></el-switch>
+    					        </div>
+    					    </td>
+    					    <td>
+    					        <div class="TableShuom">
+    					           <span>企业隐私号为减少坐席消耗，只针对后台“会员-企业-企业设置”页面，“查看联系方式-普通模式-投递简历”设置有效</span>
+    					        </div>
+    					    </td>
+    					</tr>
+    	                <tr>
+    	                    <td>
+    	                        <div class="TableTite">关闭企业隐私号</div>
+    	                    </td>
+    	                    <td>
+    	                        <div class="TableButn" v-if="qyRatings.length>0">
+                                    <el-checkbox-group v-model="sy_privacy_rating">
+                                        <el-checkbox v-for="rv in qyRatings" :key="rv.id" :label="rv.id">{{rv.name}}</el-checkbox>
+                                    </el-checkbox-group>
+    	                        </div>
+                                <div class="TableTite" v-else>
+                                    <span>暂无等级，
+                                        <el-link type="primary" @click="topage">添加会员等级</el-link>
+                                    </span>
+                                </div>
+    	                    </td>
+    	                    <td>
+            	                <div class="TableShuom">
+            	                    <span>选中会员等级，对应的的企业不启用隐私号模式。</span>
+            	                </div>
+    	                    </td>
+    	                </tr>
+    				 
+    		        </tbody>
+        	    </table>   
+        	</div>
+        	<div class="setBasicButn" style="border: none;">
+        	    <el-button type="primary" size="medium" :loading="post_loading" @click="postSet">提交</el-button>
+        	</div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    islook:false,
+
+                    sy_privacy_appid:'',
+                    sy_privacy_token:'',
+                    sy_privacy_time:'',
+                    sy_privacy_callrec:'',
+                    sy_privacy_open:2,
+                    sy_privacy_type:'',
+                    sy_comprivacy_open:2,
+                    sy_privacy_rating:[],
+
+                    qyRatings:[],
+                    post_loading:false,
+                }
+            },
+            created: function () {
+                this.getInfo();
+            },
+            methods: {
+                inputIntNumber(val, form) {
+                    this.$data[form] = val.replace(/[^0-9]/g,'');
+                },
+                async getInfo() {
+                    let that = this;
+                    
+                    startLoading();
+
+                    httpPost('m=tool&c=privacyset&a=index',{}).then((result)=>{
+                        endLoading();
+                        
+                        var res = result.data;
+                        if (res.error == 0) {
+                            
+                            that.sy_privacy_appid =res.data.config.sy_privacy_appid;
+                            that.sy_privacy_token =res.data.config.sy_privacy_token;
+                            that.sy_privacy_time =res.data.config.sy_privacy_time;
+                            that.sy_privacy_callrec =res.data.config.sy_privacy_callrec;
+                            that.sy_privacy_open =res.data.config.sy_privacy_open;
+                            that.sy_privacy_type =res.data.config.sy_privacy_type;
+                            that.sy_comprivacy_open =res.data.config.sy_comprivacy_open;
+                            that.sy_privacy_rating =res.data.config.sy_privacy_rating;
+
+                            that.qyRatings = res.data.qyRatings;
+                        }
+                        that.islook = true;
+                    }).catch(function(e){
+                        console.log(e)
+                    })
+                },
+                async postSet(){
+
+                    let that = this;
+                    
+                    if (that.sy_privacy_open == 1) {
+
+                        if (that.sy_privacy_type=='') {
+                            message.warning("请选择简历隐私模式！");
+                            return false;
+                        }
+                    }
+
+                    if (that.sy_privacy_open == 1 || that.sy_comprivacy_open == 1) {
+
+                        if (that.sy_privacy_appid == '') {
+                            message.warning("请填写appid！");
+                            return false;
+                        }
+                        if (that.sy_privacy_token == '') {
+                            message.warning("请填写token！");
+                            return false;
+                        }
+                        if (that.sy_privacy_time == '') {
+                            message.warning("请填写有效期！");
+                            return false;
+                        }
+                        
+                    }
+
+                    
+
+                    var param = {
+                        sy_privacy_appid : that.sy_privacy_appid,
+                        sy_privacy_token : that.sy_privacy_token,
+                        sy_privacy_time : that.sy_privacy_time,
+                        sy_privacy_callrec : that.sy_privacy_callrec,
+                        sy_privacy_open : that.sy_privacy_open,
+                        sy_privacy_type : that.sy_privacy_type,
+                        sy_comprivacy_open : that.sy_comprivacy_open,
+                        sy_privacy_rating : that.sy_privacy_rating,
+                    };
+                    
+                    that.post_loading = true;
+                    
+                    httpPost('m=tool&c=privacyset&a=save',param).then((result)=>{
+
+                        that.post_loading = false;
+
+                        var res = result.data;
+
+                        message.success(res.msg);
+
+                    }).catch(function(e){
+                        console.log(e)
+                    })
+                },
+                topage(){
+                    window.parent.homeapp.topage({name: 'companyvip',path:'/companyvip'});
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

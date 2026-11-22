@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="moduleElTabInpt">
+				<div class="moduleInptList">
+				    <el-input placeholder="输入你要搜索的关键字" @keyup.enter.native="search" size="small" v-model="searchForm.keyword" class="input-with-select" clearable>
+				        <el-select v-model="searchForm.type" slot="prepend" placeholder="详细地点">
+				            <el-option label="详细地点" value="1"></el-option>
+				        </el-select>
+				    </el-input>
+				</div>
+				<div v-for="(searchItem, searchIndex) in searchList" class="tableSeachInptsmall moduleInptList">
+				    <el-select v-model="searchForm[searchItem.param]" size="small" slot="prepend" :clearable="true" :placeholder="searchItem.name" @change="search">
+				        <el-option v-for="(searchLabel, searchValue) in searchItem.value" :label="searchLabel" :value="searchValue" ></el-option>
+				    </el-select>
+				</div>
+                <div class="moduleInptList">
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+                </div>
+            </div>
+
+        </div>
+        <div class="moduleElTable">
+            <div class="admin_datatip">
+                <i class="el-icon-document"></i>
+                数据统计：共 {{statis.xjhAllNum}} 条
+                <span class="admin_datatip_n" v-if="statis.xjhStatusNum1>0">未审核：{{statis.xjhStatusNum1}} 条 </span>
+                <span class="admin_datatip_n" v-else>未审核：0 条 </span>
+                <span class="admin_datatip_n" v-if="statis.xjhStatusNum2>0">未通过：{{statis.xjhStatusNum2}} 条</span>
+                <span class="admin_datatip_n" v-else>未通过：0 条 </span>
+                <span class="admin_datatip_n" v-if="statis.xjhStateNum1>0">待举办：{{statis.xjhStateNum1}} 条</span>
+                <span class="admin_datatip_n" v-else>待举办：0 条 </span>
+            	<span class="admin_datatip_n" v-if="statis.xjhStateNum2>0">已结束：{{statis.xjhStateNum2}} 条</span>
+            	<span class="admin_datatip_n" v-else>已结束：0 条 </span>
+                <span class="admin_datatip_n">搜索结果：{{total}} 条</span>
+            </div>
+            <el-table :data="list" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="calc(100% - 42px)" @sort-change="shortChange" v-loading="loading">
+                <template slot="empty">
+                    <p>{{dataText}}</p>
+                </template>
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="id" label="	编号" width="80" sortable="custom">
+                </el-table-column>
+                <el-table-column prop="stime" label="宣讲时间" width="300" sortable="custom">
+					<template slot-scope="scope">
+						<span v-if="scope.row.stime_n">{{scope.row.stime_n}}-{{scope.row.etime_n}}</span>
+						<span v-else>-</span>
+					</template>
+                </el-table-column>
+                <el-table-column label="宣讲城市" min-width="180">
+                    <template slot-scope="scope">
+                        <div class="moduleProps">
+                            <span>城市：{{ scope.row.provinceid_n }}-{{ scope.row.cityid_n }}</span>
+                            <span>地址：{{ scope.row.address }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sch_name" label="宣讲学校" min-width="180">
+                </el-table-column>
+                <el-table-column label="发布人" min-width="180">
+                    <template slot-scope="scope">
+                        <div class="moduleProps">
+                            <span>{{ scope.row.com_name }}</span>
+                            <span>{{ scope.row.ctime_n }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="atnnum" label="关注人数" width="130" sortable="custom">
+                    <template slot-scope="scope">
+                        <div class="moduleProps" v-if="scope.row.atnnum>0">
+                            <span>{{ scope.row.atnnum }}</span>
+                            <el-button type="text" @click="antlook(scope.row)" style="padding: 0;">查看</el-button>
+                        </div>
+						<span v-else>0人</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="审核状态" width="130">
+					<template slot-scope="scope">
+						<span v-if="scope.row.status==1">已审核</span>
+						<span v-else-if="scope.row.status==2" style="color: red;">未通过</span>
+						<span v-else style="color: #f60;">未审核</span>
+					</template>
+                </el-table-column>
+                <el-table-column prop="status_n" label="状态" width="120">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="150">
+                    <template slot-scope="scope">
+                        <div class="moduleElTaCaoz">
+                            <el-button size="mini" @click="apply(scope.row)">审核</el-button>
+							<el-button size="mini" @click="edit(scope.row.id)">修改</el-button>
+							<el-button size="mini" @click="del(scope.$index)" type="danger">删除</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div>
+                <el-checkbox v-model="checkedAll" :indeterminate="checkedAllIndeterminate" @change="checkAll">全选</el-checkbox>
+                <el-button @click="batch('del')" size="mini">批量删除</el-button>
+            </div>
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                   :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+                   layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <!-- 弹窗 -->
+        <div class="modluDrawer">
+            <el-dialog title="校招宣讲会审核" :visible.sync="statusBox" :with-header="true" :modal-append-to-body="false"
+                :show-close="true" width="500px">
+                <div class="toolClasDia fenpeizhand">
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>审核操作：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-radio v-model="status" label="1">正常</el-radio>
+                            <el-radio v-model="status" label="2">未通过</el-radio>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>审核说明：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="statusbody">
+                            </el-input>
+                        </div>
+                    </div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="statusBox = false">取 消</el-button>
+                    <el-button type="primary" @click="subApply" :disabled="saveLoading">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <div class="modluDrawer">
+            <el-dialog title="校招宣讲会信息" :visible.sync="editBox" :with-header="true" :modal-append-to-body="false"
+                :show-close="true" width="600px">
+                <div class="toolClasDia fenpeizhand">
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>宣讲城市：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-select v-model="info.provinceid" placeholder="请选择" @change="changeCity($event, 1)">
+                                <el-option v-for="item in provinceList" :key="item.id" :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="info.cityid" style="margin-left: 8px;" placeholder="请选择" clearable>
+                                <el-option v-for="item in cityList" :key="item.id" :label="item.name"
+                                   :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>宣讲学校：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-select v-model="info.schoolid" placeholder="请选择">
+                                <el-option v-for="item in school" :key="item.id" :label="item.schoolname"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>详细地点：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-input v-model="info.address" placeholder="请输入内容"></el-input>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>宣讲时间：</span>
+                        </div>
+                        <div class="toolClasCont xiaozhaodjsh">
+                            <el-date-picker style="margin-right: 8px;" v-model="info.stime_n" type="date" placeholder="选择日期">
+                            </el-date-picker>
+                            <el-time-picker
+                                is-range
+                                v-model="timearr"
+                                range-separator="至"
+                                start-placeholder="开始时间"
+                                end-placeholder="结束时间"
+                                placeholder="选择时间范围">
+                            </el-time-picker>
+                        </div>
+                    </div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="editBox = false">取 消</el-button>
+                    <el-button type="primary" @click="subEdit" :disabled="saveLoading">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+		<div class="modluDrawer">
+			<el-drawer title="关注宣讲会" :visible.sync="antxjhbox" :modal-append-to-body="false" append-to-body
+					   :show-close="true" :with-header="true" size="80%">
+				<antxjh ref="antxjh" :xjh_id="xjh_id"></antxjh>
+			</el-drawer>
+		</div>
+	</div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                    loading: false,
+                    dataText: '数据加载中',
+                    searchList: [],
+                    searchForm: {
+                        type: '1',
+                        keyword: ''
+                    },
+                    page: 1,
+                    limit: 0,
+                    list: [],
+                    total: 0,
+                    pageSizes: [],
+
+                    checkedAll: false, // 全选
+                    checkedAllIndeterminate: false,
+                    multipleSelection: [], // 多选值存储
+                    idArr: [],
+					saveLoading: false,
+
+					statusBox:false,
+					status:'',
+					statusbody:'',
+					pid:'',
+
+					editBox:false,
+					info:{},
+					provinceList:[],
+					cityList:[],
+					school:[],
+					company:[],
+					timearr:[],
+
+					antxjhbox: false,
+					xjh_id: '',
+					statis:[],
+
+                    prevPage: 0
+                }
+            },
+			components: {
+				'antxjh': httpVueLoader('./component/antxjh.vue'),
+			},
+            mounted() {
+                var that = this;
+                let query = window.parent.homeapp.$route.query;
+                if (query.status) {
+                    that.searchForm.status = query.status;
+                }
+
+            	this.getList();
+                setTimeout(function () {
+                    that.getStatis();
+                    that.getSearchFun();
+                }, 200)
+                
+            },
+            methods: {
+                getSearchFun:function(){
+                    let that = this;
+                    httpPost('m=user&c=school_xjh&a=getSearchData', {},{hideloading: true}).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            that.searchList = res.data.search_list;
+                        }
+                    })
+                },
+				antlook(row){
+					this.xjh_id = row.id;
+					this.antxjhbox = true;
+				},
+				subEdit(){
+					let that = this;
+					let params = {
+						id: that.info.id,
+						uid: that.info.uid,
+						provinceid: that.info.provinceid,
+						cityid: that.info.cityid,
+						schoolid: that.info.schoolid,
+						address: that.info.address,
+						status: that.info.status,
+						r_status: that.company.r_status,
+						stime: that.timearr[0].getTime()/1000,
+						etime: that.timearr[1].getTime()/1000
+					};
+					that.saveLoading = true;
+					httpPost('m=user&c=school_xjh&a=save', params).then(function (response) {
+						let res = response.data;
+						if (res.error >0){
+							message.error(res.msg);
+						}else{
+							message.success(res.msg,function(){
+								that.editBox = false;
+								that.getList()
+							})
+						}
+					}).finally(function () {
+                        setTimeout(function () {
+                            that.saveLoading = false;
+                        }, 2000);
+                    });
+				},
+				edit(id){
+					let that = this;
+
+					httpPost('m=user&c=school_xjh&a=add', {id:id},{hideloading: true}).then(function (response) {
+					    let res = response.data,
+					        data = res.data;
+						that.info = data.info;
+						that.timearr = [new Date(that.info.timearr[0]), new Date(that.info.timearr[1])];
+						that.company = data.company;
+						that.school = data.academy;
+						that.getCity();
+						that.editBox = true;
+					});
+
+				},
+				subApply(){
+					let that = this;
+					let params = {
+						pid: that.pid,
+						status: that.status,
+						lock_info: that.statusbody
+					};
+					that.saveLoading = true;
+					httpPost('m=user&c=school_xjh&a=status', params).then(function(response) {
+					    let res = response.data;
+						if (res.error>0){
+							message.error(res.msg);
+						}else{
+							message.success(res.msg, function () {
+								that.statusBox = false;
+							    that.getList();
+							});
+						}
+
+					}).finally(function () {
+						setTimeout(function () {
+							that.saveLoading = false;
+						}, 2000);
+					});
+				},
+				apply(row){
+					if (row.r_status != 1){
+						message.error('当前用户为已锁定状态，无法进行审核操作');
+						return false;
+					}
+					this.pid = row.id;
+					this.status = row.status;
+					this.statusbody = row.statusbody;
+					this.statusBox = true;
+				},
+				shortChange(e) {
+				    let orderMap = {ascending: 'asc', descending: 'desc'}
+				    this.searchForm.t = e.order ? e.prop : null;
+				    this.searchForm.order = orderMap[e.order];
+				    this.search();
+				},
+                handleSizeChange(val) {
+                    this.limit = val;
+                    this.getList();
+                },
+                handleCurrentChange(val) {
+                    this.page = val;
+                    this.getList();
+                },
+                search() {
+                    this.page = 1;
+                    this.getList();
+                },
+                getList() {
+                    let that = this,
+                        searchForm = that.searchForm,
+                        params = {
+                            page: that.page,
+                            limit: that.limit,
+                        };
+                    that.loading = true;
+
+                    httpPost('m=user&c=school_xjh', {...params, ...searchForm}, {hideloading: true}).then(function (response) {
+                        let res = response.data,
+                            data = res.data;
+
+                        that.list = data.list;
+                        that.total = parseInt(data.total);
+                        that.pageSizes = data.page_sizes;
+                        if (that.limit === 0) {
+                            that.limit = parseInt(data.limit); // 取系统配置默认数量
+                        }
+                        if (that.page > data.page) {
+                            that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+                        }
+
+                        that.loading = false;
+                        if(that.prevPage != that.page){
+                            that.prevPage = that.page;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        if (that.list.length === 0) {
+                            that.dataText = "暂无数据";
+                        }
+                    })
+                },
+				getStatis() {
+				    let that = this;
+
+				    httpPost('m=user&c=school_xjh&a=xjhNum', {}, {hideloading: true}).then(function (response) {
+				        let res = response.data,
+				            data = res.data;
+						that.statis = data;
+				    })
+				},
+                handleSelectionChange(val) {
+                    if (val.length == 0) {
+                        this.checkedAll = false;
+                        this.checkedAllIndeterminate = false;
+                    } else {
+                        if (val.length === this.list.length) {
+                            this.checkedAll = true;
+                            this.checkedAllIndeterminate = false;
+                        } else {
+                            this.checkedAll = false;
+                            this.checkedAllIndeterminate = true;
+                        }
+                    }
+                    this.multipleSelection = val;
+                },
+                batch(type) {
+                    if (this.multipleSelection.length == 0 && type == 'del') {
+                        message.error('请选择要删除的数据');
+                        return false;
+                    }else if (this.multipleSelection.length == 0){
+                        message.error('请选择要操作的数据项');
+                        return false;
+                    }
+
+                    let idArr = [];
+                    this.multipleSelection.forEach(function(item) {
+                        idArr.push(item.id);
+                    })
+                    this.idArr = idArr;
+
+                    if (type == 'del') {
+                        this.del();
+                    }
+                },
+                checkAll(val) {
+                    val ? this.checkedAllIndeterminate = false : '';
+                    this.$refs.multipleTable.toggleAllSelection();
+                },
+                del(idx) {
+                    let that = this,
+                        params = {},
+                        msg = '';
+
+                    if (typeof idx == 'undefined') { // 批量删除
+                        params.del = this.idArr;
+                        msg = '你确定要删除选中项吗？';
+                    } else {// 单个删除
+                        params.del = that.list[idx].id;
+                        msg = '你确定要删除当前项吗？';
+                    }
+
+                    delConfirm(this, params, function (params) {
+                        httpPost('m=user&c=school_xjh&a=del', params).then(function(res) {
+                            if (res.data.error > 0) {
+                                message.error(res.data.msg);
+                            } else {
+                                message.success(res.data.msg, function () {
+                                    that.$refs.multipleTable.clearSelection();
+                                    that.getList();
+                                });
+                            }
+                        })
+                    }, msg)
+                },
+				changeCity(val, level) {
+				    if (level == 1) {
+				        this.info.provinceid = val;
+				        this.info.cityid = '';
+				    } else if (level == 2) {
+				        this.info.cityid = val;
+				    }
+				    this.getCity(level);
+				},
+				getCity(level) {
+				    let that = this;
+
+				    httpPost('m=common&c=cache&a=getCity', {
+				        provinceid: that.info.provinceid,
+				        cityid: that.info.cityid,
+				        level: typeof level !== "undefined" ? level : ''
+				    }, {hideloading: true}).then(function (response) {
+				        let res = response.data,
+				            data = res.data;
+
+				        if (typeof data.provinceList !== "undefined") {
+				            that.provinceList = data.provinceList;
+				        }
+				        if (typeof data.cityList !== "undefined") {
+				            that.cityList = data.cityList;
+				        }
+				    })
+				},
+            }
+        });
+    </script>
+</body>
+
+</html>

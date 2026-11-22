@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="yemanapp" class="tableDome">
+        <div class="uploadTable">
+            <table class="tableVue">
+                <thead>
+                    <tr align="left">
+                        <th width="200">名称</th>
+                        <th width="500">状态</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="TableTite">供求开关</div>
+                    </td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-switch v-model="config.gq_status" active-value="1" inactive-value="2">
+                            </el-switch>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="TableShuom">
+                            <span>关闭后，WAP用户中心不显示任务大厅</span>
+                        </div>
+                    </td>
+                </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">发布项目任务</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+
+                                <el-input placeholder="请输入内容" v-model="config.gq_pay_price" @input="inputIntNumber($event, 'config', 'gq_pay_price')">
+                                    <span slot="suffix" class="slotspan">元/条</span>
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>提示：0为免费</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">项目发布次数</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+
+                                <el-input placeholder="请输入内容" v-model="config.gq_number" @input="inputIntNumber($event, 'config', 'gq_number')">
+                                    <span slot="suffix" class="slotspan">次/天</span>
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>提示：当金额为0元，每天发布次数才会限制（0为不限）</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">项目任务刷新</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input placeholder="请输入内容" v-model="config.gq_refrsh_pay" @input="inputIntNumber($event, 'config', 'gq_refrsh_pay')">
+                                    <span slot="suffix" class="slotspan">元/次</span>
+                                </el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>提示：0为不限</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">查看供求项目任务联系方式</div>
+                        </td>
+                        <td>
+                            <div class="TableButn">
+                                <el-radio v-model="config.gq_task_link" label="0">公开</el-radio>
+                                <el-radio v-model="config.gq_task_link" label="1">登录查看</el-radio>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>查看供求项目任务联系方式</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">查看供求用户联系方式</div>
+                        </td>
+                        <td>
+                            <div class="TableButn">
+                                <el-radio v-model="config.gq_info_link" label="0">公开</el-radio>
+                                <el-radio v-model="config.gq_info_link" label="1">登录查看</el-radio>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>查看供求用户联系方式</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">供求用户审核</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-switch v-model="config.gq_fast_status" >
+                                </el-switch>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>供求用户审核</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">供求项目任务审核</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-switch v-model="config.gq_task_status">
+                                </el-switch>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>供求项目任务审核</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">供求用户上传头像审核</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-switch v-model="config.gq_photo_status" >
+                                </el-switch>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>供求用户上传头像审核</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">默认供求头象</div>
+                        </td>
+                        <td>
+                            <div class="TableUpload">
+                                <el-upload class="upload-demo" :accept="pic_accept" action="" :auto-upload="false"
+                                           :show-file-list="false" :on-change="upShareChange">
+                                    <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
+                                    <img class="el-upload-list__item-thumbnail" v-if="config.gq_photo" :src="picurl" width="140" height="140" style="margin-left: 25px;" />
+                                </el-upload>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>默认供求头象</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="setBasicButn" style="border: none;height: 80px;">
+            <el-button type="primary" size="medium" :disabled="saveLoading" @click="setConfig">提交</el-button>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#yemanapp',
+            data: function () {
+                return {
+                    pic_accept: localStorage.getItem("pic_accept"),
+                    saveLoading: false,
+
+					config:[],
+					file: '',
+					picurl:'',
+					picPreUrl: '',
+					picMaxSize: ''
+                }
+            },
+            mounted() {
+            	this.getInfo();
+            },
+            methods: {
+                inputIntNumber(val, form, key) {
+                    this.$data[form][key] = val.replace(/[^0-9]/g,'');
+                },
+				getInfo() {
+				    let that = this;
+				
+				    httpPost('m=user&c=supply_set').then(function (response) {
+				        let res = response.data,
+				            data = res.data;
+				        that.config = data.config;
+						that.picPreUrl = data.config.sy_ossurl;
+						that.picurl = that.picPreUrl+'/'+that.config.gq_photo;
+						that.picMaxSize = data.config.pic_maxsize;
+						if (that.config.gq_fast_status==0){
+							that.config.gq_fast_status = true;
+						}else{
+							that.config.gq_fast_status = false;
+						}
+						if (that.config.gq_task_status==0){
+							that.config.gq_task_status = true;
+						}else{
+							that.config.gq_task_status = false;
+						}
+						if (that.config.gq_photo_status==1){
+							that.config.gq_photo_status = true;
+						}else{
+							that.config.gq_photo_status = false;
+						}
+				    })
+				},
+				checkFile:function(file){
+				    let that = this;
+				    //  判断图片大小
+				    let isLtNumM = file.size / 1024 / 1024 < this.picMaxSize;
+				    if (!isLtNumM) {
+				        message.error('上传图片大小不能超过 '+this.picMaxSize+'MB!');
+				        return false;
+				    }
+				},
+				upShareChange(file) {
+				    var that =  this;
+				    that.checkFile(file);
+				    this.picurl = URL.createObjectURL(file.raw);
+                    this.config.gq_photo = URL.createObjectURL(file.raw);
+				    this.file = file.raw;
+				},
+				setConfig: function () {
+					let that = this;
+
+					if (that.saveLoading) {
+					    return;
+                    }
+                    that.saveLoading = true;
+
+					let formData = new FormData();
+                    formData.append('gq_status', that.config.gq_status);
+					formData.append('gq_pay_price', that.config.gq_pay_price);
+					formData.append('gq_number', that.config.gq_number);
+					formData.append('gq_refrsh_pay', that.config.gq_refrsh_pay);
+					formData.append('gq_task_link', that.config.gq_task_link);
+					formData.append('gq_info_link', that.config.gq_info_link);
+					if (that.config.gq_fast_status){
+						formData.append('gq_fast_status', 0);
+					}else{
+						formData.append('gq_fast_status', 1);
+					}
+					if (that.config.gq_task_status){
+						formData.append('gq_task_status', 0);
+					}else{
+						formData.append('gq_task_status', 1);
+					}
+					if (that.config.gq_photo_status){
+						formData.append('gq_photo_status', 1);
+					}else{
+						formData.append('gq_photo_status', 2);
+					}
+					if (that.file.length !== 0) {
+					
+					    formData.append('logoFile', that.file);
+					}
+					formData.append('config', '1');
+					httpPost('m=user&c=supply_set&a=save', formData).then(function (res) {
+                        that.saveLoading = false;
+					    if (res.data.error == 0) {
+					        message.success(res.data.msg);
+					    } else {
+					        message.error(res.data.msg);
+					    }
+					});
+				},
+            }
+        });
+    </script>
+</body>
+
+</html>

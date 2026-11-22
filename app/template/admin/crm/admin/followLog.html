@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+
+    <script src="../../../admin/js/socketfun.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="allFollowLogApp" class="moduleDome">
+    <div class="allFollowLogPage">
+        <follow_log v-bind:log_tab="0"></follow_log>
+    </div>
+    
+</div>
+<script>
+    const allFollowLogApp = new Vue({
+        el: '#allFollowLogApp',
+        data: function () {
+            return {
+                activeName: 'first',
+            }
+        },
+        components: {
+            'follow_log': httpVueLoader('../component/followLog.vue'),
+        },
+        methods: {
+            handleClick(tab, event) {
+            }
+        }
+    })
+</script>
+</body>
+    <style>
+        .oidsusds{
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .oidsusds .moduleSeachs{
+            padding: 0;
+        }
+        .oidsusds .moduleElTable{
+            padding: 12px 0 0 0; 
+            width: 100%; 
+            margin-top: 0;
+            height: calc(100% - (60px + 10px + 12px + 12px));
+        }
+    </style>
+</html>

@@ -1,0 +1,19 @@
+@media (max-width: 375px) {
+    .homeModular {
+        height: 71vh !important;
+    }
+    .userList {
+        height: 71vh !important;
+    }
+    .meanseData form .meanseDataAlls{
+        height: 73vh;
+    }
+}
+
+
+@media (max-width: 330px) {
+    .bottom_nav{
+        margin-top: 0 !important;
+        height: 2.333333rem !important;
+    }
+}

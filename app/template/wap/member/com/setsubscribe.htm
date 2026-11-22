@@ -1,0 +1,358 @@
+{yun:}include file="$wapstyle/member/cheader.htm"{/yun}
+<div id="yunvue" class="none">
+    <div class="wap_member_box">
+        <form id="editchildForm">
+            <div class="yun_from_list">
+                <div class="from_list_tite">
+                    <span>发送周期</span>
+                </div>
+                <div class="from_list_cont">
+                    <span :class="time==1?'time_choosed':'time_unchoosed'" @click="time=1">每天 </span>
+                    <span :class="time==3?'time_choosed':'time_unchoosed'" @click="time=3">3天 </span>
+                    <span :class="time==7?'time_choosed':'time_unchoosed'" @click="time=7">7天</span>
+                </div>
+            </div>
+            <div class="yun_from_list">
+                <div class="from_list_tite">
+                	<span>工作职能</span>
+                </div>
+                <div class="from_list_cont" @click="jobShow=true">
+                    <div class="yun_create_text_p" style="color: #666;">{{jobname}}</div>
+                    <div class="yun_create_fx">
+                        <img src="{yun:}$wap_style{/yun}/images/yunfx.png" alt="" width="100%" height="100%">
+                    </div>
+                    <input hidden="true" name="job1" :value="job1"/>
+                    <input hidden="true" name="job1_son" :value="job1_son"/>
+                    <input hidden="true" name="job_post" :value="job_post"/>
+                </div>
+            </div>
+            <div class="yun_from_list">
+                <div class="from_list_tite">
+                    <span>所在城市</span>
+                </div>
+                <div class="from_list_cont" @click="areaShow=true">
+                    <div class="yun_create_text_p" style="color: #666;">{{cityname}}</div>
+                    <div class="yun_create_fx">
+                        <img src="{yun:}$wap_style{/yun}/images/yunfx.png" alt="" width="100%" height="100%">
+                    </div>
+                    <input hidden="true" name="provinceid" :value="provinceid"/>
+                    <input hidden="true" name="cityid" :value="cityid"/>
+                    <input hidden="true" name="three_cityid" :value="three_cityid"/>
+                </div>
+            </div>
+            <div class="yun_from_list"  @click="salaryBox = true">
+                <div class="from_list_tite">
+                    <span>月薪范围</span>
+                </div>
+                <div class="from_list_cont">
+                    <div class="yun_create_select" v-if="salary">{{salary}}</div>
+                    <div class="yun_create_select" style="color:#cecccc;" v-else>请填写月薪范围</div>
+                    <div class="yun_create_fx">
+                        <img src="{yun:}$wap_style{/yun}/images/yunfx.png" alt="" width="100%" height="100%">
+                    </div>
+                    <input type="hidden" name="minsalary" :value="minsalary"/>
+                    <input type="hidden" name="maxsalary" :value="maxsalary"/>
+                </div>
+            </div>
+            <div class="yun_from_list">
+                <div class="from_list_tite">
+                    <span>更新时间</span>
+                </div>
+                <div class="from_list_cont" @click="cycleShow=true">
+                    <div class="yun_create_select">{{cycle.name[cycleIndex]}}</div>
+                    <div class="yun_create_fx">
+                        <img src="{yun:}$wap_style{/yun}/images/yunfx.png" alt="" width="100%" height="100%">
+                    </div>
+                    <input type="hidden" name="cycle_time" :value="cycle_time"/>
+                    
+                </div>
+            </div>
+            <div class="security_bth">
+                <div class="security_bth_but" name="submit" @click="saveEdit" style="text-align:center">确认</div>&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <!--发送周期选择器-->
+    <van-popup v-model="cycleShow" round position="bottom">
+        <van-picker show-toolbar :default-index="cycleIndex" @cancel="cycleShow = false" :columns="cycle.name" @confirm="bindcycleChange"/>
+    </van-popup>
+    <!--职能筛选-->
+    <van-popup v-model="jobShow" round position="bottom">
+        <van-cascader v-model="jobValue" title="请选择职能" :options="jobOptions" @close="jobShow = false" @finish="onJobFinish" />
+    </van-popup>
+    <!--城市选择-->
+    <van-popup v-model="areaShow" round position="bottom">
+        <van-cascader v-model="areaValue" title="请选择所在城市" :options="areaOptions" @close="areaShow = false" @finish="onAreaFinish"/>
+    </van-popup>
+    <!--薪资弹窗-->
+    <van-popup v-model="salaryBox" round position="center" round  closeable :style="{ width: '80%'}">
+        <form id="salarySubmit">
+            <div class="">
+                <div class="salaryh1">月薪范围</div>
+                <div class="salary_list">
+                <span class="salaryname">最低薪资：</span>
+                <div class="salary_text">
+                    <input type="number" name="minsalary" oninput="value=value.replace(/^0|[\^d]/g,'')" :value="minsalary" placeholder="最低薪资"/>
+                </div></div>
+                <div class="salary_list">
+                <span class="salaryname">最高薪资：</span>
+                <div class="salary_text">
+                    <input type="number" name="maxsalary" oninput="value=value.replace(/^0|[\^d]/g,'')" :value="maxsalary" placeholder="最高薪资"/>
+                </div></div>
+                <div class="salary_subnew">
+                    <div  class="salary_sub_bth" @click="salarySubmit">确认</div>
+                </div>
+            </div>
+        </form>
+    </van-popup>
+</div>
+<script src="{yun:}$plusstyle{/yun}/job.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$plusstyle{/yun}/jobparent.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$plusstyle{/yun}/city.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$plusstyle{/yun}/cityparent.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$wap_style{/yun}/js/category.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+{yun:}include file="$wapstyle/member/public/resume_city_job.htm"{/yun}
+<script>
+
+var id = parseInt('{yun:}$smarty.get.id{/yun}');
+var cityData = cityCategory({
+        one_all: false,
+        two_all:true,
+        three_all:true
+    });
+var jobData = jobCategory({
+        one_all: false,
+        two_all:true,
+        three_all:true
+    });
+var yunvue = new Vue({
+    el: '#yunvue',
+    data: {
+
+        id: id ? id : '',
+
+        time: '',
+
+        jobShow:false,
+        jobValue:0,
+        jobOptions:jobData,
+        jobname: '请选择工作职能',
+        job1: '',
+        job1_son:'',
+        job_post:'',
+
+
+
+        areaShow:false,
+        areaValue: 0,
+        areaOptions: cityData,
+        cityname: '请选择所在城市',
+        provinceid: '',
+        cityid:'',
+        three_cityid:'',
+
+        minsalary:'',
+        maxsalary:'',
+        salary:'',
+        salaryBox:false,
+
+        cycle_time:'',
+        cycleShow:false,
+        cycle: {
+            name: ['请选择更新时间','3天以内','1周以内','2周以内','3周以内','1月以内','3月以内'],
+            id: ['','3','7','14','21','30','90']
+        },
+        cycleIndex: 0,
+
+    },
+    created() {
+        if (id != '') {
+            this.getinfo();
+        }
+    },
+    methods: {
+        getinfo: function() {
+            var that = this;
+            var paramer = { id: that.id };
+            showLoading();
+            $.post('{yun:}url d=wxapp h=com m=subscribe c=getSubscribe{/yun}', paramer, function(data) {
+
+                hideLoading();
+
+                if (data) {
+                    var info = data.data.info;
+                    if(info && id!=''){
+                        that.time = info.time;
+                        that.jobname = info.jobname_n ? info.jobname_n : '请选择工作职能';
+                        that.cityname = info.cityname_n ? info.cityname_n : '请选择所在城市';
+                        
+                        that.provinceid = info.provinceid ? parseInt(info.provinceid) : 0;
+                        that.cityid = info.cityid ? parseInt(info.cityid) : 0;
+                        that.three_cityid = info.three_cityid ? parseInt(info.three_cityid) : 0;
+                        
+                        if (that.three_cityid > 0) {
+                            that.areaValue = that.three_cityid
+                        } else if (that.cityid > 0) {
+                            that.areaValue = that.cityid
+                        } else {
+                            that.areaValue = that.provinceid;
+                        }
+
+                        that.job1     = info.job1 ? parseInt(info.job1) : 0;
+                        that.job1_son = info.job1_son ? parseInt(info.job1_son) : 0;
+                        that.job_post = info.job_post ? parseInt(info.job_post) : 0;
+                        
+                        if (that.job_post > 0) {
+                            that.jobValue = that.job_post
+                        } else if (that.job1_son > 0) {
+                            that.jobValue = that.job1_son
+                        } else {
+                            that.jobValue = that.job1;
+                        }
+
+                        that.minsalary = info.minsalary;
+                        that.maxsalary = info.maxsalary;
+                        
+                        if (that.maxsalary!= '') {
+                            that.salary = that.minsalary + '-' + that.maxsalary;
+                        } else {
+                            that.salary = that.minsalary;
+                        }
+
+                        if(info.cycle_time!=''){
+                            if(that.cycle.id.indexOf(info.cycle_time)!=-1){
+                                that.cycle_time = info.cycle_time;
+                                that.cycleIndex = that.cycle.id.indexOf(info.cycle_time)
+                            }
+                        }
+                    }
+                    
+                }
+                $("#yunvue").css('display', 'block');
+            }, 'json');
+        },
+        saveEdit: function() {
+            var that = this;
+            var formData = {};
+
+            if (that.time == '') {
+                return showToast('请选择发送周期!');
+            }
+            if (that.job1 == '') {
+                return showToast('请选择工作职能!');
+            }
+            if (that.provinceid == '') {
+                return showToast('请选择所在城市!');
+            }
+            if(that.minsalary==""||that.minsalary==0){
+                showToast('请正确填写月薪范围');return false;
+            }
+            if(that.maxsalary&&parseInt(that.maxsalary)<parseInt(that.minsalary)){
+                showToast('最高月薪必须大于最低月薪');return false;
+            }
+
+            formData.id = that.id;
+            formData.time = that.time;
+            formData.provinceid = that.provinceid;
+            formData.cityid = that.cityid;
+            formData.three_cityid = that.three_cityid;
+            formData.job1 = that.job1;
+            formData.job1_son = that.job1_son;
+            formData.job_post = that.job_post;
+            formData.minsalary = that.minsalary;
+            formData.maxsalary = that.maxsalary;
+            formData.cycle_time = that.cycle_time;
+            
+            showLoading('保存中...');
+            $.post('{yun:}url d=wxapp h=com m=subscribe c=saveSub{/yun}', formData, function(data) {
+                hideLoading();
+                if (data.errcode == 9) {
+                    showToast(data.msg, 2, function() {
+                        goBack();
+                    });
+                } else {
+                    showModal(data.msg);
+                }
+            }, 'json');
+        },
+        // 工作地点选择
+        onAreaFinish({selectedOptions}) {
+            this.provinceid = 0;
+            this.cityid = 0;
+            this.three_cityid = 0;
+
+            let cityStr = '';
+
+            if (selectedOptions[0] && selectedOptions[0].value > 0) {
+                if (selectedOptions[0]) {
+                    this.provinceid = selectedOptions[0].value;
+                    cityStr += selectedOptions[0].text;
+                }
+
+            }
+            if (selectedOptions[1] && selectedOptions[1].value > 0) {
+                if (selectedOptions[1]) {
+                    this.cityid = selectedOptions[1].value;
+                    cityStr += ' ' + selectedOptions[1].text;
+                }
+            }
+            if (selectedOptions[2] && selectedOptions[2].value > 0) {
+                if (selectedOptions[1]) {
+                    this.three_cityid = selectedOptions[2].value;
+                    cityStr += ' ' + selectedOptions[2].text;
+                }
+            }
+            this.cityname = cityStr ? cityStr : '请选择所在城市';
+            this.areaShow = false;
+        },
+        onJobFinish({selectedOptions}) {
+                
+            this.job1 = this.job1_son = this.job_post = jobStr ='';
+
+            if(selectedOptions[0] && selectedOptions[0].value>0){
+                this.job1 = selectedOptions[0].value;
+                jobStr += selectedOptions[0].text;
+            }
+            if(selectedOptions[1] && selectedOptions[1].value>0){
+                this.job1_son = selectedOptions[1].value;
+                jobStr += ' ' + selectedOptions[1].text;
+            }
+            if(selectedOptions[2] && selectedOptions[2].value>0){
+                this.job_post = selectedOptions[2].value;
+                jobStr += ' ' + selectedOptions[2].text;
+            }
+            this.jobname = jobStr ? jobStr : '请选择工作职能';
+            this.jobShow = false;
+        },
+        salarySubmit:function(){
+            var v = getFormValue('salarySubmit');
+            if (v.minsalary.trim() == '') {
+                showModal('请填写月薪范围');
+                return false;
+            } else if (parseInt(v.minsalary) > parseInt(v.maxsalary) && v.minsalary.trim() != '') {
+                showModal('请正确填写月薪范围');
+                return false;
+            }
+            if (v.maxsalary.trim() != '') {
+                this.maxsalary = v.maxsalary;
+                this.minsalary = v.minsalary;
+                this.salary = v.minsalary + '-' + v.maxsalary;
+            } else {
+                this.minsalary = v.minsalary;
+                this.maxsalary = v.maxsalary;
+                this.salary = v.minsalary;
+            }
+            this.salaryBox = false;
+        },
+        bindcycleChange: function (value, index) {
+            this.cycleIndex = index;
+            this.cycle_time = this.cycle.id[index]
+            this.cycleShow = false;
+        },
+    }
+});
+
+</script>
+</body>
+
+</html>

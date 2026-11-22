@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="moduleSeachleft">
+                <div class="moduleInptList">
+                    <el-input placeholder="输入你要搜索的关键字" v-model="searchForm.keyword" size="small" class="input-with-select" clearable>
+                        <el-select v-model="searchForm.type" size="small" slot="prepend" placeholder="用户名">
+                            <el-option label="用户名" value="1"></el-option>
+                            <el-option label="订单编号" value="2"></el-option>
+                            <el-option label="广告位名称" value="3"></el-option>
+                            <el-option label="公司名称" value="4"></el-option>
+                        </el-select>
+                    </el-input>
+                </div>
+                <div class="tableSeachInptsmall newsinput">
+                    <el-select v-model="searchForm.status" size="small" slot="prepend" placeholder="审核状态" clearable @change="handleSearch">
+                        <el-option label="已审核" value="1"></el-option>
+                        <el-option label="未通过" value="2"></el-option>
+                        <el-option label="未审核" value="-1"></el-option>
+                    </el-select>
+                </div>
+                <div class="tableSeachInptsmall newsinput">
+                    <el-select v-model="searchForm.end" size="small" slot="prepend" placeholder="订单时间" clearable @change="handleSearch">
+                        <el-option label="今天" value="1"></el-option>
+                        <el-option label="最近三天" value="3"></el-option>
+                        <el-option label="最近七天" value="7"></el-option>
+                        <el-option label="最近半月" value="15"></el-option>
+                        <el-option label="最近一个月" value="30"></el-option>
+                    </el-select>
+                </div>
+                <div class="newsbtnbox">
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSearch">查询</el-button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="moduleElTable">
+            <el-table :data="tableData" border style="width: 100%"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%"
+                ref="multipleTable"
+                @selection-change="handleSelectionChange"
+                @sort-change="shortChange"
+                v-loading="loading"
+            >
+                <template slot="empty">
+                    <p>{{dataText}}</p>
+                </template>
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="id" label="编号" sortable="custom" width="80">
+                </el-table-column>
+                <el-table-column label="公司名称/用户名" min-width="220">
+                    <template slot-scope="scope">
+                        <div>{{scope.row.comname}}</div>
+                        <div>{{scope.row.username}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="order_id" label="订单编号" width="180">
+                </el-table-column>
+                <el-table-column prop="adname" label="广告位名称" width="280">
+                </el-table-column>
+                <el-table-column prop="integral" label="购买费用" width="100">
+                    <template slot-scope="scope">
+                        <template v-if="scope.row.buytype == 1">{{scope.row.integral}} {{integral_pricename}}</template>
+                        <template v-else>{{scope.row.price}} 元</template>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="buy_time" label="广告期限" width="100">
+                    <template slot-scope="scope">
+                        {{scope.row.buy_time}} 月
+                    </template>
+                </el-table-column>
+                <el-table-column label="广告图片" width="100">
+                    <template slot-scope="scope">
+                        <div class="moduleElImage">
+                            <el-image :src="scope.row.pic_url_n ? scope.row.pic_url_n : ''" :preview-src-list="[scope.row.pic_url_n]"></el-image>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="datetime" label="下单时间" sortable="custom" width="160">
+                    <template slot-scope="scope">
+                        {{scope.row.datetime_n}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="订单状态" width="100">
+                    <template slot-scope="scope">
+                        <div v-html="scope.row.order_state_n"></div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="adzhuantai" label="广告状态" width="100">
+                    <template slot-scope="scope">
+                        <el-tag type="success" v-if="scope.row.status == 1">已审核</el-tag>
+                        <el-tag type="info" v-else-if="scope.row.status == 0">未审核</el-tag>
+                        <el-tag type="danger" v-else-if="scope.row.status == 2">未通过</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="120" align="center">
+                    <template slot-scope="scope">
+                        <div class="cz_button">
+                            <el-button v-if="scope.row.status != 1 && scope.row.status != 2" type="primary" size="small" @click="handleStatus(scope)">审核</el-button>
+                            <el-button v-if="scope.row.status == 1 || scope.row.status == 2" type="danger" size="small" @click="deleteRow(scope)">删除</el-button>
+                        </div>
+                    </template>
+               </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div class="modulecz modulePagButn">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="selectAllBottom">全选</el-checkbox>
+                <el-button @click="deleteRow(null, true)">批量删除</el-button>
+            </div>
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    :current-page.sync="searchForm.page" :page-size="searchForm.limit" :page-sizes="pageSizes"
+                    layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+
+        <div class="modluDrawer">
+            <el-dialog title="订单状态" :visible.sync="statusVisible" :with-header="true" :modal-append-to-body="false"
+               :show-close="true" width="430px">
+                <div class="wxsettip_small">
+                    选择订单状态
+                    <el-tooltip class="item" effect="dark" content="审核不通过时，将全额退回给该用户"
+                        placement="right-start"><i class="el-icon-warning-outline"></i>
+                        <el-button>右上</el-button>
+                    </el-tooltip>
+                </div>
+                <div class="">
+                    <el-radio v-model="ruleFormStatus.status" label="1">已审核</el-radio>
+                    <el-radio v-model="ruleFormStatus.status" label="2">未通过</el-radio>
+                </div>
+                <div class="wxsettip_small">状态说明</div>
+                <div class="">
+                    <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="ruleFormStatus.statusbody"></el-input>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="statusVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="submitFormStatus('ruleFormStatus')" :disabled="submitLoading">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+    </div>
+
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                    loading: false,
+                    dataText: '数据加载中',
+                    searchForm: {
+                        page: 1,
+                        limit: null,
+                        keyword: '',
+                        type: '1',
+                        status: null,
+                        end: null,
+                    },
+                    total: 0,
+                    tableData: [],
+                    pageSizes: [],
+                    checked: false,//全选
+                    isIndeterminate: false,// checkbox 的不确定状态
+                    selectedItem: [],
+                    info: {},
+                    integral_pricename: '',
+                    statusVisible: false,
+                    ruleFormStatus:{
+                        pid: 0,
+                        status: '',
+                        statusbody: '',
+                    },
+                    submitLoading: false,
+                    prevPage:0
+                }
+            },
+            components: {
+                //'ad_order_status': httpVueLoader('./component/ad_order_status.vue'),
+            },
+            created: function () {
+                var that = this
+                let query = window.parent.homeapp.$route.query;
+                if (query.status) {
+                    that.searchForm.status = query.status;
+                }
+
+                this.getList();
+            },
+            methods: {
+                handleSelectionChange(val) {
+                    this.selectedItem = val;
+                    if (this.selectedItem.length == 0) {
+                        this.isIndeterminate = false;
+                        this.checked = false;
+                    } else {
+                        if (this.selectedItem.length == this.tableData.length) {
+                            this.isIndeterminate = false;
+                            this.checked = true;
+                        } else {
+                            this.isIndeterminate = true;
+                            this.checked = false;
+                        }
+                    }
+                },
+                selectAllBottom(value) {
+                    value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+                },
+                shortChange(e) {
+                    let orderMap = {ascending: 'asc', descending: 'desc'}
+                    this.searchForm.t = e.order ? e.prop : null;
+                    this.searchForm.order = orderMap[e.order];
+                    this.searchForm.page = 1;
+                    this.getList();
+                },
+                handleSizeChange(val) {
+                    this.searchForm.limit = val;
+                    this.getList();
+                },
+                handleCurrentChange(val) {
+                    this.searchForm.page = val;
+                    this.getList();
+                },
+                handleSearch() {
+                    this.searchForm.page = 1;
+                    this.getList();
+                },
+                getList() {
+                    let _this = this;
+                    let params = JSON.parse(JSON.stringify(this.searchForm));
+                    for (let index in params) {
+                        (params[index] === '') && (params[index] = null);
+                    }
+                    _this.loading = true;
+                    httpPost('m=yunying&c=ad_order&a=index', params, {hideloading: true}).then(function (response) {
+                        let res = response.data;
+                        if (res.error === 0) {
+                            _this.integral_pricename = res.data.integral_pricename;
+                            _this.tableData = res.data.list;
+                            _this.total = res.data.total;
+                            _this.searchForm.limit = res.data.perPage;
+                            _this.pageSizes = res.data.pageSizes;
+                            if(_this.prevPage != _this.searchForm.page){
+                                _this.prevPage = _this.searchForm.page;
+                                _this.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                            }
+                            _this.loading = false;
+                            if (_this.tableData.length === 0) {
+                                _this.dataText = "暂无数据";
+                            }
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                deleteRow(scope, isMore) {
+                    let params = {};
+                    if (isMore) {
+                        if (!this.selectedItem.length) {
+                            message.error('请选择要删除的数据');
+                            return false;
+                        }
+                        let list = [];
+                        for (let item of this.selectedItem) {
+                            list.push(item.id);
+                        }
+                        params.delType = 'more';
+                        params.del = list;
+                    } else {
+                        // let index = scope.$index;
+                        // this.tableData.splice(index, 1);
+                        params.delType = 'single';
+                        params.id = scope.row.id;
+                    }
+
+                    delConfirm(this, params, this.delete);
+                },
+                delete(params) {
+                    let _this = this;
+                    httpPost('m=yunying&c=ad_order&a=del', params).then(function (response) {
+                        let res = response.data;
+                        if (res.error === 0) {
+                            message.success('删除成功！');
+                            _this.getList();
+                        } else {
+                            message.error('删除失败！');
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                handleStatus(scope){
+                    this.info = scope.row;
+                    this.ruleFormStatus.pid = this.info.id;
+                    this.getsbody();
+                    this.statusVisible = true;
+                },
+                getsbody(){
+                    let _this = this;
+                    let params = {pid: this.ruleFormStatus.pid};
+                    httpPost('m=yunying&c=ad_order&a=sbody', params).then(function (response) {
+                        let res = response.data;
+                        if (res.error === 0) {
+                            _this.ruleFormStatus.statusbody = res.data;
+                        } else {
+                            message.error('参数有误');
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                submitFormStatus(formName) {
+                    let _this = this;
+                    let params = JSON.parse(JSON.stringify(this.ruleFormStatus));
+
+                    if (params.status != '1' && params.status != '2') {
+                        message.error('请选择审核状态！');
+                        return false;
+                    }
+                    _this.submitLoading = true;
+                    httpPost('m=yunying&c=ad_order&a=status', params).then(function (response) {
+                        let res = response.data;
+                        if (res.error === 0) {
+                            message.success(res.msg);
+                            _this.clearFormStatus();
+                        } else {
+                            message.error(res.msg);
+                        }
+                        _this.statusVisible = false;
+                        _this.getList();
+                    }).catch(function (error) {
+                        console.log(error);
+                    }).finally(function () {
+                        _this.submitLoading = false;
+                    });
+                },
+                clearFormStatus() {
+                    this.ruleFormStatus.pid = 0;
+                    this.ruleFormStatus.status = '';
+                    this.ruleFormStatus.statusbody = '';
+                }
+            }
+        });
+    </script>
+</body>
+<style>
+.el-dialog__body { padding: 0px 20px; }
+</style>
+</html>

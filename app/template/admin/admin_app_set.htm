@@ -1,0 +1,2344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/appdiy.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery.dragsort-0.5.1.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <title>后台管理</title>
+</head>
+<style>
+    .app_set_bc{
+        background: #2778f8;
+        width: 140px;
+        border-radius: 4px;
+    }
+    .layui-form-select .layui-input{
+        direction: rtl;
+        margin-top: 5px;
+        padding-right: 120px;
+    }
+    #adset .layui-form-select .layui-input{
+        direction: rtl;
+        margin-top: 5px;
+        padding-right: 80px;
+    }
+
+    
+
+</style>
+<body class="body_ifm">
+
+<div class="infoboxp">
+
+    <li class="tty-tishi_top">
+        <div class="tabs_info" style="border-bottom: 1px solid #eeeff2; display: flex; align-items: center; justify-content: space-between;">
+            <ul style="border: none;">
+                <li class="curr"><a href="index.php?m=admin_app_set">自定义配置</a></li>
+                <li><a href="index.php?m=admin_app_set&c=seo">小程序SEO</a></li>
+                <li><a href="index.php?m=admin_app_set&c=career_counselor">求职助手</a></li>
+            </ul>
+            <span style="color: #61687C; font-size: 13px; padding-right: 15px;">根据自己的需求和喜好自定义属于自己的风格模板。微信小程序、百度小程序不允许有诱导分享行为，故不支持红包职位、赏金职位功能。</span>
+        </div>
+
+
+        <div class="clear"></div>
+        <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+        <div class="" style="background: #fff; border:none;">
+            {yun:}if !$tplapp || (!empty($tplapp) && $tplapp.isnew == 1){/yun}
+            <a href="javascript:;" onClick="makeCache()" class="admin_new_cz_tj" style="width:100px;">生成缓存</a>
+            {yun:}/if{/yun}
+            <input type="hidden" id="pytoken" value="{yun:}$pytoken{/yun}">
+
+            <div class="app_set_tab">
+                <ul id="top">
+                    <li data-type="theme" class="current">自定义主题</li>
+                    <li data-type="search">搜索</li>
+                    <li data-type="member">幻灯广告区</li>
+                    <li data-type="nav">导航</li>
+                    <li data-type="jobspec">职位专题</li>
+                    <li data-type="notice">公告</li>
+                    <!--可拖拽排序功能-->
+                    <div class="diysort">
+                        {yun:}foreach from=$sort item=v{/yun}
+                        {yun:}if $v=='ad'{/yun}
+                        <li data-type="ad">
+                            通栏广告
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='login'{/yun}
+                        <li data-type="login">
+                            登录/注册
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        <!--<li data-type="">图片入口</li>-->
+                        {yun:}if $v=='hotcom'{/yun}
+                        <li data-type="hotcom">
+                            名企展示
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='hotjob'{/yun}
+                        <li data-type="hotjob">
+                            热门职位（系统-类别-职位类别-首页推荐）
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='article'{/yun}
+                        <li data-type="article">
+                            资讯
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='zph'{/yun}
+                        <li data-type="zph">
+                            招聘会
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='job'{/yun}
+                        <li data-type="job">
+                            职位列表
+                            <div class="appset_tz">
+                                <img width="24" class="create" height="24" src="images/appset_tz.png" >
+                            </div>
+                        </li>
+                        {yun:}/if{/yun}
+                        {yun:}/foreach{/yun}
+                    </div>
+                    <li data-type="syszz">站长资质</li>
+                    <li data-type="connect">浮动客服</li>
+                    <li data-type="foot">底部导航</li>
+                </ul>
+                <ul id="bottom">
+                    <li id="themeset" class="current">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                自定义主题
+                            </div>
+                            <div style="margin: 15px;">
+                                <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                      target="supportiframe" class="layui-form">
+                                <!--修改此处的样色需要同步把小程序的首页校色修改-->
+                                <div class="color_box">
+                                    <span>主颜色：</span>
+                                    <div class="app_colorbox">
+                                        <div>
+                                            <div class="app_colorzx maincolor_cur" style="background: {yun:}if $tplapp.maincolor{/yun}{yun:}$tplapp.maincolor{/yun}{yun:}else{/yun}#0078ff;{yun:}/if{/yun}"></div>
+                                            <input type="hidden" name="maincolor" id="maincolor">
+                                        </div>
+                                    </div>
+                                    <div class="app_colorset_box maincolor">
+                                        <span style="background: #0078ff;" data-color="#0078ff"></span>
+                                        <span style="background: #fa6400;" data-color="#fa6400"></span>
+                                        <span style="background: #10ae51;" data-color="#10ae51"></span>
+                                        <span style="background: #ff5857;" data-color="#ff5857"></span>
+                                        <span style="background: #ac6cff;" data-color="#ac6cff"></span>
+                                    </div>
+                                </div>
+                                <div class="color_box" style="margin-top: 15px;">
+                                    <span>辅助色：</span>
+                                    <div class="app_colorbox">
+                                        <div>
+                                            <div class="app_colorzx secondcolor_cur" style="background: {yun:}if $tplapp.secondcolor{/yun}{yun:}$tplapp.secondcolor{/yun}{yun:}else{/yun}#ff5857;{yun:}/if{/yun}"></div>
+                                            <input type="hidden" name="secondcolor" id="secondcolor">
+                                        </div>
+                                    </div>
+                                    <div class="app_colorset_box secondcolor">
+                                        <span style="background: #0078ff;" data-color="#0078ff"></span>
+                                        <span style="background: #fa6400;" data-color="#fa6400"></span>
+                                        <span style="background: #10ae51;" data-color="#10ae51"></span>
+                                        <span style="background: #ff5857;" data-color="#ff5857"></span>
+                                        <span style="background: #ac6cff;" data-color="#ac6cff"></span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 15px;">
+                                    <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                    <input type="hidden" name="type" value="theme">
+                                    <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc" style="margin-left: 56px;">
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="searchset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                搜索
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="searchshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               {yun:}if $tplapp.searchshow!=2{/yun}checked{yun:}/if{/yun} lay-filter="searchshow"/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="searchstyle" value="2" title="默认样式"
+                                                   lay-filter="searchstyle"
+                                                   {yun:}if $tplapp.searchstyle!=1{/yun}checked{yun:}/if{/yun}>
+                                            <span class="app_set_radio_span">主体色底，内容白色</span>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="searchstyle" value="1" title="白色样式"
+                                                   lay-filter="searchstyle"
+                                                   {yun:}if $tplapp.searchstyle==1{/yun}checked{yun:}/if{/yun}>
+                                            <span class="app_set_radio_span">白色底样式</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>搜索框默认文字</span>
+                                    <div class="layui-input-block">
+                                        <input name="search" value="{yun:}if $tplapp.search{/yun}{yun:}$tplapp.search{/yun}{yun:}else{/yun}请输入职位关键字，如：会计...{yun:}/if{/yun}"
+                                               id="search" type="text" class="layui-input" autocomplete="off"
+                                               placeholder="请输入职位关键字，如：会计..." style="margin-top: 10px;">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="search">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="memberset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                幻灯广告区
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="membershow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="membershow"
+                                               {yun:}if $tplapp.membershow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="slideadstyle" value="1" title="默认尺寸"
+                                                   lay-filter="slideadstyle"
+                                                   {yun:}if $tplapp.slideadstyle!=2{/yun}checked{yun:}/if{/yun}>
+                                            <span class="app_set_radio_span">700*240PX</span>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="slideadstyle" value="2" title="小尺寸"
+                                                   lay-filter="slideadstyle"
+                                                   {yun:}if $tplapp.slideadstyle==2{/yun}checked{yun:}/if{/yun}>
+                                            <span class="app_set_radio_span">700*200PX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span class="app_set_img_item_tit">广告类别：</span>
+                                    <div class="layui-input-block">
+                                        <select name="hdid">
+                                            <option value=""></option>
+                                            {yun:}foreach item=adval from=$adClassList{/yun}
+                                            <option value="{yun:}$adval.id{/yun}"
+                                                    {yun:}if $tplapp.hdid == $adval.id{/yun}selected{yun:}/if{/yun}>
+                                            {yun:}$adval.class_name{/yun}
+                                            </option>
+                                            {yun:}/foreach{/yun}
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="member">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="navset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                导航
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  enctype="multipart/form-data" target="supportiframe"
+                                  class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="navshow" lay-skin="switch" lay-filter="navshow"
+                                               lay-text="显示|隐藏" {yun:}if $tplapp.navshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="navstyle" value="1" title="单行滑行"
+                                                   lay-filter="navstyle"
+                                                   {yun:}if $tplapp.navstyle!=2{/yun}checked{yun:}/if{/yun} >
+                                            <span class="app_set_radio_span">一行5个，超出侧滑展示</span>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="navstyle" value="2" title="多行展示"
+                                                   lay-filter="navstyle"
+                                                   {yun:}if $tplapp.navstyle==2{/yun}checked{yun:}/if{/yun}>
+                                            <span class="app_set_radio_span">一行5个，超出向下排列</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {yun:}if $nav{/yun}
+                                {yun:}foreach item=nv from=$nav{/yun}
+                                <div class="layui-form-item" id="n{yun:}$nv.id{/yun}">
+                                    <div class="wap_mb_list" style="padding: 0;margin: 0;">
+                                        <div class="wap_mb_list_hd_list">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <input type="hidden" name="navid[]" value="{yun:}$nv.id{/yun}">
+                                                    <input type="hidden" name="navcid[]" value=""><!--占位符-->
+                                                    <div class="app_set_img_item">
+                                                        <span class="app_set_img_item_tit">图标：</span>
+                                                        <div class="layui-upload">
+                                                            <div class="wap_mb_list_hd_file_box">
+                                                                <input type="file" name="navpic[]" multiple id="nav{yun:}$nv.id{/yun}"
+                                                                       class="wap_mb_list_hd_file_text"
+                                                                       onchange="showpic(this,'imgn{yun:}$nv.id{/yun}','navpicshow{yun:}$nv.id{/yun}','class')"/>+ 添加图标
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">标题：</span>
+                                                        <input name="navname[]" id="navname{yun:}$nv.id{/yun}"
+                                                               value="{yun:}$nv.name{/yun}" type="text" class="wap_mb_list_text" autocomplete="off">
+                                                    </div>
+                                                    <div class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">显示：</span>
+                                                        <input type="checkbox" id="navdisplay{yun:}$nv.id{/yun}" name=""
+                                                               lay-skin="switch" lay-text="显示|隐藏" lay-filter="nav"
+                                                               data-id="{yun:}$nv.id{/yun}"
+                                                               {yun:}if $nv.display==1{/yun}checked{yun:}/if{/yun}/>
+                                                        <input type="hidden" name="navdisplay[]" id="navdisplay{yun:}$nv.id{/yun}_hide" value="{yun:}$nv.display{/yun}">
+                                                    </div>
+                                                    <div id="navsortbox{yun:}$nv.id{/yun}" class="app_set_img_item mt5" {yun:}if $nv.display==2{/yun}style="display:none"{yun:}/if{/yun}>
+                                                        <span class="app_set_img_item_tit">排序：</span>
+                                                        <input id="navsort{yun:}$nv.id{/yun}" type="text" name="navsort[]" value="{yun:}$nv.navsort{/yun}" class="wap_mb_list_text" autocomplete="off">
+                                                    </div>
+                                                    <div class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">类型：</span>
+                                                        <div class="layui-input-block">
+                                                            <input type="radio" name="navtype{yun:}$nv.id{/yun}" value="0" data-id="{yun:}$nv.id{/yun}" title="内部页面" {yun:}if $nv.navtype==0||$nv.navtype=='' {/yun} checked="checked" {yun:}/if{/yun} lay-filter="navtype">
+                                                            <input type="radio" name="navtype{yun:}$nv.id{/yun}" value="1" data-id="{yun:}$nv.id{/yun}" title="打开小程序(APP和微信小程序内)" {yun:}if $nv.navtype==1{/yun} checked="checked" {yun:}/if{/yun} lay-filter="navtype">
+                                                        </div>
+                                                    </div>
+                                                    <div id="navtype1Box{yun:}$nv.id{/yun}" {yun:}if $nv.navtype==1{/yun}style="display: block;"{yun:}else{/yun}style="display: none;"{yun:}/if{/yun}>
+                                                        <div class="app_set_img_item mt5">
+                                                            <span class="app_set_img_item_tit">Appid：</span>
+                                                            <input name="navappid[]" id="navappid{yun:}$nv.id{/yun}" value="{yun:}$nv.nav_appid{/yun}" type="text" class="wap_mb_list_text" autocomplete="off">
+                                                        </div>
+														<div class="app_set_img_item mt5">
+                                                            <span class="app_set_img_item_tit">原始ID：</span>
+                                                            <input name="navysid[]" id="navysid{yun:}$nv.id{/yun}" value="{yun:}$nv.nav_ysid{/yun}" type="text" class="wap_mb_list_text" autocomplete="off">
+                                                        </div>
+                                                        <div class="app_set_img_item mt5">
+                                                            <span class="app_set_img_item_tit">路径：</span>
+                                                            <input name="navurl[]" id="navurli{yun:}$nv.id{/yun}" {yun:}if $nv.navtype!=1{/yun}disabled{yun:}/if{/yun} value="{yun:}$nv.url{/yun}" type="text" class="wap_mb_list_text" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <div id="navtype0Box{yun:}$nv.id{/yun}" {yun:}if $nv.navtype==1{/yun}style="display: none;"{yun:}/if{/yun} class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">链接：</span>
+                                                        <div class="layui-input-block" style="width: 200px;">
+                                                            <select id="navurls{yun:}$nv.id{/yun}" name="navurl[]" {yun:}if $nv.navtype==1{/yun}disabled{yun:}/if{/yun}>
+                                                                <option value=""></option>
+                                                                {yun:}foreach item=vv from=$navigation{/yun}
+                                                                <option value="{yun:}$vv.id{/yun}" {yun:}if $nv.url==$vv.id{/yun} selected{yun:}/if{/yun}>{yun:}$vv.name{/yun}</option>
+                                                                {yun:}/foreach{/yun}
+                                                            </select>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <img {yun:}if $nv.pic{/yun}src="{yun:}$nv.pic{/yun}"{yun:}else{/yun}src="images/wap_show_img1.png"{yun:}/if{/yun}
+                                                    width="64" height="64" id="imgn{yun:}$nv.id{/yun}">
+                                                </div>
+                                            </div>
+                                            <div class="app_set_img_item_tip">建议图标尺寸：不小于64*64像素</div>
+                                            {yun:}if $nv.id > 150{/yun}
+                                            <div class="navdel" data-id="{yun:}$nv.id{/yun}">删除</div>
+                                            {yun:}/if{/yun}
+                                        </div>
+                                    </div>
+                                </div>
+                                {yun:}/foreach{/yun}
+                                {yun:}/if{/yun}
+                                <div class="add_box">
+                                    
+                                    <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                    <input type="hidden" name="type" value="nav">
+                                    <input type="submit" value=" 保存 " name="submit"
+                                           class="layui-btn layui-btn-normal app_set_bc">
+                                    <div id="navadd" class="navadd">添加导航</div>
+                                </div>
+                               
+                            </form>
+                        </div>
+                    </li>
+                    <li id="jobspecset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                职位专题
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="jobspecshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="jobspecshow"
+                                               {yun:}if $tplapp.jobspecshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>数量：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="jobspecnum"
+                                               value="{yun:}if $tplapp.jobspecnum{/yun}{yun:}$tplapp.jobspecnum{/yun}{yun:}else{/yun}3{yun:}/if{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="jobspec">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+
+                    <li id="noticeset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                公告
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  enctype="multipart/form-data"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="notice" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="notice"
+                                               {yun:}if $tplapp.notice!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="noticestyle" value="1" title="样式一"
+                                                   lay-filter="noticestyle"
+                                                   {yun:}if empty($tplapp.noticestyle) || $tplapp.noticestyle==1{/yun}checked{yun:}/if{/yun} >
+                                        </div>
+                                        <div class="layui-form-item noticestyle-img noticestyle1-img"
+                                             {yun:}if !empty($tplapp.noticestyle) && $tplapp.noticestyle!=1{/yun}style="display:none;"{yun:}/if{/yun}>
+                                            <span>标题图片</span>
+                                            <div class="" style="margin-top:10px;">
+                                                <div class="layui-upload" style="display: flex;">
+                                                    <div class="app_set_imgbox" >
+                                                        <img src="{yun:}$tplapp.noticestyleimg[0]{/yun}" id="noticestyle1img" alt="" width="82" height="82" class="app_set_imgbox_img">
+                                                    </div>
+                                                    <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                        <input type="file" name="noticestyleimg[]" multiple
+                                                               class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                               onchange="showpic(this,'noticestyle1img','noticestyle1imgshow')"/>
+                                                        <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                            <div style="font-size: 30px;">+</div>
+                                                            <div>上传图片</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="noticestyle" value="2" title="样式二"
+                                                   lay-filter="noticestyle"
+                                                   {yun:}if $tplapp.noticestyle==2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="layui-form-item noticestyle-img noticestyle2-img"
+                                             {yun:}if $tplapp.noticestyle!=2{/yun}style="display:none;"{yun:}/if{/yun}>
+                                            <span>标题图片</span>
+                                            <div class="" style="margin-top:10px;">
+                                                <div class="layui-upload" style="display: flex;">
+                                                    <div class="app_set_imgbox" >
+                                                        <img src="{yun:}$tplapp.noticestyleimg[1]{/yun}" id="noticestyle2img" alt="" width="82" height="82" class="app_set_imgbox_img">
+                                                    </div>
+                                                    <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                        <input type="file" name="noticestyleimg[]" multiple
+                                                               class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                               onchange="showpic(this,'noticestyle2img','noticestyle2imgshow')"/>
+                                                        <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                            <div style="font-size: 30px;">+</div>
+                                                            <div>上传图片</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="noticestyle" value="3" title="样式三"
+                                                   lay-filter="noticestyle"
+                                                   {yun:}if $tplapp.noticestyle==3{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="layui-form-item noticestyle-img noticestyle3-img"
+                                             {yun:}if $tplapp.noticestyle!=3{/yun}style="display:none;"{yun:}/if{/yun}>
+                                            <span>标题图片</span>
+                                            <div class="" style="margin-top:10px;">
+                                                <div class="layui-upload" style="display: flex;">
+                                                    <div class="app_set_imgbox" >
+                                                        <img src="{yun:}$tplapp.noticestyleimg[2]{/yun}" id="noticestyle3img" alt="" width="82" height="82" class="app_set_imgbox_img">
+                                                    </div>
+                                                    <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                        <input type="file" name="noticestyleimg[]" multiple
+                                                               class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                               onchange="showpic(this,'noticestyle3img','noticestyle3imgshow')"/>
+                                                        <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                            <div style="font-size: 30px;">+</div>
+                                                            <div>上传图片</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="notice">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="adset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                通栏广告
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="adshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="adshow"
+                                               {yun:}if $tplapp.adshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span class="app_set_img_item_tit">广告类别：</span>
+                                    <div class="layui-input-block">
+                                        <select name="adhdid">
+                                            <option value=""></option>
+                                            {yun:}foreach item=adval from=$adClassList{/yun}
+                                            <option value="{yun:}$adval.id{/yun}"
+                                                    {yun:}if $tplapp.adhdid == $adval.id{/yun}selected{yun:}/if{/yun}>
+                                            {yun:}$adval.class_name{/yun}
+                                            </option>
+                                            {yun:}/foreach{/yun}
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="ad">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="loginset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                登录/注册
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  enctype="multipart/form-data"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="login" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="login"
+                                               {yun:}if $tplapp.login!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按扭一标题：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="login_title1" value="{yun:}$tplapp.login_title1{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按扭一副标题：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="login_subtitle1" value="{yun:}$tplapp.login_subtitle1{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按钮一图标：</span>
+                                    <div class="layui-input-block">
+                                        <div class="layui-upload" style="display: flex;">
+                                            <div class="app_set_imgbox" >
+                                                <img src="{yun:}$tplapp.login_icon1{/yun}" id="login_icon1" alt="" width="82" height="82"
+                                                     class="app_set_imgbox_img" style="margin-left: 0">
+                                            </div>
+                                            <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                <input type="file" name="login_icon1" multiple
+                                                       class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                       onchange="showpic(this,'login_icon1','login_icon1show')"/>
+                                                <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                    <div style="font-size: 30px;">+</div>
+                                                    <div>上传图片</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按扭二标题：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="login_title2" value="{yun:}$tplapp.login_title2{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按扭二副标题：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="login_subtitle2" value="{yun:}$tplapp.login_subtitle2{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>按钮二图标：</span>
+                                    <div class="layui-input-block">
+                                        <div class="layui-upload" style="display: flex;">
+                                            <div class="app_set_imgbox" >
+                                                <img src="{yun:}$tplapp.login_icon2{/yun}" id="login_icon2" alt="" width="82" height="82"
+                                                     class="app_set_imgbox_img" style="margin-left: 0">
+                                            </div>
+                                            <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                <input type="file" name="login_icon2" multiple
+                                                       class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                       onchange="showpic(this,'login_icon2','login_icon2show')"/>
+                                                <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                    <div style="font-size: 30px;">+</div>
+                                                    <div>上传图片</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="login">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <!--<li>-->
+                    <!--    <div>-->
+                    <!--        <div class="appset_bottom_tit">-->
+                    <!--            图片入口-->
+                    <!--        </div>-->
+                    <!--        <form class="layui-form" style="margin:15px;">-->
+                    <!--            <div class="layui-form-item" style="display: flex;align-items: center;">-->
+                    <!--                <span>组件展示：</span>-->
+                    <!--                <div class="layui-input-block">-->
+                    <!--                    <input type="checkbox" name="" lay-skin="switch" lay-text="显示|隐藏" />-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--            <div class="layui-form-item">                                    -->
+                    <!--                <span>组件样式：</span>-->
+                    <!--                <div class="layui-input-block" >-->
+                    <!--                    <input type="radio" name="sex" value="男" title="一张" checked="">-->
+                    <!--                    <input type="radio" name="sex" value="女" title="两张">-->
+                    <!--                    <input type="radio" name="sex" value="女" title="三张">-->
+                    <!--                    <input type="radio" name="sex" value="女" title="四张">-->
+                    <!--                  </div>-->
+                    <!--            </div>-->
+                    <!--            <div class="layui-form-item">-->
+                    <!--                <span>添加内容：</span>-->
+                    <!--                <div style="background: #f7f7f7;padding: 12px;">-->
+                    <!--                    <div class="appset_imgin_updatabox">-->
+                    <!--                        <input type="file" name="" multiple  class="wap_mb_list_hd_file_text" style=""/>-->
+                    <!--                        <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">-->
+                    <!--                            <div style="color: #3796ff;">+添加图片</div>-->
+                    <!--                            <div>图片尺寸：690*120px</div>-->
+                    <!--                        </div>-->
+                    <!--                     </div>-->
+                    <!--                     <div>-->
+                    <!--                        <span style="margin-top: 6px;">拖动选中的图片可对其排序</span>-->
+                    <!--                        <div class="appset_img_box">-->
+
+                    <!--                        </div>-->
+                    <!--                     </div>-->
+                    <!--                </div>-->
+                    <!--                -->
+                    <!--            </div>-->
+                    <!--            <input type="button" value=" 保存 " name="" class="layui-btn layui-btn-normal app_set_bc">-->
+                    <!--        </form>-->
+                    <!--    </div>-->
+                    <!--</li>-->
+                    <li id="hotcomset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                名企展示
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="hotcom" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="hotcom"
+                                               {yun:}if $tplapp.hotcom!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="hotcomstyle" value="1" title="样式一"
+                                                   lay-filter="hotcomstyle"
+                                                   {yun:}if $tplapp.hotcomstyle!=2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="hotcomstyle" value="2" title="样式二"
+                                                   lay-filter="hotcomstyle"
+                                                   {yun:}if $tplapp.hotcomstyle==2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>更多：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="hotcommore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="hotcommore"
+                                               {yun:}if $tplapp.hotcommore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>数量：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="hotcomnum"
+                                               value="{yun:}if $tplapp.hotcomnum{/yun}{yun:}$tplapp.hotcomnum{/yun}{yun:}else{/yun}8{yun:}/if{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="hotcom">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="hotjobset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                热门职位（系统-类别-职位类别-首页推荐）
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="hotjob" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="hotjob"
+                                               {yun:}if $tplapp.hotjob!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>更多：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="hotjobmore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="hotjobmore"
+                                               {yun:}if $tplapp.hotjobmore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>数量：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="hotjobnum"
+                                               value="{yun:}if $tplapp.hotjobnum{/yun}{yun:}$tplapp.hotjobnum{/yun}{yun:}else{/yun}6{yun:}/if{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="hotjob">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="articleset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                资讯
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="articleshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="articleshow"
+                                               {yun:}if $tplapp.articleshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="articletype" value="1" title="样式一" checked
+                                                   lay-filter="articletype"
+                                                   {yun:}if empty($tplapp.articletype) || $tplapp.articletype==1{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="articletype" value="2" title="样式二"
+                                                   lay-filter="articletype"
+                                                   {yun:}if $tplapp.articletype==2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="articletype" value="3" title="样式三"
+                                                   lay-filter="articletype"
+                                                   {yun:}if $tplapp.articletype==3{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>更多：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="articlemore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="articlemore"
+                                               {yun:}if $tplapp.articlemore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>数量：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="articlenum"
+                                               value="{yun:}if $tplapp.articlenum{/yun}{yun:}$tplapp.articlenum{/yun}{yun:}else{/yun}4{yun:}/if{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="article">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="zphset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                招聘会
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="zphshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="zphshow"
+                                               {yun:}if $tplapp.zphshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>更多：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="zphmore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="zphmore"
+                                               {yun:}if $tplapp.zphmore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>数量：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="zphnum"
+                                               value="{yun:}if $tplapp.zphnum{/yun}{yun:}$tplapp.zphnum{/yun}{yun:}else{/yun}2{yun:}/if{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="zph">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="jobset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                职位列表
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="job" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="job"
+                                               {yun:}if $tplapp.job!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="jobstyle" value="1" title="样式一"
+                                                   lay-filter="jobstyle"
+                                                   {yun:}if empty($tplapp.jobstyle) || $tplapp.jobstyle==1{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="jobstyle" value="2" title="样式二"
+                                                   lay-filter="jobstyle"
+                                                   {yun:}if $tplapp.jobstyle==2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="jobstyle" value="3" title="样式三"
+                                                   lay-filter="jobstyle"
+                                                   {yun:}if $tplapp.jobstyle==3{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="jobstyle" value="4" title="样式四"
+                                                   lay-filter="jobstyle"
+                                                   {yun:}if $tplapp.jobstyle==4{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div style="display: flex;justify-content: space-between;">
+                                        <span>设置推荐栏目</span>
+                                        <span>拖动可调整位置</span>
+                                    </div>
+                                    <div class="layui-input-block jobsort" style="background: #f5f5f5; padding: 12px;">
+                                        {yun:}foreach from=$tplapp.jobsort item=jobsort{/yun}
+                                            {yun:}if $jobsort == 'newjob'{/yun}
+                                            <li class="zw_tjitem">
+                                                <input type="checkbox" name="newjob" lay-skin="primary" title="最新"
+                                                       lay-filter="jobtabshow"
+                                                       {yun:}if $tplapp.newjob != 2{/yun}checked{yun:}/if{/yun}>
+                                                <div style="display: flex; align-items: center;">
+                                                    职位展示条数
+                                                    <input type="text" name="newjobnum"  placeholder="请输入"  class="layui-input" style="margin-left: 15px; width: 90px; padding: 0; text-align: center;"
+                                                           value="{yun:}if $tplapp.newjobnum{/yun}{yun:}$tplapp.newjobnum{/yun}{yun:}else{/yun}5{yun:}/if{/yun}">
+                                                </div>
+                                                <input type="hidden" name="jobsort[]" value="newjob">
+                                            </li>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'urgjob'{/yun}
+                                            <li class="zw_tjitem">
+                                                <input type="checkbox" name="urgjob" lay-skin="primary" title="急聘"
+                                                       lay-filter="jobtabshow"
+                                                       {yun:}if $tplapp.urgjob != 2{/yun}checked{yun:}/if{/yun}>
+                                                <div style="display: flex; align-items: center;">
+                                                    职位展示条数
+                                                    <input type="text" name="urgjobnum"  placeholder="请输入"  class="layui-input" style="margin-left: 15px; width: 90px; padding: 0; text-align: center;"
+                                                           value="{yun:}if $tplapp.urgjobnum{/yun}{yun:}$tplapp.urgjobnum{/yun}{yun:}else{/yun}5{yun:}/if{/yun}">
+                                                </div>
+                                                <input type="hidden" name="jobsort[]" value="urgjob">
+                                            </li>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'recjob'{/yun}
+                                            <li class="zw_tjitem">
+                                                <input type="checkbox" name="recjob" lay-skin="primary" title="推荐"
+                                                       lay-filter="jobtabshow"
+                                                       {yun:}if $tplapp.recjob != 2{/yun}checked{yun:}/if{/yun}>
+                                                <div style="display: flex; align-items: center;">
+                                                    职位展示条数
+                                                    <input type="text" name="recjobnum"  placeholder="请输入"  class="layui-input" style="margin-left: 15px; width: 90px; padding: 0; text-align: center;"
+                                                           value="{yun:}if $tplapp.recjobnum{/yun}{yun:}$tplapp.recjobnum{/yun}{yun:}else{/yun}5{yun:}/if{/yun}">
+                                                </div>
+                                                <input type="hidden" name="jobsort[]" value="recjob">
+                                            </li>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'mapjob'{/yun}
+                                            <li class="zw_tjitem">
+                                                <input type="checkbox" name="mapjob" lay-skin="primary" title="附近"
+                                                       lay-filter="jobtabshow"
+                                                       {yun:}if $tplapp.mapjob != 2{/yun}checked{yun:}/if{/yun}>
+                                                <div style="display: flex; align-items: center;">
+                                                    职位展示条数
+                                                    <input type="text" name="mapjobnum"  placeholder="请输入"  class="layui-input" style="margin-left: 15px; width: 90px; padding: 0; text-align: center;"
+                                                           value="{yun:}if $tplapp.mapjobnum{/yun}{yun:}$tplapp.mapjobnum{/yun}{yun:}else{/yun}5{yun:}/if{/yun}">
+                                                </div>
+                                                <input type="hidden" name="jobsort[]" value="mapjob">
+                                            </li>
+                                            {yun:}/if{/yun}
+                                        {yun:}/foreach{/yun}
+
+                                    </div>
+                                </div>
+                                <!--<div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>更多：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="jobmore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="jobmore"
+                                               {yun:}if $tplapp.jobmore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>-->
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="job">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="syszzset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                站长资质
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="syszzmore" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="syszzmore"
+                                               {yun:}if $tplapp.syszzmore!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <!--<div class="layui-form-item" style="display: flex;align-items: center;">-->
+                                <!--    温馨提示：显示资质后，职位列表无法使用上拉加载功能-->
+                                <!--</div>-->
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="syszz">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="connectset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                浮动客服
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  enctype="multipart/form-data"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="cshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="cshow"
+                                               {yun:}if $tplapp.cshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>客服链接：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="kfurl" value="{yun:}$tplapp.kfurl{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>企业ID：</span>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="kfcomid" value="{yun:}$tplapp.kfcomid{/yun}"
+                                               class="wap_mb_list_text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>客服图标：</span>
+                                    <div class="layui-input-block">
+                                        <div class="layui-upload" style="display: flex;">
+                                            <div class="app_set_imgbox" >
+                                                <img src="{yun:}$tplapp.kficon{/yun}" id="kficon" alt="" width="82" height="82"
+                                                     class="app_set_imgbox_img" style="margin-left: 0">
+                                            </div>
+                                            <div class="wap_mb_list_hd_file_box" style="margin-top: 6px; width: 80px;height: 80px;text-indent: 0px;">
+                                                <input type="file" name="kficon" multiple
+                                                       class="wap_mb_list_hd_file_text" style="width: 80px;height: 80px;"
+                                                       onchange="showpic(this,'kficon','kficonshow')"/>
+                                                <div style="height: 100%;align-items: center; display: flex;flex-direction: column;justify-content: center;">
+                                                    <div style="font-size: 30px;">+</div>
+                                                    <div>上传图片</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="connect">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                    <li id="footset">
+                        <div>
+                            <div class="appset_bottom_tit">
+                                底部导航
+                            </div>
+                            <form action="index.php?m=admin_app_set&c=setSave" method="post"
+                                  enctype="multipart/form-data"
+                                  target="supportiframe" class="layui-form" style="margin:15px;">
+                                <!--<div class="layui-form-item" style="display: flex;align-items: center;">
+                                    <span>组件展示：</span>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="footshow" lay-skin="switch" lay-text="显示|隐藏"
+                                               lay-filter="footshow"
+                                               {yun:}if $tplapp.footshow!=2{/yun}checked{yun:}/if{/yun}/>
+                                    </div>
+                                </div>-->
+                                <div class="layui-form-item">
+                                    <span>组件样式：</span>
+                                    <div class="layui-input-block" style="display: flex;flex-direction: column;">
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="footstyle" value="1" title="样式一"
+                                                   lay-filter="footstyle"
+                                                   {yun:}if empty($tplapp.footstyle) || $tplapp.footstyle==1{/yun}checked{yun:}/if{/yun} >
+                                        </div>
+                                        <div class="app_set_radio">
+                                            <input type="radio" name="footstyle" value="2" title="样式二"
+                                                   lay-filter="footstyle"
+                                                   {yun:}if $tplapp.footstyle==2{/yun}checked{yun:}/if{/yun}>
+                                        </div>
+                                    </div>
+                                </div>
+                                {yun:}if $footnav{/yun}
+                                {yun:}foreach item=nv from=$footnav{/yun}
+                                <div class="layui-form-item" id="f{yun:}$nv.id{/yun}">
+                                    <div class="wap_mb_list" style="padding: 0;margin: 0;">
+                                        <div class="wap_mb_list_hd_list">
+                                            <div style="display: flex;">
+                                                <div>
+                                                    <div class="app_set_img_item">
+                                                        <span class="app_set_img_item_tit">未选中：</span>
+                                                        <div class="layui-upload">
+                                                            <div class="wap_mb_list_hd_file_box">
+                                                                <input type="file" name="footpic[]" multiple
+                                                                       id="foot{yun:}$nv.id{/yun}" class="wap_mb_list_hd_file_text"
+                                                                       onchange="showpic(this,'footimg{yun:}$nv.id{/yun}','footpicshow{yun:}$nv.id{/yun}','class')"/>+ 添加图标
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">选中：</span>
+                                                        <div class="layui-upload">
+                                                            <div class="wap_mb_list_hd_file_box">
+                                                                <input type="file" name="footchoosed[]" multiple
+                                                                       id="footchoosed{yun:}$nv.id{/yun}" class="wap_mb_list_hd_file_text"
+                                                                       onchange="showpic(this,'choosedimg{yun:}$nv.id{/yun}')" />+ 添加图标
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="app_set_img_item mt5">
+                                                        <span class="app_set_img_item_tit">标题：</span>
+                                                        <input name="footname[]" id="footname{yun:}$nv.id{/yun}" value="{yun:}$nv.name{/yun}" type="text" class="wap_mb_list_text" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <div style="margin-left: 10px;">
+                                                    <img {yun:}if $nv.pic{/yun}src="{yun:}$nv.pic{/yun}"{yun:}else{/yun}src="images/wap_show_img1.png"{yun:}/if{/yun}
+                                                    width="64" height="64" id="footimg{yun:}$nv.id{/yun}">
+                                                    <img {yun:}if $nv.curpic{/yun}src="{yun:}$nv.curpic{/yun}"{yun:}else{/yun}src="images/wap_show_img1.png"{yun:}/if{/yun}
+                                                    width="64" height="64" id="choosedimg{yun:}$nv.id{/yun}">
+                                                </div>
+                                                <input type="hidden" name="footid[]" value="{yun:}$nv.id{/yun}">
+                                                <input type="hidden" name="footurl[]" value="{yun:}$nv.url{/yun}">
+                                            </div>
+                                            <div class="app_set_img_item_tip">建议图标尺寸：不小于64*64像素</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {yun:}/foreach{/yun}
+                                {yun:}/if{/yun}
+                                <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+                                <input type="hidden" name="type" value="foot">
+                                <input type="submit" value=" 保存 " name="submit" class="layui-btn layui-btn-normal app_set_bc">
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-----------------------------------------------预览---------------------------------------------->
+    <div class="wap_mb_show">
+        <div class="wxpubtool_sj_tit">
+            <div class="wxpubtool_sj_tit_c"></div>
+        </div>
+        <div class="wap_mb_show_box">
+            <div class="wap_mb_show_content">
+                <div class="wap_mb_show_content_c">
+                    <table style="width:100%;background-color: #f0f2f5;">
+                        {yun:}foreach from=$sort item=v{/yun}
+                        {yun:}if $v=='search'{/yun}
+                        <!--搜索框开始-->
+                        <tr id="searchshow" {yun:}if $tplapp.searchshow==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <!-- <div class="yun_wapheader bg3" {yun:}if $tplapp.searchshow==2{/yun} style="display:none" {yun:}/if{/yun}>
+                                <div class="yun_new_formFiled formFiled_newinput">
+                                    <input type="search" value="{yun:}if $tplapp.search{/yun}{yun:}$tplapp.search{/yun}{yun:}else{/yun}搜索全文/职位名{yun:}/if{/yun}" id="pkeyword" name="keyword" class="yun_new_input_search" readonly placeholder="{yun:}if $tplapp.search{/yun}{yun:}$tplapp.search{/yun}{yun:}else{/yun}搜索全文/职位名{yun:}/if{/yun}" style="background: none;">
+                                    <span class="yun_new_formFiled_bth"><input type="button"></span>
+                                </div> -->
+
+                                <!--白色样式-->
+                                <div class="search_topitemone searchstyle searchstyle1"
+                                     {yun:}if $tplapp.searchstyle!=1{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="search_topitemone_left">
+                                        北京<img src="images/admin_navicon0.png" alt="" style="margin: 0 4px;">
+                                    </div>
+                                    <div class="search_topitemone_right">
+                                        <img src="images/appset_search.png">
+                                        <input type="text" placeholder="请输入职位关键字，如：会计..."
+                                        value="{yun:}$tplapp.search{/yun}">
+                                    </div>
+                                </div>
+                                <!--默认样式-->
+                                <div class="search_topitemtwo searchstyle searchstyle2 maincolor_cur" style="
+                                     {yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}
+                                     {yun:}if $tplapp.searchstyle==1{/yun}display:none;{yun:}/if{/yun}">
+                                     <div class="search_topitemone_left" style="color: #fff;">
+                                        北京<img src="images/appdiy_topinput2.png" alt="" style="margin: 0 4px;">
+                                    </div>
+                                    <div class="search_topitemtwo_right">
+                                        <img src="images/appset_search.png">
+                                        <input type="text" placeholder="请输入职位关键字，如：会计..." class="search_topitemtwo_right_input"
+                                        value="{yun:}$tplapp.search{/yun}">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--搜索框结束-->
+                        {yun:}/if{/yun}
+                        {yun:}if $v=='member'{/yun}
+                        <tr id="membershow" {yun:}if $tplapp.membershow==2{/yun}style="display:none;"{yun:}/if{/yun}>
+                            <!-- 幻灯广告 -->
+                            <td id="hdshow">
+                                <div class="">
+                                    <div class="layui-carousel" id="hdpicshow">
+                                        <div carousel-item>
+                                            {yun:}foreach item=pv from=$hd{/yun}
+                                            <div><img src="{yun:}$pv.pic{/yun}" width="100%"
+                                                      height="{yun:}if $tplapp.slideadstyle == 2{/yun}69px{yun:}else{/yun}85px{yun:}/if{/yun}"></div>
+                                            {yun:}/foreach{/yun}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='nav'{/yun}
+                        <tr id="navshow" {yun:}if $tplapp.navshow==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <!-----------导航 --------------------------------------->
+                                <div class="wap_mb_show_nav navstyle1" {yun:}if $tplapp.navstyle==2{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <ul class="wap_mb_show_nav_list">
+                                        <div class="layui-carousel" id="navcar" style="background:#fff">
+                                            <div carousel-item>
+                                                {yun:}foreach item=narr from=$navarr{/yun}
+                                                <div>
+                                                    {yun:}foreach item=pv from=$narr{/yun}
+                                                    <li class="linavshow{yun:}$pv.id{/yun}">
+                                                        <img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}"
+                                                             width="30" class="navpicshow{yun:}$pv.id{/yun}">
+                                                        <div class="wap_mb_show_nav_list_p">{yun:}$pv.name{/yun}</div>
+                                                    </li>
+                                                    {yun:}/foreach{/yun}
+                                                </div>
+                                                {yun:}/foreach{/yun}
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+                                <div class="wap_mb_show_nav navstyle2" {yun:}if $tplapp.navstyle!=2{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <ul class="wap_mb_show_nav_list">
+                                        <div  style="display: flex;flex-wrap: wrap;">
+                                            {yun:}foreach item=navval from=$nav{/yun}
+                                            <li class="linavshow{yun:}$navval.id{/yun}">
+                                                <img src="{yun:}if $navval.pic{/yun}{yun:}$navval.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}"
+                                                     width="30" class="navpicshow{yun:}$navval.id{/yun}">
+                                                <div class="wap_mb_show_nav_list_p">{yun:}$navval.name{/yun}</div>
+                                            </li>
+                                            {yun:}/foreach{/yun}
+                                        </div>
+                                    </ul>
+                                </div>
+                                <style>
+                                    .wap_mb_show_nav_list .layui-this {
+                                        display: flex !important;
+                                    }
+
+                                    .wap_mb_show_nav_list li{
+                                        text-align: center;
+                                        
+                                    }
+                                    .wap_mb_show_nav_list .layui-carousel-ind ul{
+                                        width: 20%;
+                                        display: flex;
+                                        margin: auto;
+                                    }
+                                    .layui-this {
+                                        background: #fff
+                                    }
+                                    .layui-carousel > [carousel-item] > * {
+                                        background: #fff
+                                    }
+                                </style>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='navbig'{/yun}
+                        <!--<tr id="ptogglenavbig">
+                            <td>
+                                <div class="index_newedition_othernav">
+                                    <ul>
+                                        {yun:}if $navbig{/yun}
+                                        {yun:}foreach item=nb from=$navbig{/yun}
+                                        <li id="prnb{yun:}$nb.id{/yun}" {yun:}if
+                                            $nb.display==2{/yun}style="display:none;"{yun:}/if{/yun} class="">
+                                            <a>
+                                                <div class="index_newedition_othernav_tit">{yun:}$nb.name{/yun}</div>
+                                                <div class="index_newedition_othernav_p">{yun:}$nb.desc{/yun}</div>
+                                                <div class="index_newedition_othernav_imgbg ">
+                                                    <i class="index_newedition_othernav_imgicon ">
+                                                        <img src="{yun:}if $nb.pic{/yun}{yun:}$nb.pic{/yun}{yun:}/if{/yun}" width="40" id="pimgnb{yun:}$nb.id{/yun}">
+                                                    </i>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        {yun:}/foreach{/yun}
+                                        {yun:}/if{/yun}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>-->
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='notice'{/yun}
+                        <tr id="noticeshow" {yun:}if $tplapp.notice==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <!--样式一-->
+                                <div class="appdiy_gg appdiy_ggone noticestyle noticestyle1"
+                                     {yun:}if !empty($tplapp.noticestyle) && $tplapp.noticestyle!=1{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="gg_left">
+                                        <img id="noticestyle1imgshow" src="{yun:}$tplapp.noticestyleimg[0]{/yun}" alt="" width="20">
+                                    </div>
+                                    <div class="gg_right">
+                                        <span>甘肃省实施《中华人民共和国森林法》办法</span>
+                                    </div>
+                                </div>
+                                <!--样式二-->
+                                <div class="appdiy_gg appdiy_ggtwo noticestyle noticestyle2"
+                                     {yun:}if $tplapp.noticestyle!=2{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="gg_left">
+                                        <img id="noticestyle2imgshow" src="{yun:}$tplapp.noticestyleimg[1]{/yun}" alt="" width="59">
+                                    </div>
+                                    <div class="gg_right">
+                                        <span>甘肃省实施《中华人民共和国森林法》办法</span>
+                                        <span>人才网春节放假通知</span>
+                                        <span>职业梦想：人人都能自我实现</span>
+                                    </div>
+                                </div>
+                                <!--样式三-->
+                                <div class="appdiy_gg appdiy_ggthree noticestyle noticestyle3"
+                                     {yun:}if $tplapp.noticestyle!=3{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="gg_left">
+                                        <img id="noticestyle3imgshow" src="{yun:}$tplapp.noticestyleimg[2]{/yun}" alt="" width="51" height="16">
+                                    </div>
+                                    <div class="gg_right">
+                                        <span>甘肃省实施《中华人民共和国森林法》办法</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='login'{/yun}
+                        <tr id="loginshow" {yun:}if $tplapp.login==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <div class="appset_log">
+                                    <div class="appset_log_item">
+                                        <div class="log_item_left">
+                                            <img src="{yun:}$tplapp.login_icon1{/yun}" alt="" width="40" height="40" style="border-radius: 50%;" id="login_icon1show">
+                                        </div>
+                                        <div class="log_item_right">
+                                            <div class="log_item_right_tit">
+                                                {yun:}$tplapp.login_title1{/yun}
+                                            </div>
+                                            <div>
+                                                {yun:}$tplapp.login_subtitle1{/yun}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="appset_log_item">
+                                        <div class="log_item_left">
+                                            <img src="{yun:}$tplapp.login_icon2{/yun}" alt="" width="40" height="40" style="border-radius: 50%;" id="login_icon2show">
+                                        </div>
+                                        <div class="log_item_right">
+                                            <div class="log_item_right_tit">
+                                                {yun:}$tplapp.login_title2{/yun}
+                                            </div>
+                                            <div>
+                                                {yun:}$tplapp.login_subtitle2{/yun}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='hotcom'{/yun}
+                        <tr id="hotcomshow" {yun:}if $tplapp.hotcom==2{/yun} style="display:none" {yun:}/if{/yun}>
+                            <td>
+                            <div class="" style="float:left;width:100%;">
+                                <!--样式一-->
+                                <div class="">
+                                    <div class="hotcomstyle hotcomstyle1" style="padding: 12px 0;{yun:}if !empty($tplapp.hotcomstyle) && $tplapp.hotcomstyle!=1{/yun}display:none;{yun:}/if{/yun}">
+                                        <div class="mq_style_itemone">
+                                            <div class="mq_style_itemone_top">
+                                                <div class="mq_style_itemone_name">
+                                                    名企招聘
+                                                </div>
+                                                <div class="hotcommore" {yun:}if $tplapp.hotcommore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                                    更多 >
+                                                </div>
+                                            </div>
+                                            <div class="mq_style_itemone_bottom">
+                                                <div class="mq_style_itemone_bottom_item">
+                                                    <div class="mq_itemone_item_left">
+                                                        <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                    </div>
+                                                    <div class="mq_itemone_item_right">
+                                                        <div class="mq_itemone_item_name">
+                                                            双沟酿酒
+                                                        </div>
+                                                        <div>
+                                                            2个岗位
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mq_style_itemone_bottom_item">
+                                                    <div class="mq_itemone_item_left">
+                                                        <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                    </div>
+                                                    <div class="mq_itemone_item_right">
+                                                        <div class="mq_itemone_item_name">
+                                                            雨虹防水
+                                                        </div>
+                                                        <div>
+                                                            5个岗位
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mq_style_itemone_bottom_item">
+                                                    <div class="mq_itemone_item_left">
+                                                        <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                    </div>
+                                                    <div class="mq_itemone_item_right">
+                                                        <div class="mq_itemone_item_name">
+                                                            箐优网
+                                                        </div>
+                                                        <div>
+                                                            4个岗位
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mq_style_itemone_bottom_item">
+                                                    <div class="mq_itemone_item_left">
+                                                        <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                    </div>
+                                                    <div class="mq_itemone_item_right">
+                                                        <div class="mq_itemone_item_name">
+                                                            酷尔传媒
+                                                        </div>
+                                                        <div>
+                                                            8个岗位
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--样式二-->
+                                    <div class="hotcomstyle hotcomstyle2" style="{yun:}if $tplapp.hotcomstyle!=2{/yun}display:none;{yun:}/if{/yun}">
+                                      <div class="mq_style_itemtwo">
+                                          <div class="mq_style_itemtwo_top">
+                                              <div class="mq_style_itemtwo_name">
+                                                  名企招聘
+                                              </div>
+                                              <div class="hotcommore" {yun:}if $tplapp.hotcommore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                                  更多 >
+                                              </div>
+                                          </div>
+                                          <div class="mq_style_itemtwo_bottom">
+                                              <div class="mq_style_itemtwo_item">
+                                                  <div>
+                                                      <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                  </div>
+                                                  <div class="mq_itemtwo_item_name">
+                                                      雨虹防水
+                                                  </div>
+                                                  <div>
+                                                      8个在招职位
+                                                  </div>
+                                              </div>
+                                              <div class="mq_style_itemtwo_item">
+                                                <div>
+                                                    <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                </div>
+                                                <div class="mq_itemtwo_item_name">
+                                                    雨虹防水
+                                                </div>
+                                                <div>
+                                                    8个在招职位
+                                                </div>
+                                            </div>
+                                            <div class="mq_style_itemtwo_item">
+                                                <div>
+                                                    <img src="images/wap_diy_hotcom.png" alt="" width="40" height="40">
+                                                </div>
+                                                <div class="mq_itemtwo_item_name">
+                                                    雨虹防水
+                                                </div>
+                                                <div>
+                                                    8个在招职位
+                                                </div>
+                                            </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+						{yun:}if $v=='hotjob'{/yun}
+                        <tr id="hotjobshow" {yun:}if $tplapp.hotjob==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td style="">
+                                <div class="appset_hotzw">
+                                    <div class="zph_style_top">
+                                        <div>
+                                            热门职位
+                                        </div>
+                                        <div class="hotjobmore" {yun:}if $tplapp.hotjobmore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                            更多>
+                                        </div>
+                                    </div>
+                                    <div class="hotjob_bottom">
+                                        <div class="hotjob_item">
+                                            <span>服务业</span>
+                                        </div>
+                                        <div class="hotjob_item">
+                                            <span>人事/行政</span>
+                                        </div>
+                                        <div class="hotjob_item">
+                                            <span>送餐员</span>
+                                        </div>
+                                        <div class="hotjob_item">
+                                            <span>销售顾问</span>
+                                        </div>
+                                        <div class="hotjob_item">
+                                            <span>主播</span>
+                                        </div>
+                                        <div class="hotjob_item">
+                                            <span>灯光师</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='jobspec'{/yun}
+                        <!-- 职位专题 -->
+                        <tr id="jobspecshow" {yun:}if $tplapp.jobspecshow==2{/yun}style="display:none;"{yun:}/if{/yun}>
+                            <td>
+                               <div class="index_sechdpbox">
+                                    <img src="images/appdiy_jobspec1.png">
+                                    <img src="images/appdiy_jobspec2.png">
+                                    <img src="images/appdiy_jobspec3.png">
+                               </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='ad'{/yun}
+                        <tr id="adshow" {yun:}if $tplapp.adshow==2{/yun}style="display:none;"{yun:}/if{/yun}>
+                            <!-- 广告 -->
+                            <td>
+                                <div class="app_adgg">
+                                    <div>
+                                        <img src="{yun:}$adhd{/yun}" width="100%" height="80px">
+                                    </div>
+                                </div>
+                                <!--暂时注释图片入口
+                                <div class="">
+                                    <div>
+                                        <img src="{yun:}$adhd{/yun}" width="100%" height="80px">
+                                    </div>
+                                </div>
+                                <div class="" >
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <img src="{yun:}$adhd{/yun}" width="48%" height="80px">
+                                        <img src="{yun:}$adhd{/yun}" width="48%" height="80px">
+                                    </div>
+                                </div>
+                                <div class="" >
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <div style="width: 48%; display: flex; justify-content: space-between;">
+                                            <img src="{yun:}$adhd{/yun}" width="48%" height="80px">
+                                            <img src="{yun:}$adhd{/yun}" width="48%" height="80px">
+                                        </div>
+                                        <img src="{yun:}$adhd{/yun}" width="48%" height="80px">
+                                    </div>
+                                </div>
+                                <div class="" >
+                                    <div  style="display: flex; justify-content: space-between;">
+                                        <div class="ad_four_img">
+                                            <img src="{yun:}$adhd{/yun}"  width="100%" height="80px">
+                                        </div>
+                                        <div class="ad_four_img">
+                                            <img src="{yun:}$adhd{/yun}"  width="100%" height="80px">
+                                        </div>
+                                        <div class="ad_four_img">
+                                            <img src="{yun:}$adhd{/yun}"  width="100%" height="80px">
+                                        </div>
+                                        <div class="ad_four_img">
+                                            <img src="{yun:}$adhd{/yun}"  width="100%" height="80px">
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+
+                        {yun:}if $v=='job'{/yun}
+                        <tr id="jobshow" {yun:}if $tplapp.job==2 || ($tplapp.newjob == 2 && $tplapp.urgjob == 2 && $tplapp.recjob == 2 && $tplapp.mapjob == 2){/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <!-- <div class="appdiy_tit"><i class="appdiy_tit_line"></i>为你推荐</div> -->
+                                <!-- <div class="index_newedition_jobpd">
+                                    <div class="index_newedition_job">
+
+                                        <div class="index_newedition_job_list">
+                                            <a>
+                                                <div class="yun_newedition_jobcont">
+                                                    <div class="index_newedition_jobname">Java游戏开发工程师</div>
+                                                    <div class="yun_newedition_jobinfo" id="jobcity" {yun:}if $tplapp.jobcity==2{/yun} style="display:none" {yun:}/if{/yun}>
+                                                    <div class="yun_newedition_jobinfo_c">
+                                                        北京-北京
+                                                        <i class="yun_newedition_jobline"></i>1年以下经验
+                                                        <i class="yun_newedition_jobline"></i>本科学历
+                                                    </div>
+                                                </div>
+                                                <span class="index_newedition_jobxz" id="jobsalary" {yun:}if $tplapp.jobsalary==2{/yun} style="display:none" {yun:}/if{/yun}>￥6000-8000</span>
+                                                <div class="yun_index_jobemergency_tg"></div>
+                                                <div class="yun_newedition_jobflbox" id="jobwelfare" {yun:}if $tplapp.jobwelfare==2{/yun} style="display:none" {yun:}/if{/yun}>
+                                                <span class="yun_newedition_jobfl">休假制度</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <span class="yun_newedition_jobtime" id="jobdate" {yun:}if $tplapp.jobdate==2{/yun}style="display:none"{yun:}/if{/yun}>一周内</span>
+                                    <div class="yun_newedition_jobcomname" id="jobcom" {yun:}if $tplapp.jobcom==2{/yun}style="display:none"{yun:}/if{/yun}>易宏实业有限公司</div>
+                                </div> -->
+                                <!--列表  end-->
+                                <!-- <div class="yun_newedition_jobmore  jobmore" {yun:}if $tplapp.jobmore==2{/yun}style="display: none;"{yun:}/if{/yun}><a>查看更多</a> -->
+                                <div class="layui-tab-content" style="padding: 5px;">
+                                    <div class="jobstyle jobstyle1"
+                                         {yun:}if !empty($tplapp.jobstyle) && $tplapp.jobstyle!=1{/yun}style="display:none"{yun:}/if{/yun}>
+                                        <div class="zw_style">
+                                          <div class="style_top">
+                                              {yun:}foreach from=$tplapp.jobsort key=jskey item=jobsort{/yun}
+                                              {yun:}if $jobsort == 'newjob'{/yun}
+                                              <div class="style_top_item" data-type="newjob" {yun:}if $tplapp.newjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  最新
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'urgjob'{/yun}
+                                              <div class="style_top_item" data-type="urgjob" {yun:}if $tplapp.urgjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  急聘
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'recjob'{/yun}
+                                              <div class="style_top_item" data-type="recjob" {yun:}if $tplapp.recjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  推荐
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'mapjob'{/yun}
+                                              <div class="style_top_item" data-type="mapjob" {yun:}if $tplapp.mapjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  附近
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}/foreach{/yun}
+                                          </div>
+                                          <div class="style_bottom">
+                                              <div class="style_bottom_item">
+                                                  <div class="style_bottom_item_top">
+                                                      <div class="style_bottom_item_top_info">
+                                                          <div class="info_name">
+                                                              行政主管
+                                                          </div>
+                                                          <div class="info_price secondcolor_font" style="{yun:}if $tplapp.secondcolor{/yun}color:{yun:}$tplapp.secondcolor{/yun};{yun:}/if{/yun}">
+                                                              4500-6000元
+                                                          </div>
+                                                      </div>
+                                                      <div class="style_bottom_item_top_sec">
+                                                          沭城 | 大专学历 | 2年经验
+                                                      </div>
+                                                      <div class="style_bottom_item_top_tagbox">
+                                                          <div class="style_bottom_item_top_tag">
+                                                              五险一金
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag">
+                                                              公司旅行
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag">
+                                                              加班补助
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="style_bottom_item_bottom">
+                                                      <div>
+                                                          <img src="images/wap_diy_hotcom.png" alt="" width="34" height="34" style="border-radius: 6px;">
+                                                          星诺教育
+                                                      </div>
+                                                      <div>
+                                                          刚刚
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <div class="jobstyle jobstyle2"
+                                         {yun:}if $tplapp.jobstyle!=2{/yun}style="display:none"{yun:}/if{/yun}>
+                                      <div class="zw_style">
+                                          <div class="style_top style_toptwo">
+                                              {yun:}foreach from=$tplapp.jobsort key=jskey item=jobsort{/yun}
+                                              {yun:}if $jobsort == 'newjob'{/yun}
+                                              <div class="style_top_item" data-type="newjob" {yun:}if $tplapp.newjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  最新
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'urgjob'{/yun}
+                                              <div class="style_top_item" data-type="urgjob" {yun:}if $tplapp.urgjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  急聘
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'recjob'{/yun}
+                                              <div class="style_top_item" data-type="recjob" {yun:}if $tplapp.recjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  推荐
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'mapjob'{/yun}
+                                              <div class="style_top_item" data-type="mapjob" {yun:}if $tplapp.mapjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  附近
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}/foreach{/yun}
+                                          </div>
+                                          <div class="style_bottom">
+                                              <div class="style_bottom_item">
+                                                  <div class="style_bottom_item_top">
+                                                      <div class="style_bottom_item_top_info">
+                                                          <div class="info_name">
+                                                              采购主管
+                                                          </div>
+
+                                                      </div>
+                                                      <div class="style_bottom_item_top_sec" style="display: flex;align-items: center; justify-content: space-between;">
+                                                          <div style="display: flex;align-items: center;">
+                                                              <div class="info_price secondcolor_font" style="font-size: 16px;{yun:}if $tplapp.secondcolor{/yun}color:{yun:}$tplapp.secondcolor{/yun};{yun:}/if{/yun}">
+                                                                  4500-6000元
+                                                              </div>
+                                                              <div style="margin-left: 5px;">
+                                                                  1年经验 . 不限学历
+                                                              </div>
+                                                          </div>
+                                                          <div>
+                                                              经开区
+                                                          </div>
+
+                                                      </div>
+                                                      <div class="style_bottom_item_top_tagbox" style="display: flex;flex-wrap: nowrap; justify-content: space-between;">
+                                                          <div style="display: flex;flex-wrap: wrap;">
+                                                              <div class="style_bottom_item_top_tag zw_styletwo_tag">
+                                                                  五险一金
+                                                              </div>
+                                                              <div class="style_bottom_item_top_tag zw_styletwo_tag">
+                                                                  公司旅行
+                                                              </div>
+                                                              <div class="style_bottom_item_top_tag zw_styletwo_tag">
+                                                                  加班补助
+                                                              </div>
+                                                          </div>
+                                                          <div class="zw_styletwo_btn">
+                                                              申请
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="style_bottom_item_bottom">
+                                                      <div style="display: flex; align-items: center;">
+                                                          <img src="images/wap_diy_hotcom.png" alt="" width="34" height="34" style="border-radius: 50%;">
+                                                          <div style="margin-left: 6px;">
+                                                              <div style="color: #666;font-weight: bolder; font-size: 15px;">
+                                                                  途招聘
+                                                              </div>
+                                                              <div>
+                                                                  精华电子(苏州)有限公司
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="jobstyle jobstyle3"
+                                         {yun:}if $tplapp.jobstyle!=3{/yun}style="display:none"{yun:}/if{/yun}>
+                                      <div class="zw_style">
+                                          <div class="style_top">
+                                              {yun:}foreach from=$tplapp.jobsort key=jskey item=jobsort{/yun}
+                                              {yun:}if $jobsort == 'newjob'{/yun}
+                                              <div class="style_top_item" data-type="newjob" {yun:}if $tplapp.newjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  最新
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'urgjob'{/yun}
+                                              <div class="style_top_item" data-type="urgjob" {yun:}if $tplapp.urgjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  急聘
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'recjob'{/yun}
+                                              <div class="style_top_item" data-type="recjob" {yun:}if $tplapp.recjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  推荐
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}if $jobsort == 'mapjob'{/yun}
+                                              <div class="style_top_item" data-type="mapjob" {yun:}if $tplapp.mapjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                  附近
+                                                  {yun:}if $jskey == 0{/yun}
+                                                  <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                  {yun:}/if{/yun}
+                                              </div>
+                                              {yun:}/if{/yun}
+                                              {yun:}/foreach{/yun}
+                                          </div>
+                                          <div class="style_bottom">
+                                              <div class="style_bottom_item">
+                                                  <div class="style_bottom_item_top">
+                                                      <div class="style_bottom_item_top_info">
+                                                          <div class="info_name">
+                                                              采购主管
+                                                          </div>
+                                                          <div class="info_price secondcolor_font" style="{yun:}if $tplapp.secondcolor{/yun}color:{yun:}$tplapp.secondcolor{/yun};{yun:}/if{/yun}">
+                                                              3-5k
+                                                          </div>
+                                                      </div>
+                                                      <div class="style_bottom_item_top_sec">
+                                                          沭城 <span style="color: #eee;">|</span> 大专学历 <span style="color: #eee;">|</span> 2年经验
+                                                      </div>
+                                                      <div class="style_bottom_item_top_tagbox">
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              五险一金
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              公司旅行
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              加班补助
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="style_bottom_item_bottom" style="border-top: 1px solid #efefef;">
+                                                      <div style="display: flex; align-items: center;">
+                                                          <img src="images/wap_diy_hotcom.png" alt="" width="34" height="34" style="border-radius: 50%;">
+                                                          <div style="margin-left: 6px;">
+                                                              <div style="color: #666;font-weight: bolder; font-size: 15px;">
+                                                                  途招聘
+                                                              </div>
+                                                              <div>
+                                                                  精华电子(苏州)有限公司
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="jobstyle jobstyle4"
+                                         {yun:}if $tplapp.jobstyle!=4{/yun}style="display:none"{yun:}/if{/yun}>
+                                      <div class="zw_style">
+                                        <div class="style_top style_topfour">
+                                            {yun:}foreach from=$tplapp.jobsort key=jskey item=jobsort{/yun}
+                                            {yun:}if $jobsort == 'newjob'{/yun}
+                                            <div class="style_top_item" data-type="newjob" {yun:}if $tplapp.newjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                最新
+                                                {yun:}if $jskey == 0{/yun}
+                                                <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                {yun:}/if{/yun}
+                                            </div>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'urgjob'{/yun}
+                                            <div class="style_top_item" data-type="urgjob" {yun:}if $tplapp.urgjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                急聘
+                                                {yun:}if $jskey == 0{/yun}
+                                                <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                {yun:}/if{/yun}
+                                            </div>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'recjob'{/yun}
+                                            <div class="style_top_item" data-type="recjob" {yun:}if $tplapp.recjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                推荐
+                                                {yun:}if $jskey == 0{/yun}
+                                                <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                {yun:}/if{/yun}
+                                            </div>
+                                            {yun:}/if{/yun}
+                                            {yun:}if $jobsort == 'mapjob'{/yun}
+                                            <div class="style_top_item" data-type="mapjob" {yun:}if $tplapp.mapjob == 2{/yun}style="display: none"{yun:}/if{/yun}>
+                                                附近
+                                                {yun:}if $jskey == 0{/yun}
+                                                <i class="zw_xh_line maincolor_cur" style="{yun:}if $tplapp.maincolor{/yun}background:{yun:}$tplapp.maincolor{/yun};{yun:}/if{/yun}"></i>
+                                                {yun:}/if{/yun}
+                                            </div>
+                                            {yun:}/if{/yun}
+                                            {yun:}/foreach{/yun}
+                                        </div>
+                                        <div class="style_bottom">
+                                            <div class="style_bottom_item">
+                                                <div class="style_bottom_item_top">
+                                                    <div class="style_bottom_item_top_info">
+                                                        <div class="info_name">
+                                                            行政主管
+                                                        </div>
+                                                        <div class="info_price secondcolor_font" style="{yun:}if $tplapp.secondcolor{/yun}color:{yun:}$tplapp.secondcolor{/yun};{yun:}/if{/yun}">
+                                                            4500-6000元
+                                                        </div>
+                                                    </div>
+                                                    <div class="style_bottom_item_top_tagbox" style="margin-top: 12px;margin-bottom: 0; display: flex;justify-content: space-between;">
+                                                      <div style="display: flex;flex-wrap: wrap;">
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              经开区
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              不限经验
+                                                          </div>
+                                                          <div class="style_bottom_item_top_tag zw_stylethree_tag">
+                                                              不限学历
+                                                          </div>
+                                                      </div>
+                                                      <div>
+                                                          刚刚
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                                <div class="style_bottom_item_bottom">
+                                                  <div style="display: flex; align-items: center;">
+                                                      <img src="images/wap_diy_hotcom.png" alt="" width="34" height="34" style="border-radius: 50%;">
+                                                      <div style="margin-left: 6px;">
+                                                          <div style="color: #666;font-weight: bolder; font-size: 15px;">
+                                                              途招聘
+                                                          </div>
+                                                          <div>
+                                                              精华电子(苏州)有限公司
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='syszz'{/yun}
+                        <!--站长资质-->
+                        <tr id="syszzshow" {yun:}if $tplapp.syszzmore==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <td>
+                                <div class="yun_newedition_jobmore  syszzmore" style="font-size: 12px; color: #999; text-align: center;line-height: 18px;">
+                                    <p>版权所有：鑫潮人力资源服务 </p>
+                                    <p>ICP备案号：苏ICP备12049413号-3 </p>
+                                    <p>网安备案号：苏公网安备11020210125号 </p>
+                                    <p>人力资源证编号：321333 </p>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='zph'{/yun}
+                        <!--招聘会-->
+                        <tr id="zphshow" {yun:}if $tplapp.zphshow==2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <!-- <td class="zphshow" {yun:}if $tplapp.zphshow==2{/yun}style="display:none"{yun:}/if{/yun}>
+                                <div class="appdiy_tit"><i class="appdiy_tit_line"></i>招聘会</div>
+                                <div class="app_zph_box">
+                                    <div class="app_zph_box_list">
+                                        <div class="app_zph_name">南京国际博览中心新春首场特大规模招聘会</div>
+                                        <div class="app_zph_time" id="zphtime" {yun:}if $tplapp.zphtime==2{/yun} style="display:none" {yun:}/if{/yun}>时间：2019-08-30 至 2020-06-16</div>
+                                        <div class="app_zph_add" id="zphplace" {yun:}if $tplapp.zphplace==2{/yun} style="display:none" {yun:}/if{/yun}>地点：沭阳县人力资源市场</div>
+                                    </div>
+                                </div>
+                                <div class="yun_newedition_jobmore  zphmore" {yun:}if $tplapp.zphmore==2{/yun}style="display: none;"{yun:}/if{/yun}><a>查看更多</a></div>
+                            </td> -->
+                            <td style="padding: 5px 0;">
+                                <div class="appset_zph">
+                                    <div class="zph_style_top">
+                                        <div>
+                                            招聘会
+                                        </div>
+                                        <div class="zphmore" {yun:}if $tplapp.zphmore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                            更多>
+                                        </div>
+                                    </div>
+                                    <div class="zph_style_bottom">
+                                        <div class="zph_item">
+                                            <div class="zph_item_left">
+                                                <img src="images/wap_show_img3.png" alt="" width="100%" height="100%">
+                                            </div>
+                                            <div class="zph_item_right">
+                                                <div>
+                                                    <span>湖北2023年春节期间"春暖农民工"服务行动，来了！</span>
+                                                </div>
+                                                <div>
+                                                    2023-1-3
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}if $v=='article'{/yun}
+                        <!--资讯-->
+                        <tr id="articleshow" {yun:}if $tplapp.articleshow==2{/yun}style="display:none"{yun:}/if{/yun} style="margin-bottom: 10px;">
+                            <!-- <td class="articleshow" {yun:}if $tplapp.articleshow==2{/yun}style="display:none"{yun:}/if{/yun}>
+
+                                <div class="appdiy_tit"><i class="appdiy_tit_line"></i>职场资讯</div>
+                                <div id="articletype1" class="app_twnews atypectrl" {yun:}if $tplapp.articletype==1 || $tplapp.articletype==''{/yun} style="display:block" {yun:}else{/yun} style="display:none"{yun:}/if{/yun}>
+                                    <div class="app_twnews_list">
+                                        <div class="app_twnews_list_c">
+                                            <image src="images/wap_diy_article.png" class="app_news_tw_img"></image>
+                                            <div class="app_twnews_p"> 面试前究竟要准备什么？</div>
+                                        </div>
+                                    </div>
+                                    <div class="app_twnews_list">
+                                        <div class="app_twnews_list_c">
+                                            <image src="images/wap_diy_article.png" class="app_news_tw_img"></image>
+                                            <div class="app_twnews_p"> 面试前究竟要准备什么？</div>
+                                        </div>
+                                    </div>
+                                    <div class="app_twnews_list">
+                                        <div class="app_twnews_list_c">
+                                            <image src="images/wap_diy_article.png" class="app_news_tw_img"></image>
+                                            <div class="app_twnews_p"> 面试前究竟要准备什么？</div>
+                                        </div>
+                                    </div>
+                                    <div class="app_twnews_list">
+                                        <div class="app_twnews_list_c">
+                                            <image src="images/wap_diy_article.png" class="app_news_tw_img"></image>
+                                            <div class="app_twnews_p"> 面试前究竟要准备什么？</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="articletype2" class="app_news atypectrl" {yun:}if $tplapp.articletype==2{/yun} style="display:block" {yun:}else{/yun} style="display:none"{yun:}/if{/yun}>
+                                    <div class="app_news_solist">
+                                        <div class="app_news_soname">面试前究竟要准备什么？</div>
+                                        <div class="app_news_so_b">
+                                            <div class="app_news_so_p">
+                                                不少同事说，自己刚入职的时候，立誓要每天又忙又美地上班。结果没几天就打脸了，早上根本起不来，安慰自己心思要放在工作上，于是，素面朝天一张大脸，随手从衣柜里捞出一件衣服，去见一群同样丧气的同事。
+                                            </div>
+                                            <image src="images/wap_diy_article.png" class="app_news_so_img"></image>
+                                        </div>
+                                    </div>
+                                    <div class="app_news_solist">
+                                        <div class="app_news_soname">在职场上，表达能力究竟有多重要？</div>
+                                        <div class="app_news_so_b">
+                                            <div class="app_news_so_p">面试是一个非常重要的过程，有些大学生在这个过程中感到不知所措，或者做得不好，使自己在求...</div>
+                                            <image src="images/wap_diy_article.png" class="app_news_so_img"></image>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="articletype3" class="app_news atypectrl" {yun:}if $tplapp.articletype==3{/yun} style="display:block" {yun:}else{/yun} style="display:none"{yun:}/if{/yun}>
+                                    <div class="app_news_list">面试前究竟要准备什么？</div>
+                                    <div class="app_news_list">在职场上，表达能力究竟有多重要</div>
+                                    <div class="app_news_list">面试前究竟要准备什么？</div>
+                                    <div class="app_news_list">在职场上，表达能力究竟有多重要</div>
+                                </div>
+                                <div class="yun_newedition_jobmore  articlemore" {yun:}if $tplapp.articlemore==2{/yun}style="display: none;"{yun:}/if{/yun}><a>查看更多</a></div>
+                            </td> -->
+
+                            <td>
+                                <!--样式一-->
+                                <div class="appset_zx articletype articletype1"
+                                     {yun:}if !empty($tplapp.articletype) && $tplapp.articletype!=1{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="zph_style_top">
+                                        <div>
+                                            职场资讯
+                                        </div>
+                                        <div class="articlemore" {yun:}if $tplapp.articlemore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                            更多>
+                                        </div>
+                                    </div>
+                                    <div class="zph_style_bottom">
+                                        <div class="zph_item">
+                                            <div class="zph_item_left">
+                                                <img src="images/wap_diy_article.png" alt="" width="100%" height="100%">
+                                            </div>
+                                            <div class="zph_item_right">
+                                                <div>
+                                                    <span>湖北2023年春节期间"春暖农民工"服务行动，来了！</span>
+                                                </div>
+                                                <div>
+                                                    2023-1-3
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--样式二-->
+                                <div class="appset_zx appset_zphtwo articletype articletype2"
+                                     {yun:}if $tplapp.articletype!=2{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="zph_style_top">
+                                        <div>
+                                            职场资讯
+                                        </div>
+                                        <div class="articlemore" {yun:}if $tplapp.articlemore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                            更多>
+                                        </div>
+                                    </div>
+                                    <div class="zph_style_bottom zph_style_bottomtwo">
+                                        <div class="zph_item zph_itemtwo">
+                                            <div class="zph_item_left zph_item_lefttwo">
+                                                <img src="images/wap_diy_article.png" alt="" width="100%" height="100%">
+                                            </div>
+                                            <div class="zph_item_right">
+                                                <div>
+                                                    <span>2023年春节期间"春暖农民工"服务行动，来了！</span>
+                                                </div>
+                                                <div>
+                                                    2023-1-3
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="zph_item zph_itemtwo">
+                                            <div class="zph_item_left zph_item_lefttwo">
+                                                <img src="images/wap_diy_article.png" alt="" width="100%" height="100%">
+                                            </div>
+                                            <div class="zph_item_right">
+                                                <div>
+                                                    <span>2023年春节期间"春暖农民工"服务行动，来了！</span>
+                                                </div>
+                                                <div>
+                                                    2023-1-3
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--样式三-->
+                                <div class="appset_zx articletype articletype3"
+                                     {yun:}if $tplapp.articletype!=3{/yun}style="display:none"{yun:}/if{/yun}>
+                                    <div class="zph_style_top">
+                                        <div>
+                                            职场资讯
+                                        </div>
+                                        <div class="articlemore" {yun:}if $tplapp.articlemore==2{/yun}style="display: none;"{yun:}/if{/yun}>
+                                            更多>
+                                        </div>
+                                    </div>
+                                    <div class="zph_style_bottom">
+                                        <div class="zph_item zph_itemthree">
+                                            <span>湖北2023年春节期间"春暖农民工"服务行动，来了！</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        {yun:}/if{/yun}
+
+                        {yun:}/foreach{/yun}
+						<tr id="ptoggleconnect">
+                            <td>
+                                <div class="yun_newedition_footer connectshow" {yun:}if $tplapp.cshow==2{/yun} style="display:none" {yun:}/if{/yun}>
+                                    <div class="" style="position:absolute;right:40px;bottom:70px;">
+                                        <img src="{yun:}$tplapp.kficon{/yun}" id="kficonshow" alt=""
+                                             style="width:50px;height:50px;">
+                                        <!--<span class="lxwm" style="width:50px;height:50px; line-height:18px; position:absolute;right:40px;bottom:50px; background:#06F;color:#fff;border-radius:50%; display:inline-block; z-index:10000"><em style="display:block; padding-top:8px;">浮动</em>客服</span>-->
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!--底部导航开始-->
+                    <!--<div style="background: #f0f2f5; {yun:}if $tplapp.footshow == 2{/yun}display:none;{yun:}/if{/yun}" class="footstyle">-->
+                    <div style="background: #f0f2f5;" class="footstyle">
+                        <!--样式一-->
+                        <div class="appfooter footstyle1" {yun:}if $tplapp.footstyle == 2{/yun}style="display:none"{yun:}/if{/yun}>
+                            <ul class="yun_footer_nav">
+                                {yun:}foreach item=pv from=$footnav{/yun}
+                                {yun:}if $pv.url=='index'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='job'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='midButton'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}" style="width: 40px;height: 40px;left: 14%;top: -30%;">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='resume'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='sysnews'{/yun}
+                                <li style="display:none"><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='login'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}/foreach{/yun}
+                            </ul>
+                        </div>
+                        <!--样式二-->
+                        <div class="appfooter footstyle2" style="background: #fff; border-radius: 26px 26px 0 0;{yun:}if $tplapp.footstyle != 2{/yun}display:none;{yun:}/if{/yun}">
+                            <ul class="yun_footer_nav">
+                                {yun:}foreach item=pv from=$footnav{/yun}
+                                {yun:}if $pv.url=='index'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='job'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='midButton'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}" style="width: 40px;height: 40px;left: 14%;top: -30%;">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='resume'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='sysnews'{/yun}
+                                <li style="display:none"><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}if $pv.url=='login'{/yun}
+                                <li><a><img src="{yun:}if $pv.pic{/yun}{yun:}$pv.pic{/yun}{yun:}else{/yun}images/wap_show_img1.png{yun:}/if{/yun}" width="30" class="footpicshow{yun:}$pv.id{/yun}">{yun:}$pv.name{/yun}</a></li>
+                                {yun:}/if{/yun}
+                                {yun:}/foreach{/yun}
+                            </ul>
+                        </div>
+                    </div>
+                    <!--底部导航结束-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['colorpicker', 'element'], function(){
+        var $ = layui.$,colorpicker = layui.colorpicker;
+        //常规使用
+        colorpicker.render({
+            elem: '#test1',
+            color: '#0078ff',
+            predefine: true, // 开启预定义颜色
+            colors: ['#0078ff','#fa6400','#10ae51','#3b83c0','#da8657','#ff5857','#ac6cff'] //自定义预定义颜色项
+        });
+        colorpicker.render({
+            elem: '#test2',
+            color: '#ff5857',
+            predefine: true, // 开启预定义颜色
+            colors: ['#0078ff','#fa6400','#10ae51','#3b83c0','#da8657','#ff5857','#ac6cff'] //自定义预定义颜色项
+        });
+    });
+</script>
+<script src="js/appdiy.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script>
+    var navlength = parseInt('{yun:}$navlength{/yun}');
+
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#navcar'
+            , width: '100%' //设置容器宽度
+            , height: '100px'
+            , autoplay: false
+            , arrow: 'none' //始终显示箭头
+
+        });
+    });
+
+    function makeCache() {
+        var pytoken = $('#pytoken').val();
+        loadlayer();
+        $.post('index.php?m=admin_app_set&c=makeCache', {pytoken: pytoken}, function (data) {
+            parent.layer.closeAll();
+            parent.layer.msg('生成成功', 2, 9, function () {
+                window.location.reload();
+            });
+        })
+    }
+</script>
+</body>
+</html>

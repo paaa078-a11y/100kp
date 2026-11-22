@@ -1,0 +1,188 @@
+.clear{width:100%; clear: both;}
+.new_bgcor{width:100%;height:3.2rem; background-color: #0062ff; position: relative;}
+.new_header_fh{width:0.8rem;height:0.8rem; position: absolute;left:0.213333rem;top:0.4rem; display: block;background:url(../img/header_fh.png) no-repeat; background-size:70%;}
+.new_bgcorbj{ position: absolute;right:0.4rem;top:0.4rem;color:#fff}
+.new_job_box{padding:0px 0.32rem}
+.new_job_info{ background-color: #fff;border-radius:0.213333rem;padding:0.4rem; margin-top: -1.733333rem;position: relative; z-index: 100;}
+.new_job_name{font-size:0.533333rem; font-weight: bold; padding-right: 2.933333rem;;}
+.new_job_i_xz{color: #ff4c52; font-size: 0.533333rem; font-weight: bold;  padding: 0.266666rem 0 0 0;; }
+.new_job_comname{font-size: 0.373333rem;color:#666; padding: 0.266666rem  0 0 0;;}
+.new_job_datename{ font-size: 0.373333rem;color:#999; display: block; padding-bottom:0.266666rem;}
+.new_job_date_n{font-size:0.533333rem;  margin-right: 0.266666rem;}
+.new_job_date{ }
+.new_job_date_list{width:32%; display: inline-block;}
+	.new_job_date_c{ padding: 0.266666rem 0.4rem;background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 0.053333rem 0.213333rem 0.026666rem rgb(0 0 0 / 5%); margin-right:0.266666rem; margin-top: 0.4rem;}
+.new_job_cz {height:2.666666rem;}
+.new_job_cz .new_job_cz_a{ display:inline-block;width:50%; float: left;}
+.new_job_cz .new_job_cz_a a{ display: block;background-color: #fff;border-radius:0.106666rem; margin-top: 0.266666rem;height:1.2rem; padding-left: 1.2rem; line-height: 1.2rem; position: relative;}
+.new_job_cz_l{ margin-right:0.133333rem;}
+.new_job_cz_r{ margin-left: 0.133333rem;}
+.new_job_cz_jr{width:0.8rem;height:0.8rem;background:url(../img/jr.png) no-repeat center center; background-size:30%; position: absolute;right:0px;top:0.133333rem;}
+.new_job_cz_icon{width:1.2rem;height:1.2rem; position: absolute;left:0px;top:0px;}
+.new_job_cz_iconzd{background:url(../img/zhid1.png) no-repeat center center; background-size:55%;}
+.new_job_cz_icontj{background:url(../img/tuij1.png) no-repeat center center; background-size:55%;}
+.new_job_cz_iconjp{background:url(../img/ji1.png) no-repeat center center; background-size:55%;}
+.new_job_cz_iconsx{background:url(../img/sxjob.png) no-repeat center center; background-size:55%;}
+.new_job_cz_ok{color:#f60; position: absolute;right:0.666666rem;top:0px; font-size: 0.32rem;}
+.new_job_infobox{ background-color: #fff;border-radius:0.213333rem;padding:0 0.4rem 0.533333rem 0.4rem; margin-top:0.266666rem }
+.new_job_infotit{ font-size: 0.426666rem; font-weight: bold; padding-top: 0.4rem;;}
+.new_job_i ul{ padding-top: 0.266666rem;}
+.new_job_i ul li{ line-height: 0.8rem; font-size: 0.373333rem;}
+.new_job_i_n{color:#999}
+.new_job_fl span{ margin-top: 0.266666rem; margin-right: 0.133333rem;     background-color: #e9f1fe;
+    color: #2778F8;padding:0.16rem 0.16rem;border-radius:0.08rem; font-size: 0.373333rem; display: inline-block;}
+.new_job_infojs{ padding-top: 0.4rem;font-size: 0.373333rem; line-height: 0.8rem;}
+.job_footer{width:100%;height:2.666666rem;}
+.job_footer_fix{width:100%;padding:0.266666rem; position: fixed;left:0px;bottom:0px; background: #fff; z-index: 100;}
+.job_footer_box{ display: flex;}
+.job_footer_box_r{width:60%}
+.job_tel{width:100%;height:1.333333rem; line-height: 1.333333rem; display: block;border-radius:0.8rem; background-color: #0062ff; text-align: center;color:#fff; margin-left: 0.266666rem; font-size: 0.426666rem;;}
+.job_footer_box_l{width:30%}
+.job_sh{width:100%;height:1.28rem; line-height: 1.28rem; display: block;border-radius:0.8rem; background-color: #fff; text-align: center;color:#0062ff;border:0.026666rem solid #0062ff;font-size: 0.426666rem; position: relative;}
+.job_shzt{ display: inline-block;width:;height:0.533333rem; line-height: 0.533333rem; text-align: center;color:#fff; background-color: #009944; position: absolute;right:-0.533333rem;top:-0.4rem; font-size: 0.32rem;padding:0px 0.16rem;border-radius:0.213333rem;}
+
+.new_user_resume{ padding-left:1.6rem; position: relative;}
+.new_user_pic{width:1.333333rem;height:1.333333rem; position: absolute;left:0px;top:0px;border-radius:50%;}
+.new_user_pic img{width:1.333333rem;height:1.333333rem; border-radius:50%;}
+.new_job_wzd{ padding-top: 0.426666rem;color:#999}
+.new_job_wzdbg{width:2.666666rem;height:0.266666rem; background-color: #bdd6fd; display: inline-block;border-radius:0.266666rem;}
+.new_job_wzd_jd{ background-color: #0062ff;height:0.266666rem;display: inline-block;border-radius:0.266666rem; vertical-align: top; }
+.new_user_infotit{ position: relative; margin-top: 0.4rem;;}
+.new_user_info_name{ font-size: 0.426666rem; font-weight: bold;}
+.new_user_info_cz{width:0.666666rem;height:0.666666rem;background:url(../img/bj.png) no-repeat center center; background-size:100%; position: absolute;right:0px;top:0.133333rem;}
+.new_user_time{color:#999; padding-top: 0.266666rem;;}
+.shzt{ position: absolute;right:0.266666rem;top:0.266666rem;}
+.shzt1{}
+.shzt2{}
+.shzt3{}
+.ysh{ color:#0ac584; display: inline-block;  position: relative; font-size: 0.32rem; padding-left: 0.266666rem; margin-left: 0.266666rem;}
+.wsh{ color:#f22836; display: inline-block; position: relative; font-size: 0.32rem; padding-left: 0.266666rem; margin-left: 0.266666rem;}
+.ysd{ color:#ff9f1e; display: inline-block; position: relative; font-size: 0.32rem; padding-left: 0.266666rem; margin-left: 0.266666rem;}
+.yzt{ color:#0983fd; display: inline-block; position: relative; font-size: 0.32rem; padding-left: 0.266666rem; margin-left: 0.266666rem;}
+.wshicon{width:0.213333rem;height:0.213333rem;border-radius:50%; display: inline-block; position: absolute;left:0px;top:0.106666rem;}
+.ysh .wshicon{ background-color: #0ac584;}
+.wsh .wshicon{ background-color: #f22836;}
+.ysd .wshicon{ background-color: #ff9f1e;}
+.yzt .wshicon{ background-color: #0983fd;}
+.new_user_cz_iconzd{background:url(../img/jobhunter_top.png) no-repeat center center; background-size:55%;}
+.new_user_cz_icontj{background:url(../img/tuij1.png) no-repeat center center; background-size:55%;}
+.new_user_cz_iconjp{background:url(../img/jobhunter_preview.png) no-repeat center center; background-size:55%;}
+.new_user_cz_iconsx{background:url(../img/jobhunter_refresh.png) no-repeat center center; background-size:55%;}
+/*简历详细页*/
+.resume_show_info ul li{ padding-left: 0.533333rem; line-height: 0.8rem; font-size: 0.373333rem; position: relative; margin-top:5px;;}
+.resume_line{color:#999; font-size: 0.32rem; display: inline-block;; margin: 0 0.266666rem;;}
+.resume_show_info ul li i{width:0.4rem;height:0.4rem; display: inline-block; position: absolute;left:0px;top:0.213333rem;}
+.resume_show_icon1{background:url(../img/uicon1.png) no-repeat center center; background-size:100%;}
+.resume_show_icon2{background:url(../img/uicon2.png) no-repeat center center; background-size:100%;}
+.resume_show_icon3{background:url(../img/uicon3.png) no-repeat center center; background-size:100%;}
+.resume_show_icon4{background:url(../img/uicon4.png) no-repeat center center; background-size:100%;}
+.resume_show_icon5{background:url(../img/uicon5.png) no-repeat center center; background-size:100%;}
+.resume_show_icon6{background:url(../img/uicon6.png) no-repeat center center; background-size:100%;}
+.resume_show_icon7{background:url(../img/uicon7.png) no-repeat center center; background-size:100%;}
+.user_i_xg{width:0.666666rem;height:0.666666rem;background:url(../img/bj.png) no-repeat center center; background-size:100%; position: absolute;right:0px;top:0.133333rem;}
+
+/*企业详细页*/
+.new_combgcor{width:100%; background-color: #0062ff; position: relative;}
+.new_comheader{height:1.333333rem}
+.new_header_fh{width:0.8rem;height:0.8rem; position: absolute;left:0.213333rem;top:0.4rem; display: block;background:url(../img/header_fh.png) no-repeat; background-size:70%;}
+.new_cominfo{ padding-left: 2.133333rem; padding-bottom: 0.533333rem;color:#fff;position: relative;}
+.new_comname{ font-size: 0.48rem; padding-bottom: 0.266666rem;}
+.new_comlogo{width:1.466666rem;height:1.466666rem; background-color: #fff;border-radius:0.16rem; position: absolute;left:0.4rem;top:0px;;}
+.new_comlogo img{width:1.466666rem;height:1.466666rem;border-radius:0.16rem;;}
+.new_com_bj a{color:#fff; position: relative; padding-left: 0.533333rem;;}
+.new_com_bj a:after{width:0.373333rem;height:0.373333rem; display: inline-block; position: absolute;left:0px;top:1px;background:url(../img/bjicon.png) no-repeat center center; background-size:100%;content:''; }
+.new_comvipbox{padding:0px 0.32rem}
+.new_comvip{padding:0.266666rem 0.32rem; position: relative;min-height: 0.48rem; background-color: #f8deb5;border-radius:0.213333rem 0.213333rem 0 0;color:#a66c39}
+.new_comvip_jb{ font-size: 0.48rem; font-weight: bold;}
+.new_comvip_xg{ background-color: #e9811d;color:#fff;border-radius:0.533333rem; display: inline-block; position: absolute;right:0.32rem;top:0.266666rem;padding:0.08rem 0.266666rem;}
+.new_comvip_time{ padding-left: 0.533333rem; font-size: 0.373333rem;;}
+.new_comczbox{padding:0px 0.32rem}
+.new_comcz{ background-color: #fff;border-radius:0 0 8px 8px ; padding-bottom: 0.133333rem; padding-top: 0.133333rem;}
+.new_comcz_list{width:48%; display: inline-block;}
+.new_comcz_list_c{height:1.066666rem; line-height: 1.066666rem; padding-left: 1.066666rem;position: relative;color:#666; font-size: 0.373333rem; display: block;}
+.new_comcz_list_c .new_comcz_icon{width:0.48rem;height:0.48rem;display: inline-block; position: absolute;left:15px;top:11px;}
+.new_comcz_icon1{background:url(../img/icon1.png) no-repeat center center; background-size:100%; }
+.new_comcz_icon2{background:url(../img/icon2.png) no-repeat center center; background-size:100%; }
+.new_comcz_icon3{background:url(../img/icon3.png) no-repeat center center; background-size:100%; }
+.new_comcz_icon4{background:url(../img/icon4.png) no-repeat center center; background-size:100%; }
+.new_comcz_fx{width:30px;height:30px;background:url(../img/jr.png) no-repeat center center; background-size:30%; position: absolute;right:0px;top:5px;}
+.new_comcz_ok{color:#f60; position: absolute;right:0.666666rem;top:0px; font-size: 0.32rem;}
+.new_comtit ul{ display: flex;}
+.new_comtit ul li{height:55px; line-height: 1.333333rem; font-size: 0.426666rem;color:#666;width:100%;}
+.new_comtit ul .new_comtit_cur{ font-weight: bold;color:#000; position: relative;}
+.new_comtit ul .new_comtit_cur:after{width:0.533333rem;height:3px; background-color:#0062ff;content:''; display: inline-block; position: absolute;left:0.533333rem;bottom:0.266666rem;border-radius:2px; }
+.wapadmin_cominfo_all{ padding-left: 0.4rem; padding-top: 0.4rem;}
+.wapadmin_cominfo_p{  }
+.wapadmin_cominfo_p ul li{ padding-left: 1.733333rem; position: relative; min-height: 0.8rem; line-height: 0.8rem; font-size: 0.373333rem;}
+.wapadmin_cominfo_n{width:1.6rem; position: absolute;left:0rem;top:0rem;color:#666;}
+.wapadmin_par_tit{ font-size: 0.426666rem; font-weight: bold;padding:0.4rem 0}
+.wapadmin_cont{ font-size: 0.373333rem; line-height: 0.8rem;;}
+.wapadmin_tctj ul{ }
+.wapadmin_tctj ul li{width:32%; display: inline-block; }
+.wapadmin_tctjlist{ background-color: #fff;border-radius:8px; padding:0.266666rem 0.4rem;   box-shadow: 0.133333rem 0.133333rem 0.4rem rgb(3 0 0 / 4%); margin-right: 0.266666rem; margin-bottom: 0.266666rem;border:1px solid #eee;}
+.wapadmin_tc_name{color:#999}
+.wapadmin_tc_n{ font-size: 0.533333rem; font-weight: bold; padding-top: 0.266666rem;;}
+
+.wapadmin_comjoblist ul{overflow:hidden}
+.wapadmin_comjoblist ul li{background:#fff;overflow:hidden;margin-bottom:.3rem;border-radius:.2rem;box-shadow: 0.133333rem 0.133333rem 0.4rem rgb(3 0 0 / 4%);background-color: #fff;border-radius:0.213333rem; padding:0.266666rem 0.4rem; border:0.026666rem solid #eee; }
+.wapadmin_comjoblist ul li .positionLinke{overflow:hidden;display:flex;margin-bottom:.2rem;align-items:center}
+.wapadmin_comjoblist ul li .positionLinke a{font-size:var(--font-16);font-weight:700}
+.wapadmin_comjoblist ul li .positionLinke img{width:var(--font-24);margin-left:.2rem;height:auto}
+.wapadmin_comjoblist ul li .positionTitlest{overflow:hidden}
+.wapadmin_comjoblist ul li .positionTitlest .postListe{overflow:hidden;display:flex;align-items:center;color:#999;margin:.2rem 0;font-size:var(--font-13)}
+.wapadmin_comjoblist ul li .positionTitlest .postListe p{margin-right:.4rem}
+.wapadmin_comjoblist ul li .positionListing{overflow:hidden;margin-top:.4rem}
+.wapadmin_comjoblist ul li .positionListing .listingTab{overflow:hidden;display:block;width:20%;float:left; text-align: center;}
+.wapadmin_comjoblist ul li .positionListing .listingTab img{display:block;width:var(--font-20); margin:0 auto;}
+.wapadmin_comjoblist ul li .positionListing .listingTab p{margin-top:.2rem;color:#666;font-size:var(--font-12)}
+.jobfb_bth{ display:block ;width: 100%;height: 1.333333rem;line-height: 1.333333rem;display: block;border-radius: 0.8rem;
+background-color: #0062ff;text-align: center;color: #fff; font-size: 0.426666rem;}
+.zttc_box{ position:relative;height:30px; font-size: 0.373333rem;color:#666; margin-top: 0.266666rem; line-height:0.693333rem;}
+.zttc{ background-color: #e9811d;color:#fff;border-radius:0.533333rem; display: inline-block; position: absolute;right:0.32rem;top:0px;padding:0rem 0.266666rem;line-height:0.693333rem;}
+.gj_jl{color:#0062ff}
+.gj_jlbth{ display: inline-block; position: absolute;right:0px;top:0px; background-color: #f7f6fb;color:#0062ff;padding:0px 0.346666rem;border-radius:0.533333rem;}
+.wapadmin_cominfo_gl li{ margin-bottom: 0.266666rem;;}
+
+/*企业日志*/
+.com_log_box{ background-color: #fff;border-radius:8px; margin: 12px; padding-top: 15px;}
+.com_logo_list{ font-size:0.373333rem;padding:10px 0 10px 20px;border-left:1px solid #eee; margin-left: 20px; position: relative;}
+.com_logo_list:after{width:10px;height:10px; display: inline-block;content:'';;background:url(../img/quans.png) no-repeat center center; background-size:100%; position: absolute;left:-5px;top:14px;}
+.com_logo_listtime{width:;color:#999; padding-bottom: 10px;;}
+.com_logo_list_p{ line-height: 30px;;}
+quans.png
+
+
+.wapadmin_paragraph{
+    overflow: hidden;
+}
+.wapadmin_paragraph .photoes{
+    overflow: hidden;
+}
+.wapadmin_paragraph .photoes img{
+    width: 47%;
+    height: 3rem;
+    float: left;
+    margin-bottom: 0.3rem;
+}
+.wapadmin_paragraph .photoes img:nth-child(2n+2){
+    float: right;
+}
+
+.zhanwutixsnh{
+    overflow: hidden;
+    height: var(--font-42);
+    padding: 0 var(--font-8);
+    background: #F9F9F9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--font-14);
+    color: #666;
+}
+
+.followSubedealOne{
+    display: flex;
+    align-items: center !important;
+}

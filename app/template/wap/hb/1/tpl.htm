@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	{yun:}include file="$wapstyle/hb/hb_header.htm"{/yun}
+
+	<body>
+		<div class="hb_jobbox1 noSHow" id="backurl">
+			{yun:}if $smarty.session.auid{/yun}
+			<img id="bgt" src="{yun:}$config.sy_weburl{/yun}/wap/?c=company&a=getHbBase&hb={yun:}$smarty.get.hb{/yun}" width="640" height="1088" />
+			{yun:}else{/yun}
+			<img id="bgt" src="{yun:}url m=wap c=company a=getHbBase hb=$smarty.get.hb{/yun}" width="640" height="1088" />
+			{yun:}/if{/yun}
+			<div class="hb_jobbox1cont">
+				<div class="hb1_ewm">
+					{yun:}if $smarty.session.auid{/yun}
+					<img id="comQrcode" src="{yun:}url m=ajax c=pubqrcode toc=company toa=show toid=$smarty.get.id{/yun}" width="180" height="180" />
+					{yun:}else{/yun}
+					<img id="comQrcode" src="{yun:}url m=wap c=ajax a=pubqrcode toc=company toa=show toid=$smarty.get.id{/yun}" width="180" height="180" />
+					{yun:}/if{/yun}
+				</div>
+				<div class="hb1_comname">{yun:}$row.name{/yun}</div>
+				<div class="hb1_webname">{yun:}$config.sy_webname{/yun} ({yun:}$config.sy_weburl{/yun})</div>
+			</div>
+		</div>
+		<div class="hb_generate noSHow" style="display:block;" id="hb_a">
+			<a href="javascript:void(0);" onclick="toCanvas();" class="hb_generate_bth">生成海报</a>
+		</div>
+
+		{yun:}include file="$wapstyle/hb/hb_foot.htm"{/yun}
+	</body>
+</html>

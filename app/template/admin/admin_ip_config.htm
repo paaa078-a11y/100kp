@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="../js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="../js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="../js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+
+				<div class="ttyTishiTopAll">
+					<h3>IP归属地配置</h3>
+				  </div>
+
+				<div class="clear"></div>
+
+				<style type="text/css">
+					.layui-form-switch {
+						margin-top: 0;
+					}
+				</style>
+
+				<div>
+					<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+					<form method="post" target="supportiframe" action="index.php?m=admin_ip_config&c=save" onsubmit="return checkForm();"
+					 class="layui-form">
+						<table width="100%" class="table_form">
+							<tr>
+								<th width="160">IP归属地：</th>
+								<td>
+									<div class="layui-input-block">
+										<input type="checkbox" name="sy_ip" lay-skin="switch" lay-text="开启|关闭" lay-filter="ip" {yun:}if
+										 $config.sy_ip=="1" {/yun}checked{yun:}/if{/yun}/> <span class="admin_web_tip" style="margin-left: 10px;">关闭时不获取Ip归属地，开启后获取Ip归属地</span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160">IP地址APPKEY：</th>
+								<td>
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input name="sy_ip_appkey" id="sy_ip_appkey" autocomplete="off" class="layui-input" type="text" value="{yun:}$config.sy_ip_appkey{/yun}" size="50" />
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160">IP地址APPSECRET：</th>
+								<td>
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input name="sy_ip_appsecret" id="sy_ip_appsecret" autocomplete="off" class="layui-input" type="text" value="{yun:}$config.sy_ip_appsecret{/yun}" size="50" />
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160" class="t_fr">剩余数量：</th>
+								<td>
+									<div class="layui-input-block t_w480">
+										<input class="tty_input t_w250" type="text" name="rest_msgnum" id="rest_msgnum"
+                                        value="0" disabled="disabled" />条
+									</div>
+								</td>
+							</tr>
+							<tr class="admin_table_trbg">
+								<th>&nbsp;</th>
+								<td>
+									<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+									<input class="layui-btn tty_sub" name="ip_config" type="submit" value="提交" />&nbsp;&nbsp;
+									<input class="layui-btn tty_cz" type="reset" value="重置" />
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script>
+			layui.use(['layer', 'form'], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					$ = layui.$;
+			});
+
+			function checkForm() {
+				var sy_ip = $("input[name=sy_ip]").is(":checked") ? 1 : 2;
+				var sy_ip_appkey = $("#sy_ip_appkey").val();
+				if (sy_ip == 1 && sy_ip_appkey == '') {
+					parent.layer.msg('请填写IP地址APPKEY', 2, 8);
+					return false;
+				}
+				var sy_ip_appsecret = $("#sy_ip_appsecret").val();
+				if (sy_ip == 1 && sy_ip_appsecret == '') {
+					parent.layer.msg('请填写IP地址APPSECRET', 2, 8);
+					return false;
+				}
+				loadlayer();
+			}
+			$(function () {
+				$.post("index.php?m=admin_ip_config&c=get_restnum", { pytoken: $("#pytoken").val(), msguser: $("#sy_msguser").val() }, function (data) {
+                    data = eval('(' + data + ')');
+                    if (data) {
+                        if (data.msgnum) {
+                            $("#rest_msgnum").val(data.msgnum);
+                        } else {
+                            $("#rest_msgnum").val(0);
+                        }
+                    }
+                });
+
+
+            })
+		</script>
+
+	</body>
+</html>

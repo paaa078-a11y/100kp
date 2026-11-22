@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="培训设置" name="set">
+                    <set ref="set"></set>
+                </el-tab-pane>
+                <el-tab-pane label="头像设置" name="avatar" lazy>
+                    <avatar ref="avatar"></avatar>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'set'
+                }
+            },
+            components: {
+                'set': httpVueLoader('./component/config_set.vue'),
+                'avatar': httpVueLoader('./component/config_avatar.vue'),
+            },
+            methods: {
+                handleClick(tab, event) {
+                    // this.$refs[tab.name].init();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

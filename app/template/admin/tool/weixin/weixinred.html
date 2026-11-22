@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName">
+                <el-tab-pane label=" 微信红包设置" name="second" :lazy="true">
+                    <weixinredset :config="config" @post-set="postset"></weixinredset>
+                </el-tab-pane>
+                <el-tab-pane label="关注微信发红包" name="third" :lazy="true">
+                    <weixinredgz :config="config" @post-set="postset"></weixinredgz>
+                </el-tab-pane>
+                <el-tab-pane label=" 公众号绑定账户" name="fourth" :lazy="true">
+                    <weixinredbd :config="config" @post-set="postset"></weixinredbd>
+                </el-tab-pane>
+                <el-tab-pane label="  创建首份简历发红包" name="fiveth" :lazy="true">
+                    <weixinredresume :config="config" @post-set="postset"></weixinredresume>
+                </el-tab-pane>
+                <el-tab-pane label=" 企业首次完善基本资料发红包" name="sixth" :lazy="true">
+                    <weixinredcom :config="config" @post-set="postset"></weixinredcom>
+                </el-tab-pane>
+                <el-tab-pane label="微信红包记录" name="seven" :lazy="true">
+                    <weixinredlist></weixinredlist>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'second',
+                config: {}
+            }
+        },
+        components: {
+            'weixinredlist': httpVueLoader('./component/weixinredlist.vue'),
+            'weixinredset': httpVueLoader('./component/weixinredset.vue'),
+            'weixinredgz': httpVueLoader('./component/weixinredgz.vue'),
+            'weixinredbd': httpVueLoader('./component/weixinredbd.vue'),
+            'weixinredresume': httpVueLoader('./component/weixinredresume.vue'),
+            'weixinredcom': httpVueLoader('./component/weixinredcom.vue'),
+        },
+        created: function() {
+            this.getInfo();
+        },
+        methods: {
+            async getInfo() {
+                let that = this;
+
+                httpPost('m=tool&c=weixinred&a=index', {}).then((result) => {
+
+                    var res = result.data;
+                    if (res.error == 0) {
+
+                        that.config = res.data;
+
+                    }
+
+                }).catch(function(e) {
+                    console.log(e)
+                })
+            },
+            async postset(e) {
+
+                let that = this;
+                var config = e.config;
+                var type = e.type;
+
+                if (type == 1 || type == 2 || type == 3 || type == 4) {
+
+                    var pro = config[`sy_wxredpack_pro${type}`],
+                        money1 = config[`sy_wxredpack_money${type}`],
+                        money2 = config[`sy_wxredpack_money_max${type}`];
+
+                    if (pro == 0 && (money1 < 1 || money2 > 200)) {
+                        message.warning('金额大于200或小于1元,请选非“其他”场景');
+                        return false;
+                    } else if (pro != 0 && money1 < 0.3) {
+                        message.warning('红包金额最低0.3元');
+                        return false;
+                    }
+                    if (money2 <= money1) {
+                        message.warning('最大红包金额不能小于或等于最小红包金额');
+                        return false;
+                    }
+                }
+
+                if (type == 'redset') {
+                    var param = {
+                        sy_wxredpack_nick: config.sy_wxredpack_nick,
+                        sy_wxredpack_ip: config.sy_wxredpack_ip,
+                        sy_wxredpack_remark: config.sy_wxredpack_remark,
+                        sy_wxredpack_type: config.sy_wxredpack_type,
+                    };
+                } else if (type == 1 || type == 2 || type == 3 || type == 4) {
+
+                    var param = {};
+
+                    param[`sy_wxredpack_actname${type}`] = config[`sy_wxredpack_actname${type}`];
+
+                    param[`sy_wxredpack_isopen${type}`] = config[`sy_wxredpack_isopen${type}`];
+
+                    param[`sy_wxredpack_pro${type}`] = config[`sy_wxredpack_pro${type}`];
+
+                    param[`sy_wxredpack_money${type}`] = config[`sy_wxredpack_money${type}`];
+
+                    param[`sy_wxredpack_money_max${type}`] = config[`sy_wxredpack_money_max${type}`];
+
+                    param[`sy_wxredpack_wishing${type}`] = config[`sy_wxredpack_wishing${type}`];
+
+                }
+
+                startLoading();
+
+                httpPost('m=tool&c=weixinred&a=save', param).then((result) => {
+
+                    endLoading();
+
+                    var res = result.data;
+
+                    message.success(res.msg, this.getInfo);
+
+                }).catch(function(e) {
+                    console.log(e)
+                })
+            },
+        }
+    });
+    </script>
+</body>
+
+</html>

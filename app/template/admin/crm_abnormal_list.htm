@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>后台管理 - CRM - 业务员 - 我的客户 - 预警信息</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+    <style>
+        .yj_chlose{padding:15px}
+        .yj_chlose a{display:inline-block;margin-right:10px;padding:2px 6px}
+        .yj_chlose_a{background-color:#2778f8;color:#fff;border-radius:3px}
+        .yj_chlose_text{width:200px;height:30px;border-radius:3px;border:1px solid #eee}
+        .yj_chlose_bth{width:60px;height:30px;border:none;background-color:#2778f8;color:#fff;border-radius:3px}
+        .logtj{display:block;width:48px;height:24px;line-height:24px;border:1px solid #ccc;border-radius:4px;font-size:13px;color:#61687c;overflow:hidden;margin:0 4px;text-align:center}
+        .operationSeries a:hover{cursor:pointer}
+    </style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp" id="admvue" style="display: none;">
+    <div class="tty-tishi_top">
+        <div class="yj_chlose" style="margin-bottom: 5px;">
+            <span style="font-weight: bold; font-size: 18px;">{{title}}</span>
+            <span style="margin-left: 36px;">{{desc}}</span>
+        </div>
+    </div>
+    <div class="tty-tishi_top">
+        <div class="yj_chlose">
+            <span class="">统计时间：</span>
+            <a href="javascript:;" @click="timeChange('1')" :class="time == 1 ? 'yj_chlose_a' : ''">昨天</a>
+            <a href="javascript:;" @click="timeChange('2')" :class="time == 2 ? 'yj_chlose_a' : ''">今天</a>
+            <a href="javascript:;" @click="timeChange('3')" :class="time == 3 ? 'yj_chlose_a' : ''">一周内</a>
+            <a href="javascript:;" @click="timeChange('4')" :class="time == 4 ? 'yj_chlose_a' : ''">一月内</a>
+            <a href="javascript:;" @click="timeChange('5')" :class="time == 5 ? 'yj_chlose_a' : ''">三月内</a>
+            <input type="text" id="date" name="date" readonly :value="date" placeholder="选择时间段" class="yj_chlose_text" style="width: 300px;"/>
+            <input class="yj_chlose_bth" type="submit" @click="timeSearch" value="查询"/>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <table width="100%">
+                    <thead>
+                    <tr class="admin_table_top">
+                        <th align="left">用户ID</th>
+                        <th align="left">用户名</th>
+                        <th align="left">名称</th>
+                        {yun:}if $smarty.get.type == '5' || $smarty.get.type == '6'{/yun}
+                        <th align="left">职位名称</th>
+                        {yun:}/if{/yun}
+                        {yun:}if $smarty.get.type == '7'{/yun}
+                        <th align="left">拨号岗位</th>
+                        {yun:}/if{/yun}
+                        {yun:}if $smarty.get.type == '2'{/yun}
+                        <th align="left">企业最后登录时间</th>
+                        {yun:}/if{/yun}
+                        <th align="left">统计</th>
+                        <th class="admin_table_th_bg" width="70">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tableBackColorTwo">
+                    <tr align="left" v-for="(item,lkey) in list" :key="lkey">
+                        <td align="left">{{item.uid}}</td>
+                        <td align="left">{{item.username}}</td>
+                        <td align="left">{{item.name}}</td>
+                        {yun:}if $smarty.get.type == '5' || $smarty.get.type == '6'{/yun}
+                        <td align="left">{{item.job_name}}</td>
+                        {yun:}/if{/yun}
+                        {yun:}if $smarty.get.type == 'companytel' {/yun}
+                        <td align="left">{{item.job_name}}</td>
+                        {yun:}/if{/yun}
+                        {yun:}if $smarty.get.type == '2'{/yun}
+                        <td align="left">{{item.login_date}}</td>
+                        {yun:}/if{/yun}
+
+                        <td align="left">{{item.num}}</td>
+                        <td>
+                            <div class="operationSeries">
+                                <a class="logtj" @click="showDetail(lkey)">分析</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    var usertype = 2;
+    var type = "{yun:}$smarty.get.type{/yun}";
+    var pytoken = "{yun:}$pytoken{/yun}";
+    var time = "{yun:}$smarty.get.time{/yun}";
+    var app = new Vue({
+        el: '#admvue',
+        data: {
+            type: type? type: 1,
+            title: '',
+            desc: '',
+            time: time,
+            date: '',
+            ip: '',
+            list: []
+        },
+        created: function () {
+            this.getData();
+            document.getElementById('admvue').style.display = 'block';
+            if (time.length > 1) {
+                this.date = time;
+            }
+        },
+        methods: {
+            timeChange: function (e) {
+                this.date = '';
+                this.time = e;
+                this.getData();
+            },
+            timeSearch: function () {
+                this.getData();
+            },
+            getData: function () {
+                var self = this,
+                    url = 'index.php?m=crm_my_customer&c=abnormal';
+
+                var params = {
+                    usertype: usertype,
+                    pytoken: pytoken,
+                    type: self.type,
+                    time: self.time,
+                    limit: 50,
+                    list: 1
+                }
+
+                loadlayer();
+                $.post(url, params, function (res) {
+                    parent.layer.closeAll('loading');
+                    setTitle(self.type);
+                    self.list = res.list;
+                }, 'json');
+            },
+            showDetail: function (key) {
+
+                var self = this;
+                if (self.type == '5' || self.type == '6') {
+
+                    var src = 'index.php?m=crm_my_customer&c=abnormalDetail&uid='+this.list[key].uid+'&job_id=' + this.list[key].job_id + '&usertype=2&type=' + self.type + '&time=' + this.time;
+                } else {
+
+                    var src = 'index.php?m=crm_my_customer&c=abnormalDetail&uid='+this.list[key].uid+'&type='+self.type+'&time='+self.time;
+                }
+                iframfunct(src, '90%');
+            }
+        }
+    });
+    layui.use(['laydate'], function () {
+        var laydate = layui.laydate,
+            $ = layui.$;
+        var datevalue = '';
+        if (time.length > 1) {
+            datevalue = time;
+        }
+        laydate.render({
+            elem: '#date',
+            type: 'datetime',
+            value: datevalue,
+            isInitValue: true,
+            range: '~',
+            done: function (value) {
+                app.$data.date = value;
+                app.$data.time = value;
+            }
+        });
+    });
+    function setTitle(type) {
+
+        if (type == 1) {
+            app.$data.title = '收到简历';
+            app.$data.desc = '客户收到简历记录';
+        } else if (type == 2) {
+            app.$data.title = '简历未查看';
+            app.$data.desc = '客户未查看投递简历统计';
+        } else if (type == 3) {
+            app.$data.title = '简历下载';
+            app.$data.desc = '客户下载简历数据统计';
+        } else if (type == 4) {
+            app.$data.title = '客户登录';
+            app.$data.desc = '客户登录平台次数';
+        } else if (type == 5) {
+            app.$data.title = '岗位投递';
+            app.$data.desc = '客户岗位被投递信息统计';
+        } else if (type == 6) {
+            app.$data.title = '岗位拨号';
+            app.$data.desc = '岗位被拨号数据统计';
+        } else if (type == 7) {
+            app.$data.title = '企业拨号';
+            app.$data.desc = '企业被拨号数据统计';
+        } else if (type == 8) {
+            app.$data.title = '投递删除';
+            app.$data.desc = '简历投递后删除记录';
+        } else if (type == 9) {
+            app.$data.title = '下载删除';
+            app.$data.desc = '企业删除下载简历记录';
+        }
+    }
+</script>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

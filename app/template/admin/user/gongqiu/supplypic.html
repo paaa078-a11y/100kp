@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+<div id="daohaapp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleElTabInpt">
+            <div class="moduleInptList">
+                <el-input placeholder="输入你要搜索的关键字" @keyup.enter.native="search" size="small" v-model="searchForm.keyword" class="input-with-select"
+                          clearable>
+                    <el-select v-model="searchForm.type" slot="prepend" placeholder="用户姓名">
+                        <el-option label="用户姓名" value="1"></el-option>
+                        <el-option label="用户ID" value="2"></el-option>
+                    </el-select>
+                </el-input>
+            </div>
+            <div v-for="(searchItem, searchIndex) in searchList" class="tableSeachInptsmall moduleInptList">
+                <el-select v-model="searchForm[searchItem.param]" size="small" slot="prepend" :clearable="true"
+                           :placeholder="searchItem.name" @change="search">
+                    <el-option v-for="(searchLabel, searchValue) in searchItem.value" :label="searchLabel"
+                               :value="searchValue"></el-option>
+                </el-select>
+            </div>
+            <div class="moduleInptList">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+            </div>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="list" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange"
+                  :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+            <template slot="empty">
+                <p>{{dataText}}</p>
+            </template>
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="name" label="名称" min-width="140">
+            </el-table-column>
+            <el-table-column prop="link_man" label="图片" width="130">
+                <template slot-scope="scope">
+                    <el-image style="width: auto; height: 100px" :src="scope.row.photo_n"
+                              :preview-src-list="[scope.row.photo_n]">
+                    </el-image>
+                </template>
+            </el-table-column>
+            <el-table-column prop="status_n" label="状态" width="120">
+                <template slot-scope="scope">
+                    <el-tag type="success" size="small" v-if="scope.row.photo_status==0">已审核</el-tag>
+                    <el-tag type="warning" size="small" v-else-if="scope.row.photo_status==1">未审核</el-tag>
+                    <el-tag type="danger" size="small" v-else-if="scope.row.photo_status==2">未通过</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="140">
+                <template slot-scope="scope">
+                    <div class="moduleElTaCaoz">
+                        <el-button size="mini" @click="apply(scope.row)">审核</el-button>
+                        <el-button size="mini" @click="edit(scope.row)">修改</el-button>
+                        <el-button size="mini" @click="del(scope.$index)" type="danger">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div>
+            <el-checkbox v-model="checkedAll" :indeterminate="checkedAllIndeterminate" @change="checkAll">全选
+            </el-checkbox>
+            <el-button @click="batch('del')" size="mini">批量删除</el-button>
+            <el-button @click="batchshenhe()" size="mini">批量审核</el-button>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+                           layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+    <!-- 弹窗 -->
+    <div class="modluDrawer">
+        <el-dialog title="供求头像审核" :visible.sync="statusBox" :with-header="true" :modal-append-to-body="false"
+                   :show-close="true" width="500px">
+            <div class="toolClasDia fenpeizhand">
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>审核操作：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-radio v-model="status" label="0">正常</el-radio>
+                        <el-radio v-model="status" label="2">未通过</el-radio>
+                    </div>
+                </div>
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>审核说明：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="statusbody">
+                        </el-input>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="statusBox = false">取 消</el-button>
+                    <el-button type="primary" @click="subStatus" :disabled="saveLoading">确 定</el-button>
+                </span>
+        </el-dialog>
+    </div>
+    <div class="modluDrawer">
+        <el-dialog title="修改供求头像" :visible.sync="editBox" :with-header="true" :modal-append-to-body="false"
+                   :show-close="true" width="500px">
+            <div class="toolClasDia fenpeizhand">
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>姓名：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-input v-model="name" placeholder="请输入内容"></el-input>
+                    </div>
+                </div>
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>上传图片：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-upload class="avatar-uploader" :accept="pic_accept" :action="uploadAction" :show-file-list="false"
+                                   :on-change="upShareChange">
+                            <img style="width:100px;height: 100px;" v-if="logopic" :src="logopic" class="avatar">
+                            <el-button v-else type="primary" icon="el-icon-document-add">上传LOGO</el-button>
+                        </el-upload>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="editBox = false">取 消</el-button>
+                    <el-button type="primary" @click="subPic" :disabled="saveLoading">确 定</el-button>
+                </span>
+        </el-dialog>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function () {
+            return {
+                pic_accept: localStorage.getItem("pic_accept"),
+                loading: false,
+                dataText: '数据加载中',
+                saveLoading: false,
+
+                searchList: [],
+                searchForm: {
+                    type: '1',
+                    keyword: ''
+                },
+                page: 1,
+                limit: 0,
+                list: [],
+                total: 0,
+                pageSizes: [],
+
+                checkedAll: false, // 全选
+                checkedAllIndeterminate: false,
+                multipleSelection: [], // 多选值存储
+                idArr: [],
+
+                statusBox: false,
+                status: '0',
+                statusbody: '',
+                editBox: false,
+                file: [],
+                logopic: '',
+                uid: '',
+                name: '',
+                uploadAction: baseUrl + 'm=common&c=common_upload',
+
+                prevPage: 0
+            }
+        },
+        mounted() {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.status) {
+                that.searchForm.status = query.status;
+            }
+
+            this.getList();
+            setTimeout(function () {
+                that.getSearchFun();
+            }, 200)
+        },
+        methods: {
+            getSearchFun:function(){
+                let that = this;
+                httpPost('m=user&c=supply_pic&a=getSearchData', {},{hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        that.searchList = res.data.search_list;
+                    }
+                })
+            },
+            subPic() {
+                let that = this,
+                    formData = new FormData();
+                if (that.file.length !== 0){
+                    formData.append('file', that.file);
+                } else {
+                    message.error('请上传修改的图片');
+                    return false;
+                }
+
+                if (that.saveLoading) {
+                    return;
+                }
+                that.saveLoading = true;
+                formData.append('id', that.uid);
+                httpPost('m=user&c=supply_pic&a=savePhoto', formData).then(function (response) {
+                    let res = response.data;
+                    if (res.error > 0) {
+                        message.error(res.msg);
+                    } else {
+                        message.success(res.msg, function () {
+                            that.editBox = false;
+                            that.getList();
+                        });
+                    }
+                }).finally(function () {
+                    setTimeout(function () {
+                        that.saveLoading = false;
+                    }, 2000);
+                });
+            },
+            edit(row) {
+                this.name = row.name;
+                this.logopic = row.photo_n;
+                this.uid = row.uid;
+                this.editBox = true;
+            },
+            subStatus() {
+                let that = this,
+
+                params = {
+                    status: that.status,
+                    statusbody: that.statusbody
+                };
+                if (this.idArr.length > 0) {
+                    params.uid = this.idArr.join(',')
+                } else {
+                    params.uid = that.uid
+                }
+          
+                that.saveLoading = true;
+
+                httpPost('m=user&c=supply_pic&a=status', params).then(function (response) {
+                    let res = response.data;
+                    if (res.error > 0) {
+                        message.error(res.msg);
+                    } else {
+                        message.success(res.msg, function () {
+                            that.statusBox = false;
+                            that.getList();
+                        });
+                    }
+                }).finally(function() {
+                    setTimeout(function() {
+                        that.saveLoading = false;
+                    }, 2000);
+                });
+            },
+            apply(row) {
+                let that = this;
+                this.uid = row.uid;
+                this.status = row.photo_status;
+                httpPost('m=user&c=supply_pic&a=getStatusBody', {uid: row.uid}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        that.statusbody = res.data.photo_statusbody;
+                    }
+                });
+                this.statusBox = true;
+            },
+            upShareChange(file) {
+                var that = this;
+                this.logopic = URL.createObjectURL(file.raw);
+                this.file = file.raw;
+            },
+            handleSizeChange(val) {
+                this.limit = val;
+                this.getList();
+            },
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getList();
+            },
+            search() {
+                this.page = 1;
+                this.getList();
+            },
+            getList() {
+                let that = this,
+                    searchForm = that.searchForm,
+                    params = {
+                        page: that.page,
+                        limit: that.limit,
+                    };
+                that.loading = true;
+
+                httpPost('m=user&c=supply_pic', {...params, ...searchForm}, {hideloading: true}).then(function (response) {
+                    let res = response.data,
+                        data = res.data;
+
+                    that.list = data.list;
+                    that.total = parseInt(data.total);
+                    that.pageSizes = data.page_sizes;
+                    if (that.limit === 0) {
+                        that.limit = parseInt(data.limit); // 取系统配置默认数量
+                    }
+                    if (that.page > data.page) {
+                        that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+                    }
+                    that.loading = false;
+                    if(that.prevPage != that.page){
+                        that.prevPage = that.page;
+                        that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                    }
+                    if (that.list.length === 0) {
+                        that.dataText = "暂无数据";
+                    }
+                })
+            },
+            handleSelectionChange(val) {
+                if (val.length == 0) {
+                    this.checkedAll = false;
+                    this.checkedAllIndeterminate = false;
+                } else {
+                    if (val.length === this.list.length) {
+                        this.checkedAll = true;
+                        this.checkedAllIndeterminate = false;
+                    } else {
+                        this.checkedAll = false;
+                        this.checkedAllIndeterminate = true;
+                    }
+                }
+                this.multipleSelection = val;
+            },
+            batch(type) {
+                if (this.multipleSelection.length == 0 && type == 'del') {
+                    message.error('请选择要删除的数据');
+                    return false;
+                }else if(this.multipleSelection.length == 0){
+                    message.error('请选择要操作的数据项');
+                    return false;
+                }
+
+                let idArr = [];
+                this.multipleSelection.forEach(function (item) {
+                    idArr.push(item.uid);
+                })
+                this.idArr = idArr;
+
+                if (type == 'del') {
+                    this.del();
+                }
+            },
+            checkAll(val) {
+                val ? this.checkedAllIndeterminate = false : '';
+                this.$refs.multipleTable.toggleAllSelection();
+            },
+            del(idx) {
+                let that = this,
+                    params = {},
+                    msg = '';
+
+                if (typeof idx == 'undefined') { // 批量删除
+                    params.del = this.idArr;
+                    msg = '你确定要删除选中项吗？';
+                } else { // 单个删除
+                    params.del = that.list[idx].uid;
+                    msg = '你确定要删除当前项吗？';
+                }
+
+                delConfirm(this, params, function (params) {
+                    httpPost('m=user&c=supply_pic&a=del', params).then(function (res) {
+                        if (res.data.error > 0) {
+                            message.error(res.data.msg);
+                        } else {
+                            message.success(res.data.msg, function () {
+                                that.$refs.multipleTable.clearSelection();
+                                that.getList();
+                            });
+                        }
+                    })
+                }, msg)
+            },
+            batchshenhe: function () {
+
+                if (this.multipleSelection.length == 0) {
+                    message.error('请选择要操作的数据项');
+                    return false;
+                }
+                let idArr = [];
+                this.multipleSelection.forEach(function (item) {
+                    idArr.push(item.uid);
+                })
+                this.statusbody ='';
+                this.status = '';
+                this.idArr = idArr;
+                this.statusBox = true;
+            },
+        }
+    });
+</script>
+</body>
+<style>
+    .tableSeachInptsmall .el-select {
+        margin: 0;
+    }
+</style>
+</html>

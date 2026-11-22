@@ -1,0 +1,691 @@
+<!DOCTYPE htmlPUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+		<script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+	</head>
+
+	<body class="body_ifm">
+		<div class="infoboxp" id="admvue" style="display: none;">
+			<div class="tty-tishi_top">
+				<div class="tabs_info">
+					<ul>
+						<li {yun:}if !$smarty.get.c{/yun}class="curr" {yun:}/if{/yun}>
+							<a href="index.php?m=admin_abnormal">求职者行为预警</a>
+						</li>
+						<li {yun:}if $smarty.get.c=='com' {/yun}class="curr" {yun:}/if{/yun}>
+							<a href="index.php?m=admin_abnormal&c=com">企业行为预警</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="yj_chlose" style="overflow: hidden;display: flex;align-items: center; justify-content: space-between;">
+					<div>
+						<span class="">统计时间：</span>
+						<a href="javascript:;" @click="tongjiChange('1')" :class="time == 1 ? 'yj_chlose_a' : ''">昨天</a>
+						<a href="javascript:;" @click="tongjiChange('2')" :class="time == 2 ? 'yj_chlose_a' : ''">今天</a>
+						<a href="javascript:;" @click="tongjiChange('3')" :class="time == 3 ? 'yj_chlose_a' : ''">一周内</a>
+						<a href="javascript:;" @click="tongjiChange('4')" :class="time == 4 ? 'yj_chlose_a' : ''">一月内</a>
+						<a href="javascript:;" @click="tongjiChange('5')" :class="time == 5 ? 'yj_chlose_a' : ''">三月内</a>
+						<input type="text" id="date" name="date" readonly :value="date" placeholder="选择时间段" class="yj_chlose_text" style="width: 300px;" />
+						<input class="yj_chlose_bth" type="submit" @click="tongjisearch" value="查询" />
+					</div>
+					<div>
+						<span>数据概况截止：{{datetime}}</span>
+						<!--a href="" style="color: #2778f8;">同步</a-->
+					</div>
+				</div>
+			</div>
+
+			<div class="yj_tableboxpd">
+				<div class="earlyWarning">
+					<ul>
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>简历投递</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者向企业投递简历统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('tdnum')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,numkey) in numlist" :key="numkey" @click="showdetail(item.uid, item.name, 'tdnum')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>简历投递分类</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者向不同分类职位投递简历统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('tdclass')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,classkey) in classlist" :key="classkey" @click="showdetail(item.uid, item.name, 'tdclass')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>删除简历投递记录</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者删除简历投递记录统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('usersqdel')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,sdkey) in sqdellist" :key="sdkey" @click="showdetail(item.uid, item.name, 'usersqdel')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="sqdel_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>职位浏览</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者浏览职位统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('lookjob')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,lookkey) in looklist" :key="lookkey" @click="showdetail(item.uid, item.name, 'lookjob')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>职位拨号</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者在职位详情页点击拨号次数统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('tellog')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,telkey) in tellist" :key="telkey" @click="showdetail(item.uid, item.name, 'tellog')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>直聊人数</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者向不同企业发送聊天统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('chatlog')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,chatkey) in chatlist" :key="chatkey" @click="showdetail(item.uid, item.name, 'chatlog')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>登录次数</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者登录次数统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('loginlog')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,loginkey) in loginlist" :key="loginkey" @click="showdetail(item.uid, item.name, 'loginlog')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>IP活跃次数</span>
+										<i>
+											<img src="images/wenhao.png" alt="根据行为轨迹统计同一IP下不同求职者访问量">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('weblog')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>IP</span>
+										<span>IP归属地</span>
+										<span>用户量</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,ipkey) in iplist" :key="ipkey" @click="showdetail(item.ip, '', 'weblog')">
+											<span style="color: #333;">{{item.ip}}</span>
+											<span style="color: #333;">{{item.city}}</span>
+											<span style="color: #333;">{{item.usernum}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+						<!-- 模块分割 -->
+						<li>
+							<div class="earlyAllConts">
+								<div class="earlyContOne">
+									<div class="earlyContOneUp">
+										<span>职位隐私号</span>
+										<i>
+											<img src="images/wenhao.png" alt="求职者在职位详情页点拨打电话生成的隐私号次数统计">
+										</i>
+									</div>
+									<div>
+										<a @click="listbox('privacylog')" style="color: #2778f8;cursor: pointer;">更多</a>
+									</div>
+								</div>
+								<div class="earlyContTwo">
+									<div class="earlyContTwoName">
+										<span>用户名</span>
+										<span>姓名</span>
+										<span class="ontTwoNumTidth">总量</span>
+									</div>
+									<div class="ontTwoNumScalls">
+										<div class="earlyContTwoNumber" v-for="(item,pkey) in privacylist" :key="pkey" @click="showdetail(item.uid, item.name, 'privacylog')">
+											<span style="color: #333;">{{item.username}}</span>
+											<span style="color: #00b389;">{{item.name}}</span>
+											<span class="ontTwoNumTidth" style="color: #e84c3d;">{{item.num}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="earlyAllLoads1" v-if="tdnum_load">
+								<div class="loading1">
+							        <hr />
+							        <hr />
+							        <hr />
+							        <hr />
+							    </div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<style>
+			.yj_chlose{padding:15px}
+			.yj_chlose a{display:inline-block;margin-right:10px;padding:2px 6px}
+			.yj_chlose_a{background-color:#2778f8;color:#fff;border-radius:3px}
+			.yj_chlose_text{width:200px;height:30px;border-radius:3px;border:1px solid #eee}
+			.yj_chlose_bth{width:60px;height:30px;border:none;background-color:#2778f8;color:#fff;border-radius:3px}
+			.yj_table_tit{padding:15px 15px;font-size:16px;font-weight:700}
+		</style>
+		<input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}" />
+
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}">
+		</script>
+
+		<script type="text/javascript">
+			var dsq = [];
+			var pytoken = $('#pytoken').val();
+			var ctime = '';
+			var app = new Vue({
+				el: '#admvue',
+				data: {
+					time: '{yun:}$time{/yun}',
+					date: '',
+					numlist: [],
+					classlist: [],
+					sqdellist: [],
+					looklist: [],
+					tellist: [],
+					privacylist: [],
+					chatlist: [],
+					loginlist: [],
+					iplist: [],
+					tdnum_load: true,
+					tdclass_load: true,
+					sqdel_load: true,
+					lookjob_load: true,
+					tellog_load: true,
+					chatlog_load: true,
+					loginlog_load: true,
+					weblog_load: true,
+					privacylog_load: true
+				},
+				created: function() {
+					this.getdata();
+					document.getElementById('admvue').style.display = 'block';
+				},
+				computed: {
+					datetime(){
+						var ntime = '{yun:}$ctime{/yun}';
+						if(this.tdnum_load == false && this.tdclass_load == false && this.sqdel_load == false && this.lookjob_load == false && this.tellog_load == false && this.chatlog_load == false && this.loginlog_load == false && this.weblog_load == false && this.privacylog_load == false){
+							ntime = ctime;
+						}
+						return ntime;
+					}
+				},
+				methods: {
+					tongjiChange: function(e){
+						this.date = '';
+						this.time = e;
+						if(dsq.length > 0){
+							for (let i = 0; i < dsq.length; i++) {
+								clearTimeout(dsq[i]);
+							}
+							dsq = [];
+						}
+						this.getdata();
+					},
+					tongjisearch: function(){
+						if(dsq.length > 0){
+							for (let i = 0; i < dsq.length; i++) {
+								clearTimeout(dsq[i]);
+							}
+							dsq = [];
+						}
+						this.getdata();
+					},
+					getdata: function(){
+						this.tdnum_load = true;
+						this.tdclass_load = true;
+						this.sqdel_load = true;
+						this.lookjob_load = true;
+						this.tellog_load = true;
+						this.chatlog_load = true;
+						this.loginlog_load = true;
+						this.weblog_load = true;
+						this.privacylog_load = true;
+						this.tdnum();
+						this.tdclass();
+						this.usersqdel();
+						var self = this;
+						var a = setTimeout(function(){
+							self.lookjob();
+							self.loginlog();
+							self.tellog();
+						},1000);
+						dsq.push(a);
+						var b = setTimeout(function(){
+							self.chatlog();
+							self.weblog();
+							self.privacylog();
+						},2000);
+						dsq.push(b);
+					},
+					tdnum: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=tdnum', {
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.tdnum_load = false;
+							self.numlist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					tdclass: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=tdclass', {
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.tdclass_load = false;
+							self.classlist = res.list;
+							if(res.ctime){
+								if(res.ctime){
+								ctime = res.ctime;
+							}
+							}
+						}, 'json');
+					},
+					usersqdel: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=usersqdel', {
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.sqdel_load = false;
+							self.sqdellist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					lookjob: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=lookjob', {
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.lookjob_load = false;
+							self.looklist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					tellog: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=tellog', {
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.tellog_load = false;
+							self.tellist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					privacylog: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=privacylog', {
+							usertype: 1,
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.privacylog_load = false;
+							self.privacylist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					chatlog: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=chatlog', {
+							usertype: 1,
+							pytoken: pytoken, time: self.time
+						}, function(res) {
+							self.chatlog_load = false;
+							self.chatlist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						}, 'json');
+					},
+					loginlog: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=loginlog',{usertype: 1,pytoken: pytoken, time: self.time}, function(res){
+							self.loginlog_load = false;
+							self.loginlist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						},'json');
+					},
+					weblog: function() {
+						var self = this;
+						$.post('index.php?m=admin_abnormal&c=weblog',{usertype: 1,pytoken: pytoken, time: self.time}, function(res){
+							self.weblog_load = false;
+							self.iplist = res.list;
+							if(res.ctime){
+								ctime = res.ctime;
+							}
+						},'json');
+					},
+					listbox: function(type){
+						// $.layer({
+						// 	type: 2,
+						// 	title: typename(type),
+						// 	offset: 'r',
+						// 	area: ['99%', '100%'],
+						// 	iframe: {src: 'index.php?m=admin_abnormal&c=listbox&usertype=1&type=' + type + '&time=' + this.time}
+						// });
+						iframfunct('index.php?m=admin_abnormal&c=listbox&usertype=1&type=' + type + '&time=' + this.time,'95%')
+					},
+					showdetail: function(uid, name ,type){
+						if(type == 'weblog'){
+							var arr = uid.split('.');
+							var src = 'index.php?m=admin_abnormal&c=detail&ip=' + arr.join('_') + '&usertype=1&type=' + type + '&time=' + this.time;
+						}else{
+							var src = 'index.php?m=admin_abnormal&c=detail&uid=' + uid + '&usertype=1&type=' + type + '&time=' + this.time;
+						}
+						var title = typename(type) + '详情';
+						if(name){
+							title += '-' + name;
+						}
+						$.layer({
+							type: 2,
+							title: title,
+							shadeClose: true,
+							offset: 'r',
+							area: ['99%', '100%'],
+							iframe: {src: src}
+						});
+					}
+				}
+			});
+			layui.use(['laydate', 'layer'], function () {
+				var laydate = layui.laydate,
+					layer = layui.layer,
+					$ = layui.$;
+				laydate.render({
+					elem: '#date',
+					type: 'datetime',
+					range: '~',
+					done: function(value){
+						app.$data.date = value;
+						app.$data.time = value;
+					}
+				});
+				$('.earlyContOneUp').find('img').each(function(){
+					var alt = $(this).attr('alt');
+					var _this = this;
+					$(this).hover(function(){
+						layer.tips(alt, _this, {
+						  tips: 1,
+						  time: 0
+						});
+					}, function() {
+						layer.closeAll('tips');
+					});
+				})
+			});
+			function typename(type){
+				if (type== 'tdnum'){
+					return '简历投递数量';
+				}else if(type == 'tdclass'){
+					return '简历投递分类';
+				}else if(type == 'usersqdel'){
+					return '删除简历投递记录';
+				}else if (type == 'lookjob'){
+					return '职位浏览';
+				}else if (type == 'tellog'){
+					return '职位拨号';
+				}else if (type == 'chatlog'){
+					return '直聊人数';
+				}else if (type == 'loginlog'){
+					return '登录次数';
+				}else if (type == 'privacylog'){
+					return '职位隐私号';
+				}else if (type == 'weblog'){
+					return 'IP活跃次数';
+				}
+			}
+		</script>
+
+	</body>
+	{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

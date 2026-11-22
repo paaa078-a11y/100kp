@@ -1,0 +1,853 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+	<title>后台管理 - 后台充值</title>
+
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<style type="text/css">
+	.added_cont_radio {
+	    width: 13px;
+	    height: 13px;
+	    overflow: hidden;
+	    position: absolute;
+	    left: 0px;
+	    top: 8px
+	}
+
+	.added_cont_b{
+		margin: 8px 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.layui-form-radio{
+		margin: 2px 0 0 0;
+		padding: 0;
+	}
+
+	.added_cont_s {
+	    display: inline-block;
+	}
+
+	.admin_kt_uservip_box{
+		width: 478px;
+	}
+</style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+		<div class="tabs_info">
+			<ul>
+				<li class="curr" data-div="recharge"><a>{yun:}$config.integral_pricename{/yun}充值</a></li>
+				<li class="" data-div="comvip"><a>企业会员开通套餐</a></li>
+				<li class="" data-div="comservice"><a>企业会员开通增值包</a></li>
+			</ul>
+		</div>
+
+		<div class="clear"></div>
+		<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+		<div class="recharge_box">
+			<div id="recharge">
+				<div class="operationTips">
+					<span>充值时，请正确填写用户名和要充值的积分。确认用户名的正确性。</span>
+				</div>
+				<form name="myform" action="index.php?m=recharge" method="post" target="supportiframe" onSubmit="return check()" class="layui-form">
+					<table width="100%" class="table_form">
+						<tr>
+							<th width="140" class="t_fr">充值用户名：</th>
+							<td>
+								<div class="layui-input-block t_w480">
+									<input class="layui-input" type="text" name="userarr" id='userarr' size="40" value="" />
+								</div>
+								<span class="admin_web_tip">多个用户名用逗号隔开</span>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">充值方式：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline">
+										<input type="radio" name="fs" value="1" id="fs_0" checked title="增加">
+										<input type="radio" name="fs" value="2" id="fs_1" title="扣除">
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="int" id="integral_tr">
+							<th height="30">{yun:}$config.integral_pricename{/yun}({yun:}$config.integral_priceunit{/yun})：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline t_w480">
+										<input type="text" name="integral" id="integral" size="20" maxlength="16" value="" onKeyUp="this.value=this.value.replace(/[^0-9.]/g,'')"
+											   class="layui-input">
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="int">
+							<th height="30">价格：</th>
+							<td>
+								<div class="layui-input-inline t_w480">
+									<input type="text" name="order_price" id="order_price" size="20" maxlength="16" value="" onKeyUp="priceCk(this)" class="layui-input">
+								</div>
+								元
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th height="30" class="t_fr">备　　注：</th>
+							<td>
+								<textarea name="remark" rows=2 cols=40 wrap="physical" class="layui-textarea t_w480"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="tty_sub" type="submit" name="insert" value="&nbsp;充　值&nbsp;" />
+							</td>
+						</tr>
+					</table>
+					<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+			<div id="comvip" class="none">
+				<form name="myform" action="index.php?m=recharge&c=comvip" method="post" target="supportiframe" onSubmit="return comvip()" class="layui-form" lay-filter="hm2">
+					<table width="100%" class="table_form">
+						<tr>
+							<th width="140" class="t_fr">开通用户名：</th>
+							<td>
+								<div class="admin_kt_uservip">
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input class="layui-input" type="text" name="username" id='username' size="40" value="" oninput="clearusername()" />
+										</div>
+										<div id="addvipuser" class="admin_kt_uservip_box none"></div>
+										<div onclick="namesearch('')" class="admin_kt_uservip_bth">检索</div>
+									</div>
+								</div>
+								<span class="admin_web_tip">单次只能为一个会员开通套餐</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="140">开通企业名称：</th>
+							<td>
+								<div class="admin_kt_uservip">
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input class="layui-input" type="text" name="comname" id='comname' size="40" value="" oninput="clearcomname();" />
+										</div>
+										<div id="addvipcom" class="admin_kt_uservip_box none">
+										</div>
+										<div onclick="comsearch('')" class="admin_kt_uservip_bth">检索</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">是否累加：</th>
+							<td>
+								<div class="layui-input-block">
+									<div class="layui-input-inline">
+										<input type="radio" name="leijia" value="1"  lay-filter= "menutype" id="leijia_0" title="是">
+										<input type="radio" name="leijia" value="2"  lay-filter= "menutype" id="leijia_1" checked title="否">
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg oldtaocan" style="display: none">
+							<th width="140">原本套餐：</th>
+							<td>
+								<div class="layui-input-block" style="display: flex;align-items: center;">
+									<span style="margin-right: 10px;">套餐名称：<span class="taocanmingc"></span></span>
+									<span style="margin-right: 10px;">截止日期：<span class="jiezhiriqi"></span></span>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">开通等级：</th>
+							<td>
+								<div class="layui-input-block" style=" float:left">
+									<div class="layui-input-inline t_w480">
+										<select name="ratingid" id="ratingid" lay-filter="vipprice">
+											<option value="">请选择</option>
+											{yun:}foreach from=$rating_list item=ratings{/yun}
+											<option value="{yun:}$ratings.id{/yun}"   {yun:}if $ratings.service_time==0{/yun} selected {yun:}/if{/yun} >{yun:}$ratings.name{/yun}</option>
+											{yun:}/foreach{/yun}
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">套餐时间：</th>
+							<td>
+								<div class="layui-input-inline t_w480">
+									<input type="text" name="taocanshijian" disabled id="taocanshijian" size="20" maxlength="16" value="0" onKeyUp="priceCk(this)"
+										   class="layui-input taocanshijian">
+									<input type="text" hidden="" id="taocanshijianhidden">
+								</div>
+								天
+							</td>
+						</tr>
+						<tr class="int">
+							<th height="30">价格：</th>
+							<td>
+								<div class="layui-input-inline t_w480">
+									<input type="text" name="vipprice" id="vipprice" size="20" maxlength="16" value="0" onKeyUp="priceCk(this)"
+										   class="layui-input">
+									<input type="hidden" id="service_time" value="0">
+								</div>
+								元
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">到期时间：</th>
+							<td>
+								<div id="vipetime_container" class="layui-input-inline t_w480">
+									<input type="text" name="vipetime" id="vipetime" lay-verify="required" autocomplete="off" class="layui-input t_w480time">
+									<input type="hidden" id="oldetime" value="">
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th height="30" class="t_fr">备　　注：</th>
+							<td><textarea name="remark" rows=2 cols=40 wrap="physical" class="admin_comdit_textarea"></textarea></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="tty_sub" type="submit" value="&nbsp;开　通&nbsp;" />
+							</td>
+						</tr>
+					</table>
+					<input type="hidden" id="uid" name="uid" value="">
+					<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+			<div id="comservice" class="none">
+				<form name="myform" action="index.php?m=recharge&c=comservice" method="post" target="supportiframe" onSubmit="return comservice()" class="layui-form">
+					<table width="100%" class="table_form">
+						<tr>
+							<th width="140" class="t_fr">开通用户名：</th>
+							<td>
+								<div class="admin_kt_uservip">
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input class="layui-input" type="text" name="username2" id='username2' size="40" value="" oninput="clearusername()" />
+										</div>
+										<div id="addvipuser2" class="admin_kt_uservip_box none"></div>
+										<div onclick="namesearch('comservice')" class="admin_kt_uservip_bth">检索</div>
+									</div>
+								</div>
+								<span class="admin_web_tip">单次只能为一个会员开通增值包</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="140">开通企业名称：</th>
+							<td>
+								<div class="admin_kt_uservip">
+									<div class="layui-input-block">
+										<div class="layui-input-inline t_w480">
+											<input class="layui-input" type="text" name="comname2" id='comname2' size="40" value="" oninput="clearcomname();" />
+										</div>
+										<div id="addvipcom2" class="admin_kt_uservip_box none"></div>
+										<div onclick="comsearch('comservice')" class="admin_kt_uservip_bth">检索</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="140">增值包：</th>
+							<td>
+								<div class="layui-input-block" style=" float:left">
+									<div class="layui-input-inline t_w480">
+										<select name="serviceid" id="serviceid" lay-filter="serviceid">
+											<option value="">请选择</option>
+											{yun:}foreach from=$service_list item=service{/yun}
+											<option value="{yun:}$service.id{/yun}">{yun:}$service.name{/yun}</option>
+											{yun:}/foreach{/yun}
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr class="int">
+							<th></th>
+							<td>
+								<div id="added_cont">
+
+								</div>
+							</td>
+						</tr>
+						<tr class="int">
+							<th height="30">价格：</th>
+							<td>
+								<div class="layui-input-inline t_w480">
+									<input type="text" name="service_price" id="service_price" size="20" maxlength="16" value="" onKeyUp="priceCk(this)"
+										   class="layui-input">
+								</div>
+								元
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input class="tty_sub" type="submit" value="&nbsp;开　通&nbsp;" />
+							</td>
+						</tr>
+					</table>
+					<input type="hidden" id="uid2" name="uid" value="">
+					<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function priceCk(obj){
+		obj.value = obj.value.replace(/[^0-9.]/g,'');// 去除数字和.以外其他字符
+        obj.value = obj.value.replace(/^\./g,'');// 验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g,'.');// 只保留第一个.
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');// 只能输入两位小数
+	}
+	var vipData = [];
+	'{yun:}foreach from=$rating_list item=v{/yun}';
+	vipData.push({
+		id: '{yun:}$v.id{/yun}',
+		price: '{yun:}$v.service_price{/yun}',
+		service_time: '{yun:}$v.service_time{/yun}',
+		name: '{yun:}$v.name{/yun}'
+	});
+	'{yun:}/foreach{/yun}';
+
+	layui.use(['layer', 'form'], function() {
+		var layer = layui.layer,$ = layui.$;
+		form = layui.form;
+
+		form.on('select(vipprice)', function(data) {
+			if (data.value) {
+				for (var i in vipData) {
+					if (vipData[i].id == data.value) {
+						$("#vipprice").val(vipData[i].price);
+						$("#service_time").val(vipData[i].service_time);
+						// 代表免费会员
+						if (vipData[i].service_time == '0'){
+							$(".taocanshijian").val('不限');
+							$("#taocanshijianhidden").val('不限');
+						}else{
+							$(".taocanshijian").val(vipData[i].service_time);
+							$("#taocanshijianhidden").val(vipData[i].service_time);
+						}
+						if($('#comname').val() || $('#username').val()){
+							editVipetime();
+						}
+					}
+				}
+			}else{
+				$("#vipprice").val('');
+				$("#service_time").val(0);
+				$(".taocanshijian").val(0);
+				$("#taocanshijianhidden").val(0);
+				if($('#oldetime').val() == '0'){
+					var vipetime_ymd = '不限';
+				}else{
+					var oldeTime = parseInt($('#oldetime').val());
+					var oldeTime1000 = oldeTime*1000
+					var  vipetime_ymd =  timestampToTime(oldeTime1000);
+				}
+
+				updateVipEtimeInput()
+				layui.use(['laydate'], function() {
+					$('#vipetime').val(vipetime_ymd)
+				});
+			}
+		});
+		form.on('select(serviceid)',function(data) {
+			if (data.value !=''){
+				var pytoken = $("#pytoken").val();
+				$.post("index.php?m=recharge&c=getservice", {
+					type: data.value,
+					pytoken: pytoken
+				}, function(data) {
+					var data = eval('(' + data + ')');
+					var html = '';
+					$("#added_cont").html('');
+					data.forEach(function(v,index){
+						html += '<div class="added_cont_b"><input type="radio" name="service_package" lay-filter="service_package" value="'+v.id+'" class="added_cont_radio" data-price="'+v.service_price+'" autocomplete="off" />';
+						if (v.resume>0) {
+							html += '<span class="added_cont_s">下载简历：<i class="com_dt_rage">'+v.resume+'份</i>，</span>';
+						}
+						if (v.interview>0) {
+							html += '<span class="added_cont_s">邀请面试：<i class="com_dt_rage">'+v.interview+'份</i>，</span>';
+						}
+						if (v.job_num>0) {
+							html += '<span class="added_cont_s">上架职位：<i class="com_dt_rage">'+v.job_num+'份</i>，</span>';
+						}
+						if (v.breakjob_num>0) {
+							html += '<span class="added_cont_s">刷新职位：<i class="com_dt_rage">'+v.breakjob_num+'份</i>，</span>';
+						}
+						if (v.top_num>0) {
+							html += '<span class="added_cont_s">职位置顶：<i class="com_dt_rage">'+v.top_num+'天</i>，</span>';
+						}
+						if (v.rec_num>0) {
+							html += '<span class="added_cont_s">职位推荐：<i class="com_dt_rage">'+v.rec_num+'天</i>，</span>';
+						}
+						if (v.urgent_num>0) {
+							html += '<span class="added_cont_s">紧急招聘：<i class="com_dt_rage">'+v.urgent_num+'天</i>，</span>';
+						}
+						if (v.zph_num>0) {
+							html += '<span class="added_cont_s">报名招聘会：<i class="com_dt_rage">'+v.zph_num+'次</i>，</span>';
+						}
+						if (v.chat_num>0) {
+							html += '<span class="added_cont_s">{yun:}$config.sy_chat_name{/yun}：<i class="com_dt_rage">'+v.chat_num+'次</i>，</span>';
+						}
+						if (v.spview_num>0) {
+							html += '<span class="added_cont_s">视频面试：<i class="com_dt_rage">'+v.spview_num+'次</i>，</span>';
+						}
+						html += '</div>';
+					});
+
+					$("#added_cont").html(html);
+					form.render();
+				})
+			}
+
+		});
+		form.on('radio(service_package)',function(data) {
+			$("#service_price").val(data.elem.dataset.price)
+		});
+		 // 切换累加不累加的时候 变换时间
+		form.on('radio(menutype)',function(data) {
+			var service_time =  $("#service_time").val()
+			var value = data.value;
+			if (value == 1){
+				$('.oldtaocan').show()
+			}else{
+				$('.oldtaocan').hide()
+			}
+			if(service_time && service_time!=0){
+				editVipetime();
+			}
+		});
+	});
+	updateVipEtimeInput()
+	layui.use(['laydate'], function() {
+		var laydate = layui.laydate;
+		laydate.render({
+			elem: '#vipetime',
+			done: function(value, date){
+				var taocanshijianhidden =  $("#taocanshijianhidden").val();
+				var service_time = $("#service_time").val();
+
+				var comname = $('#comname').val()
+				var username = $('#username').val()
+
+				if(!comname || !username){
+					$('#vipetime').val('');
+				}else{
+					if(service_time !='0'){
+						if((comname || username) && taocanshijianhidden =='0'){
+							$(".taocanshijian").val('不限');
+							$("#taocanshijianhidden").val('不限');
+							$('#vipetime').val('');
+						}else{
+							setPackageTime(value);
+						}
+					}else{
+						$(".taocanshijian").val('不限');
+						$("#taocanshijianhidden").val('不限');
+						$('#vipetime').val('');
+					}
+				}
+			},
+		});
+	});
+	function setPackageTime(value){
+		var time  = (Date.parse(value))/1000
+		var radioValue = $('input[name=leijia]:checked').val();
+		var oldeTime = '';
+		if (radioValue == 2){
+			oldeTime = (Date.parse(new Date()))/1000;
+		}else{
+			oldeTime = parseInt($('#oldetime').val());
+			var $time = parseInt (Date.now()/1000);
+			if (oldeTime <$time){
+				oldeTime = $time;
+			}
+		}
+		var days = Math.ceil((time-oldeTime)/86400);
+		$("#taocanshijian").val(days);
+		$("#taocanshijianhidden").val(days);
+	}
+
+	/*******************gengzs start 0506***************************/
+	// 转年月日
+	function timestampToTime(timestamp) {
+		var date = new Date(timestamp);
+		var Y = date.getFullYear() + '-';
+		var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+		// var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+		// var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+		// var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+
+		// strDate = Y+M+D+h+m+s;
+		strDate = Y+M+D;
+		return strDate;
+
+	}
+	function  editVipetime(){
+		var service_time = $("#taocanshijian").val();
+		var oldeTime = parseInt($('#oldetime').val());
+		var comname = $('#comname').val()
+		var username = $('#username').val()
+		updateVipEtimeInput()
+		if((comname ||username) && service_time == '不限'){
+			layui.use(['laydate'], function() {
+				$('#vipetime').val('')
+			});
+		}else {
+			var radioValue = $('input[name=leijia]:checked').val();
+			service_time = parseInt(service_time);
+			if (radioValue == 2){
+				var $time = parseInt (Date.now()/1000);
+				oldeTime = $time;
+				var service_timeSec = service_time*86400 ;
+				var vipetime =(oldeTime + service_timeSec) *1000 ;
+				var  vipetime_ymd =  timestampToTime(vipetime);
+			}else{
+				var $time = parseInt (Date.now()/1000);
+				if (oldeTime <$time){
+					oldeTime = $time;
+				}
+				var service_timeSec = service_time*86400 ;
+				var vipetime =(oldeTime + service_timeSec) *1000 ;
+				var vipetime_ymd =  timestampToTime(vipetime);
+			}
+			layui.use(['laydate'], function() {
+				var laydate = layui.laydate;
+				laydate.render({
+					elem: '#vipetime',
+					min:oldeTime*1000,
+					value:vipetime_ymd,
+					ready: function () {},
+				});
+			});
+		}
+	}
+	/*******************gengzs  end  0506***************************/
+	$(function() {
+		var switchtag = $("div.tabs_info ul li");
+		switchtag.click(function() {
+			$(this).addClass("curr").siblings().removeClass("curr");
+			var index = this.getAttribute('data-div');
+			$(".tag_box").addClass('none');
+			$("#" + index).removeClass('none');
+			$(".admin_new_tip_list").addClass('none');
+			$("." + index).removeClass('none');
+		});
+	})
+
+	var ah2 = $(".tabs_info ul li")
+	var ap = $(".recharge_box>div")
+
+	for (var i = 0; i < ah2.length; i++) {
+		ah2[i].index = i;
+		ah2[i].onclick = function () {
+			for (var j = 0; j < ap.length; j++) {
+				ap[j].style.display = "none"
+			}
+			ap[this.index].style.display = "block";
+		}
+	}
+
+	function check() {
+		if ($("#userarr").val() == '') {
+			parent.layer.msg('请输入用户名！', 2, 8);
+			return false;
+		}
+		if ($("#integral").val() < 1) {
+			parent.layer.msg('请输入{yun:}$config.integral_pricename{/yun}！', 2, 8);
+			return false;
+		}
+	}
+	function comservice(){
+		if ($("#username2").val() == '' && $("#comname2").val() == '') {
+
+			parent.layer.msg('请输入用户名或企业名称', 2, 8);
+			return false;
+		}else if ($('#uid2').val() == ''){
+
+			parent.layer.msg('请输入正确的用户名或企业名称', 2, 8);
+			return false;
+		}
+		if ($("#serviceid").val() == '' || $("input[name='service_package']:checked").val()==undefined) {
+			parent.layer.msg('请选择开通增值包！', 2, 8);
+			return false;
+		}
+
+	}
+	function comvip() {
+		if ($("#username").val() == '' && $("#comname").val() == '') {
+
+			parent.layer.msg('请输入用户名或企业名称', 2, 8);
+			return false;
+		}else if ($('#uid').val() == ''){
+
+			parent.layer.msg('请输入正确的用户名或企业名称', 2, 8);
+			return false;
+		}
+		if ($("#ratingid").val() == '') {
+			parent.layer.msg('请选择开通等级！', 2, 8);
+			return false;
+		}
+	}
+
+	function namesearch(e) {
+		if (e == 'comservice') {
+			var username = $("#username2").val();
+		}else{
+			var username = $("#username").val();
+		}
+
+		if (username == '') {
+			parent.layer.msg('请输入用户名！', 2, 8);
+			return false;
+		}
+		var weburl = '{yun:}$config.sy_weburl{/yun}';
+		var pytoken = $("#pytoken").val();
+		$.post("index.php?m=recharge&c=searchname", {
+			username: username,
+			pytoken: pytoken
+		}, function(data) {
+			var data = eval('(' + data + ')');
+			if (data.error == 0) {
+				var html = '<ul>';
+				for (var i in data.namelist) {
+					html += '<li><a href="javascript:void(0)" onclick="setuser(this,\''+e+'\')" data-uid="'+data.namelist[i].uid+'" data-comname="' + data.namelist[i].comname + '" data-vipetime="'+data.namelist[i].vipetime+'" data-vipetime_ymd="'+data.namelist[i].vipetime_ymd+'" data-rating_name="'+data.namelist[i].rating_name+'">' + data.namelist[i].username + '</a></li>';
+				}
+				html += '</ul>';
+				if (e == 'comservice') {
+					$("#addvipuser2").removeClass('none');
+					$("#addvipuser2").html(html);
+				}else{
+					$("#addvipuser").removeClass('none');
+					$("#addvipuser").html(html);
+				}
+			} else {
+				parent.layer.msg('企业用户名不存在', 2, 8);
+			}
+		})
+	}
+
+	function comsearch(e) {
+		if (e == 'comservice') {
+			var comname = $("#comname2").val();
+		}else{
+			var comname = $("#comname").val();
+		}
+		if (comname == '') {
+			parent.layer.msg('请输入企业名称！', 2, 8);
+			return false;
+		}
+		var weburl = '{yun:}$config.sy_weburl{/yun}';
+		var pytoken = $("#pytoken").val();
+		$.post("index.php?m=recharge&c=searchcom", {
+			comname: comname,
+			pytoken: pytoken
+		}, function(data) {
+			var data = eval('(' + data + ')');
+			if (data.error == 0) {
+				var html = '<ul>';
+				for (var i in data.namelist) {
+					html += '<li><a href="javascript:void(0)" onclick="setcom(this,\''+e+'\')" data-uid="'+data.namelist[i].uid+'" data-username="' + data.namelist[i].username + '"   data-vipetime="'+data.namelist[i].vipetime+'" data-vipetime_ymd="'+data.namelist[i].vipetime_ymd+'" data-rating_name="'+data.namelist[i].rating_name+'">' + data.namelist[i].comname + '</a></li>';
+				}
+				html += '</ul>';
+				if (e == 'comservice') {
+					$("#addvipcom2").removeClass('none');
+					$("#addvipcom2").html(html);
+				}else{
+					$("#addvipcom").removeClass('none');
+					$("#addvipcom").html(html);
+				}
+			} else {
+				parent.layer.msg('企业名称不存在', 2, 8);
+			}
+		})
+	}
+
+	function setuser(obj,e) {
+		var username = obj.innerText;
+		var comname = obj.getAttribute('data-comname');
+		var uid = obj.getAttribute('data-uid');
+
+		var vipetime = obj.getAttribute('data-vipetime');
+		var vipetime_ymd = obj.getAttribute('data-vipetime_ymd');
+		var mingc = obj.getAttribute('data-rating_name');
+		if (e == 'comservice') {
+			$("#username2").val(username);
+			$("#comname2").val(comname);
+			$("#addvipuser2").addClass('none');
+			$("#addvipuser2").html('');
+			$('#uid2').val(uid);
+		}else{
+			$("#username").val(username);
+			$("#comname").val(comname);
+			$("#addvipuser").addClass('none');
+			$("#addvipuser").html('');
+			$('#uid').val(uid);
+			$('#oldetime').val(vipetime);
+
+			// $("#ratingid").val('');
+			// form.render('select','hm2');
+			// $("#vipprice").val('');
+			// $(".taocanshijian").text('');
+			// 判断时间是否已经过期
+			var $time = parseInt (Date.now()/1000);
+			if (vipetime_ymd == '不限' || vipetime >$time){
+				$('.jiezhiriqi').text(vipetime_ymd);
+			}else {
+				$('.jiezhiriqi').html("<font color='red'>"+vipetime_ymd+"</font>");
+			}
+			$('.taocanmingc').text(mingc);
+			//  初始化选中框的值
+			var taocanshijian = $(".taocanshijian").val()
+
+			if ($("#ratingid").val()){
+				if (taocanshijian == '0'){
+					updateVipEtimeInput()
+					layui.use(['laydate'], function() {
+						$('#vipetime').val('');
+					});
+				}else{
+					editVipetime();
+				}
+			}else{
+				updateVipEtimeInput()
+				layui.use(['laydate'], function() {
+					var laydate = layui.laydate;
+					if (vipetime_ymd != '不限') {
+						laydate.render({
+							elem: '#vipetime',
+							min: vipetime*1000,
+							value:vipetime_ymd,
+							ready: function () {},
+						});
+					} else {
+						$('#vipetime').val('不限');
+					}
+				});
+			}
+		}
+	}
+
+	function setcom(obj,e) {
+		var comname = obj.innerText;
+		var uid = obj.getAttribute('data-uid');
+		var username = obj.getAttribute('data-username');
+		var vipetime = obj.getAttribute('data-vipetime');
+		var vipetime_ymd = obj.getAttribute('data-vipetime_ymd');
+		var mingc = obj.getAttribute('data-rating_name');
+		if (e == 'comservice') {
+			$("#comname2").val(comname);
+			$("#username2").val(username);
+			$("#addvipcom2").addClass('none');
+			$("#addvipcom2").html('');
+			$('#uid2').val(uid);
+		}else{
+			$("#comname").val(comname);
+			$("#username").val(username);
+			$("#addvipcom").addClass('none');
+			$("#addvipcom").html('');
+			$('#uid').val(uid);
+			$('#oldetime').val(vipetime);
+			//  初始化选中框的值
+
+			var $time = parseInt (Date.now()/1000);
+			if (vipetime_ymd == '不限' || vipetime >$time){
+				$('.jiezhiriqi').text(vipetime_ymd);
+			}else {
+				$('.jiezhiriqi').html("<font color='red'>"+vipetime_ymd+"</font>");
+			}
+			$('.taocanmingc').text(mingc);
+			var taocanshijian = $(".taocanshijian").val()
+			if ($("#ratingid").val()){
+				if (taocanshijian == '0'){
+					updateVipEtimeInput()
+					layui.use(['laydate'], function() {
+						$('#vipetime').val('');
+					});
+				}else{
+					editVipetime();
+				}
+			}else {
+				// updateVipEtimeInput()
+				layui.use(['laydate'], function() {
+					var laydate = layui.laydate;
+					if (vipetime_ymd != '不限') {
+						laydate.render({
+							elem: '#vipetime',
+							min: vipetime*1000,
+							value:vipetime_ymd,
+							ready: function () {},
+						});
+					} else {
+						$('#vipetime').val('');
+					}
+				});
+			}
+			// $('#vipetime_ymd').val(vipetime_ymd);
+
+		}
+	}
+	/* 删掉已经绑定时间插件的旧输入框，重新添加一个新的输入框 */
+	function updateVipEtimeInput(){
+		// $("input[name='vipetime']").remove();
+		// $('#vipetime_container').append('<input type="text" name="vipetime" id="vipetime" lay-verify="required" autocomplete="off" class="layui-input t_w480time">');
+	}
+
+	function clearusername(e) {
+		if (e == 'comservice') {
+			$("#comname2").val('');
+			$("#addvipuser2").addClass('none');
+			$("#addvipuser2").html('');
+		}else{
+			$("#comname").val('');
+			$("#addvipuser").addClass('none');
+			$("#addvipuser").html('');
+		}
+
+	}
+
+	function clearcomname(e) {
+		if (e == 'comservice') {
+			$("#username2").val('');
+			$("#addvipcom2").addClass('none');
+			$("#addvipcom2").html('');
+		}else{
+			$("#username").val('');
+			$("#addvipcom").addClass('none');
+			$("#addvipcom").html('');
+		}
+	}
+
+
+
+</script>
+</body>
+
+</html>

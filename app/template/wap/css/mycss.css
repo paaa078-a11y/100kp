@@ -1,0 +1,2342 @@
+/* 默认主题颜色 */
+:root{
+    --font-color1: #3F75EF;
+    --font-color2: #333;
+    --font-color3: #666;
+    --font-color4: #999;
+    --font-color5: #fff;
+    --font-color6: #FE5B2C;
+    --font-color7: #AEB0C4;
+    --font-color8: #3FC9A8;
+    --font-color9: #ddd;
+    --font-color10: #fff;
+    --font-hover-color: #f90;
+    --bgcolor1: #F5F6F8;
+    --bgcolor2: #FE3261;
+    --bgcolor3: #FE5B2E;
+    --bgcolor4: #3F75EF;
+    --bgcolor5: #fff;
+    --bgcolor6: rgba(0,0,0,0.5);
+    --bgcolor7: url(../images/live/Frame.png) center no-repeat;
+    --bgcolor8: #F0F7FF;
+    --bgcolor9: linear-gradient(to right, #04A3FE , #016BFF);
+    --bgcolor10: linear-gradient(to right, #FF5C2F , #FF3362);
+    --bgcolor11: #f5f5f5;
+    --bgcolor12: rgba(63, 117, 239, 0.08);
+    --bgcolor13: #eee;
+    --bgcolor14: linear-gradient(to right, #3F75EF , #55B1F8);
+    --color-button: #333;
+    --color-border1: #D7E7FE;
+    --color-border2: #eee;
+    --color-border3: #f5f5f5;
+}
+/* 黑色主题 */
+:root[theme='dark']{
+    --font-color1: #fff;
+    --font-color2: #babece;
+    --font-color3: #fff;
+    --font-color4: #999;
+    --font-color5: #2f3a5b;
+    --font-color6: #FE5B2C;
+    --font-color7: #AEB0C4;
+    --font-color8: #3FC9A8;
+    --font-color9: #ddd;
+    --font-color10: #fff;
+    --font-hover-color: #f90;
+    --bgcolor1: #28304a;
+    --bgcolor2: #f30;
+    --bgcolor3: #f60;
+    --bgcolor4: #fff;
+    --bgcolor5: #2f3a5b;
+    --bgcolor6: rgba(0,0,0,0.5);
+    --bgcolor7: url(../images/live/Frame.png) center no-repeat;
+    --bgcolor8: #1a2033;
+    --bgcolor9: linear-gradient(to right, #04A3FE , #016BFF);
+    --bgcolor10: linear-gradient(to right, #FF5C2F , #FF3362);
+    --bgcolor11: #28304a;
+    --bgcolor12: rgba(63, 117, 239, 0.08);
+    --bgcolor13: #eee;
+    --bgcolor14: linear-gradient(to right, #3F75EF , #55B1F8);
+    --color-button: #FE3261;
+    --color-border1: #D7E7FE;
+    --color-border2: #eee;
+    --color-border3: #28304a;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+html {
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    background: var(--bgcolor1);
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    overflow: hidden;
+}
+a,
+li {
+    list-style: none;
+    text-decoration: none;
+}
+
+a {
+    color: var(--color-black);
+    font-size: 14px;
+}
+
+a:hover {
+    color: var(--color-red);
+}
+
+button,
+input {
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+section {
+    position: relative;
+    overflow: hidden;
+}
+.none{display: none;}
+ .subjectFlexse{
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+ }
+/*---分割线---*/
+.liveTopsAll{
+    overflow: hidden;
+    height: 5.7rem;
+}
+.liveTopsAll .liveTopImg{
+    overflow: hidden;
+}
+.liveTopsAll .liveTopImg img{
+    width: 100%;
+    height: auto;
+}
+.liveTopsAll .liveTopImg .vcp-player{
+    height: 5.733rem !important;
+}
+.liveTopsAll .liveTopImg .vcp-player video{
+    height: 5.733rem !important;
+}
+.liveTopsAll .liveTopEnds{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.liveTopsAll .liveTopEnds p{
+    overflow: hidden;
+    position: relative;
+    font-size: 0.5rem;
+    color: var(--font-color1);
+}
+.liveTopsAll .liveTopEnds span{
+    overflow: hidden;
+    position: relative;
+    display: block;
+    font-size: 0.38rem;
+    color: var(--font-color2);
+}
+
+.themeSwitch{
+    overflow: hidden;
+    position: absolute;
+    top: 0.453rem;
+    left: 0;
+    width: calc(100% - 0.64rem);
+    padding: 0 0.32rem;
+    z-index: 22;
+}
+.themeSwitch .themeSwitNavs{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.themeSwitch .themeSwitNavs .themeSwitNavClisk{
+    overflow: hidden;
+    position: relative;
+}
+.themeSwitch .themeSwitNavs .themeSwitNavClisk a{
+    overflow: hidden;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 0.8rem;
+    padding: 0.2rem 0;
+}
+.themeSwitch .themeSwitNavs .themeSwitNavClisk img{
+    height: 0.453rem;
+    width: auto;
+    display: block;
+}
+.themeSwitch .themeSwitNavs .themeSwitNumber{
+    overflow: hidden;
+    height: 0.64rem;
+    padding:0 0.32rem;
+    background: var(--bgcolor6);
+    border-radius: 0.33rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.themeSwitch .themeSwitNavs .themeSwitNumber img{
+    width: 0.4rem;
+    height: auto;
+    margin-right: 0.1rem;
+}
+.themeSwitch .themeSwitNavs .themeSwitNumber span{
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color10);
+    opacity: 0.8;
+}
+
+
+.themeSwitch button{
+    overflow: hidden;
+    width: 1rem;
+    height: 1rem;
+    background: var(--color-button);
+    color: var(--font-color1);
+    border-radius: 50%;
+    font-size: 0.37rem;
+}
+
+
+
+
+.liveTopsAll .qplayer-center-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+.liveTopsAll .qplayer-center-btn img{
+    position: relative;
+    top: initial;
+    left: initial;
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.liveTopsAll .qplayer-controlbtns img{
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+.liveTopsAll .qplayer-time{
+    width: 86px !important;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.liveTopsAll .qplayer-time span.qplayer-currtime{
+    display: block;
+    margin-right: 5px;
+}
+.liveTopsAll .qplayer-time span.qplayer-totaltime{
+    display: block;
+    margin-left: 5px;
+}
+
+
+
+
+
+
+
+/* 倒计时样式 */
+.countDownAll{
+    overflow: hidden;
+    height: 1.44rem;
+    width: calc(100% - 0.64rem);
+    padding: 0 0.32rem;
+    background: var(--bgcolor8);
+}
+.countDownAll .countDownConts{
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.countDownAll .countDownConts .ownContsOne{
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.countDownAll .countDownConts .ownContsOne .ownContsOneKai{
+    overflow: hidden;
+    font-size: 0.346rem;
+    color: var(--font-color2);
+    font-weight: bold;
+    padding-right: 0.1rem;
+}
+.countDownAll .countDownConts .ownContsOne .ownContsOneTian{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.countDownAll .countDownConts .ownContsOne .ownContsOneTian .van-count-down{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.countDownAll .countDownConts .ownContsOne .ownContsOneTian span{
+    overflow: hidden;
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 1px solid var(--color-border1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.106rem;
+    font-size: 0.4rem;
+    color: var(--font-color1);
+    font-weight: bold;
+}
+.countDownAll .countDownConts .ownContsOne .ownContsOneTian b{
+    overflow: hidden;
+    display: block;
+    color: var(--font-color2);
+    font-size: 0.346rem;
+    padding: 0 0.1rem;
+    font-weight: 500;
+}
+.countDownAll .countDownConts .ownContsTwo{
+    overflow: hidden;
+    width: 2.6rem;
+    height: 0.8rem;
+    background: var(--bgcolor9);
+    border-radius: 0.43rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.countDownAll .countDownConts .ownContsTwo a{
+    overflow: hidden;
+    width: 2.9rem;
+    height: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.countDownAll .countDownConts .ownContsTwo a img{
+    overflow: hidden;
+    display: block;
+    width: 0.347rem;
+    height: 0.347rem;
+}
+.countDownAll .countDownConts .ownContsTwo span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color10);
+}
+/* 主体样式 */
+.liveSubjects{
+    overflow: hidden;
+    height: calc(100% - 7.173rem);
+    position: relative;
+}
+.liveSubjects .liveSubTab{
+    overflow: hidden;
+    height: 1.2rem;
+    position: relative;
+    background: var(--bgcolor5);
+    padding: 0 0.533rem;
+}
+.liveSubjects .van-popup{
+    height: 100%;
+    max-height: 15rem;
+}
+
+.liveChatPrompt{
+    overflow: hidden;
+    width: 100%;
+    padding: 0.2rem 0 0.4rem 0;
+    font-size: 0.34rem;
+    color: var(--font-color6);
+}
+
+.liveSubjects .liveSubTab ul{
+    overflow: hidden;
+    height: 1.2rem;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.liveSubjects .liveSubTab ul li{
+    overflow: hidden;
+    position: relative;
+    font-size: 0.4rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: var(--font-color2);
+    cursor: pointer;
+}
+.liveSubjects .liveSubTab ul li.liveSubTabCur{
+    overflow: hidden;
+    color: var(--font-color1);
+    position: relative;
+}
+.liveSubjects .liveSubTab ul li.liveSubTabCur::after{
+    overflow: hidden;
+    display: block;
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 0.42rem;
+    height: 3px;
+    margin: auto;
+    z-index: 1;
+    background: var(--bgcolor4);
+    border-radius: 2px;
+}
+.liveSubjects .liveSubCont{
+    overflow: hidden;
+    height: calc(100% - 1.82rem);
+    position: relative;
+    padding: 0.32rem;
+    /*background: #fff;*/
+}
+.liveSubjects .liveSubCont .van-popup--bottom.van-popup--round{
+    height: 100%;
+    max-height: 15rem;
+    overflow: hidden;
+}
+.liveSubjects .liveSubCont .liveSubList{
+    overflow: hidden;
+    height: 100%;
+    display: none;
+    /* position: relative; */
+}
+.liveSubjects .liveSubCont .liveSubListOn{
+    overflow: hidden;
+    display: block;
+}
+.liveSubjects .liveSubCont .liveSubConInfo{
+    overflow: hidden;
+    position: relative;
+    height: calc(100% - 1.8rem);
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat{
+    overflow-y: auto;
+    height: 100%;
+    /* background: var(--bgcolor3); */
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul{
+    overflow: hidden;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li{
+    overflow: hidden;
+    display: flex;
+    width: 88%;
+    padding-bottom: 0.32rem;
+    position: relative;
+    z-index: 66;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatPhoto{
+    overflow: hidden;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: 50%;
+    margin-right: 0.2rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatPhoto img{
+    width: 100%;
+    height: 100%;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo{
+    overflow: hidden;
+    width: calc(100% - 1.15rem);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoGuan{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.08rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo h4{
+    overflow: hidden;
+    font-size: 0.32rem;
+    color: var(--font-color4);
+    font-weight: 500;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoGuan b{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.32rem;
+    font-weight: 500;
+    width: 1rem;
+    height: 0.45rem;
+    margin-left: 0.06rem;
+    background: var(--bgcolor10);
+    border-radius: 0.08rem;
+    color: var(--font-color10);
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoCont{
+    overflow: hidden;
+    padding: 0.32rem;
+    background: var(--bgcolor5);
+    border-radius: 0.053rem 0.32rem 0.32rem 0.32rem;
+    max-width: 70%;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoZhus{
+    overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-width: 100%;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoCont .chatInfoText{
+    overflow: hidden;
+    font-size: 0.347rem;
+    color: var(--font-color2);
+    line-height: 0.64rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoCont .chatInfoText img{
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .liveChatInfoCont .chatInfoText .iconImg{
+    width: 0.8rem;
+    height: 0.8rem;
+    display: inline-block;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist{
+    overflow: hidden;
+    width: 100%;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssOne{
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssOne p{
+    overflow: hidden;
+    font-size: 0.4rem;
+    color: var(--font-color2);
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssOne span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.4rem;
+    color: var(--font-color6);
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssTwo{
+    overflow: hidden;
+    font-size: 0.32rem;
+    color: var(--font-color4);
+    margin-bottom: 0.2rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre .nfoAssThreName{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre .nfoAssThreName img{
+    overflow: hidden;
+    width: 0.64rem;
+    height: 0.64rem;
+    margin-right: 0.15rem;
+    border-radius: 0.106rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre .nfoAssThreName span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.346rem;
+    color: var(--font-color3);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 4rem;
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre .nfoAssThreLink{
+    overflow: hidden;
+    width: 1.386rem;
+    height: 0.64rem;
+    border-radius: 0.33rem;
+    background: var(--bgcolor4);
+}
+.liveSubjects .liveSubCont .liveSubConInfo .liveSubChat ul li .liveChatInfo .chatInfoAssist .nfoAssThre .nfoAssThreLink a{
+    overflow: hidden;
+    display: block;
+    width: 1.386rem;
+    height: 0.64rem;
+    border-radius: 0.33rem;
+    color: var(--font-color5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.liveSubjects .liveSubCont .liveSubConInput{
+    /*overflow: hidden;*/
+    position: absolute;
+    height: 1.8rem;
+    background: var(--bgcolor5);
+    width: calc(100% - 0.64rem);
+    left: 0;
+    bottom: 0;
+    z-index: 222;
+    padding: 0 0.32rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1{
+    /* overflow: hidden; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.32rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .ubInput1Alls{
+    /* overflow: hidden; */
+    position: relative;
+    width: 100%;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpshuru{
+    /*overflow: hidden;*/
+    height: 1rem;
+    width: calc(100% - 2.7rem);
+    background: var(--bgcolor1);
+    border-radius: 0.55rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.liveSubInpJinyan{
+    pointer-events: none;
+    cursor: default;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpshuru input{
+    overflow: hidden;
+    width: calc(100% - 1.3rem);
+    height: 1rem;
+    padding-left: 0.32rem;
+    background: none;
+    color: var(--font-color4);
+    font-size: 0.37rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpshuru input::placeholder{
+    color: var(--font-color7);
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpshuru i{
+    overflow: hidden;
+    width: 0.56rem;
+    height: 0.56rem;
+    background: var(--bgcolor7);
+    background-size: 100%;
+    margin-right: 0.32rem;
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpIcos{
+    /* overflow: hidden; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 2.3rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpIcos img{
+    overflow: hidden;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpIcos .liveSubPiost{
+    /* overflow: hidden; */
+    position: relative;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpIcos .liveSubPiost .liveZboz{
+    overflow: hidden;
+    position: absolute;
+    top: -0.35rem;
+    left: -0.21rem;
+    z-index: 22;
+    width: 1.46rem;
+    height: 0.48rem;
+    background: var(--bgcolor10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.22rem;
+    font-size: 0.28rem;
+    color: var(--font-color10);
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput1 .liveSubInpIcos .liveSubPiost .liveZboz img{
+    overflow: hidden;
+    display: block;
+    width: 0.28rem;
+    height: 0.28rem;
+    margin-right: 0.1rem;
+}
+/* 第二个输入框 */
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2{
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    height: calc(100% - 0.64rem);
+    width: calc(100% - 0.64rem);
+    background: var(--bgcolor5);
+    z-index: 22;
+    padding: 0.32rem;
+    transition: 0.2s;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2Cur{
+    overflow: initial;
+    top: 0;
+    transition: 0.2s;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls{
+    /*overflow: hidden;*/
+    position: relative;
+    width: 100%;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpshuru{
+    /*overflow: hidden;*/
+    height: 1rem;
+    width: calc(100% - 1.2rem);
+    background: var(--bgcolor1);
+    border-radius: 0.55rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpshuru input{
+    overflow: hidden;
+    width: calc(100% - 1.3rem);
+    height: 1rem;
+    padding-left: 0.32rem;
+    background: none;
+    color: var(--font-color4);
+    font-size: 0.37rem;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpshuru input::placeholder{
+    color: var(--font-color7);
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpshuru i{
+    overflow: hidden;
+    width: 0.56rem;
+    height: 0.56rem;
+    background: var(--bgcolor7);
+    background-size: 100%;
+    margin-right: 0.32rem;
+}
+
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpIcos{
+    overflow: hidden;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveSubjects .liveSubCont .liveSubConInput .liveSubInput2 .ubInput2Alls .liveSubInpIcos img{
+    overflow: hidden;
+    display: block;
+    width: 0.7rem;
+    height: 0.7rem;
+}
+
+.liveSubAbout{
+    overflow: hidden;
+    height: 100%;
+    padding: 0 0.32rem;
+}
+.liveSubAbout .liveAboutCont{
+    overflow-y: auto;
+	height: 100%;
+    font-size: 0.373rem;
+    color: var(--font-color2);
+    line-height: 0.64rem;
+}
+.liveSubAbout .liveAboutCont img{
+    width: max-content;
+    max-width: 80%;
+}
+/* 企业介绍 */
+.liveCompanyAll{
+    overflow-y: auto;
+    height: 100%;
+    position: relative;
+}
+.liveCompanyAll ul{
+    overflow: hidden;
+}
+.liveCompanyAll ul li{
+    overflow: hidden;
+    background: var(--bgcolor5);
+    padding: 0.32rem;
+    border-radius: 0.106rem;
+    margin-bottom: 0.32rem;
+    position: relative;
+}
+.liveCompanyAll ul li .liveComOne{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.liveCompanyAll ul li .liveComOne .liveComOneImg{
+    overflow: hidden;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.106rem;
+    margin-right: .3rem;
+}
+.liveCompanyAll ul li .liveComOne .liveComOneImg img{
+    overflow: hidden;
+    width: 1rem;
+    height: 1rem;
+}
+.liveCompanyAll ul li .liveComOne .liveComOneData{
+    overflow: hidden;
+    width: calc(100% - 1.3rem);
+}
+.liveCompanyAll ul li .liveComOne .liveComOneData a{
+    overflow: hidden;
+    display: block;
+    font-size: 0.42rem;
+    color: var(--font-color2);
+    padding-bottom: 0.08rem;
+}
+.liveCompanyAll ul li .liveComOne .liveComOneData span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color4);
+}
+.liveCompanyAll ul li .liveComTwo{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-top: 0.25rem;
+    justify-content: space-between;
+}
+.liveCompanyAll ul li .liveComTwo .liveComTwoText{
+    overflow: hidden;
+    font-size: 0.32rem;
+    color: var(--font-color3);
+}
+.liveCompanyAll ul li .liveComTwo .liveComTwoMingc{
+    overflow: hidden;
+    font-size: 0.32rem;
+    width: calc(100% - 3rem);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--font-color1);
+}
+.liveComSuspen{
+    overflow: hidden;
+    width: 1.8rem;
+    height: 0.5rem;
+    background: var(--bgcolor10);
+    position: absolute;
+    top: 0.1rem;
+    right: 0rem;
+    border-radius: 0.26rem 0 0 0.26rem;
+    z-index: 22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveComSuspen .liveComSuspenOne{
+    overflow: hidden;
+    width: 0.33rem;
+    height: 0.33rem;
+    border-radius: 50%;
+    margin-right: 0.26rem;
+}
+.liveComSuspen .liveComSuspenOne img{
+    overflow: hidden;
+    display: block;
+    width: 0.33rem;
+    height: 0.33rem;
+}
+.liveComSuspen .liveComSuspenTwo{
+    overflow: hidden;
+    font-size: 0.32rem;
+    color: var(--font-color5);
+}
+.liveComSuspen .liveComSuspenTwo span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color10);
+}
+
+/* 本场职位样式 */
+.liveThisBroad{
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    /* background: #f90; */
+}
+.liveThisBroad ul{
+    overflow: hidden;
+}
+.liveThisBroad ul li{
+    overflow: hidden;
+    padding: 0.32rem;
+    border-radius: 00.106rem;
+    background: var(--bgcolor5);
+    margin-bottom: 0.32rem;
+}
+.liveThisBroad ul li .liveThisOne{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.2rem;
+}
+.liveThisBroad ul li .liveThisOne span{
+    overflow: hidden;
+    display: block;
+    font-size: 00.426rem;
+    color: var(--font-color2);
+}
+.liveThisBroad ul li .liveThisOne a{
+    overflow: hidden;
+    display: flex;
+    height: 0.64rem;
+    width: 1.76rem;
+    font-size: 0.37rem;
+    border-radius: 0.33rem;
+    color: var(--font-color5);
+    align-items: center;
+    justify-content: center;
+    background: var(--bgcolor4);
+}
+.liveThisBroad ul li .liveThisTwo{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.liveThisBroad ul li .liveThisTwo .liveThisTwoInfo{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-size: 0.37rem;
+    color: var(--font-color3);
+}
+.liveThisBroad ul li .liveThisTwo .liveThisTwoInfo i{
+    overflow: hidden;
+    display: block;
+    width: 1px;
+    height: 0.4rem;
+    background: var(--color-border2);
+    margin: 0 0.15rem;
+}
+.liveThisBroad ul li .liveThisTwo .liveThisTwoMoney{
+    overflow: hidden;
+    font-size: 0.42rem;
+    color: var(--font-color6);
+}
+.liveThisBroad ul li .liveThisThree{
+    overflow: hidden;
+    padding: 0.32rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.liveThisBroad ul li .liveThisThree span{
+    overflow: hidden;
+    display: flex;
+    height: 0.64rem;
+    background: var(--bgcolor11);
+    border-radius: 0.106rem;
+    padding: 0 0.25rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 0.2rem;
+    color: var(--font-color3);
+    font-size: 0.32rem;
+}
+.liveThisBroad ul li .liveThisFive{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.liveThisBroad ul li .liveThisFive .liveThisFiveCom{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.liveThisBroad ul li .liveThisFive .liveThisFiveCom .comLogo{
+    overflow: hidden;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-right: 0.15rem;
+    border: 1px solid var(--color-border2);
+    border-radius: 00.106rem;
+}
+.liveThisBroad ul li .liveThisFive .liveThisFiveCom .comLogo img{
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.liveThisBroad ul li .liveThisFive .liveThisFiveCom .comName{
+    overflow: hidden;
+    font-size: 00.35rem;
+    color: var(--font-color3);
+}
+.liveThisBroad ul li .liveThisFive .liveThisFiveTime{
+    overflow: hidden;
+    font-size: 00.32rem;
+    color: var(--font-color4);
+}
+
+
+
+
+
+/* 职位弹窗样式 */
+.companyPopup{
+    overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-height: 15rem;
+    height: calc(100% - 0.64rem);
+    border-radius: 0.42rem 0.42rem 0 0;
+    background: var(--bgcolor11);
+    padding: 0.32rem;
+}
+.companyPopup .compaOpupOne{
+    overflow: hidden;
+    height: 1.7rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneMing{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.2rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneMing p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.companyPopup .compaOpupOne .compaOpupOneMing p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.companyPopup .compaOpupOne .compaOpupOneMing img{
+    overflow: hidden;
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneNub{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.companyPopup .compaOpupOne .compaOpupOneNub .pupOneNubPost{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-size: 0.373rem;
+    color: var(--font-color4);
+}
+.companyPopup .compaOpupOne .compaOpupOneNub .pupOneNubPost span{
+    color: var(--font-color6);
+    padding: 0 0.2rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneNub .pupOneNubJie{
+    overflow: hidden;
+    width: 1.8rem;
+    height: 0.48rem;
+    background: var(--bgcolor10);
+    border-radius: 0.106rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.2rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneNub .pupOneNubJie img{
+    overflow: hidden;
+    display: block;
+    width: 0.24rem;
+    height: auto;
+    margin-right: 0.2rem;
+}
+.companyPopup .compaOpupOne .compaOpupOneNub .pupOneNubJie span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color10);
+}
+
+.companyPopup .compaOpupTwo{
+    overflow-y: auto;
+    height: calc(100% - 1.7rem);
+}
+.companyPopup .compaOpupTwo ul{
+    overflow-y: auto;
+}
+.companyPopup .compaOpupTwo ul li{
+    overflow: hidden;
+    padding: 0.32rem;
+    background: var(--bgcolor5);
+    border-radius: 0.21rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.32rem;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo{
+    overflow: hidden;
+    width: calc(100% - 1.8rem);
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoName{
+    overflow: hidden;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoName h4{
+    overflow: hidden;
+    font-size: 0.42rem;
+    color: var(--font-color3);
+    font-weight: 500;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoName p{
+    overflow: hidden;
+    font-size: 0.4rem;
+    color: var(--font-color6);
+    padding: 0.12rem 0;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoName span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.32rem;
+    color: var(--font-color7);
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoTips{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 0.25rem;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoInfo .comTwoInfoTips span{
+    overflow: hidden;
+    height: 0.64rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.32rem;
+    background: var(--bgcolor12);
+    border-radius: 0.106rem;
+    margin-right: 0.15rem;
+    color: var(--font-color1);
+    font-size: 0.32rem;
+    margin: 3px;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoLink{
+    overflow: hidden;
+    height: 0.74rem;
+    width: 1.76rem;
+    background: var(--bgcolor4);
+    border-radius: 0.38rem;
+}
+.companyPopup .compaOpupTwo ul li .comOpuTwoLink a{
+    overflow: hidden;
+    display: block;
+    height: 0.74rem;
+    line-height: 0.74rem;
+    width: 1.76rem;
+    font-size: 0.375rem;
+    text-align: center;
+    color: var(--font-color5);
+}
+
+
+
+/* 职位详细弹窗样式 */
+.comShowPopup{
+    overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-height: 15rem;
+    height: calc(100% - 0.64rem);
+    border-radius: 0.42rem 0.42rem 0 0;
+    background: var(--bgcolor5);
+    padding: 0.32rem;
+    transition: 0.5s;
+}
+.comShowPopup .comShowTops{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.32rem;
+    border-bottom: 1px solid var(--color-border2);
+}
+.comShowPopup .comShowTops p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.comShowPopup .comShowTops img{
+    overflow: hidden;
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+}
+.comShowPopup .comShowCenter{
+    overflow-y: auto;
+    height: calc(100% - 3.2rem);
+    padding: 0.32rem 0;
+    margin-top: 0.2rem;
+}
+
+.pop_link{
+    margin-top: 10px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 22px;
+    background: #2778f8;
+}
+
+.pop_link a{
+    color: #fff;
+}
+.comShowPopup .comShowCenter .comShowInfo{
+    overflow: hidden;
+}
+.comShowPopup .comShowCenter .comShowInfo h4{
+    overflow: hidden;
+    font-size: 0.53rem;
+    color: var(--font-color2);
+    font-weight: 500;
+}
+.comShowPopup .comShowCenter .comShowInfo p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color1);
+    font-weight: 500;
+    padding: 0.2rem 0 0.15rem 0;
+}
+.comShowPopup .comShowCenter .comShowInfo .comShowInfoMab{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.comShowPopup .comShowCenter .comShowInfo .comShowInfoMab span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.37rem;
+    color: var(--font-color4);
+}
+.comShowPopup .comShowCenter .comShowInfo .comShowInfoMab i{
+    overflow: hidden;
+    display: block;
+    width: 1px; 
+    height: 0.32rem;
+    background:var(--bgcolor13);
+    margin: 0 0.2rem;
+}
+.comShowPopup .comShowCenter .comShowTipse{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.32rem 0;
+}
+.comShowPopup .comShowCenter .comShowTipse span{
+    overflow: hidden;
+    display: flex;
+    height: 0.64rem;
+    background: var(--bgcolor11);
+    border-radius: 0.106rem;
+    padding: 0 0.25rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 0.2rem;
+    color: var(--font-color3);
+    font-size: 0.32rem;
+    margin: 3px;
+}
+.comShowPopup .comShowCenter .comShowConters{
+    overflow: hidden;
+    margin-top: 0.42rem;
+}
+.comShowPopup .comShowCenter .comShowConters .comConterOne{
+    overflow: hidden;
+    font-size: 0.42rem;
+    color: var(--font-color2);
+    font-weight: bold;
+    margin-bottom: 0.21rem;
+}
+.comShowPopup .comShowCenter .comShowConters .comConterTwo{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+.comShowPopup .comShowCenter .comShowConters .comConterTwo span{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0.64rem;
+    background: var(--bgcolor11);
+    padding: 0 0.25rem;
+    border-radius: 00.106rem;
+    margin-right: 0.2rem;
+    color: var(--font-color3);
+    font-size: 0.32rem;
+}
+.comShowPopup .comShowCenter .comShowConters .comConterThree{
+    overflow: hidden;
+    line-height: 0.64rem;
+    font-size: 0.37rem;
+    color: var(--font-color2);
+}
+
+/* 简历弹窗布局 */
+.comResumePopup{
+	overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-height: 16rem;
+    height: calc(100% - 0.64rem);
+    border-radius: 0.42rem 0.42rem 0 0;
+    background: var(--bgcolor5);
+    padding: 0.32rem;
+}
+.comResumePopup .comShowTops{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.comResumePopup .comShowTops{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.25rem;
+}
+.comResumePopup .comShowTops p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.comResumePopup .comShowTops img{
+    overflow: hidden;
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+}
+.comResumePopup .comResumeLogin{
+    overflow: hidden;
+}
+.comResumePopup .comResumeLogin a{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.comResumePopup .comResumeLogin a span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.37rem;
+    color: var(--font-color1);
+}
+.comResumePopup .comResumeLogin a img{
+    overflow: hidden;
+    display: block;
+    width: 0.13rem;
+    height: 0.26rem;
+    margin-left: 0.15rem;
+}
+.comResumePopup .comResumeInput{
+    overflow: hidden;
+    height: calc(100% - 1.4rem);
+}
+.comResumePopup .comResumeInput form{
+    overflow: hidden;
+    padding-top: 0.2rem;
+}
+.comResumePopup .comResumeInput form .sumeInputList{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 1.38rem;
+    border-bottom: 1px solid var(--color-border3);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputName{
+    overflow: hidden;
+    font-size: 0.37rem;
+    color: var(--font-color2);
+    width: 1.8rem;
+    text-align: right;
+    margin-right: 0.18rem;
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputName b{
+    color: var(--bgcolor2);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts{
+    overflow: hidden;
+    width: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts input{
+    width: calc(100% - 3rem);
+    height: 0.8rem;
+    font-size: 0.37rem;
+    color: var(--font-color3);
+    background: none;
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts .sumYanzm{
+    overflow: hidden;
+    position: relative;
+    width: 2.6rem;
+    background: #f90;
+    height: 0.8rem;
+}
+
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts input::placeholder{
+    color: var(--font-color4);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.37rem;
+    color: var(--font-color4);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts img{
+    overflow: hidden;
+    display: block;
+    width: 0.186rem;
+    height: 0.373rem;
+}
+
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts .sumYanzm img{
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    border-radius: 0;
+    transform: translateY(0);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts .fasond{
+    overflow: hidden;
+    display: block;
+    width: 2rem;
+    color: var(--font-color1);
+}
+.comResumePopup .comResumeInput form .sumeInputList .sumeInputConts .yanzenm{
+    overflow: hidden;
+    display: block;
+    width: calc(100% - 2rem);
+}
+.comResumePopup .comResumeInput form .sumeInpButton{
+    overflow: hidden;
+    height: 1.12rem;
+    margin-top: 0.32rem;
+}
+.comResumePopup .comResumeInput form .sumeInpButton span{
+    overflow: hidden;
+    width: 100%;
+    height: 1.12rem;
+    background: var(--bgcolor14);
+    border-radius: 0.6rem;
+    font-size: 0.346rem;
+    color: var(--font-color5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* 简历弹窗布局 */
+.comWorkExperie{
+    overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-height: 15rem;
+    height: 100%;
+    border-radius: 0.42rem 0.42rem 0 0;
+    background: var(--bgcolor5);
+    padding: 0.32rem;
+}
+.comWorkExperie .comWorkTops{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.comWorkExperie .comWorkTops .comWorkGoblak{
+    overflow: hidden;
+    display: block;
+    width: 0.186rem;
+    height: 0.346rem;
+}
+.comWorkExperie .comWorkTops .comWorkClose{
+    overflow: hidden;
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+}
+.comWorkExperie .comWorkTops p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.comWorkExperie .comWorksInput{
+    overflow-y: auto;
+    height: calc(100% - 1rem);
+    margin-top: 0.32rem;
+}
+
+
+.comWorkExperie .comWorksInput form{
+    overflow: hidden;
+    padding-top: 0.2rem;
+}
+.comWorkExperie .comWorksInput form .sumeInputSkip{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 1.38rem;
+    border-bottom: 1px solid var(--color-border3);
+}
+.comWorkExperie .comWorksInput form .sumeInputSkip .sumeInputName{
+    overflow: hidden;
+    font-size: 0.346rem;
+    color: var(--font-color3);
+}
+.comWorkExperie .comWorksInput form .sumeInputSkip .sumeInputConts{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-size: 0.346rem;
+    color: var(--font-color1);
+}
+.comWorkExperie .comWorksInput form .sumeInputSkip .sumeInputConts img{
+    overflow: hidden;
+    display: block;
+    width: 0.13rem;
+    height: 0.26rem;
+    margin-left: 0.12rem;
+}
+.comWorkExperie .comWorksInput form .sumeInputList{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 1.38rem;
+    border-bottom: 1px solid var(--color-border3);
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputName{
+    overflow: hidden;
+    font-size: 0.37rem;
+    color: var(--font-color2);
+    width: 1.8rem;
+    text-align: right;
+    margin-right: 0.18rem;
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputName b{
+    color: var(--bgcolor2);
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts{
+    overflow: hidden;
+    width: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts input{
+    width: 100%;
+    height: 0.8rem;
+    font-size: 0.37rem;
+    color: var(--font-color3);
+    background: none;
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts input::placeholder{
+    color: var(--font-color4);
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.37rem;
+    color: var(--font-color4);
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts img{
+    overflow: hidden;
+    display: block;
+    width: 0.186rem;
+    height: 0.373rem;
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts .fasond{
+    overflow: hidden;
+    display: block;
+    width: 2rem;
+    color: var(--font-color1);
+}
+.comWorkExperie .comWorksInput form .sumeInputList .sumeInputConts .yanzenm{
+    overflow: hidden;
+    display: block;
+    width: calc(100% - 2rem);
+}
+.comWorkExperie .comWorksInput form .sumeInpButton{
+    overflow: hidden;
+    height: 1.12rem;
+    margin-top: 0.32rem;
+}
+.comWorkExperie .comWorksInput form .sumeInpButton span{
+    overflow: hidden;
+    width: 100%;
+    height: 1.12rem;
+    background: var(--bgcolor14);
+    border-radius: 0.6rem;
+    font-size: 0.346rem;
+    color: var(--font-color5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 教育经历弹窗布局 */
+.comEducational{
+    overflow: hidden;
+    width: calc(100% - 0.64rem);
+    max-height: 15rem;
+    height: 100%;
+    border-radius: 0.42rem 0.42rem 0 0;
+    background: var(--bgcolor5);
+    padding: 0.32rem;
+}
+.comEducational .comWorkTops{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.comEducational .comWorkTops .comEducatGoblak{
+    overflow: hidden;
+    display: block;
+    width: 0.186rem;
+    height: 0.346rem;
+}
+.comEducational .comWorkTops .comEducatClose{
+    overflow: hidden;
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+}
+.comEducational .comWorkTops p{
+    overflow: hidden;
+    font-size: 0.48rem;
+    color: var(--font-color2);
+    font-weight: bold;
+}
+.comEducational .comWorksInput{
+    overflow-y: auto;
+    height: calc(100% - 1rem);
+    margin-top: 0.32rem;
+}
+
+
+.comEducational .comWorksInput form{
+    overflow: hidden;
+    padding-top: 0.2rem;
+}
+.comEducational .comWorksInput form .sumeInputSkip{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 1.38rem;
+    border-bottom: 1px solid var(--color-border3);
+}
+.comEducational .comWorksInput form .sumeInputSkip .sumeInputName{
+    overflow: hidden;
+    font-size: 0.346rem;
+    color: var(--font-color3);
+}
+.comEducational .comWorksInput form .sumeInputSkip .sumeInputConts{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-size: 0.346rem;
+    color: var(--font-color1);
+}
+.comEducational .comWorksInput form .sumeInputSkip .sumeInputConts img{
+    overflow: hidden;
+    display: block;
+    width: 0.13rem;
+    height: 0.26rem;
+    margin-left: 0.12rem;
+}
+.comEducational .comWorksInput form .sumeInputAdds{
+    overflow: hidden;
+    padding: 0.32rem 0;
+    margin-top: 0.4rem;
+}
+.comEducational .comWorksInput form .sumeInputList{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 1.38rem;
+    border-bottom: 1px solid var(--color-border3);
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputName{
+    overflow: hidden;
+    font-size: 0.37rem;
+    color: var(--font-color2);
+    width: 1.8rem;
+    text-align: right;
+    margin-right: 0.18rem;
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputName b{
+    color: var(--bgcolor2);
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts{
+    overflow: hidden;
+    width: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts input{
+    width: 100%;
+    height: 0.8rem;
+    font-size: 0.37rem;
+    color: var(--font-color3);
+    background: none;
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts input::placeholder{
+    color: var(--font-color4);
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.37rem;
+    color: var(--font-color4);
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts img{
+    overflow: hidden;
+    display: block;
+    width: 0.186rem;
+    height: 0.373rem;
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts .fasond{
+    overflow: hidden;
+    display: block;
+    width: 2rem;
+    color: var(--font-color1);
+}
+.comEducational .comWorksInput form .sumeInputList .sumeInputConts .yanzenm{
+    overflow: hidden;
+    display: block;
+    width: calc(100% - 2rem);
+}
+.comEducational .comWorksInput form .sumeInpButton{
+    overflow: hidden;
+    height: 1.12rem;
+    margin-top: 0.32rem;
+}
+.comEducational .comWorksInput form .sumeInpButton span{
+    overflow: hidden;
+    width: 100%;
+    height: 1.12rem;
+    background: var(--bgcolor14);
+    border-radius: 0.6rem;
+    font-size: 0.346rem;
+    color: var(--font-color10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 弹出添加样式 */
+.comShowOpupCur{
+    bottom: 0;
+    transition: 0.5s;
+}
+.authcode{
+    position: absolute;
+	right:0.4rem;
+	top:0.4rem;
+    transform: translateY(-50%);
+    width: 2.3rem;
+    height: .8rem;
+    border-radius: 0.4rem;
+}
+/*---点赞---*/
+.liveSubList canvas {
+    display: block;
+    position: fixed;
+    bottom: 155px;
+    right: 10px;
+    z-index: 20;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    z-index: 99;
+}
+
+.liveTelecast{
+    overflow: hidden;
+    position: fixed;
+    bottom: 80px;
+    right: 10px;
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 88;
+}
+.liveTelecast .liveNumber{
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    z-index: 22;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveTelecast .liveNumber span{
+    display: block;
+    font-size: 13px;
+    color: #444;
+}
+.liveTelecast .clickImage{
+    overflow: hidden;
+    height: auto;
+    width: 50px;
+    z-index: 21;
+    transition: 0.4s;
+    cursor: pointer;
+}
+.liveTelecast .clickImage:active{
+    overflow: hidden;
+    height: auto;
+    width: 55px;
+    z-index: 21;
+    transition: 0.3s;
+}
+.liveTelecast .clickImage img{
+    width: 100%;
+    height: auto;
+}
+/*---工作内容弹窗---*/
+.contentBoxAllsd{
+    overflow: hidden;
+    padding: 0.32rem;
+    background: #fff;
+}
+.contentBoxAllsd .fast_box_header{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.33rem;
+}
+.contentBoxAllsd .fast_box_header .fast_box_headericon{
+    overflow: hidden;
+    position: absolute;
+    top: 0.2rem;
+    left: 0;
+    z-index: 1;
+}
+.contentBoxAllsd .fast_box_header .fast_box_headericon img{
+    width: 0.35rem;
+    height: auto;
+}
+.contentBoxAllsd .fast_box_header_p{
+    overflow: hidden;
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.contentBoxAllsd .fast_textarea{
+    overflow: hidden;
+    position: relative;
+    padding-top: 0.32rem;
+}
+.contentBoxAllsd .fast_textarea_c{
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 0.12rem;
+    padding: 0.2rem;
+}
+.contentBoxAllsd .fast_textarea_c .fast_textarea_text{
+    border: none;
+    font-size: 0.4rem;
+    min-height: 3rem;
+}
+.contentBoxAllsd .fast_bth{
+    overflow: hidden;
+    position: relative;
+    padding: 0.32rem 0 0.4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contentBoxAllsd .fast_bth .fast_bth_sub{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 1.1rem;
+    background: var(--bgcolor4);
+    color: var(--font-color5);
+    font-size: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.21rem;
+}
+
+.clear {
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after {
+  content: '';
+  clear: both;
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+a {
+  color: #666;
+  outline: none;
+}
+
+a, a:visited {
+  text-decoration: none;
+}
+
+/* //d点赞 */
+.position_zhan {
+  position: absolute;
+  right: 0px;
+  bottom: 15px;
+  width: 50px;
+  height: auto;
+  z-index: 100;
+}
+.position_zhan .imageDate{
+  overflow: hidden;
+  width: 50px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.position_zhan .imageDate .dongaImage{
+  overflow: hidden;
+  width: 85%;
+  transition: 0.3s;
+  cursor: pointer;
+  margin: auto;
+}
+.position_zhan .imageDate .dongaImage:active{
+  overflow: hidden;
+  width: 100%;
+  transition: 0.3s;
+  background: none;
+}
+
+
+.position_zhan .imageDate .dongaOne {
+  overflow: hidden;
+  position: absolute;
+  top: -1px;
+  left: 8px;
+  right: 0;
+  z-index: 2;
+  width: 70%;
+  text-align: center;
+  font-size: 13px;
+  color: #f30;
+}
+
+
+
+
+
+.dongaImage{
+  overflow: hidden;
+}
+.dongaImage img{
+  width: 100%;
+  height: auto;
+}
+
+
+.parentImg {
+  width: 34px;
+  height: 34px;
+  display: inline-block;
+  position: absolute;
+  top: -18px;
+  left: 11px;
+  animation: vertical-animation 2.4s linear forwards;
+  -webkit-animation: vertical-animation 2.4s linear forwards;
+  z-index: 333;
+}
+.parentImg img{
+  width: 100%;
+  height: auto;
+}
+
+@-webkit-keyframes vertical-animation {
+  0% {
+    transform: translateY(0px);
+    opacity: 1
+  }
+
+  100% {
+    transform: translateY(-200px);
+    opacity: 0
+  }
+}
+
+.parentImg0 img, .parentImg1 img {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  animation: hor-animation 2.4s linear forwards;
+  -webkit-animation: hor-animation 2.4s linear forwards;
+}
+
+@-webkit-keyframes hor-animation {
+  0% {
+    transform: translateX(0px);
+    transform: scale(0);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: translateX(5px);
+  }
+
+  50% {
+    transform: translateX(0px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.parentImg2 img, .parentImg3 img {
+  width: 30px;
+  height: 30px;
+  animation: hor-animation1 2.4s linear forwards;
+  -webkit-animation: hor-animation1 2.4s linear forwards;
+}
+
+@-webkit-keyframes hor-animation1 {
+  0% {
+    transform: translateX(0px);
+    transform: scale(0);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  33% {
+    transform: translateX(10px);
+  }
+
+  66% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.parentImg4 img, .parentImg5 img {
+  width: 28px;
+  height: 28px;
+  animation: hor-animation2 2.4s linear forwards;
+  -webkit-animation: hor-animation2 2.4s linear forwards;
+}
+
+@-webkit-keyframes hor-animation2 {
+  0% {
+    transform: translateX(0px);
+    transform: scale(0);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  33% {
+    transform: translateX(-10px);
+  }
+
+  66% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(3px);
+  }
+}
+
+.parentImg6 img, .parentImg7 img {
+  width: 30px;
+  height: 30px;
+  animation: hor-animation3 2.2s linear forwards;
+  -webkit-animation: hor-animation3 2.2s linear forwards;
+}
+
+@-webkit-keyframes hor-animation3 {
+  0% {
+    transform: translateX(0px);
+    transform: scale(0);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  33% {
+    transform: translateX(10px);
+  }
+
+  66% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.parentImg8 img, .parentImg9 img {
+  width: 32px;
+  height: 32px;
+  animation: hor-animation4 2.2s linear forwards;
+  -webkit-animation: hor-animation4 2.2s linear forwards;
+}
+
+@-webkit-keyframes hor-animation4 {
+  0% {
+    transform: translateX(0px);
+    transform: scale(0);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  33% {
+    transform: translateX(-5px);
+  }
+
+  66% {
+    transform: translateX(-10px);
+  }
+
+  100% {
+    transform: translateX(-6px);
+  }
+}
+
+.portrait .candou {
+  -webkit-animation: shakerotate 2s ease-in-out;
+  animation: shakerotate 1.6s ease-in-out;
+}
+
+@-webkit-keyframes shakerotate {
+  0% {
+    -webkit-transform: translate(0px, 0px) scaleX(1) scaleY(1);
+  }
+
+  56% {
+    -webkit-transform: translate(0px, 0px) scaleX(1.3) scaleY(1.1);
+  }
+
+  100% {
+    -webkit-transform: translate(0px, 0px) scaleX(1) scaleY(1);
+  }
+}
+
+.landscape .candou {
+  -webkit-animation: shakerotate2 2s ease-in-out;
+  animation: shakerotate2 1.6s ease-in-out;
+}
+
+@-webkit-keyframes shakerotate2 {
+  0% {
+    -webkit-transform: translate(0px, 0px)
+  }
+
+  56% {
+    -webkit-transform: translate(10px, 0px)
+  }
+
+  100% {
+    -webkit-transform: translate(0px, 0px)
+  }
+}
+
+
+/*表情样式*/
+.liveSubInpshuru #commonly{
+    overflow: hidden;
+    position: absolute;
+    width: calc(100% - 0.6rem);
+    height: 8rem;
+    background: var(--bgcolor5);
+    left: 0;
+    bottom: 1.82rem;
+    z-index: 66;
+    box-shadow: 0px 5px 10px 0px rgb(0 0 0 / 40%);
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+}
+.liveSubInpshuru #commonly .chat_face{
+    overflow-y: auto;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /*margin: 0.3rem 0;*/
+}
+.liveSubInpshuru #commonly .chat_face li{
+    overflow: hidden;
+    position: relative;
+    width: 0.85rem;
+    padding: 0 0.06rem;
+}
+.liveSubInpshuru #commonly .chat_face li img{
+    width: 100%;
+    height: auto;
+}
+
+/*关注微信二维码*/
+.weChatFlwx{
+    overflow: hidden;
+    height: initial !important;
+    padding: 15px 0;
+    width: 240px;
+    border-radius: 6px !important;
+}
+.weChatFlwx .wx_bdtck_pic{
+    overflow: hidden;
+    position: relative;
+    margin: auto;
+    width: 180px;
+}
+
+.weChatFlwx .wx_bdtck_p{
+    overflow: hidden;
+    position: relative;
+    padding: 0 12px;
+    font-size: 0.4rem;
+    text-align: center;
+}
+/*微信分享*/
+.yun_wap_share_tip_p{color:#fff; font-size:.453333rem; padding-left:.533333rem; padding-top:.533333rem;  }
+.yun_wap_share_tip_icon{width:3.413333rem;height:3.413333rem; background:url(../images/yun_wap_fxicon.png) no-repeat; display:block; background-size:100%;right:0;top:0; }
+.yun_wap_share_tip_i{width:.8rem;height:.8rem; display:inline-block; background:url(../images/yun_wap_share_tip_fx.png) no-repeat; background-size:100%; vertical-align:middle; margin:0 .213333rem}
+.yun_wap_share_tip_i2{width:.8rem;height:.8rem; display:inline-block; background:url(../images/yun_wap_share_tip_fx2.png) no-repeat; background-size:100%; vertical-align:middle; margin:0 .213333rem;}
+.yun_wap_share_tip_i3{width:.693333rem;height:.693333rem; display:inline-block; background:url(../images/yun_wap_share_tip_fx3.png) no-repeat; background-size:100%; vertical-align:middle; margin:0 .213333rem;}
+.yun_wap_share_tip_i4{width:.8rem;height:.8rem; display:inline-block; background:url(../images/yun_wap_share_tip_fx4.png) no-repeat; background-size:100%; vertical-align:middle; margin:0 .213333rem;}
+.yun_wap_share_n{ font-style:italic; margin-right:.133333rem; display:inline-block; font-family:Georgia,"Times New Roman",Times,serif; font-size:.533333rem;}
+.yun_wap_share_tip_wxicon{width:90%;height:6.666667rem; background:url(../images/yun_wap_fxicon.png) no-repeat center center;background-size:100%; display:block; position:absolute;right:.266667rem;top:.266667rem;}
+.yun_wap_share_tip_wxicon_more{width:.8rem;height:.8rem; background:url(../images/yun_wap_share_more.png) no-repeat;background-size:100%; display:block; position:absolute;right:.4rem;top:.266667rem}

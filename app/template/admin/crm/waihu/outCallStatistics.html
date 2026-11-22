@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+	<link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <!--防止页面显示模板标签-->
+	<link rel="stylesheet" href="../../../admin/js/cloak.css">
+	<script src="../../../admin/js/wangeditor/index.js"></script>
+
+	<script src="../../../../../data/plus/city.cache.js"></script>
+	<script src="../../../../../data/plus/cityparent.cache.js"></script>
+	<script src="../../../../../data/plus/job.cache.js"></script>
+	<script src="../../../../../data/plus/jobparent.cache.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="waihuHeader" v-cloak>
+            <div class="waihuHeaNum">
+                <div class="waihuHeaNumList" @click="toCallLog(1)">
+                    <div class="waihuHeaNumImg">
+                        <img src="../../images/hcicon1.png" alt="">
+                    </div>
+                    <div class="waihuHeaNumInfo">
+                        <span>呼出总数</span>
+                        <b>{{allCnt}}</b>
+                    </div>
+                </div>
+                <div class="waihuHeaNumList" @click="toCallLog(2)">
+                    <div class="waihuHeaNumImg">
+                        <img src="../../images/hcicon2.png" alt="">
+                    </div>
+                    <div class="waihuHeaNumInfo">
+                        <span>接通量</span>
+                        <b>{{jtCnt}}</b>
+                    </div>
+                </div>
+                <div class="waihuHeaNumList" @click="toCallLog(3)">
+                    <div class="waihuHeaNumImg">
+                        <img src="../../images/hcicon3.png" alt="">
+                    </div>
+                    <div class="waihuHeaNumInfo">
+                        <span>无人接听量</span>
+                        <b>{{wrCnt}}</b>
+                    </div>
+                </div>
+                <div class="waihuHeaNumList" @click="toCallLog(1)">
+                    <div class="waihuHeaNumImg">
+                        <img src="../../images/hcicon4.png" alt="">
+                    </div>
+                    <div class="waihuHeaNumInfo">
+                        <span>呼出总时长</span>
+                        <b>{{totalTime}}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="waihuHeaBaos">
+                <div class="waihuHeaBaTite">
+                    <h3>通话时长包</h3>
+                    <span>本功能按实际通话时长计费，不足1分钟按1分钟计算</span>
+                </div>
+                <div class="waihuHeaBaTac">
+                    <div class="waihuHeaBaText">
+                        <p>当前套餐余量： <span>{{balanceArr['total_send']}} </span> 分钟</p>
+                        <p>额外时长包余量： <span>{{balanceArr['total_personal']}} </span> 分钟</p>
+                    </div>
+                    <div class="waihuHeaBaButn">
+                        <a href="javascript:void(0)" style="background: #ff9803;" @click="callBox = true">云外呼</a>
+                        <a href="https://u.phpyun.com" target="_blank">在线充值</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="waihuYewuyuan">
+            <div class="waihuYewuTite">
+                <span>业务员看板</span>
+            </div>
+            <div class="waihuYewuTips">
+                <div class="waihuYewData">
+                    <span :class="staffDays==0?'spanCur':''" @click="timeSel(0,1)">今日</span>
+                    <span :class="staffDays==7?'spanCur':''" @click="timeSel(7,1)">近7天</span>
+                    <span :class="staffDays==30?'spanCur':''" @click="timeSel(30,1)">近30天</span>
+                    <span :class="staffDays==-1?'spanCur':''" @click="timeSel(-1,1)">自定义</span>
+                </div>
+                <div class="waihuYewPickr" v-if="userTimeBox">
+                    <el-date-picker v-model="datestaff" size="small" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" @change="diyDateStaff">
+                    </el-date-picker>
+                </div>
+            </div>
+            <div class="waihuYewuTable">
+                <el-table :data="stafflist" style="width: 100%" :empty-text="emptytext"
+                    :header-cell-style="{ background: '#f5f7fa', color: '#606266' }" v-loading="loading">
+                    <el-table-column prop="username" label="业务员">
+                    </el-table-column>
+                    <el-table-column prop="total_cnt" label="电话量(次)">
+                    </el-table-column>
+                    <el-table-column prop="total_length" label="总时长(分钟)">
+                    </el-table-column>
+                    <el-table-column prop="avg_length" label="平均时长(分钟)">
+                    </el-table-column>
+                    <el-table-column prop="jt_cnt" label="接通量(次)">
+                    </el-table-column>
+                    <el-table-column prop="jt_rate" label="接通率(%)">
+                    </el-table-column>
+                    <el-table-column prop="wr_cnt" label="无人接听量(次)">
+                    </el-table-column>
+                </el-table>
+            </div>
+			<div class="modulePaging" v-if="stafflist.length>0">
+			    <div class="modulePagNum">
+			        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+			           :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+			           layout="total, sizes, prev, pager, next, jumper" :total="total">
+			        </el-pagination>
+			    </div>
+			</div>
+        </div>
+        <div class="waihuYewuyuan">
+            <div class="waihuYewuTite">
+                <span>数据看板</span>
+            </div>
+            <div class="waihuYewuTips">
+                <div class="waihuYewData">
+                    <span :class="days==0?'spanCur':''" @click="timeSel(0)">今日</span>
+                    <span :class="days==7?'spanCur':''" @click="timeSel(7)">近7天</span>
+                    <span :class="days==30?'spanCur':''" @click="timeSel(30)">近30天</span>
+                    <span :class="days==-1?'spanCur':''" @click="timeSel(-1)">自定义</span>
+                </div>
+                <div class="waihuYewPickr" v-if="totalTimeBox">
+                    <el-date-picker v-model="dateday" size="small" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" @change="diyDateDay">
+                    </el-date-picker>
+                </div>
+            </div>
+            <div class="waihuYewuEchat" id="main1"></div>
+        </div>
+		<div class="modluDrawer">
+		    <el-dialog title="外呼拨号" :visible.sync="callBox" :with-header="true" :modal-append-to-body="false"
+		        :show-close="true" width="400px">
+		        <div class="toolClasDia fenpeizhand">
+		            <div class="toolClasList">
+		                <div class="toolClasTite">
+		                    <span>联系电话：</span>
+		                </div>
+		                <div class="toolClasCont">
+		                    <el-input v-model="mobile" type="number"></el-input>
+							<el-button type="primary" @click="outCall" :disabled="submitLoading">拨 号</el-button>
+		                </div>
+		            </div>
+		        </div>
+				<span slot="footer" class="dialog-footer"></span>
+		    </el-dialog>
+		</div>
+		<div class="modluDrawer">
+			<el-drawer title="录入客户" :visible.sync="addcustomer_show" :modal-append-to-body="false" :show-close="true"
+				:with-header="true" size="60%">
+				<addcustomer @close-update="closeAddcustomer" :mobile_v="mobile" v-if="addcustomer_show"></addcustomer>
+			</el-drawer>
+		</div>
+		<el-drawer title="联系跟进" :visible.sync="follow_show" :modal-append-to-body="false" append-to-body  :show-close="true" :with-header="true" size="60%">
+			<crmnewfollow :uid_v="follow_uid" :crm_status_v="follow_status" :crm_type_v="follow_type" :name_v="follow_name"
+				:calllog_id="follow_calllog_id" @close-update="closeAddfollow" v-if="follow_show">
+			</crmnewfollow>
+		</el-drawer>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                	emptytext: '暂无数据',
+                	loading: false,
+					allCnt:0,
+					jtCnt:0,
+					wrCnt:0,
+					totalTime:0,
+					balanceArr:[],
+					cache:{
+						crmclass_name:[],
+						crmdata:[],
+					},
+					days: 0,
+					staffDays: 0,
+					sdate:'',
+					edate:'',
+					userTimeBox:false,
+					totalTimeBox:false,
+
+					callBox:false,
+					mobile:'',
+					addcustomer_show:false,
+					follow_show: false,
+					follow_uid: '',
+					follow_status: '',
+					follow_type: '',
+					follow_name: '',
+					follow_calllog_id: '',
+					dateday:[],
+                    datestaff: [],
+                    stafflist: [],
+					page: 1,
+					limit: 0,
+					total: 0,
+					pageSizes: [],
+					submitLoading:false,
+
+					s1_data: [],
+					s2_data: [],
+					s3_data: [],
+					s4_data: [],
+					x_data: [],
+                    staffdate_start: 0,
+                    staffdate_end: 0,
+
+                }
+            },
+			components: {
+				'addcustomer': httpVueLoader('../component/addcustomer.vue'),
+				'crmnewfollow': httpVueLoader('../component/crmnewfollow.vue'),
+			},
+            mounted() {
+                var that = this
+                this.init();
+				this.getTotalTjData(this.staffDays);
+				setTimeout(function(){
+                    that.getStaffTjData(that.staffDays);
+                }, 500)
+                setTimeout(function(){
+                    that.getTjData(that.days);
+                }, 1000)
+            },
+            methods: {
+				diyDateStaff(e){
+					let stime = '';
+					let etime = '';
+					if (e == null){
+						stime = '';
+						etime = '';
+					}else{
+						stime = e[0];
+						etime = e[1];
+					}
+					this.staffdate_start = stime
+					this.staffdate_end = etime
+					this.getStaffTjData(-1,stime,etime);
+					this.getTotalTjData(-1,stime,etime);
+				},
+				diyDateDay(e){
+					let stime = '';
+					let etime = '';
+					if (e == null){
+						stime = '';
+						etime = '';
+					}else{
+						stime = e[0];
+						etime = e[1];
+					}
+					this.getTjData(-1,stime,etime);
+				},
+				timeSel(timeType = 0, isStaff = 0){
+					// 默认查今日
+					if (isStaff) {
+						this.staffDays = 0;
+					} else {
+						this.days = 0;
+					}
+					if (timeType == 7){
+						if (isStaff){
+							this.staffDays = 7;
+							this.userTimeBox = false;
+						}else{
+							this.days = 7;
+							this.totalTimeBox = false;
+						}
+					}else if (timeType == 30){
+						if (isStaff){
+							this.staffDays = 30;
+							this.userTimeBox = false;
+						}else{
+							this.days = 30;
+							this.totalTimeBox = false;
+						}
+					}else if (timeType == 0){
+						if (isStaff){
+							this.staffDays = 0;
+							this.userTimeBox = false;
+						}else{
+							this.days = 0;
+							this.totalTimeBox = false;
+						}
+					}else{
+						if (isStaff){
+							this.staffDays = -1;
+							this.userTimeBox = true;
+						}else{
+							this.days = -1;
+							this.totalTimeBox = true;
+						}
+					}
+					if (this.staffDays >= 0 && isStaff) {
+						this.getStaffTjData(this.staffDays)
+						this.getTotalTjData(this.staffDays)
+					}
+					if (this.days >= 0 && !isStaff) {
+						this.getTjData(this.days)
+					}
+				},
+				outCall(){
+					let that = this;
+					if (!isjsMobile(that.mobile)){
+						message.error('请输入要呼叫的号码');
+						return false;
+					}
+					that.submitLoading = true;
+					httpPost('m=crm&c=crm_outcall&a=contactMobile', {mobile:that.mobile}).then(function(response) {
+						let res = response.data,
+							data = res.data;
+
+						if (res.error == 0){
+							that.callBox = false;
+							if (data.jump_type == 1){
+								that.follow_uid = data.company.uid;
+								that.follow_name = data.company.name;
+								that.follow_calllog_id = data.log_id;
+								that.follow_status = data.crm_status;
+								that.follow_type = data.crm_type;
+
+								that.follow_show = true;
+							}else if (data.jump_type == 2){
+								that.addcustomer_show = true;
+							}
+						}else {
+							message.error(res.msg);
+						}
+					}).finally(function () {
+						that.submitLoading = false;
+					});
+				},
+				toCallLog(type){
+				    // 默认查当天
+                    let s_time = new Date(new Date().setHours(0,0,0,0));
+                    let e_time = new Date(new Date().setHours(23,59,59,999));
+				    if (this.staffDays == 7) {// 近7天
+                        s_time = new Date(s_time.getTime() - 3600 * 1000 * 24 * 6)
+                    } else if (this.staffDays == 30) {// 近30天
+                        s_time = new Date(s_time.getTime() - 3600 * 1000 * 24 * 29)
+                    } else if (this.staffDays == -1) {// 自定义
+                        s_time = new Date(new Date(this.staffdate_start).setHours(0,0,0,0))
+                        e_time = new Date(new Date(this.staffdate_end).setHours(23,59,59,999))
+                    }
+					let params = {
+						s_time:s_time.getTime(),
+						e_time:e_time.getTime()
+					};
+					if (type == 2){ // 接通
+						params.call_status = 3;
+					}else if (type == 3) { // 无人接听
+						params.call_status = 2;
+					}
+					window.parent.homeapp.checkMenuTwo(212, 933, 934, '外呼记录', '/outCallLog', params);
+				},
+				getTjData(days,sdate = '', edate = ''){
+					let that = this;
+					let params = {};
+					if (days>0){
+						params.days = days;
+					}
+					if (sdate) {
+						params.sdate = sdate;
+					}
+					if (edate) {
+						params.edate = edate;
+					}
+					that.x_data = [];
+					that.s1_data = [];
+					that.s2_data = [];
+					that.s3_data = [];
+					that.s4_data = [];
+					httpPost('m=crm&c=crm_outcall&a=tj',params).then(function (response) {
+						let res = response.data,
+							data = res.data;
+						for (let i in data.list1) {
+						    that.x_data.push(i);
+						    that.s1_data.push(parseInt(data.list1[i]));
+						}
+						for (let i in data.list2) {
+						    that.s2_data.push(parseInt(data.list2[i]));
+						}
+						for (let i in data.list3) {
+						    that.s3_data.push(parseInt(data.list3[i]));
+						}
+						for (let i in data.list4) {
+						   that.s4_data.push(parseInt(data.list4[i]));
+						}
+						that.initCharts1();
+					});
+				},
+				getStaffTjData(days,sdate = '', edate = ''){
+					let that = this;
+					let params = {
+						page: that.page,
+						limit: that.limit
+					};
+					if (days>0){
+						params.days = days;
+					}
+					if (sdate) {
+						params.sdate = sdate;
+					}
+					if (edate) {
+						params.edate = edate;
+					}
+					that.loading = true;
+					that.emptytext = "数据加载中";
+					httpPost('m=crm&c=crm_outcall&a=staffTj', params).then(function(response) {
+						let res = response.data;
+							data = res.data;
+						that.stafflist = data.list;
+						that.total = parseInt(data.total);
+						that.pageSizes = data.page_sizes;
+						if (that.limit === 0) {
+						    that.limit = parseInt(data.limit); // 取系统配置默认数量
+						}
+						if (that.page > data.page) {
+						    that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+						}
+						that.loading = false;
+					    if (that.stafflist.length === 0){
+                            that.emptytext = "暂无数据";
+                        }
+					});
+				},
+				getTotalTjData(days,sdate = '', edate = ''){
+					let that = this;
+					let params = {};
+					if (days>0){
+						params.days = days;
+					}
+					if (sdate) {
+						params.sdate = sdate;
+					}
+					if (edate) {
+						params.edate = edate;
+					}
+					httpPost('m=crm&c=crm_outcall&a=totalTj', params).then(function(response) {
+						let res = response.data;
+
+					    that.allCnt = res.data.allCnt;
+					    that.jtCnt = res.data.jtCnt;
+					    that.wrCnt = res.data.wrCnt;
+					    that.totalTime = res.data.totalTime;
+					});
+
+				},
+				init(){
+					let that = this;
+					httpPost('m=crm&c=crm_outcall&a=outcall_statistics').then(function (response) {
+						let res = response.data,
+							data = res.data;
+						that.balanceArr = data.balanceArr;
+						that.cache = data.cache;
+					});
+				},
+				handleSizeChange(val) {
+				    this.limit = val;
+					this.getStaffTjData(this.days,this.sdate,this.edate)
+				},
+				handleCurrentChange(val) {
+				    this.page = val;
+				},
+				closeAddcustomer: function () {
+					this.addcustomer_show = false;
+				},
+				closeAddfollow: function () {
+					this.follow_show = false;
+				},
+                initCharts1() {
+                    var myChart = echarts.init(document.getElementById('main1'));
+					let xAxisData = this.x_data;
+					let seriesArr = [];
+					seriesArr.name = ['总电话量','业务电话','客勤电话','接通量'];
+					seriesArr.data = [this.s1_data, this.s2_data, this.s3_data,this.s4_data];
+                    var option = {
+                        color: ['#dd6b66', '#546570', '#a7d4dd', '#e69d87'],
+                        legend: {},
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            top: '8%',
+                            left: '1%',
+                            right: '1%',
+                            bottom: '1%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: 'category',
+                            // boundaryGap: false,
+                            data: xAxisData,
+                            axisLine: { show: false },
+                            axisTick: { show: false },
+                            splitLine: {
+                                lineStyle: {
+                                    type: 'dashed',
+                                    color: '#f3f3f3'
+                                },
+                                show: true
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            axisLine: { show: false },
+                            axisTick: { show: false },
+                            splitLine: {
+                                lineStyle: {
+                                    type: 'dashed',
+                                    color: '#f3f3f3'
+                                },
+                                show: true
+                            }
+                        },
+                        series: [
+                            {
+                                name: seriesArr.name[0],
+                                data: seriesArr.data[0],
+                                type: 'line',
+                                //stack: 'total',
+                                symbol: 'circle',//拐点样式
+                                symbolSize: 10,
+                            },
+							{
+							    name: seriesArr.name[1],
+							    data: seriesArr.data[1],
+							    type: 'line',
+							    //stack: 'total',
+							    symbol: 'circle',//拐点样式
+							    symbolSize: 10,
+							},
+							{
+							    name: seriesArr.name[2],
+							    data: seriesArr.data[2],
+							    type: 'line',
+							    //stack: 'total',
+							    symbol: 'circle',//拐点样式
+							    symbolSize: 10,
+							},
+							{
+							    name: seriesArr.name[3],
+							    data: seriesArr.data[3],
+							    type: 'line',
+							    //stack: 'total',
+							    symbol: 'circle',//拐点样式
+							    symbolSize: 10,
+							}
+                        ]
+                    };
+                    myChart.setOption(option);
+                    setTimeout(function () {
+                        window.addEventListener("resize", () => {
+                            myChart.resize();
+                        });
+                    }, 200);
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

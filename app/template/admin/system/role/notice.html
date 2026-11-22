@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <script src="https://wwcdn.weixin.qq.com/node/wework/wwopen/js/wwLogin-1.2.5.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleElenAl">
+        <div class="setDomeAll">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="管理员通知" name="tzset">
+                    <tongzhiset ref="tzset"></tongzhiset>
+                </el-tab-pane>
+                <el-tab-pane label="微信通知" name="wxset">
+                    <wechatset ref="wxset"></wechatset>
+                </el-tab-pane>
+                <el-tab-pane label="企微通知" name="qwtz">
+                    <qiweitonz ref="qwtz"></qiweitonz>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'tzset'
+                }
+            },
+            components: {
+                'tongzhiset': httpVueLoader('./component/tongzhiset.vue'),
+                'wechatset': httpVueLoader('./component/wechatset.vue'),
+                'qiweitonz': httpVueLoader('./component/qiweitonz.vue'),
+            },
+            created: function () {
+                setTimeout(() => {
+                    this.$refs.tzset.getList();
+                }, 500)
+            },
+            methods: {
+                handleClick(tab) {
+                    if (tab.name == 'tzset') {
+                        this.$refs.tzset.getList();
+                    } else if (tab.name == 'wxset') {
+                        this.$refs.wxset.getList();
+                    } else if (tab.name == 'qwtz') {
+                        this.$refs.qwtz.getList();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

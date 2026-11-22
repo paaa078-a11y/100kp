@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="daohaapp" class="moduleElenAl">
+    <div class="moduleSeachbig" style="padding: 12px;">
+        <el-tag @click="changeType(key)" v-for="(item,key) in seoType" :effect="act == key ? 'dark' : 'light'" :type="act == key ? 'primary' : ''" style="margin-right: 10px;" :key="key">{{ item }}</el-tag>
+        <div class="tableSeachInpt" style="margin-bottom: 0;">
+            <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="addseo({id: 0})">添加SEO</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable" style="padding-bottom: 12px;">
+        <el-table :data="tableData" border style="width: 100%" :header-cell-style="{background:'#f5f7fa',color:'#606266'}"
+                  height="100%" ref="multipleTable" v-loading="loading" :empty-text="emptytext">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="name" label="名称">
+            </el-table-column>
+            <el-table-column prop="ident" label="SEO标识符">
+            </el-table-column>
+            <el-table-column prop="title" label="标题">
+            </el-table-column>
+            <el-table-column prop="lastupdate_n" label="更新时间">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="145">
+                <template slot-scope="scope">
+                    <div class="moduleElTaCaoz">
+                        <el-button @click="addseo(scope.row)">修改</el-button>
+                        <el-button type="danger" @click="delrow(scope.row)">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <!-- 添加、修改seo弹窗 -->
+    <div class="modluDrawer">
+        <el-drawer :title="title" :visible.sync="showadd" append-to-body :modal-append-to-body="false" :show-close="true"
+                   :with-header="true" size="600px">
+            <div class="drawerModInfo drawerModInfoOne">
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>页面名称</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-input v-model="info.name" placeholder="请输入页面名称"></el-input>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>所属类型</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-select v-model="info.seomodel" placeholder="请选择所属类型">
+                            <el-option v-for="(item,key) in seoType" :key="key" :label="item" :value="key">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>小程序分享图</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-upload class="upload-demo" :accept="pic_accept" action="" :auto-upload="false"
+                                   :show-file-list="false" :on-change="upPicChange">
+                            <el-button slot="trigger" size="small" type="primary">上传图片</el-button>
+                            <img class="el-upload-list__item-thumbnail" width="36" height="36" v-if="info.share_pic_n"
+                                 :src="info.share_pic_n" alt="小程序分享图" />
+                        </el-upload>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>小程序标识符</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-input v-model="info.ident" placeholder="请输入小程序标识符"></el-input>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>标题（title）</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-input type="textarea" maxlength="20" v-model="info.title"></el-input>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span></span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-button type="info" @click="selParam('title')" plain>选择参数</el-button>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>网站关键字（keywords）</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-input type="textarea" maxlength="100" v-model="info.keywords"></el-input>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span></span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-button type="info" @click="selParam('keywords')" plain>选择参数</el-button>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span>网站描述（description）</span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-input type="textarea" maxlength="200" v-model="info.description"></el-input>
+                    </div>
+                </div>
+                <div class="drawerModLis">
+                    <div class="drawerModTite">
+                        <span></span>
+                    </div>
+                    <div class="drawerModInpt">
+                        <el-button type="info" @click="selParam('description')" plain>选择参数</el-button>
+                    </div>
+                </div>
+            </div>
+            <div class="setBasicButn" style="border: none;">
+                <el-button type="primary" size="medium" :loading="save_load" @click="submitForm">提交</el-button>
+            </div>
+        </el-drawer>
+    </div>
+    <!-- 选择参数弹窗 -->
+    <div class="modluDrawer">
+        <el-dialog title="可选择参数" :visible.sync="drawerParam" :with-header="true" append-to-body
+                   :show-close="true" width="700px">
+            <div class="gongnengsuomin">
+                <el-alert title="提示：下面的标识符请根据页面对应添加，否则无法正常显示！" type="error" :closable="false">
+                </el-alert>
+            </div>
+            <div class="xuanzhecanshu">
+                <el-checkbox-group v-model="checkedParam">
+                    <el-checkbox v-for="(item,key) in seoconfig.public" :key="'public_' + key" :value="key" :label="key">{{item + '      代码：{'+key+'}'}}</el-checkbox>
+                    <el-checkbox v-for="(item,key) in seoconfig[info.seomodel]" :key="'extra_' + key" :label="key">{{item + '      代码：{'+key+'}'}}</el-checkbox>
+                </el-checkbox-group>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="drawerParam = false">取 消</el-button>
+                    <el-button type="primary" @click="submitParam">确 定</el-button>
+                </span>
+        </el-dialog>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function () {
+            return {
+                loading: false,
+                emptytext: '暂无数据',
+                checkedAll: false,
+                selectedItem:[],
+                tableData: [],
+                seoType: [],
+                seoconfig: [],
+                act: 'index',
+                showadd: false,
+                pic_accept: localStorage.getItem("pic_accept"),
+                pic_file: [],
+                save_load: false,
+                title: '',
+                paramsType: '',
+                info: {
+                    id: '',
+                    name: '',
+                    seomodel: 'index',
+                    share_pic: '',
+                    share_pic_n: '',
+                    ident: '',
+                    title: '',
+                    keywords: '',
+                    description: ''
+                },
+                drawerParam: false,
+                checkedParam: [],
+            }
+        },
+        components: {
+            // 'jibenset': httpVueLoader('./component/jibenset.vue'),
+        },
+        created: function () {
+            this.getList();
+        },
+        methods: {
+            // 提交选择参数
+            submitParam: function(){
+                var param = ''
+                this.checkedParam.forEach(item => {
+                    if (param) {
+                        param += '-' + '{' + item + '}';
+                    } else {
+                        param += '{' + item + '}';
+                    }
+                });
+                if (this.paramsType == 'title') {
+                    if (this.info.title) {
+                        this.info.title += '-' + param
+                    } else if (this.info.title != undefined) {
+                        this.info.title += param
+                    } else {
+                        this.info.title = param
+                    }
+                } else if (this.paramsType == 'keywords') {
+                    if (this.info.keywords) {
+                        this.info.keywords += '-' + param
+                    } else if (this.info.keywords != undefined) {
+                        this.info.keywords += param
+                    } else {
+                        this.info.keywords = param
+                    }
+                } else if (this.paramsType == 'description') {
+                    if (this.info.description) {
+                        this.info.description += '-' + param
+                    } else if (this.info.description != undefined) {
+                        this.info.description += param
+                    } else {
+                        this.info.description = param
+                    }
+                }
+                this.drawerParam = false
+            },
+            selParam: function(type){
+                this.paramsType = type
+                this.checkedParam = []
+                this.drawerParam = true
+            },
+            // 添加seo
+            addseo: function(data){
+                if (data.id) {
+                    this.title = '修改SEO'
+                    this.info = data
+                } else {
+                    this.info = {
+                        id: '',
+                        name: '',
+                        seomodel: 'index',
+                        share_pic: '',
+                        ident: '',
+                        title: '',
+                        keywords: '',
+                        description: ''
+                    }
+                    this.title = '添加SEO'
+                }
+                this.showadd = true
+            },
+            submitForm() {
+                let that = this;
+                let formData = new FormData();
+                if (!that.info.name) {
+                    message.error('请填写页面名称');
+                    return false;
+                }
+                // if (!that.info.share_pic && that.pic_file.length == 0) {
+                //     message.error('请上传小程序分享图');
+                //     return false;
+                // }
+                for (i in that.info) {
+                    if (i != 'share_pic_url') {
+                        formData.append(i, that.info[i])
+                    }
+                }
+                if (that.pic_file.length !== 0) {
+                    formData.append('xcxshare_file', that.pic_file)
+                }
+                that.save_load = true;
+                httpPost('m=tool&c=xcxset&a=saveSeo', formData).then(function (res) {
+                    that.save_load = false;
+                    if (res.data.error == 0) {
+                        message.success(res.data.msg, function(){
+                            that.showadd = false
+                            that.getList()
+                        })
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                });
+            },
+            // 上传小程序分享图
+            upPicChange(file) {
+                // 预览文件处理
+                this.info.share_pic_n = URL.createObjectURL(file.raw);
+                this.info = deepClone(this.info)
+                // 复刻文件信息
+                this.pic_file = file.raw;
+            },
+            changeType: function(type){
+                this.act = type
+                this.getList()
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    action: that.act
+                }
+                that.loading = true;
+                that.emptytext = "数据加载中";
+                httpPost('m=tool&c=xcxset&a=seo', params).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.seoType = res.data.seomodel
+                        that.seoconfig = res.data.seoconfig
+                        that.loading = false;
+                        if (that.tableData.length === 0){
+                            that.emptytext = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            delrow(row){
+                delConfirm(this, row.id, this.delete);
+            },
+            async delete(Ids) {
+                let that = this;
+                let params= {
+                    del: Ids
+                };
+                httpPost('m=tool&c=xcxset&a=delSeo', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success('操作成功');
+                        that.getList();
+                    }else{
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+</body>
+</html>

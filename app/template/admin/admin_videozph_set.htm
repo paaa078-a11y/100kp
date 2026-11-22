@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="Pragma" content="no-cache" /> 
+	<meta http-equiv="Cache-Control" content="no-cache" /> 
+	<meta http-equiv="Expires" content="0" />
+	
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<title>后台管理</title>
+</head>
+
+<body class="body_ifm">
+	<div class="infoboxp"> 
+		<div class="admin_new_tip">
+			<a href="javascript:;" class="admin_new_tip_close"></a>
+			<a href="javascript:;" class="admin_new_tip_open" style="display:none;"></a>
+			<div class="admin_new_tit"><i class="admin_new_tit_icon"></i>操作提示</div>
+			<div class="admin_new_tip_list_cont">
+				<div class="admin_new_tip_list">修改平台授权信息。</div>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+		<div style="height:10px;"></div>
+
+		<div class="main_tag">
+			<div class="tag_box">
+				<form action="" method="post" class="layui-form">
+					<table width="100%" class="table_form">
+						<tr>
+							<th width="200" bgcolor="#f0f6fb"><span class="admin_bold">参数说明</span></th>
+							<td bgcolor="#f0f6fb"><span class="admin_bold">参数值</span></td>
+						</tr>
+						 
+						<tr>
+							<th>站点：</th>
+							<td>
+								<div class="layui-form-item">
+									<div class="layui-input-inline" style="margin-right:30px;">
+										<input type="text" name="sy_webname" id="sy_webname"  lay-verify="required" placeholder="请输入站点名称" value="{yun:}$config.sy_webname{/yun}" size="30"  autocomplete="off" class="layui-input input-text">
+									</div>
+								</div>
+							</td>
+						</tr>
+						 
+
+						<tr>
+							<th>域名：</th>
+							<td>
+								<div class="layui-form-item">
+									<div class="layui-input-inline" style="margin-right:30px;">
+										<input type="text" name="sy_webname" id="sy_webname"  lay-verify="required" placeholder="请输入站点域名 带http://或 https://" value="{yun:}$config.sy_weburl{/yun}" size="30"  autocomplete="off" class="layui-input input-text">
+									</div>
+								</div>
+							</td>
+							
+							
+						</tr>
+						
+						
+						<tr>
+							<th>联系人：</th>
+							<td>
+								<div class="layui-form-item">
+									<div class="layui-input-inline" style="margin-right:30px;">
+										<input type="text" name="sy_zphweb_linkman" id="sy_zphweb_linkman"  lay-verify="required" placeholder="请输入联系人" value="{yun:}$config.sy_zphweb_linkman{/yun}" size="30"  autocomplete="off" class="layui-input input-text">
+									</div>
+								</div>
+							</td>
+							
+							
+						</tr>
+						
+						<tr>
+							<th>联系手机：</th>
+							<td>
+								<div class="layui-form-item">
+									<div class="layui-input-inline" style="margin-right:30px;">
+										<input type="text" name="sy_zphweb_linktel" id="sy_zphweb_linktel"  lay-verify="required" placeholder="请输入联系电话" value="{yun:}$config.sy_zphweb_linktel{/yun}" size="30"  autocomplete="off" class="layui-input input-text">
+									</div>
+								</div>
+							</td>
+							
+							
+						</tr>
+						
+						<tr>
+							<th width="160">整站LOGO：<br/>300px * 45px</th>
+							<td>
+								<button type="button" class="yun_bth_pic adminupload" lay-data="{name: 'sy_logo',imgid: 'imglogo',path: 'logo',source:'back'}">上传图片</button>
+								<input type="hidden" id="layupload_type" value="2"/>
+								<img id="imglogo" src="{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_logo{/yun}" style="max-width:300px;" {yun:}if !$config.sy_logo{/yun}class="none"{yun:}/if{/yun}>
+							</td>
+						</tr>
+
+						
+						<tr>
+						
+							<th >简历授权：</th>
+							<td>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<input type="checkbox" name="sy_zphweb_resume" value="1" lay-skin="switch" lay-text="是|否" {yun:}if $config.sy_zphweb_resume==1{/yun} checked{yun:}/if{/yun} >
+									</div>
+								</div>
+							</td>
+							
+						</tr>
+						 
+						<tr class="admin_table_trbg">
+							<th width="200">授权KEY：</th>
+							<td><input class="input-text tips_class" type="text" name="sy_zphweb_key" id="sy_zphweb_key" value="{yun:}$config.sy_zphweb_key{/yun}" size="50" maxlength="255"/>  
+							<span class="admin_web_tip"> 运营网站加密串</span></td>
+						</tr>
+						 
+						<tr>
+							<td colspan="2" align="center">
+								<input class="layui-btn layui-btn-normal" id="config" type="button" name="haibaoconfig" value="提交" />
+							</td>
+						</tr>
+					</table>
+					<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+		</div>
+	</div>
+	<script> 
+		layui.use(['layer', 'form'], function(){
+			var layer = layui.layer
+			,form = layui.form
+			,$ = layui.$;
+			 
+		});
+
+		$(function(){
+			$("#config").click(function(){
+				
+				loadlayer();
+  				$.post("index.php?m=admin_zphnet_video&c=save",{
+					config : $("#config").val(),
+					sy_webname : $("#sy_webname").val(),	
+					sy_weburl : $("#sy_weburl").val(),
+					sy_zphweb_linkman : $("#sy_zphweb_linkman").val(),
+					sy_zphweb_linktel : $("#sy_zphweb_linktel").val(),
+					sy_zphweb_resume : $("input[name=sy_zphweb_resume]").is(":checked") ? 1 : 2,
+					sy_zphweb_key : $("#sy_zphweb_key").val(),
+					pytoken : $("#pytoken").val(),
+ 				},function(data,textStatus){
+					parent.layer.closeAll('loading');
+					config_msg(data);
+				});
+			});
+		})
+	</script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script> 
+ </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+
+    <script src="../../../admin/js/socketfun.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="taskListApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="我的任务" name="first">
+                <task_list v-bind:task_tab="1" ref="taskOne" ywy></task_list>
+            </el-tab-pane>
+            <el-tab-pane label="下属任务" name="second" lazy>
+                <task_list v-bind:task_tab="2" ref="taskTwo" ywy></task_list>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const taskListApp = new Vue({
+        el: '#taskListApp',
+        data: function () {
+            return {
+                activeName: 'first'
+            }
+        },
+        components: {
+            'task_list': httpVueLoader('../component/taskList.vue'),
+        },
+        methods: {
+            handleClick(tab, event) {
+                if (tab._props.name == 'first') {
+                    this.$nextTick(function () {
+                        this.$refs.taskOne.getTaskList();
+                    })
+                } else if (tab._props.name == 'second') {
+                    this.$nextTick(function () {
+                        this.$refs.taskTwo.getTaskList();
+                    })
+                }
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

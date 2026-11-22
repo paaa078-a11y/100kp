@@ -1,0 +1,1650 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<style>
+    body, html {
+        padding: 0;
+        margin: 0;
+        overflow: auto;
+    }
+</style>
+<body>
+<div id="yunvue" style="display: none;">
+    <div class="new_combgcor">
+        <div class="new_comheader">
+            <a href="javascript:history.go(-1)" class="new_header_fh"></a>
+        </div>
+        <div class="new_cominfo">
+            <div class="new_comlogo"><img :src="info.logo" alt=""></div>
+            <div class="new_comname">{{info.name}}
+                <span v-if="info.r_status == '1'" class="ysh"><i class="wshicon" style="top:5px;"></i>已审核</span>
+                <span v-else-if="info.r_status == '3'" class="wsh"><i class="wshicon" style="top:5px;"></i>未通过</span>
+                <span v-else-if="info.r_status == '2'" class="wsh"><i class="wshicon" style="top:5px;"></i>已锁定</span>
+                <span v-else-if="info.r_status == '4'" class="wsh"><i class="wshicon" style="top:5px;"></i>已暂停</span>
+                <span v-else class="wsh"><i class="wshicon" style="top:5px;"></i>未审核</span>
+            </div>
+            <div class="new_com_bj"><a :href="'index.php?c=admin_company&a=edit&id=' + info.uid">编辑基本信息</a></div>
+        </div>
+        <div class="new_comvipbox">
+            <div class="new_comvip">
+                <span class="new_comvip_jb">{{info.rating_name}}</span>
+                <span class="new_comvip_time">{{info.vipetime_n}} 到期</span>
+                <a href="javascript:;" @click="ratingShow = true" class="new_comvip_xg">修改套餐</a>
+            </div>
+        </div>
+    </div>
+    <div class="new_comczbox">
+        <div class="new_comcz">
+            <div v-if="info.hottime && info.rec == 1" @click="hotjobSetShow = true" class="new_comcz_list">
+                <a class="new_comcz_list_c" href="javascript:void(0);">
+                    <i class="new_comcz_icon new_comcz_icon1"></i>设为名企<em class="new_comcz_fx"></em>
+                    <span class="new_comcz_ok">已设置</span>
+                </a>
+            </div>
+            <div v-else @click="hotjobOpen" class="new_comcz_list">
+                <a class="new_comcz_list_c" href="javascript:void(0);">
+                    <i class="new_comcz_icon new_comcz_icon1"></i>设为名企<em class="new_comcz_fx"></em>
+                </a>
+            </div>
+            <div class="new_comcz_list"><a class="new_comcz_list_c" :href="'index.php?c=admin_company_job&a=show&uid=' + info.uid"><i class="new_comcz_icon new_comcz_icon2"></i>发布职位 <em class="new_comcz_fx"></em></a></div>
+            <div class="new_comcz_list"><a class="new_comcz_list_c" href="javascript:void(0)" @click="pageTo('index.php?c=admin_company&a=member_log&uid='+info.uid)"><i class="new_comcz_icon new_comcz_icon3"></i>企业日志 <em class="new_comcz_fx"></em></a></div>
+            <div class="new_comcz_list"><a class="new_comcz_list_c" href="javascript:void(0)" @click="pageTo('index.php?c=admin_weblog&usertype=2&uid='+info.uid)"><i class="new_comcz_icon new_comcz_icon4"></i>行为轨迹 <em class="new_comcz_fx"></em></a></div>
+        </div>
+    </div>
+
+    <div class="new_job_box">
+        <div class="new_job_infobox">
+            <div class="new_comshow">
+                <div class="new_comtit">
+                    <ul>
+                        <li @click="changeTab('info')" :class="tab == 'info' ? 'new_comtit_cur' : ''">基本资料</li>
+                        <li @click="changeTab('vip')" :class="tab == 'vip' ? 'new_comtit_cur' : ''">会员信息</li>
+                        <li @click="changeTab('job')" :class="tab == 'job' ? 'new_comtit_cur' : ''">职位信息</li>
+                    </ul>
+                </div>
+                <!--基本信息-->
+                <div class="" :class="tab == 'info' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+
+                    <div class="wapadmin_cominfo_p">
+                        <ul>
+                            <!--<li>-->
+                            <!--    <p>企业认证：</p> <span></span>-->
+                            <!--</li>-->
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业全称</span> <span>{{info.name}}</span>
+                            </li>
+                            <li v-if="info.shortname">
+                                <span class="wapadmin_cominfo_n">企业简称</span><span>{{info.shortname}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">从事行业</span> <span>{{info.hy_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业性质</span> <span>{{info.pr_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业规模</span> <span>{{info.mun_n}}</span>
+                            </li>
+                            <li v-if="info.sdate">
+                                <span class="wapadmin_cominfo_n">创办时间</span> <span>{{info.sdate}}</span>
+                            </li>
+                            <li v-if="info.money">
+                                <span class="wapadmin_cominfo_n">注册资金</span>
+                                <span>{{info.money}} {{info.moneytype_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">所在地区</span> <span>{{info.job_city_one}} {{info.job_city_two}} {{info.job_city_three}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">详细地址</span><span>{{info.address}}</span>
+                            </li>
+                            <li v-if="info.busstops">
+                                <span class="wapadmin_cominfo_n">交通站点</span> <span>{{info.busstops}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_par_tit">公司简介</div>
+                        <div class="wapadmin_cont" v-html="info.content">
+                            <!--<a class="opend" href="">展开</a>-->
+                        </div>
+                    </div>
+                    <div class="wapadmin_paragraph" v-if="info.show && info.show.length > 0">
+                        <div class="wapadmin_par_tit">企业环境</div>
+                        <div class="photoes">
+                            <img v-for="item in info.show" :src="item.picurl" alt="">
+                        </div>
+                    </div>
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_par_tit">联系方式</div>
+                        <div class="wapadmin_cominfo_p">
+                            <ul>
+                                <li>
+                                    <span class="wapadmin_cominfo_n">联系电话</span> <span>{{info.linktel}} ({{info.linkman}})</span>
+                                </li>
+                                <li>
+                                    <span class="wapadmin_cominfo_n">公司座机</span><span>{{info.linkphone}}</span>
+                                </li>
+                                <li>
+                                    <span class="wapadmin_cominfo_n">联系邮箱</span><span>{{info.linkmail}}</span>
+                                </li>
+                                <li>
+                                    <span class="wapadmin_cominfo_n">联系QQ</span> <span>{{info.linkqq}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--会员信息-->
+                <div :class="tab == 'vip' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+                    <div class="wapadmin_cominfo_p">
+                        <ul>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业等级</span> <span>{{info.rating_name}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">到期时间</span> <span>{{info.vipetime_n}}</span>
+                            </li>
+                            <li v-if="info.hottime && info.rec == 1">
+                                <span class="wapadmin_cominfo_n">名企时间</span> <span>{{info.hottime_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">登录时间</span> <span>{{info.login_date_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">注册时间</span> <span>{{info.reg_date_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业来源</span> <span>{{source[info.source]}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_par_tit">套餐余量</div>
+                        <div class="wapadmin_tctj">
+                            <ul>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">发布职位数</span>
+                                        <div class="wapadmin_tc_n">{{rating.job_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">刷新职位数</span>
+                                        <div class="wapadmin_tc_n">{{rating.breakjob_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+
+                                        <span class="wapadmin_tc_name">剩余下载量</span>
+                                        <div class="wapadmin_tc_n">{{rating.down_resume}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">邀请面试数</span>
+                                        <div class="wapadmin_tc_n">{{rating.invite_resume}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">招聘会报名</span>
+                                        <div class="wapadmin_tc_n">{{rating.zph_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">置顶天数</span>
+                                        <div class="wapadmin_tc_n">{{rating.top_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">急聘天数</span>
+                                        <div class="wapadmin_tc_n">{{rating.urgent_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">推荐天数</span>
+                                        <div class="wapadmin_tc_n">{{rating.rec_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">子账号数量</span>
+                                        <div class="wapadmin_tc_n">{{rating.sons_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">直聊数</span>
+                                        <div class="wapadmin_tc_n">{{rating.chat_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">视频面试数</span>
+                                        <div class="wapadmin_tc_n">{{rating.spview_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">账户积分</span>
+                                        <div class="wapadmin_tc_n">{{rating.integral}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="zttc_box">提示：暂时没有招聘需求可暂停套餐
+                            <a class="zttc" href="javascript:;" @click="unsuspendShow = true" v-if="info.r_status == 4">解除暂停</a>
+                            <a class="zttc" href="javascript:;" @click="suspend" v-else>暂停套餐</a>
+                        </div>
+                    </div>
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_par_tit">企业数据统计</div>
+                        <div class="wapadmin_tctj">
+                            <ul>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">收到简历</span>
+                                        <div class="wapadmin_tc_n">{{sqnum}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">邀请面试</span>
+                                        <div class="wapadmin_tc_n">{{invite_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">被浏览量</span>
+                                        <div class="wapadmin_tc_n">{{info.hits_s}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">被关注量</span>
+                                        <div class="wapadmin_tc_n">{{info.ant_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">下载简历</span>
+                                        <div class="wapadmin_tc_n">{{downresume_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">子账号</span>
+                                        <div class="wapadmin_tc_n">{{child_account_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">总职位数</span>
+                                        <div class="wapadmin_tc_n">{{job_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">在招职位数</span>
+                                        <div class="wapadmin_tc_n">{{info.inJobNum}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">登录次数</span>
+                                        <div class="wapadmin_tc_n">{{info.login_hits}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--招聘信息-->
+                <div :class="tab == 'job' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+                    <div class="layuiSrolls layuiSrollList" ref="box" @scroll="scrollEvent">
+                        <div class="wapadmin_comjoblist">
+                            <ul>
+                                <li v-for="(item, jobkey) in jobList" :key="jobkey">
+                                    <div class="positionLinke">
+                                        <a :href="'index.php?c=admin_company_job&a=detail&id=' + item.id">{{item.name}}</a>
+                                        <img v-if="item.urgent_n" src="img/ji1.png" alt="">
+                                        <img v-if="item.rec_n" src="img/tuij1.png" alt="">
+                                        <img v-if="item.xs" src="img/zhid1.png" alt="">
+                                    </div>
+                                    <div class="positionTitlest">
+                                        <div class="postListe">
+                                            <p>收到简历：{{item.snum}}</p>
+                                            <p>未查看：{{item.browseNum}}</p>
+                                            <p>已面试：{{item.inviteNum}}</p>
+                                        </div>
+                                        <div class="postListe">
+                                            <p>招聘状态：<span v-if="item.status==1">已下架</span><span v-else>招聘中</span></p>
+                                        </div>
+                                        <div class="postListe">
+                                            <p>发布时间：{{item.sdate_n}}</p>
+                                        </div>
+                                        <div class="postListe">
+                                            <p>更新时间：{{item.lastupdate_n}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="positionListing">
+                                        <a href="javascript:;" @click="jobAuditOpen(item.id)" class="listingTab">
+                                            <img src="img/shenh.png" alt="">
+                                            <p>审核</p>
+                                        </a>
+                                        <a href="javascript:;" @click="jobTopOpen(item, jobkey)" class="listingTab">
+                                            <img src="img/zhid.png" alt="">
+                                            <p>置顶</p>
+                                        </a>
+                                        <a href="javascript:;" @click="jobUrgentOpen(item, jobkey)" class="listingTab">
+                                            <img src="img/jipin.png" alt="">
+                                            <p>急聘</p>
+                                        </a>
+                                        <a href="javascript:;" @click="jobRecOpen(item, jobkey)" class="listingTab">
+                                            <img src="img/tuijian.png" alt="">
+                                            <p>推荐</p>
+                                        </a>
+                                        <a :href="'index.php?c=admin_company_job&a=show&id=' + item.id"
+                                           class="listingTab">
+                                            <img src="img/xiugai.png" alt="">
+                                            <p>修改</p>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="pageLoading" :class="loadFlag==true && total>limit? 'lodbox' :'lodbox none'"><span
+                                class="lodbox_p"><i class="lodbox_iocn"></i>正在加载...</span></div>
+                        <div id="pageNoMore" :class="loadFlag==false? 'lodbox' :'lodbox none'">-没有更多了-</div>
+                    </div>
+                    <div class="">
+                        <a class="jobfb_bth " :href="'index.php?c=admin_company_job&a=show&uid=' + info.uid">发布职位</a>
+                    </div>
+                </div>
+            </div>
+            <!--end-->
+        </div>
+    </div>
+    <div class="job_footer">
+        <div class="job_footer_fix">
+            <div class="job_footer_box">
+                <div class="job_footer_box_l">
+                    <a class="shenhe job_sh" href="javascript:void(0);" @click="statusOpen">审核</a>
+                </div>
+                <div class="job_footer_box_r">
+                    <a v-if="is_outcall" class="bodTel job_tel" href="javascript:;" @click="contactMobile">拨打电话</a>
+                    <a v-else class="bodTel job_tel" href="javascript:;" @click="callTel">拨打电话</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--审核-->
+    <van-popup v-model="statusShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="statusShow = false">
+                <div class="positeForms">
+                    <h3>企业用户审核</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="positeSubes">
+                            <p>审核操作</p>
+                            <div class="positeList">
+                                <a href="javascript:void(0);" :class="status == 0 ? 'positeButton' : ''" @click="setStatus(0)">未审核</a>
+                                <a href="javascript:void(0);" :class="status == 1 ? 'positeButton' : ''" @click="setStatus(1)">已审核</a>
+                                <a href="javascript:void(0);" :class="status == 3 ? 'positeButton' : ''" @click="setStatus(3)">未通过</a>
+                            </div>
+                        </div>
+                        <div class="positeSubes" style="margin-bottom: 0.3rem;">
+                            <p>审核说明</p>
+                            <div class="positeCont" style="border: #eee 1px solid; border-radius: 0.1rem; padding: 0.15rem;">
+                                <textarea class="follotextarea" v-model="statusbody"></textarea>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button @click="statusSubmit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <!--设为名企-->
+    <van-popup v-model="hotjobShow" round position="bottom">
+        <section class="enterPopup">
+            <div class="enterren enterrenModi">
+                <img class="enterCloser" src="img/close.png" @click="hotjobShow = false" alt="">
+                <div class="enterForms">
+                    <h3>名企招聘</h3>
+                    <form class="layui-form" action="" onsubmit="return false;" id="hotjobForm">
+                        <div class="enterSuberen">
+                            <p>服务开始时间：</p>
+                            <div class="followTime">
+                                <div class="layui-input-inline" @click="timeStartShow = true">
+                                    <span>{{timeStartStr ? timeStartStr : '请选择开始时间'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="enterSuberen">
+                            <p>服务结束时间：</p>
+                            <div class="followTime">
+                                <div class="layui-input-inline" @click="timeEndShow = true">
+                                    <span>{{timeEndStr ? timeEndStr : '请选择结束时间'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="enterSuberen">
+                            <p>服务价格：</p>
+                            <div class="enterIupur">
+                                <input type="text" v-model="hotjob.service_price">
+                            </div>
+                            <span>元</span>
+                        </div>
+                        <div class="enterSuberen">
+                            <p>显示排序：</p>
+                            <div class="enterIupur">
+                                <input type="text" v-model="hotjob.sort">
+                            </div>
+                            <span>大前小后</span>
+                        </div>
+                        <div class="enterSuberen">
+                            <p>LOGO：</p>
+                            <div class="enterIupur">
+                                <van-uploader v-model="hotjobLogo" multiple :max-count="1"/>
+                            </div>
+                        </div>
+                        <div class="enterSuberen flexsubjectren" style="align-items: initial;">
+                            <p>名企备注：</p>
+                            <div class="followCont" style="border: 1px solid #eee; width: 5.9rem; border-radius: 4px;">
+                                <textarea v-model="hotjob.beizhu" class="follotextarea" placeholder="200字以内"></textarea>
+                            </div>
+                        </div>
+                        <div class="enterSuberen">
+                            <div class="followCont" @click="hotjobSub">
+                                <button>提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <van-popup v-model="timeStartShow" round position="bottom">
+            <van-datetime-picker v-model="timeStart" type="date" title="选择年月日" @confirm="confirmTimeStart" @cancel="timeStartShow = false" />
+        </van-popup>
+        <van-popup v-model="timeEndShow" round position="bottom">
+            <van-datetime-picker v-model="timeEnd" type="date" title="选择年月日" @confirm="confirmTimeEnd" @cancel="timeEndShow = false" />
+        </van-popup>
+    </van-popup>
+
+    <!--拨打电话（多个的情况下）-->
+    <div class="tellOpty">
+        <van-action-sheet v-model:show="callShow" :actions="callActions" @select="onSelectCall">
+            <div class="tellOptyClose">
+                <button @click="callShow = false">取消</button>
+            </div>
+        </van-action-sheet>
+    </div>
+
+    <!--名企设置-->
+    <van-action-sheet v-model:show="hotjobSetShow" :actions="hotjobSetActions" @select="onSelectHotjobSet" description="名企设置"></van-action-sheet>
+    <!--修改套餐-->
+    <van-popup v-model="ratingShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="ratingShow = false">
+                <div class="positeForms">
+                    <h3>修改套餐</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="positeSubes">
+                            <p style="margin-bottom: 0.3rem;">会员等级</p>
+                            <div class="layui-input-inline" @click="ratingVipShow = true">
+                                <div class="positeGrade">
+                                    <p>{{ratingValue ? ratingValue : '请选择会员等级'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doubleFlex">
+                            <div class="positeSubes">
+                                <p>上架职位数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.job_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>刷新职位数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.breakjob_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>下载简历数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.down_resume" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>邀请面试数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.invite_resume" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>招聘会报名次数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.zph_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>置顶天数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.top_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>紧急天数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.urgent_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>推荐天数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.rec_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>子账户数量</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.sons_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>{{sy_chat_name}}对象数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.chat_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>视频面试数</p>
+                                <div class="layui-input-inline">
+                                    <input type="number" v-model="ratingData.spview_num" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')"/>
+                                </div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>到期时间</p>
+                                <div class="layui-input-inline" @click="ratingVipetimeShow = true">
+                                    <p style="height: 0.7rem">{{ratingVipetimeStr ? ratingVipetimeStr : '请选择到期时间'}}</p>
+                                </div>
+                            </div>
+                            <div class="positeSubesPouy">
+                                <input type="checkbox" id="wxq" @change="ratingIndefinitelyChange" value="1"
+                                       v-model="ratingIndefinitely" title="无限期">
+                                <label for="wxq">无限期</label>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button @click="ratingSub">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <van-popup v-model="ratingVipetimeShow" round position="bottom">
+            <van-datetime-picker v-model="ratingVipetime" type="date" title="选择年月日" @confirm="confirmRatingVipetime" @cancel="ratingVipetimeShow = false"/>
+        </van-popup>
+        <van-popup v-model="ratingVipShow" round position="bottom">
+            <van-picker title="会员等级" :columns="rating_list" value-key="name" :columns-field-names="ratingCustomFieldName" show-toolbar @confirm="onRatingConfirm" @cancel="ratingVipShow = false"/>
+        </van-popup>
+    </van-popup>
+
+    <!--解除暂停-->
+    <van-popup closeable v-model="unsuspendShow" class="backaudnhg">
+        <div class="unsuspendBack">
+            <div class="popupText">
+                <p>温馨提示</p>
+                <span>
+                    已暂停 {{info.zt_days}} 天，是否为客户延续会员有效期？
+                </span>
+            </div>
+            <div class="popupButton">
+                <span @click="unsuspend(0)">否</span>
+                <span @click="unsuspend(1)" style="color: #f23f53; border-left: solid 1px #eee;">是</span>
+            </div>
+        </div>
+    </van-popup>
+    <!--职位审核-->
+    <van-popup v-model="jobAuditShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="jobAuditShow = false">
+                <div class="positeForms">
+                    <h3>审核操作</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="positeSubes">
+                            <p>职位审核</p>
+                            <div class="positeList">
+                                <a href="javascript:void(0);" :class="jobStatus == 1 ? 'positeButton' : ''" @click="setJobStatus(1)">正常</a>
+                                <a href="javascript:void(0);" :class="jobStatus == 3 ? 'positeButton' : ''" @click="setJobStatus(3)">未通过</a>
+                            </div>
+                        </div>
+                        <div class="positeSubes positeSubesMoban">
+                            <p style="margin-bottom: 0.3rem;">审核模板</p>
+                            <div class="layui-input-inline" @click="jobAuditTemplateShow = true" style="border: 1px solid #eee; padding: 0.2rem; width: auto;">
+                                {{jobAuditTemplate ? comclass_name[jobAuditTemplate] : '请选择审核模板'}}
+                            </div>
+                        </div>
+                        <div v-if="jobInfo.r_status != 1" class="positeSubes">
+                            <p>企业审核</p>
+                            <div class="positeList tongbushenh">
+                                <label><input type="checkbox" value="1" v-model="jobSyncAudit" disabled title="同步审核"><span>同步审核</span> </label>
+                            </div>
+                            <div class="jobshtip">同步说明：企业身份为未审核状态需同步审核</div>
+                        </div>
+                        <div class="positeSubes" style="margin-bottom: 0.3rem;">
+                            <p>审核说明</p>
+                            <div class="positeCont" style="border: 1px solid #eee; padding: 0.15rem; width: auto;">
+                                <textarea class="follotextarea" v-model="jobStatusbody"></textarea>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button @click="jobAuditSub">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <van-popup v-model:show="jobAuditTemplateShow" round position="bottom">
+            <van-picker title="审核模板" :columns="jobAuditTemplateColumns" show-toolbar @confirm="onJobAuditTemplateConfirm" @cancel="jobAuditTemplateShow = false"/>
+        </van-popup>
+    </van-popup>
+    <!--置顶-->
+    <van-popup v-model="jobTopShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeExtseo">
+                <img class="positeCloseseo" src="img/close.png" alt="" @click="jobTopShow = false">
+                <div class="positeForms">
+                    <h3>职位置顶</h3>
+                    <div class="positeSeoAll">
+                        <form action="" onsubmit="return false;">
+                            <div class="positeSeoAllOne">
+                                <div class="kouye">
+                                    <p>置顶天数：</p>
+                                    <input type="text" v-model="top_days" @input="numbers($event, 'top_days')" placeholder="">
+                                    <span class="spanSeo">天</span>
+                                </div>
+                                <span v-if="jobInfo.xsdate && jobInfo.xsdate != '0' && jobInfo.xs == 1" class="spanSheny">当前结束日期： {{jobInfo.xstime}} </span>
+                            </div>
+                            <div class="positeSeoAllOne">
+                                <div class="buttonTi">
+                                    <button @click="jobTopSub(0)">提交</button>
+                                </div>
+                                <div v-if="jobInfo.xsdate && jobInfo.xsdate != '0' && jobInfo.xs == 1" class="buttonTi">
+                                    <button @click="jobTopSub(1)" class="tijiaor">取消置顶</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <!--推荐-->
+    <van-popup v-model="jobRecShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeExtseo">
+                <img class="positeCloseseo" src="img/close.png" alt="" @click="jobRecShow = false">
+                <div class="positeForms">
+                    <h3>职位推荐</h3>
+                    <div class="positeSeoAll">
+                        <form action="" onsubmit="return false;">
+                            <div class="positeSeoAllOne">
+                                <div class="kouye">
+                                    <p>推荐天数：</p>
+                                    <input type="text" v-model="rec_days" @input="numbers($event, 'rec_days')" placeholder="">
+                                    <span class="spanSeo">天</span>
+                                </div>
+                                <span v-if="jobInfo.rec_time && jobInfo.rec_time != '0' && jobInfo.rec_n == 1" class="spanSheny">当前结束日期： {{jobInfo.recdate}} </span>
+                            </div>
+                            <div class="positeSeoAllOne">
+                                <div class="buttonTi">
+                                    <button @click="jobRecSub(0)">提交</button>
+                                </div>
+                                <div v-if="jobInfo.rec_time && jobInfo.rec_time != '0' && jobInfo.rec_n == 1" class="buttonTi">
+                                    <button @click="jobRecSub(1)" class="tijiaor">取消推荐</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <!--急聘-->
+    <van-popup v-model="jobUrgentShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeExtseo">
+                <img class="positeCloseseo" src="img/close.png" alt="" @click="jobUrgentShow = false">
+                <div class="positeForms">
+                    <h3>紧急招聘</h3>
+                    <div class="positeSeoAll">
+                        <form action="" onsubmit="return false;">
+                            <div class="positeSeoAllOne">
+                                <div class="kouye">
+                                    <p>紧急天数：</p>
+                                    <input type="text" v-model="urgent_days" @input="numbers($event, 'urgent_days')" placeholder="">
+                                    <span class="spanSeo">天</span>
+                                </div>
+                                <span v-if="jobInfo.urgent_time && jobInfo.urgent_time != '0' && jobInfo.urgent_n == 1" class="spanSheny">当前结束日期： {{jobInfo.eurgent}} </span>
+                            </div>
+                            <div class="positeSeoAllOne">
+                                <div class="buttonTi">
+                                    <button @click="jobUrgentSub(0)">提交</button>
+                                </div>
+                                <div v-if="jobInfo.urgent_time && jobInfo.urgent_time != '0' && jobInfo.urgent_n == 1"
+                                     class="buttonTi">
+                                    <button @click="jobUrgentSub(1)" class="tijiaor">取消紧急招聘</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+</div>
+<script src="{yun:}$plusstyle{/yun}/com.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script>
+    let com_id = '{yun:}$smarty.get.com_id{/yun}',
+        sy_chat_name = '{yun:}$config.sy_chat_name{/yun}',
+        go = '{yun:}$smarty.get.go{/yun}',
+        is_outcall = '{yun:}$is_outcall{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                auid: '',
+                // 基本信息
+                job_num: 0,
+                invite_num: 0,
+                sqnum: 1,
+                downresume_num: 0,
+                child_account_num: 0,
+                info: {},
+                tab: 'info',
+                source: [],
+                rating_list: [], // 会员等级列表，修改套餐使用
+
+                // 套餐信息
+                rating: {},
+
+                // 职位列表
+                jobList: [],
+                page: 1,
+                limit: 10,
+                pageTotal: 1,
+                total: 0,
+                loadFlag: true,
+
+                // 拨打电话
+                callShow: false,
+                callActions: [],
+
+                // 企业审核
+                statusShow: false,
+                statusbody: '',
+                status: 0,
+
+                // 企业暂停
+                unsuspendShow: false,
+
+                // 设为名企
+                hotjob: {},
+                hotjobShow: false,
+                timeStartShow: false,
+                timeStart: new Date(),
+                timeStartStr: '',
+                timeEndShow: false,
+                timeEnd: new Date(),
+                timeEndStr: '',
+                hotjobLogo: [],
+                // 名企设置
+                hotjobSetShow: false,
+                hotjobSetActions: [
+                    {id: 1, name: '修改'},
+                    {id: 2, name: '取消'}
+                ],
+
+                // 修改套餐
+                ratingShow: false,
+                ratingSelected: '',
+                ratingValue: '',
+                ratingData: {},
+                ratingVipetimeShow: false,
+                ratingVipetime: new Date(),
+                ratingVipetimeStr: '',
+                ratingIndefinitely: false,
+                sy_chat_name: sy_chat_name,
+                ratingVipShow: false,
+                ratingCustomFieldName: {
+                    values: 'id',
+                    text: 'name'
+                },
+
+                // 企业缓存
+                comclass_name: comn,
+                comclass_data: comd,
+
+                // 职位审核
+                jobAuditShow: false,
+                jobInfo: {},
+                jobStatus: 1,
+                jobAuditTemplateShow: false,
+                jobAuditTemplateColumns: [],
+                jobAuditTemplate: '',
+                jobSyncAudit: true,
+                jobStatusbody: '',
+
+                // 职位置顶
+                jobTopShow: false,
+                top_days: '',
+
+                jobIndex: 0, // 置顶、推荐、紧急
+
+                // 职位推荐
+                jobRecShow: false,
+                rec_days: '',
+
+                // 职位紧急
+                jobUrgentShow: false,
+                urgent_days: '',
+                is_outcall: is_outcall// 是否已开通外呼
+            }
+        },
+        created() {
+            this.getInfo()
+            this.getVip();
+            let comclass_data = this.comclass_data,
+                comclass_name = this.comclass_name,
+
+                jobAuditTemplateColumns = [];
+            comclass_data.job_audit.forEach(function (item) {
+                jobAuditTemplateColumns.push({value: item, text: comclass_name[item].slice(0, 20)});
+            });
+            this.jobAuditTemplateColumns = jobAuditTemplateColumns;
+        },
+        methods: {
+            getInfo: function () {
+                let _this = this;
+                var params = {
+                    com_id: com_id
+                };
+                showLoading();
+                $.post('index.php?c=admin_company&a=show', params, function (res) {
+                    hideLoading();
+
+                    if (res.error === 0) {
+                        data = res.data;
+                        info = data.info;
+                        _this.auid = data.auid;
+                        _this.job_num = data.job_num;
+                        _this.invite_num = data.invite_num;
+                        _this.sqnum = data.sqnum;
+                        _this.downresume_num = data.downresume_num;
+                        _this.child_account_num = data.child_account_num;
+                        _this.info = info;
+                        _this.source = data.source;
+                        _this.status = data.info.r_status;
+                        _this.rating_list = data.rating_list;
+                        _this.ratingSelected = data.info.rating;
+                        _this.ratingValue = data.info.rating_name;
+                        $("#yunvue").show();
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            changeTab: function (key) {
+                this.tab = key;
+
+                if (key == 'vip') {
+                    if (typeof (this.rating.down_resume) == 'undefined') {
+                        this.getVip();
+                    }
+                }
+
+                if (key == 'job') {
+                    if (this.jobList.length == 0) {
+                        this.getJob();
+                    }
+                }
+            },
+
+            getVip: function () {
+                let _this = this;
+                var params = {
+                    uid: com_id
+                };
+                $.post('index.php?c=admin_company&a=getstatis', params, function (res) {
+                    if (res) {
+                        _this.rating = res.data;
+                        _this.ratingData = res.data;
+                        _this.ratingIndefinitely = false;
+                        if (res.data.vip_etime == 0) {
+                            _this.ratingIndefinitely = true;
+                        } else {
+                            let vipetimeArr = res.data.vip_etime_n.split('-');
+                            _this.ratingVipetime = new Date(vipetimeArr[0], parseInt(vipetimeArr[1]) - 1, vipetimeArr[2]);
+                        }
+                        _this.ratingVipetimeStr = res.data.vip_etime_n;
+                    }
+                }, 'json')
+            },
+
+            getJob: function () {
+                let _this = this;
+                var params = {
+                    uid: com_id,
+                    page: _this.page,
+                    limit: _this.limit
+                };
+                $.post('index.php?c=admin_company_job', params, function (res) {
+                    if (res && res.list) {
+                        _this.jobList = _this.jobList.concat(res.list);
+                        _this.total = res.total ? res.total : 0;
+                        _this.pageTotal = res.pageTotal ? res.pageTotal : 1;
+
+                        if (_this.pageTotal <= _this.page) {
+                            _this.loadFlag = false;
+                        } else {
+                            _this.loadFlag = true;
+                        }
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            scrollEvent: function () {
+                if (this.loadFlag) {
+                    let clientHeight = this.$refs.box.clientHeight;
+                    let scrollTop = this.$refs.box.scrollTop + 1;
+                    let scrollHeight = this.$refs.box.scrollHeight;
+                    //滚动条到底部的条件:div 到头部的距离 + 屏幕高度 = 可滚动的总高度
+                    if (scrollTop + clientHeight >= scrollHeight) {
+                        if (this.pageTotal === 1) {//第一页
+                            this.loadFlag = false;
+                        } else if ((this.page + 1) <= this.pageTotal) {//中间页
+                            this.page += 1;
+                            this.getJob();
+                        } else {//最后一页
+                            this.page += 1;
+                            this.getJob();
+                            this.loadFlag = false;
+                        }
+                    }
+                } else {
+                    return;
+                }
+
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            },
+            // 没开外呼，直接手机拨号
+            callTel: function () {
+                let linktel = this.info.linktel;
+                let linkphone = this.info.linkphone;
+                if (linktel && linkphone) {
+                    this.callActions = [
+                        {name: linktel},
+                        {name: linkphone}
+                    ]
+                    this.callShow = true;
+                    return;
+                }
+                if (linktel || linkphone) {
+                    window.location.href = "tel:" + (linktel ? linktel : linkphone)
+                    return;
+                }
+                showToast('无可用联系方式');
+            },
+			// 外呼联系客户
+            contactMobile: function () {
+                var that = this
+                let linktel = that.info.linktel;
+                let linkphone = that.info.linkphone;
+                let uid = that.info.uid;
+                let mobile = linktel ? linktel : linkphone;
+                if (!mobile) {
+                    showToast('无可用联系方式');
+                    return false;
+                }
+                showConfirm('确定要联系客户吗？',function(){
+                    $.post('index.php?c=crm_my_customer&a=contactCustomer', {uid, mobile}, function(res){
+                        if (res.code == 200) {
+                            showToast(res.msg)
+                        } else {
+                            return showToast(res.msg);
+                        }
+                    },'json');
+                })
+            },
+            onSelectCall: function (item) {
+                this.callShow = false;
+                window.location.href = "tel:" + item.name;
+            },
+
+            goBack: function () {
+                if (go) {
+                    navigateTo("index.php?c=admin_company");
+                } else {
+                    history.go(-1);
+                }
+            },
+
+            statusOpen: function () {
+                let _this = this;
+
+                var params = {
+                    uid: com_id
+                };
+                showLoading();
+                $.post('index.php?c=admin_company&a=lockinfo', params, function (res) {
+                    hideLoading();
+                    _this.statusbody = res;
+                    _this.statusShow = true;
+                });
+            },
+
+            setStatus: function (val) {
+                this.status = val;
+            },
+
+            statusSubmit: function () {
+                let _this = this;
+                var params = {
+                    uid: com_id,
+                    status: _this.status,
+                    statusbody: _this.statusbody
+                };
+                showLoading();
+                $.post('index.php?c=admin_company&a=status', params, function (res) {
+                    hideLoading();
+                    if (res.error === 0) {
+                        showToast(res.msg, 2, function () {
+                            // _this.info.r_status = _this.status;
+                            _this.statusShow = false;
+                            window.location.reload();
+                        });
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            suspend: function () {
+                let _this = this;
+
+                if (_this.info.r_status == 2) {
+                    showToast('该企业已被锁定，请先解锁后再暂停！');
+                    return;
+                }
+
+                showConfirm('确定要暂停该企业吗？', function () {
+                    var params = {
+                        uid: com_id
+                    }
+                    $.post('index.php?c=admin_company&a=suspend', params, function (res) {
+                        hideLoading();
+                        if (res.error === 0) {
+                            showToast('暂停成功！');
+                            _this.info.r_status = 4;
+                            window.location.reload();
+                        } else {
+                            showToast('暂停失败请重试！');
+                        }
+                    }, 'json')
+                })
+            },
+
+            unsuspend: function (key) {
+                this.unsuspendSub(key);
+            },
+
+            unsuspendSub: function (addzttime) {
+                let _this = this;
+                var params = {
+                    uid: com_id,
+                    addzttime: addzttime
+                }
+                $.post('index.php?c=admin_company&a=setupcom', params, function (res) {
+                    hideLoading();
+                    if (res.error === 0) {
+                        showToast('企业解除暂停成功', 2, function () {
+                            _this.unsuspendShow = false;
+                            window.location.reload();
+                        });
+                    } else {
+                        showToast('操作失败请重试');
+                    }
+                }, 'json')
+            },
+
+            hotjobOpen: function () {
+                let _this = this,
+                    url = 'index.php?c=admin_hotjob&a=hotjobinfo',
+                    info = _this.info;
+
+                if (info.hottime && info.rec == 1) {
+                    url += "&id=" + com_id;
+                } else {
+                    url += "&uid=" + com_id;
+                }
+
+                showLoading();
+                $.get(url, function (res) {
+                    hideLoading();
+                    if (res.error === 0) {
+                        let hotjob = res.data.hotjob
+                        _this.hotjobShow = true;
+                        _this.hotjob = hotjob;
+
+                        if (hotjob.id) {
+                            _this.timeStartStr = hotjob.time_start_n;
+                            _this.timeEndStr = hotjob.time_end_n;
+                            let timeStartArr = hotjob.time_start_n.split('-');
+                            let timeEndArr = hotjob.time_end_n.split('-');
+                            _this.timeStart = new Date(timeStartArr[0], parseInt(timeStartArr[1]) - 1, timeStartArr[2]);
+                            _this.timeEnd = new Date(timeEndArr[0], parseInt(timeEndArr[1]) - 1, timeEndArr[2]);
+                        } else {
+                            _this.hotjob.service_price = '';
+                            _this.hotjob.sort = '';
+                            _this.hotjob.beizhu = '';
+                        }
+                        if (hotjob.hot_pic_n) {
+                            _this.hotjobLogo[0] = {url: hotjob.hot_pic_n};
+                        }
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            confirmTimeStart: function (item) {
+                this.timeStartShow = false;
+                this.timeStart = item;
+                let year = item.getFullYear();
+                let month = item.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = item.getDate();
+                day = day < 10 ? '0' + day : day;
+                this.timeStartStr = year + '-' + month + '-' + day;
+            },
+
+            confirmTimeEnd: function (item) {
+                this.timeEndShow = false;
+                this.timeEnd = item;
+                let year = item.getFullYear();
+                let month = item.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = item.getDate();
+                day = day < 10 ? '0' + day : day;
+                this.timeEndStr = year + '-' + month + '-' + day;
+            },
+
+            hotjobSub: function () {
+                let _this = this,
+                    info = _this.info,
+                    time_start = _this.timeStartStr,
+                    time_end = _this.timeEndStr,
+                    hotjob = _this.hotjob;
+
+                if (!info.name) {
+                    showToast('请先完善企业资料');
+                }
+                if (time_start == "") {
+                    showToast('名企开始时间不能为空！');
+                    return false
+                }
+                if (time_end == '') {
+                    showToast('名企结束时间不能为空！');
+                    return false
+                }
+                if (info.logo == "" && _this.hotjobLogo.length == 0) {
+                    showToast('企业展示LOGO不能为空！');
+                    return false
+                }
+                if (hotjob.beizhu.length > 200) {
+                    showToast('不能超过200字以内！');
+                    return false
+                }
+
+                let logo = _this.hotjobLogo.length > 0 ? typeof (_this.hotjobLogo[0].content) == 'undefined' ? '' : _this.hotjobLogo[0].content : '';
+                var params = {
+                    username: hotjob.username,
+                    rating: hotjob.rating,
+                    rating_id: hotjob.rating_id,
+                    time_start: time_start,
+                    time_end: time_end,
+                    service_price: hotjob.service_price,
+                    sort: hotjob.sort,
+                    uimage: logo,
+                    beizhu: hotjob.beizhu,
+                    uid: com_id
+                };
+
+                if (info.hottime && info.rec == 1) {
+                    params.hotup = 1;
+                } else {
+                    params.hotad = 1;
+                }
+
+                showLoading();
+                $.post('index.php?c=admin_hotjob&a=save', params, function (res) {
+                    hideLoading();
+                    if (res.error == 9) {
+                        showToast(res.msg, 2, function () {
+                            _this.hotjobShow = false;
+                            window.location.reload();
+                        });
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+            onSelectHotjobSet: function (item) {
+                this.hotjobSetShow = false;
+                if (item.id == 1) {
+                    this.hotjobOpen();
+                } else {
+                    this.hotjobConfirm();
+                }
+            },
+            hotjobConfirm: function () {
+                let _this = this;
+                showConfirm('确定要取消该名企？', function () {
+                    showLoading('取消中');
+                    $.get('index.php?c=admin_hotjob&a=del&del=' + com_id, function (res) {
+                        hideLoading();
+                        if (res.error === 0) {
+                            showToast(res.msg, 2, function () {
+                                _this.hotjobSetShow = false;
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                });
+            },
+            ratingChange: function () {
+                let _this = this,
+                    ratingSelected = _this.ratingSelected;
+                var params = {
+                    id: ratingSelected
+                };
+                $.post('index.php?c=admin_company&a=getrating', params, function (res) {
+                    if (res) {
+                        _this.ratingData = res;
+                        _this.ratingIndefinitely = false
+                        if (res.vip_etime == 0) {
+                            _this.ratingIndefinitely = true;
+                        } else {
+                            let vipetimeArr = res.vip_etime_n.split('-');
+                            _this.ratingVipetime = new Date(vipetimeArr[0], parseInt(vipetimeArr[1]) - 1, vipetimeArr[2]);
+                        }
+                        _this.ratingVipetimeStr = res.vip_etime_n;
+                    } else {
+                        showToast('数据加载失败');
+                    }
+                }, 'json')
+            },
+
+            confirmRatingVipetime: function (item) {
+                this.ratingVipetimeShow = false;
+                this.ratingVipetime = item;
+                let year = item.getFullYear();
+                let month = item.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = item.getDate();
+                day = day < 10 ? '0' + day : day;
+                this.ratingVipetimeStr = year + '-' + month + '-' + day;
+                this.ratingIndefinitely = false;
+            },
+
+            ratingIndefinitelyChange: function (item) {
+                if (this.ratingIndefinitely) {
+                    this.ratingVipetime = new Date();
+                    this.ratingVipetimeStr = '不限';
+                } else {
+                    let vip_etime_n = this.ratingData.vip_etime_n;
+                    if (vip_etime_n && vip_etime_n != '不限') {
+                        let vipetimeArr = vip_etime_n.split('-');
+                        this.ratingVipetime = new Date(vipetimeArr[0], parseInt(vipetimeArr[1]) - 1, vipetimeArr[2]);
+                        this.ratingVipetimeStr = this.ratingData.vip_etime_n;
+                    } else {
+                        let date = new Date();
+                        this.ratingVipetime = date;
+                        this.ratingVipetimeStr = this.formatDate(date);
+                    }
+                }
+            },
+
+            onRatingConfirm: function (obj, index) {
+                this.ratingVipShow = false;
+                this.ratingSelected = obj.id;
+                this.ratingValue = obj.name;
+                this.ratingChange();
+            },
+
+            ratingSub: function () {
+                let _this = this,
+                    ratingData = _this.ratingData;
+                var params = ratingData;
+                params.uid = com_id;
+                params.ratingid = _this.ratingSelected;
+                params.vip_etime = _this.ratingVipetimeStr == '不限' ? '' : _this.ratingVipetimeStr;
+
+                showLoading('修改中');
+                $.post('index.php?c=admin_company&a=saveRating', params, function (res) {
+                    hideLoading();
+                    if (res.error == 9) {
+                        showToast(res.msg, 2, function () {
+                            _this.ratingShow = false;
+                            window.location.reload();
+                        })
+                    } else {
+                        showToast(res.msg)
+                    }
+                }, 'json')
+            },
+
+            jobAuditOpen: function (jobId) {
+                let _this = this;
+
+                showLoading();
+                $.get('index.php?c=admin_company_job&a=jobAudit&id=' + jobId, function (res) {
+                    hideLoading();
+                    if (res && res.error === 0) {
+                        let jobInfo = res.data.info;
+                        _this.jobAuditShow = true;
+                        _this.jobInfo = jobInfo;
+                        _this.jobStatus = jobInfo.state;
+                        _this.jobStatusbody = jobInfo.statusbody;
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            setJobStatus: function (val) {
+                this.jobStatus = val;
+            },
+
+            onJobAuditTemplateConfirm: function (obj, index) {
+                this.jobAuditTemplateShow = false;
+                this.jobAuditTemplate = obj.value;
+                this.jobStatusbody = this.comclass_name[obj.value];
+            },
+
+            jobAuditSub: function (jobId) {
+                let _this = this,
+                    jobInfo = _this.jobInfo,
+                    status = _this.jobStatus,
+                    statusbody = _this.jobStatusbody;
+
+                if (status != '1' && status != '3') {
+                    showToast("请选择审核状态！");
+                    return false;
+                }
+
+                var params = {
+                    single: 1,
+                    status: status,
+                    pid: jobInfo.id,
+                    uid: jobInfo.uid,
+                    statusbody: statusbody
+                };
+                if (jobInfo.r_status != '1') {
+                    var url = 'index.php?c=admin_company_job&a=cjobstatus';
+                } else {
+                    var url = 'index.php?c=admin_company_job&a=status';
+                }
+
+                showLoading();
+                $.post(url, params, function (res) {
+                    hideLoading();
+                    if (res && res.error == 9) {
+                        showToast(res.msg);
+                        _this.jobAuditShow = false;
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            jobTopOpen: function (obj, index) {
+                this.jobTopShow = true;
+                this.jobInfo = obj;
+                this.jobIndex = index;
+            },
+
+            jobTopSub: function (key) {
+                let _this = this,
+                    jobInfo = _this.jobInfo,
+                    days = _this.top_days;
+
+                var params = {
+                    pid: jobInfo.id,
+                    days: days,
+                    s: key
+                };
+                showLoading();
+                $.post('index.php?c=admin_company_job&a=xuanshang', params, function (res) {
+                    hideLoading();
+                    if (res && res.error == 9) {
+                        showToast(res.msg, 2, function () {
+                            _this.jobTopShow = false;
+                            _this.top_days = '';
+                            if (key == 1) {
+                                _this.jobList[_this.jobIndex].xsdate = '';
+                                _this.jobList[_this.jobIndex].xstime = '';
+                                _this.jobList[_this.jobIndex].xs = 0;
+                            } else {
+                                if (_this.jobList[_this.jobIndex].xstime && _this.jobList[_this.jobIndex].xstime != '0' && _this.jobList[_this.jobIndex].xs == 1) {
+                                    _this.jobList[_this.jobIndex].xs = 1;
+                                    _this.jobList[_this.jobIndex].xstime = _this.dateAddDays(_this.jobList[_this.jobIndex].xstime, days);
+                                } else {
+                                    _this.jobList[_this.jobIndex].xs = 1;
+                                    _this.jobList[_this.jobIndex].xsdate = '1';
+                                    let toDayDate = _this.formatDate(new Date());
+                                    _this.jobList[_this.jobIndex].xstime = _this.dateAddDays(toDayDate, days);
+                                }
+                            }
+                        });
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            jobRecOpen: function (obj, index) {
+                this.jobRecShow = true;
+                this.jobInfo = obj;
+                this.jobIndex = index;
+            },
+
+            jobRecSub: function (key) {
+                let _this = this,
+                    jobInfo = _this.jobInfo,
+                    days = _this.rec_days;
+
+                var params = {
+                    pid: jobInfo.id,
+                    days: days,
+                    s: key
+                };
+                showLoading();
+                $.post('index.php?c=admin_company_job&a=recommend', params, function (res) {
+                    hideLoading();
+                    if (res && res.error == 9) {
+                        showToast(res.msg, 2, function () {
+                            _this.jobRecShow = false;
+                            _this.rec_days = '';
+                            if (key == 1) {
+                                _this.jobList[_this.jobIndex].rec_time = '';
+                                _this.jobList[_this.jobIndex].recdate = '';
+                                _this.jobList[_this.jobIndex].rec_n = 0;
+                            } else {
+                                if (_this.jobList[_this.jobIndex].recdate && _this.jobList[_this.jobIndex].recdate != '0' && _this.jobList[_this.jobIndex].rec_n == 1) {
+                                    _this.jobList[_this.jobIndex].rec_n = 1;
+                                    _this.jobList[_this.jobIndex].recdate = _this.dateAddDays(_this.jobList[_this.jobIndex].recdate, days);
+                                } else {
+                                    _this.jobList[_this.jobIndex].rec_n = 1;
+                                    _this.jobList[_this.jobIndex].rec_time = '1';
+                                    let toDayDate = _this.formatDate(new Date());
+                                    _this.jobList[_this.jobIndex].recdate = _this.dateAddDays(toDayDate, days);
+                                }
+                            }
+                        });
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            jobUrgentOpen: function (obj, index) {
+                this.jobUrgentShow = true;
+                this.jobInfo = obj;
+                this.jobIndex = index;
+            },
+
+            jobUrgentSub: function (key) {
+                let _this = this,
+                    jobInfo = _this.jobInfo,
+                    days = _this.urgent_days;
+
+                var params = {
+                    pid: jobInfo.id,
+                    days: days,
+                    s: key
+                };
+                showLoading();
+                $.post('index.php?c=admin_company_job&a=urgent', params, function (res) {
+                    hideLoading();
+                    if (res && res.error == 9) {
+                        showToast(res.msg, 2, function () {
+                            _this.jobUrgentShow = false;
+                            _this.urgent_days = '';
+                            if (key == 1) {
+                                _this.jobList[_this.jobIndex].urgent_time = '';
+                                _this.jobList[_this.jobIndex].eurgent = '';
+                                _this.jobList[_this.jobIndex].urgent_n = 0;
+                            } else {
+                                if (_this.jobList[_this.jobIndex].eurgent && _this.jobList[_this.jobIndex].eurgent != '0' && _this.jobList[_this.jobIndex].urgent_n == 1) {
+                                    _this.jobList[_this.jobIndex].urgent_n = 1;
+                                    _this.jobList[_this.jobIndex].eurgent = _this.dateAddDays(_this.jobList[_this.jobIndex].eurgent, days);
+                                } else {
+                                    _this.jobList[_this.jobIndex].urgent_n = 1;
+                                    _this.jobList[_this.jobIndex].urgent_time = '1';
+                                    let toDayDate = _this.formatDate(new Date());
+                                    _this.jobList[_this.jobIndex].eurgent = _this.dateAddDays(toDayDate, days);
+                                }
+                            }
+                        });
+                    } else {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            /**
+             * [dateAddDays 从某个日期增加n天后的日期]
+             * @param  {[string]} dateStr  [日期字符串]
+             * @param  {[int]} dayCount [增加的天数]
+             * @return {[string]}[增加n天后的日期字符串]
+             */
+            dateAddDays: function (dateStr, dayCount) {
+                var tempDate = new Date(dateStr.replace(/-/g, "/"));//把日期字符串转换成日期格式
+                var resultDate = new Date((tempDate / 1000 + (86400 * dayCount)) * 1000);//增加n天后的日期
+
+                let year = resultDate.getFullYear();
+                let month = resultDate.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = resultDate.getDate();
+                day = day < 10 ? '0' + day : day;
+
+                return year + '-' + month + '-' + day;
+            },
+
+            formatDate: function (date) {
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = date.getDate();
+                day = day < 10 ? '0' + day : day;
+                return year + '-' + month + '-' + day;
+            },
+
+            numbers: function (e, key) {
+                let number = e.target.value;
+                if (key == 'top_days') {
+                    this.top_days = number.replace(/[^0-9]/g, '')
+                } else if (key == 'rec_days') {
+                    this.rec_days = number.replace(/[^0-9]/g, '')
+                } else if (key == 'urgent_days') {
+                    this.urgent_days = number.replace(/[^0-9]/g, '')
+                }
+            },
+        }
+    });
+</script>
+<style type="text/css">
+    .positePopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .positePopup .positeShen {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+
+    .enterPopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .enterPopup .enterren {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+
+    .positePopup .positeExtseo {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+</style>
+</body>
+
+</html>

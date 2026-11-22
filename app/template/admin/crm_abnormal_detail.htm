@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>后台管理 - CRM - 业务员 - 我的客户 - 预警分析</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/app/template/chat/css/chat.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<style>
+		.yj_chlose{padding:15px}
+		.yj_chlose a{display:inline-block;margin-right:10px;padding:2px 6px}
+		.yj_chlose_a{background-color:#2778f8;color:#fff;border-radius:3px}
+		.yj_chlose_text{width:200px;height:30px;border-radius:3px;border:1px solid #eee}
+		.yj_chlose_bth{width:60px;height:30px;border:none;background-color:#2778f8;color:#fff;border-radius:3px}
+	</style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+		<div class="yj_chlose" style="margin-bottom: 5px;">
+			<span style="font-weight: bold; font-size: 18px;">{yun:}$title{/yun}</span>
+			<!--<span style="margin-left: 36px;">{{desc}}</span>-->
+		</div>
+	</div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+				<table width="100%">
+					<thead>
+						<tr class="admin_table_top">
+							<th align="left">{yun:}if !in_array($smarty.get.type, array('4')){/yun}求职者{yun:}else{/yun}企业{yun:}/if{/yun}UID</th>
+							{yun:}if !in_array($smarty.get.type, array('4')){/yun}
+							<th align="left">姓名</th>
+							{yun:}/if{/yun}
+							<th align="left">企业名称</th>
+							{yun:}if !in_array($smarty.get.type, array('3', '4','7', '9')){/yun}
+							<th align="left">职位名称</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('2')){/yun}
+							<th align="left">简历查看状态</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<th align="left">端口</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<th align="left">IP</th>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<th align="left">IP归属地</th>
+							{yun:}/if{/yun}
+							<th align="left">时间</th>
+						</tr>
+					</thead>
+					<tbody class="tableBackColorTwo">
+						{yun:}foreach item=v from=$rows{/yun}
+						<tr align="left">
+							<td align="left">{yun:}$v.uid{/yun}</td>
+							{yun:}if !in_array($smarty.get.type, array('4')){/yun}
+							<td align="left" onclick="showuser('{yun:}$v.uid{/yun}')" style="cursor: pointer;">{yun:}$v.name{/yun}</td>
+							{yun:}/if{/yun}
+							<td align="left" onclick="showcom('{yun:}$v.comid{/yun}')" style="cursor: pointer;">{yun:}$v.comname{/yun}</td>
+							{yun:}if !in_array($smarty.get.type, array('3','4','7', '9')){/yun}
+							<td align="left">{yun:}$v.jobname{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('2')){/yun}
+							<td align="left">
+								{yun:}if $v.body !=''{/yun}
+									取消申请,原因：{yun:}$v.body{/yun}
+								{yun:}else{/yun}
+									未查看
+								{yun:}/if{/yun}
+							</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<td align="left">{yun:}$v.content{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<td align="left">{yun:}$v.ip{/yun}</td>
+							{yun:}/if{/yun}
+							{yun:}if in_array($smarty.get.type, array('4')){/yun}
+							<td align="left">{yun:}$v.city{/yun}</td>
+							{yun:}/if{/yun}
+							<td align="left">{yun:}$v.time{/yun}</td>
+						</tr>
+						{yun:}/foreach{/yun}
+
+						{yun:}if $total > $config.sy_listnum {/yun}
+						<tr>
+							{yun:}if $pagenum==1{/yun}
+							<td colspan="2"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+							<td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum == $pages{/yun}
+							<td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}/if{/yun}
+							<td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+						</tr>
+						{yun:}/if{/yun}
+					</tbody>
+				</table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="admvue">
+	<!--企业管理弹出框-->
+	<div id="manage" class="" style="display:none;">
+		<div class="admin_comtck_box">
+			<div class="admin_comtck_hd">
+				<div class="comtck_hd_name">
+					<a class="name" @click="comPreview" style="cursor: pointer;">{{com.name}}</a>
+					<div class="comtck_hd_btn">
+						<a @click="lock(com.uid,'2')" class="b3" style="cursor: pointer;">锁定账号</a>
+					</div>
+				</div>
+				<div class="comtck_hd_userInfo">
+					<span>用户名：<em>{{com.username}}</em></span>
+					<span>联系电话：<em>{{com.link || '无'}}</em></span>
+					<span>用户ID：<em>{{com.uid}}</em></span>
+					<span>状态：<em>{{com.status}}</em></span>
+				</div>
+			</div>
+	
+			<div class="admin_comtck_md">
+				<ul class="comtck_md_list">
+					<li><a style="cursor: default;"><div>{{com.lookresume_num}}</div><span>简历浏览</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.downresume_num}}</div><span>简历下载</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.downdel_num}}</div><span>删除简历下载记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.yqms_num}}</div><span>邀请面试</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.addjob_num}}</div><span>发布职位</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.refreshjob_num}}</div><span>刷新职位</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.sqjob_num}}</div><span>收到简历</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.sqdel_num}}</div><span>删除收到简历记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.chatlog_num}}</div><span>直聊人数</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.loginlog_num}}</div><span>登录次数</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.privacylog_num}}</div><span>简历隐私号</span></a></li>
+					<li><a style="cursor: default;"><div>{{com.weblog_num}}</div><span>IP活跃次数</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--企业管理弹出框 end-->
+	<!--求职者管理弹出框-->
+	<div id="userbox" class="" style="display:none;">
+		<div class="admin_comtck_box">
+			<div class="admin_comtck_hd">
+				<div class="comtck_hd_name">
+					<a class="name" @click="userPreview" style="cursor: pointer;">{{user.name}}</a>
+					<div class="comtck_hd_btn">
+						<a @click="lock(user.uid,'2')" class="b3" style="cursor: pointer;">锁定账号</a>
+					</div>
+				</div>
+				<div class="comtck_hd_userInfo">
+					<span>用户名：<em>{{user.username}}</em></span>
+					<span>联系电话：<em>{{user.link || '无'}}</em></span>
+					<span>用户ID：<em>{{user.uid}}</em></span>
+					<span>状态：<em>{{user.status}}</em></span>
+				</div>
+			</div>
+	
+			<div class="admin_comtck_md">
+				<ul class="comtck_md_list">
+					<li><a style="cursor: default;"><div>{{user.tdnum_num}}</div><span>简历投递数量</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.tdclass_num}}</div><span>简历投递分类</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.usersqdel_num}}</div><span>删除简历投递记录</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.lookjob_num}}</div><span>职位浏览</span></a></li>
+					<li><a style="cursor: default;"><div>{{user.tellog_num}}</div><span>职位拨号</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.chatlog_num}}</div><span>直聊人数</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.loginlog_num}}</div><span>登录次数</span></a></li>
+					<li style="border-bottom: 1px solid #eee;"><a style="cursor: default;"><div>{{user.privacylog_num}}</div><span>职位隐私号</span></a></li>
+					<li style="border-right: 1px solid #eee;"><a style="cursor: default;"><div>{{user.weblog_num}}</div><span>IP活跃次数</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--求职者管理弹出框 end-->
+</div>
+
+</body>
+<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+	var layer = null;
+	var pytoken = '{yun:}$pytoken{/yun}';
+	var time = "{yun:}$smarty.get.time{/yun}";
+	var app = new Vue({
+		el: '#admvue',
+		data: {
+			title: '',
+			desc: '',
+			user: {},
+			com: {}
+		},
+		created: function() {
+			
+		},
+		methods: {
+			lock: function(uid, type){
+				setTimeout(function(){
+					$('#lockbox').find('textarea').each(function(){
+						$(this).attr('placeholder', '请填写锁定原因');
+					});
+				},500);
+				layer.prompt({
+					id: 'lockbox',
+					formType: 2,
+					value: '',
+					title: '锁定原因',
+					area: ['300px', '100px'] //自定义文本域宽高
+				}, function(value, index, elem){
+					layer.close(index);
+					layer.load();
+					$.post("index.php?m=admin_abnormal&c=lock", {
+						uid: uid,
+						type: type,
+						lock_info: value,
+						pytoken: pytoken
+					}, function(res) {
+						layer.closeAll('loading');
+						layer.msg(res.msg);
+					}, 'json');
+				});
+			},
+			userPreview: function(){
+				layer.open({
+					type: 2,
+					title: '简历预览',
+					area: ['755px', ($(window).height() - 30) +'px'],
+					content: 'index.php?m=admin_resume&c=resumePreview&id='+ this.user.eid
+				});
+			},
+			comPreview: function(){
+				layer.open({
+					type: 2,
+					title: '企业预览',
+					area: ['755px', ($(window).height() - 30) +'px'],
+					content: 'index.php?m=admin_company&c=comPreview&uid='+ this.com.uid
+				});
+			}
+		}
+	});
+	layui.use(['layer'], function () {
+		layer = layui.layer;
+	});
+	function showuser(uid){
+		var i = loadlayer();
+		$.post("index.php?m=admin_abnormal&c=userstatis", {
+			uid: uid,
+			time: time,
+			pytoken: pytoken
+		}, function(res) {
+			parent.layer.closeAll('loading');
+			app.$data.user = res;
+			parent.$(".iframCloseOpab").addClass("iframCloseOpabCur");
+			parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			$.layer({
+				type : 1,
+				title : '求职者数据  ' + res.time,
+				closeBtn : [ 0, true ],
+				border : [ 10, 0.3, '#000', true ],
+				area : [ '610px', 'auto' ],
+				offset : [ '20px', '' ],
+				page : {
+					dom : "#userbox"
+				},
+				close: function () {
+					parent.$(".iframCloseOpab").removeClass("iframCloseOpabCur");
+					parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+				}
+			});
+		}, 'json');
+	}
+	function showcom(comid){
+		var i = loadlayer();
+		$.post("index.php?m=admin_abnormal&c=comstatis", {
+			uid: comid,
+			time: time,
+			pytoken: pytoken
+		}, function(res) {
+			parent.layer.closeAll('loading');
+			app.$data.com = res;
+			parent.$(".iframCloseOpab").addClass("iframCloseOpabCur");
+			parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			$.layer({
+				type : 1,
+				title : '企业数据  ' + res.time,
+				closeBtn : [ 0, true ],
+				border : [ 10, 0.3, '#000', true ],
+				area : [ '610px', 'auto' ],
+				offset : [ '20px', '' ],
+				page : {
+					dom : "#manage"
+				},
+				close: function () {
+					parent.$(".iframCloseOpab").removeClass("iframCloseOpabCur");
+					parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+				}
+			});
+		}, 'json');
+	}
+</script>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>后台管理 - CRM - 客勤 - 面试邀请</title>
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+	.admin_table_border tr:nth-child(2n) {background-color: #f8f9fd}
+	.kq_bz {color: #ff6600;}
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+		<div class="tabs_info">
+			<ul>
+				<li><a href="index.php?m=crm_chat">拥有简历</a></li>
+				<li><a href="index.php?m=crm_chat&c=noresume">没有简历</a></li>
+				<li><a href="index.php?m=crm_chat&c=phoneAuthList">手机号授权</a></li>
+				<li><a href="index.php?m=crm_chat&c=inviteList">面试回访</a></li>
+				<li class='curr'><a href="index.php?m=crm_chat&c=follow">跟进记录</a></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		<div class="admin_new_search_box">
+
+			<form id="resumeFormSearch" action="index.php" name="myform" method="get">
+				<div>
+					<input name="m" value="crm_chat" type="hidden"/>
+					<input name="c" value="follow" type="hidden"/>
+
+					<div class="admin_Filter_text formselect" did='dkeytype'>
+						<input type="button" {yun:}if $smarty.get.keytype=='' || $smarty.get.keytype=='1' {/yun} value="个人姓名" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="备注内容"{yun:}/if{/yun} class="admin_Filter_but" id="bkeytype" />
+						<input type="hidden" name="keytype" id="keytype" {yun:}if $smarty.get.keytype==''{/yun} value="1" {yun:}else{/yun} value="{yun:}$smarty.get.keytype{/yun}" {yun:}/if{/yun}/>
+						<div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+							<ul>
+								<li><a href="javascript:void(0)" onClick="formselect('1','keytype','个人姓名')">个人姓名</a></li>
+								<li><a href="javascript:void(0)" onClick="formselect('2','keytype','备注内容')">备注内容</a></li>
+							</ul>
+						</div>
+					</div>
+					<input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword' class="admin_new_text" />
+					<input type="submit" value="搜索" class="admin_new_bth" />
+					<a href="javascript:;" onclick="$('.admin_screenlist_box').toggle();" class="admin_new_search_gj">筛选</a>
+				</div>
+			</form>
+			{yun:}include file="admin/admin_search.htm"{/yun}
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="tty_table-bom">
+		<div class="table-list">
+			<div class="admin_table_border">
+				<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+				<form action="index.php" target="supportiframe" name="myform" method="get" id='myform'>
+					<input name="m" value="crm_chat" type="hidden"/>
+					<input name="c" value="delFollow" type="hidden"/>
+					<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+					<table width="100%">
+						<thead>
+						<tr class="admin_table_top" align="left">
+							<th><label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label></th>
+							<th width="60">
+								{yun:}if $smarty.get.t=="id" && $smarty.get.order=="asc"{/yun}
+								<a href="index.php?m=crm_chat&c=follow&order=desc&t=id">编号</a>
+								{yun:}else{/yun}
+								<a href="index.php?m=crm_chatc=follow&order=asc&t=id">编号</a>
+								{yun:}/if{/yun}
+							</th>
+							<th width="100" align="left">个人姓名</th>
+							<th align="left">业务员</th>
+							<th width="">备注内容</th>
+							<th width="150">备注时间</th>
+ 							<th align="center" width="180">操作</th>
+						</tr>
+						</thead>
+
+						<tbody>
+						{yun:}foreach item=v key=key from=$list{/yun}
+						<tr {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg" {yun:}/if{/yun}>
+						<td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+						<td align="left" class="td1"><span>{yun:}$v.id{/yun}</span></td>
+						<td class="gd" align="left"><a class="admin_cz_sc resume-preview" href="javascript:void(0);" uid="{yun:}$v.uid{/yun}">{yun:}$v.r_name{/yun}</a></td>
+						<td class="od" align="left"><a class="admin_cz_sc">{yun:}$v.c_name{/yun}</a></td>
+						<td align="left">{yun:}$v.content{/yun}</td>
+						<td>{yun:}$v.time_n{/yun}</td>
+						<td align="center">
+							<div class="operationSeries">
+								<a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=crm_chat&c=delFollow&del={yun:}$v.id{/yun}');">删除</a>
+							</div>
+						</td>
+						</tr>
+						{yun:}/foreach{/yun}
+						<tr>
+							<td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/></td>
+							<td colspan="10">
+								<label for="chkAll2">全选</label>
+								<input class="admin_button" type="button" name="delsub" value="删除" onClick="return really('del[]')" />
+							</td>
+						</tr>
+						{yun:}if $total > $config.sy_listnum {/yun}
+						<tr>
+							{yun:}if $pagenum==1{/yun}
+							<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+							<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}else if $pagenum == $pages{/yun}
+							<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+							{yun:}/if{/yun}
+							<td colspan="8" class="digg">{yun:}$pagenav{/yun}</td>
+						</tr>
+						{yun:}/if{/yun}
+						</tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="show_more" style="display:none;margin:20px;"></div>
+<script>
+	var pytoken = $('#pytoken').val();
+	layui.use(['layer', 'form', 'element'], function () {
+		var layer = layui.layer,
+				form = layui.form,
+				element = layui.element,
+				$ = layui.$;
+	});
+	$(".resume-preview").click(function() {
+		var uid = $(this).attr("uid");
+		$('body').css('overflow-y', 'hidden');
+		$.layer({
+			type: 2,
+			shadeClose: true,
+			title: '简历预览',
+			area: ['755px', ($(window).height() - 30) +'px'],
+			iframe: {src: 'index.php?m=crm_chat&c=previewResume&uid='+uid},
+			close: function(){
+				$('body').css('overflow-y', '');
+			}
+		});
+	});
+</script>
+</body>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../header.js"></script>
+    <script src="../../httpVueLoader.js"></script>
+</head>
+<body>
+<div id="excelApp" class="tableDome">
+    <div class="tableDome_tip">
+        <el-alert title="请按照范本格式上传 xls文件，其他文件无法读取" type="success" :closable="false"></el-alert>
+    </div>
+    <div class="dataImportAll">
+        <div class="dataImporOne">
+            <el-form :model="resumeExcel" :ref="resumeExcel">
+                <div class="table_form">
+                    <h3>简历数据导入：</h3>
+                    <div class="dataImporButton">
+                        <div class="imporButOne">
+                            <div class="imporButOneImg">
+                                <img src="../../images/imports.png" alt="">
+                            </div>
+                            <el-upload class="upload-demo" action="" :auto-upload="false"  :on-change="handelChange" :on-remove="handleRemove" :limit="1">
+                                <el-button slot="trigger" size="small">选择文件</el-button>
+                            </el-upload>
+                        </div>
+                    </div>
+                </div>
+                <div class="imporButTwo">
+                    <el-button type="primary" icon="el-icon-upload2" :disabled="saveLoading" @click="submitForm('resumeExcel')">开始导入</el-button>
+                </div>
+            </el-form>
+        </div>
+        <div class="dataImporOne">
+            <el-form :model="jobExcel" :reg="jobExcel">
+                <div class="table_form">
+                    <h3>职位数据导入：</h3>
+                    <div class="dataImporButton">
+                        <div class="imporButOne">
+                            <div class="imporButOneImg">
+                                <img src="../../images/imports.png" alt="">
+                            </div>
+                            <el-upload class="upload-demo" action="" :auto-upload="false" :on-change="handelChange" :on-remove="handleRemove" :limit="1" >
+                                <el-button slot="trigger" size="small">选择文件</el-button>
+                            </el-upload>
+                        </div>
+                    </div>
+                </div>
+                <div class="imporButTwo">
+                    <el-button type="primary" icon="el-icon-upload2" :disabled="saveLoading" @click="submitForm('jobExcel')">开始导入</el-button>
+                </div>
+            </el-form>
+        </div>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const excelApp = new Vue({
+        el: '#excelApp',
+        data: function () {
+            return {
+                resumeExcel:{
+                    resumeXls: ''
+                },
+                jobExcel:{
+                    jobXls: ''
+                },
+                files: [],
+                saveLoading: false
+
+            }
+        },
+        methods: {
+            handelChange(file) {
+                var that =  this;
+                // 复刻文件信息
+                this.files = file.raw;
+            },
+            handleRemove(file, fileList) {
+                this.files = [];
+            },
+            submitForm(formName) {
+                let that = this;
+                let url = '';
+                let formData = new FormData();
+
+                if (that.files.length == 0){
+                    message.error('请选择需要导入的xls文件');
+                    return false;
+                }
+                if (formName == 'resumeExcel'){
+
+                    url = 'm=tool&c=dataExcel&a=resume';
+                    formData.append('file', this.files);
+                } else if (formName == 'jobExcel'){
+
+                    url = 'm=tool&c=dataExcel&a=job';
+                    formData.append('file', this.files);
+                }
+                that.saveLoading = true;
+
+                httpPost(url, formData).then(function (res) {
+                    if (res.data.error == 0) {
+                        message.success(res.data.msg);
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                }).finally(function () {
+                    setTimeout(function () {
+                        that.saveLoading = false;
+                    }, 2000);
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

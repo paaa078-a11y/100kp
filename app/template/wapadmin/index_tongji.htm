@@ -1,0 +1,177 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+
+<body style="background: #FFFFFF;">
+<div class="iframeDataAll">
+    
+    <div style="overflow: hidden;padding-top: 0.2rem;">
+        <div id="main" style="width: 100%;height:6rem;"></div>
+    </div>
+    <div class="dataInfoAll">
+        <ul>
+            <li class="tj-count none">
+                <a href="javascript:void(0);">
+                    <div class="dataInOne">
+                        <i></i>
+                        <span class="tj-name"></span>
+                    </div>
+                    <div class="dataInTwo">
+                        <span class="tj-num">0</span>
+                    </div>
+                </a>
+            </li>
+            <li class="tj-count none">
+                <a href="javascript:void(0);">
+                    <div class="dataInOne">
+                        <i style="background: #E39D32;"></i>
+                        <span class="tj-name"></span>
+                    </div>
+                    <div class="dataInTwo">
+                        <span class="tj-num">0</span>
+                    </div>
+                </a>
+            </li>
+            <li class="tj-count none">
+                <a href="javascript:void(0);">
+                    <div class="dataInOne">
+                        <i style="background: #FF5644;"></i>
+                        <span class="tj-name"></span>
+                    </div>
+                    <div class="dataInTwo">
+                        <span class="tj-num">0</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--
+
+ *  .--,       .--,
+ * ( (  \.---./  ) )
+ *  '.__/o   o\__.'
+ *     {=  ^  =}
+ *      >  -  <
+ *     /       \
+ *    //       \\
+ *   //|   .   |\\
+ *   "'\       /'"_.-~^`'-.
+ *      \  _  /--'         `
+ *    ___)( )(___
+ *   (((__) (__)))
+ */
+
+ -->
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var legendData = JSON.parse('{yun:}$name{/yun}');
+    var tjlist = JSON.parse('{yun:}$list{/yun}');
+    
+    var xAxisData = [],
+        seriesList = [],
+        seriesObj = {},
+        seriesData = [];
+    tjlist.forEach(function (item, key) {
+        $(".tj-name").eq(key).text(legendData[key]);
+        $(".tj-num").eq(key).text(item.count);
+        $(".tj-count").eq(key).show();
+        seriesData = [];
+        for (let sdkey in item.list) {
+            if (key == 0) {
+                xAxisData.push(item.list[sdkey].td);
+            }
+            seriesData.push(item.list[sdkey].cnt);
+        }
+        seriesObj = {
+            name: legendData[key],
+            data: seriesData,
+            type: 'line',
+            smooth: true,
+            areaStyle: {
+                normal: {
+                    //右，下，左，上
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        {
+                            offset: 0,
+                            color: key == 0 ? '#327FFD' : '#d6eff8'
+                        },
+                        {
+                            offset: 0.9,
+                            color: '#fff'
+                        }
+                    ], false)
+                }
+            }
+        };
+        seriesList.push(seriesObj);
+    })
+
+    var option = {
+        // title: {
+        //     text: 'Stacked Line'
+        // },
+        color: ['#0062ff', '#30c3ce'],
+        legend: {
+            data: legendData,
+            textStyle: {
+                color: "#999",
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+
+        grid: {
+            top: '16%',
+            left: '1%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxisData,
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: '#666',
+                    fontSize: 12
+                }
+            },
+        },
+        yAxis: {
+            type: 'value',
+            axisLine: {show: false},
+            axisTick: {show: false},
+            splitLine: { //网格线
+                lineStyle: {
+                    type: 'dashed' //设置网格线类型 dotted：虚线 solid:实线
+                },
+                show: true //隐藏或显示
+            }
+        },
+        series: seriesList
+    };
+
+    myChart.setOption(option);
+    setTimeout(function () {
+        window.addEventListener("resize", () => {
+            myChart.resize();
+        });
+    }, 200);
+</script>
+<script>
+    $(document).ready(function () {
+        $(".listAllClick").click(function () {
+            $(".listAllCont").animate({
+                height: 'toggle'
+            });
+            $(".lickFangx i").toggleClass("hideFadn");
+        });
+    });
+</script>
+</body>
+
+</html>

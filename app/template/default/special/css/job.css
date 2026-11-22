@@ -1,0 +1,341 @@
+:root {
+    --font-6: 0.16rem;
+    --font-8: 0.21333rem;
+    --font-9: 0.24rem;
+    --font-10: 0.26666rem;
+    --font-12: 0.32rem;
+    --font-13: 0.346666rem;
+    --font-14: 0.3777rem;
+    --font-15: 0.4rem;
+    --font-16: 0.42222rem;
+    --font-18: 0.48rem;
+    --font-20: 0.53333rem;
+    --font-22: 0.586666rem;
+    --font-24: 0.64rem;
+    --font-28: 0.74666rem;
+    --font-30: 0.8rem;
+    --font-32: 0.853333rem;
+    --font-35: 0.93333rem;
+    --font-40: 1.06666rem;
+    --font-45: 1.2rem;
+    --font-50: 1.333333rem;
+    --font-60: 1.6rem;
+    --font-65: 1.73333rem;
+    --font-70: 1.866666rem;
+    --font-80: 2.133333rem;
+    --font-90: 2.4rem;
+    --font-100: 2.6666rem;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: #F2F2F2;
+}
+
+a,
+li {
+    list-style: none;
+    text-decoration: none;
+}
+
+a {
+    color: #333;
+    font-size: 14px;
+}
+
+a:hover {
+    color: #2778F8;
+}
+
+button,
+input {
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+section {
+    position: relative;
+    overflow: hidden;
+}
+
+
+.specialTop{
+    background: #fff;
+    overflow: hidden;
+    width: 100%;
+}
+.specialTopBord{
+    width: 100%;
+    overflow: hidden;
+    height: 22px;
+    background: #32373E;
+}
+.specialTopLogo{
+    width: 1200px;
+    margin: auto;
+    height: 60px;
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.specialTopLogo .specialTopLogoImg{
+    width: 300px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.specialTopLogo .specialTopLogoImg img{
+    width: 100%;
+}
+.specialTopLogo .specialTopLogoButt{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.specialTopLogo .specialTopLogoButt a{
+    display: block;
+    padding: 6px 25px;
+    background: #2778F8;
+    font-size: 15px;
+    border-radius: 18px;
+    margin-left: 10px;
+    color: #fff;
+}
+.specialPoster{
+    z-index: 2;
+    position: relative;
+    min-height: 300px;
+}
+.specialPoster img{
+    width: 100%;
+    height: auto;
+}
+.specialSubject{
+    width: 1200px;
+    min-height: 600px;
+    background: #fff;
+    border-radius: 12px;
+    margin: -45px auto 15px auto;
+    position: relative;
+    z-index: 4;
+}
+.specialSubject ul{
+    overflow: hidden;
+    padding: 24px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.specialSubject ul li{
+    overflow: hidden;
+    padding: 20px;
+    background: #F9FAFC;
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+.specialSubject ul li .specialLinks{
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+}
+.specialSubject ul li .specialInfo{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.specialSubject ul li .specialInfo .specialInfoName{
+    overflow: hidden;
+    width: 280px;
+}
+.specialSubject ul li .specialInfo .specialInfoName .nameOne{
+    font-size: 18px; 
+    font-weight: bold;
+    color: #2778F8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
+}
+.specialSubject ul li .specialInfo .nameOne p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.specialSubject ul li .specialInfo .specialInfoName .nameTwo{
+    font-size: 14px; 
+    color: #707988;
+    overflow: hidden;
+}
+.specialSubject ul li .specialInfo .specialInfoName img{
+    width: 17px;
+    margin-left: 8px;
+}
+.specialSubject ul li .specialInfo .specialInfoMoney{
+    overflow: hidden;
+    position: relative;
+    width: 150px;
+}
+.specialSubject ul li .specialInfo .specialInfoMoney p{
+    font-size: 18px; 
+    font-weight: bold;
+    color: #E64D52;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*padding-bottom: 6px;*/
+}
+.specialSubject ul li .specialInfo .specialInfoMoney span{
+    font-size: 14px; 
+    color: #707988;
+    overflow: hidden;
+    display: block;
+}
+.specialSubject ul li .specialInfo .specialComName{
+    overflow: hidden;
+    position: relative;
+    width: 320px;
+}
+.specialSubject ul li .specialInfo .specialComName p{
+    font-size: 16px; 
+    color: #414A60;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.specialSubject ul li .specialInfo .specialInfoMap{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 15px;
+}
+.specialSubject ul li .specialInfo .specialInfoMap p{
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.specialSubject ul li .specialInfoKan{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.specialSubject ul li .specialToud{
+    overflow: hidden;
+    font-size: 14px;
+    color: #999;
+}
+.specialSubject ul li .specialInfoKan span{
+    display: block;
+    padding: 6px 18px;
+    background: #E9F1FF;
+    border-radius: 20px;
+    color: #2778F8;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.specialSubject ul li .specialInfoKan span.toudis{
+    background: #2778F8;
+    color: #fff;
+}
+.specialSubject ul li .specialWelfare{
+    overflow: hidden;
+    display: none;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.specialSubject ul li .specialWelfare span{
+    display: block;
+    padding: 4px 10px;
+    border: 1px solid #E4E4E4;
+    border-radius: 30px;
+    margin-right: 6px;
+    color: #707988;
+    margin: 5px 8px 5px 0;
+    font-size: 12px;
+}
+
+.specialSubject ul li .specialTips {
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 6px;
+}
+.specialSubject ul li .specialTips span{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 12px;
+    height: 25px;
+    background: #fff;
+    border-radius: 3px;
+    margin: 3px 6px 3px 0;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    color: #666;
+}
+
+.specialSubject .specialGoBack{
+    overflow: hidden;
+    width: 218px;
+    height: 35px;
+    background: #2778F8;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 35px;
+    margin:0 auto 25px auto;
+}
+.specialSubject .specialGoBack .speciaMore{
+    display: block;
+    color: #fff;
+}
+
+
+
+.speciaBottom{
+    width: 1200px;
+    background: #fff;
+    border-radius: 12px;
+    margin: 0 auto 15px auto;
+}
+.speciaBottom div{
+    overflow: hidden;
+    padding: 13px;
+}
+.speciaBottom div img{
+    width: 100%;
+    height: auto;
+}
+/* 控制尺寸 */
+@media (max-width: 375px) {
+    .specialSubject{
+        height: 63vh;
+    }
+}

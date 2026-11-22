@@ -1,0 +1,264 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav claimInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <p class="followTitle">行为日志</p>
+        </div>
+    </section>
+    <section class="behaviorTab">
+        <div class="behaviorTabHaun">
+            <ul class="tabHaunUide">
+                <li :class="type=='rz'?'tabDisp':''" @click="setNav('rz')">行为日志</li>
+                <li :class="type=='fx'?'tabDisp':''" @click="setNav('fx')">行为分析</li>
+            </ul>
+            <div class="behaviorTabHaunCon">
+                <div :class="type=='rz'?'behaviorTabLit onDisp':'behaviorTabLit'" v-if="type=='rz'">
+                    <div class="behaviTitle">
+                        <p>账号信息 UID：{{info.uid}}</p>
+                        <p>账号：{{info.username}}</p>
+                        <p>名称：{{info.s_name}}</p>
+                        <p>手机：{{info.mobile}}</p>
+                    </div>
+                    <div class="behavSchedule" v-if="!noLog">
+                        <ul v-if="!noLog">
+                            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getloglist">
+                                    <li v-for="(item, key) in list" :key="key">
+                                        <i> <img src="img/quans.png" alt=""></i>
+                                        <div class="layuiTimeline">
+                                            <span>{{item.timehis_n}} ({{item.timeymd_n}}) [{{item.ip}}]</span>
+                                            <p>{{item.info}}</p>
+                                        </div>
+                                    </li>
+                                </van-list>
+                            </van-pull-refresh>
+                        </ul>
+                    </div>
+                    <div class="behavSchedule noneInfoAll" v-else>
+                        <div class="nfoAllConu">
+                            <img src="img/zwtip.png" alt="">
+                            <p>暂无信息</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="type=='fx'?'behaviorTabLit onDisp':'behaviorTabLit'" v-if="type=='fx'">
+                    <div class="behaviAnalcon">
+                        <p>说明：以下统计仅为对应动作触发次数，不代表实际操作成功，如：投递简历20次，代表该用户点击简历投递20次，实际简历投递数以职位记录中简历投递记录为准</p>
+                    </div>
+                    <div class="behaviRecord">
+                        <div class="behaviRecordback">
+                            <p>{{logcount.lognum}}</p>
+                            <span>累计点击次数</span>
+                        </div>
+                        <div class="behaviRecordInfos" v-if="usertype=='2'">
+                            <p>浏览简历 <span>{{logcount.lookresume}}</span> 次</p>
+                            <p>邀请面试 <span>{{logcount.inviteresume}}</span> 次</p>
+                            <p>聊天沟通 <span>{{logcount.chat}}</span> 次</p>
+                            <p>下载简历 <span>{{logcount.downresume}}</span> 次</p>
+                            <p>发布修改职位 <span>{{logcount.addjob}}</span> 次</p>
+                            <p>推广服务 <span>{{logcount.promote}}</span> 次</p>
+                            <p>浏览套餐/增值包 <span>{{logcount.pay}}</span> 次</p>
+                        </div>
+                        <div class="behaviRecordInfos" v-if="usertype=='1'">
+                            <p>搜索职位 <span>{{logcount.searchjob}}</span> 次</p>
+                            <p>浏览职位 <span>{{logcount.lookjob}}</span> 次</p>
+                            <p>投递简历 <span>{{logcount.sqjob}}</span> 次</p>
+                            <p>聊天沟通 <span>{{logcount.chat}}</span> 次</p>
+                        </div>
+                    </div>
+                    <div class="behaviRecorFrist">
+                        <p>首次活跃：{{logcount.startlog}}</p>
+                    </div>
+                    <div class="behaviRecorForm">
+                        <form action="" onsubmit="return false">
+                            <div class="haviRecorFormOne">
+                                <p>选择时间：</p>
+                            </div>
+                            <div class="haviRecorFormTwo">
+                                <input type="text" readonly v-model="datetime" placeholder="可选择时间段" @click="dateShow=true">
+                                <button></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="behaviRecorVisit">
+                        <p>访问时间：</p>
+                        <div class="threeList">
+                            <a :class="timeid==2?'threeListLink':''" href="javascript:void(0);" @click="settime(2)">昨日</a>
+                            <a :class="timeid==1?'threeListLink':''" href="javascript:void(0);" @click="settime(1)">今日</a>
+                            <a :class="timeid==3?'threeListLink':''" href="javascript:void(0);" @click="settime(3)">三天内</a>
+                            <a :class="timeid==4?'threeListLink':''" href="javascript:void(0);" @click="settime(4)">一周内</a>
+                        </div>
+                    </div>
+                    <div class="behavSchedule" v-if="!noLog">
+                        <ul>
+                            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getloglist">
+                                    <li v-for="(item, key) in list" :key="key">
+                                        <i> <img src="img/quans.png" alt=""></i>
+                                        <div class="layuiTimeline">
+                                            <span>{{item.timehis_n}} ({{item.timeymd_n}}) [{{item.ip}}]</span>
+                                            <p>{{item.info}}</p>
+                                        </div>
+                                    </li>
+                                </van-list>
+                            </van-pull-refresh>
+                        </ul>
+                    </div>
+                    <div class="behavSchedule noneInfoAll" v-else>
+                        <div v-show="!loading" class="nfoAllConu">
+                            <img src="img/zwtip.png" alt="">
+                            <p>暂无信息</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <van-calendar v-model="dateShow" type="range" :show-confirm="false" :min-date="minDate" :max-date="maxDate" @confirm="dateConfirm"></van-calendar>
+</div>
+<script>
+    var uid = '{yun:}$smarty.get.uid{/yun}';
+    var usertype = '{yun:}$smarty.get.usertype{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noLog: false,
+
+                info: [],
+                timeid: '',
+                type: 'rz',
+
+                logcount: [],
+                usertype: usertype,
+                uid: uid,
+                minDate: new Date(2021, 0, 1),
+                maxDate: new Date(),
+                dateShow: false,
+                datetime: ''
+            }
+        },
+        created() {
+            this.getloglist();
+            this.getlogcount();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getloglist('new');
+            },
+            getlogcount: function () {
+                var that = this;
+                var param = {
+                    uid: uid,
+                    usertype: that.usertype
+                };
+                if (that.datetime != '') {
+                    param.times = that.datetime;
+                } else {
+                    param.time = that.timeid != '' ? that.timeid : 1;
+                }
+                $.post('index.php?m=user&c=admin_weblog', param, function (res) {
+                    that.info = res.logcount.userinfo ? res.logcount.userinfo : [];
+                    that.logcount = res.logcount;
+                    $("#yunvue").css('display', 'block');
+                }, 'json');
+            },
+            getloglist: function (type) {
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    uid: that.uid,
+                    usertype: that.usertype,
+                    time: that.timeid,
+                    times: that.datetime,
+                    page: that.page,
+                    limit: that.limit
+                };
+                that.loading = true;
+                $.post('index.php?m=user&c=admin_weblog&a=loglist', param, function (res) {
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noLog = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noLog = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+                }, 'json');
+            },
+            setNav: function (e) {
+                this.type = e;
+                this.page = 0;
+                if (e == 'fx') {
+                    this.timeid = 1;
+                    this.noLog = true;
+                } else {
+                    this.timeid = '';
+                }
+                this.list = [];
+                this.getloglist();
+            },
+            settime: function (e) {
+                this.timeid = e;
+                this.datetime = '';
+                this.page = 0;
+                this.list = [];
+                this.noLog = true;
+                this.getloglist();
+                this.getlogcount();
+            },
+            dateConfirm: function (date) {
+                this.datetime = `${date[0].getFullYear()}-${date[0].getMonth() + 1}-${date[0].getDate()}` + '~' + `${date[1].getFullYear()}-${date[1].getMonth() + 1}-${date[1].getDate()}`;
+                this.page = 0;
+                this.timeid = '';
+                this.list = [];
+                this.getloglist();
+                this.getlogcount();
+                this.dateShow = false;
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            }
+        }
+    });
+</script>
+</body>
+</html>

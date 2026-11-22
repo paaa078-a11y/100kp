@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+	<title>{yun:}$headertitle{/yun}</title>
+
+	<link href="{yun:}$wap_style{/yun}/css/base.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+	<link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"/>
+	<link type="text/css" href="{yun:}$wap_style{/yun}/work/css/work.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+
+	<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script src="https://open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js"></script>
+
+	<script src="{yun:}$wap_style{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+
+	<script src="{yun:}$wap_style{/yun}/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config_wapdomain{/yun}/js/vant/lib/vant.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config_wapdomain{/yun}/js/vant/phpyun_vant.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$wap_style{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}"></script>
+
+</head>
+<body>
+<div id="work" class="none workScorllbar">
+	<div v-if="single">
+		<div class="user_portray">
+			<div class="user_portray_info">
+				<div class="user_portray_tx"><img :src="info.avatar"></div>
+				<div class="user_portray_p">
+					<div class="user_portray_info_name">{{info.name}}</div>
+					<div class="user_portray_info_wx">@{{info.type_n}}</div>
+				</div>
+			</div>
+			<div class="user_portray_time ortrayTimeFlex">
+				<p v-if="info.createtime_n">添加时间：{{info.createtime_n}}</p>
+				<span class="user_portray_bs" v-if="info.type==1">身份标识：<i class="user_portray_bs_bg">{{info.utype_n}}</i></span>
+			</div>
+		</div>
+		<div class="user_portraypd" v-if="info.type == 1">
+					<div class="work_wstip" v-if="info.is_reg == 2" @click="shareRegUrl">
+						<div class="work_wsbthtip">该用户尚未注册会员</div>
+						<div class="work_wsbth">注册会员</div>
+					</div>
+			<div v-if="info.usertype == 1">
+				<div class="user_portray_box" v-if="info.is_reg == 1">
+					<div class="user_portray_list"><span class="user_portray_list_s">姓<span class="user_portray_list_sm">名</span>：</span>{{info.subInfo.name}}</div>
+					<div class="user_portray_list"><span class="user_portray_list_s">年<span class="user_portray_list_sm">龄</span>：</span>{{info.subInfo.age}}</div>
+					<div><span class="user_portray_list_s">期望薪资：</span>{{info.subInfo.salary}}</div>
+					<div><span class="user_portray_list_s">期望职位：</span>{{info.subInfo.expect_name}}</div>
+					<div><span class="user_portray_list_s">注册时间：</span>{{info.reg_date_n}}</div>
+					<div><span class="user_portray_list_s">最近登录：</span>{{info.login_date_n}}</div>
+					<div v-if="info.subInfo.isResume == 1"><span class="user_portray_list_s">简历完整度</span><van-progress :percentage="info.subInfo.integrity" stroke-width="10" /></div>
+				</div>
+
+				<div class="work_wstipshow" v-if="info.type == 1">
+					<div class="work_wstip" v-if="info.is_reg == 2" @click="shareRegUrl">
+						<div class="work_wsbthtip">该用户尚未注册会员</div>
+						<div class="work_wsbth">注册会员</div>
+					</div>
+					<div class="work_wstip" v-if="info.is_reg == 1 && info.subInfo.isResume == 2" @click="shareResumeUrl">
+						<div class="work_wsbthtip">该用户尚未添加简历</div>
+						<div class="work_wsbth">完善简历</div>
+					</div>
+					<div class="work_wstip" v-if="info.is_reg == 1 && info.subInfo.isResume == 1 && info.subInfo.integrity < 100 " @click="shareResumeSubUrl(info.subInfo.wstitle)">
+						<div class="work_wsbthtip">该用户尚未添加{{info.subInfo.wstitle}}</div>
+						<div class="work_wsbth">添加{{info.subInfo.wstitle}}</div>
+					</div>
+				</div>
+
+				<div class="user_portray_lc" v-if="info.is_reg == 1">
+
+					<div class="user_portray_lc_tit">
+						<ul>
+							<li :class="tab==1 ? 'user_portray_lc_cur' : ''" @click="tabChange(1)">浏览</li>
+							<li :class="tab==2 ? 'user_portray_lc_cur' : ''" @click="tabChange(2)">投递</li>
+							<li :class="tab==3 ? 'user_portray_lc_cur' : ''" @click="tabChange(3)">职位</li>
+							<li :class="tab==4 ? 'user_portray_lc_cur' : ''" @click="tabChange(4)">备注</li>
+						</ul>
+					</div>
+					<div class="user_portray_show" v-if="tab==1">
+						<van-list v-model:loading="lookLoading" :finished="lookFinished" finished-text="没有更多浏览信息了" @load="getLookList">
+							<ul class="user_portray_dzlist" v-for="item in lookList" :key="item">
+								<div class="user_portray_listtime" v-if="item.day == 1">{{item.week_day}}</div>
+								<li><span class="user_portray_dzt">{{item.time_n}}</span>  浏览了<span class="user_portray_zd">{{item.job_name}}</span> 的职位<div class="">{{item.com_name}}</div></li>
+							</ul>
+						</van-list>
+					</div>
+					<div class="user_portray_show" v-if="tab==2">
+						<van-list v-model:loading="sqLoading" :finished="sqFinished" finished-text="没有更多投递记录了" @load="getSqList">
+							<ul class="user_portray_dzlist" v-for="item in sqList">
+								<div class="user_portray_listtime" v-if="item.day == 1">{{item.week_day}}</div>
+								<li><span class="user_portray_dzt">{{item.time_n}}</span>  投递了<span class="user_portray_zd">{{item.com_name}}</span> 的职位<div class="">{{item.job_name}}</div></li>
+							</ul>
+						</van-list>
+					</div>
+					<div class="user_portray_show" v-if="tab==3">
+						<div class="comjobsearch">
+							<input type="text" v-model="keyword" placeholder="请输入关键词搜索" class="comjobsearch_text"/>
+							<div @click="searchJob" class="comjobsearch_bth">搜索</div>
+						</div>
+
+						<van-list v-model:loading="jobLoading" :finished="jobFinished" finished-text="没有更多职位数据了" @load="getJobList">
+							<div class=" " v-for="item in jobList" :key="item">
+								<div class="user_portray_listtime" v-if="item.day == 1">{{item.week_day}}</div>
+								<div class="comjoblist">
+
+									<span class="user_portray_dzt">{{item.time_n}}</span>
+									<div class="comjobname">{{item.name}}<span class="comjobxz"> {{item.salary_n}}</span></div>
+
+									<div class="comcomname"> {{item.com_name}}</div>
+									<div @click="shareJobUrl(item)" class="comjobts">推送</div>
+									<div class="comjobtime">{{item.up_time}}更新</div>
+
+								</div>
+							</div>
+						</van-list>
+					</div>
+					<div class="user_portray_show" v-if="tab==4">
+						<van-cell-group inset>
+							<van-field v-model="info.subInfo.content" rows="4" autosize type="textarea" placeholder="请输入备注信息" />
+						</van-cell-group>
+						<div class="conserveWork" @click="remark">保存</div>
+					</div>
+				</div>
+			</div>
+			<div class="notYetWork" v-if="info.usertype == 2">
+				<div>
+					<img src="{yun:}$wap_style{/yun}/images/none_position.png?v={yun:}$config.cachecode{/yun}" alt="">
+				</div>
+				<span>当前功能不支持企业客户使用</span>
+			</div>
+		</div>
+		<div class="notYetWork" v-if="info.type == 2">
+			<div>
+				<img src="{yun:}$wap_style{/yun}/images/none_position.png?v={yun:}$config.cachecode{/yun}" alt="">
+			</div>
+			<span>当前功能不支持企业微信客户使用</span>
+			<div>
+				<span>请选择单个微信用户使用</span>
+			</div>
+		</div>
+	</div>
+	<div v-if="group" class="notYetWork">
+		<div>
+			<img src="{yun:}$wap_style{/yun}/images/none_position.png?v={yun:}$config.cachecode{/yun}" alt="">
+		</div>
+		<span>当前功能不支持群聊使用</span>
+		<div>
+			<span>请选择单个用户使用</span>
+		</div>
+	</div>
+</div>
+{yun:}include file="$wapstyle/work/work_js.htm"{/yun}
+<script>
+	var weburl = "{yun:}$config.sy_weburl{/yun}";
+
+	var formData = new FormData();
+
+	var lookData = new FormData();
+	var sqData = new FormData();
+	var jobData = new FormData();
+
+	var workVue = new Vue({
+		el: '#work',
+		data: {
+			single: false,
+			group: false,
+			info: {},
+			tab: 1,
+
+			lookList: [],
+			lookLoading: false,
+			lookFinished: false,
+			lookPage: 1,
+			lookLimit: 10,
+
+			sqList: [],
+			sqLoading: false,
+			sqFinished: false,
+			sqPage: 1,
+			sqLimit: 10,
+
+			keyword: '',
+			jobList: [],
+			jobLoading: false,
+			jobFinished: false,
+			jobPage: 1,
+			jobLimit: 10,
+
+			weekDay: ''
+		},
+		methods: {
+			setGroupShow(){
+
+				var self = this;
+				self.group = true;
+				self.single = false;
+				$("#work").css('display', 'block');
+			},
+			getUserInfo(userId) {
+				showLoading();
+				var self = this;
+				self.group = false;
+				self.single = true;
+				formData.append('userId', userId);
+				$.ajax({
+					url: weburl + '/wap/index.php?c=work&a=getUserInfo',
+					type: 'post',
+					data: formData,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function (res) {
+
+						hideLoading();
+						var res = JSON.stringify(res);
+						var data = JSON.parse(res);
+
+						if (data.errcode == 1) {
+
+							$("#work").css('display', 'block');
+
+							self.info = data.info;
+
+							if (self.info.is_reg == 1){
+
+								self.info.lookList.forEach(item=>{
+
+									if (item.week_day != self.weekDay){
+
+										item.day = 1;
+										self.weekDay = item.week_day;
+									}
+
+									self.lookList.push(item);
+								});
+
+								self.lookLoading = false;
+
+								if (self.lookList.length < self.lookLimit){
+
+									self.lookFinished = true;
+								}else{
+
+									self.lookPage = self.lookPage + 1;
+								}
+							}
+						} else if (data.errcode == 2) {
+
+							showToast(data.msg);
+						}
+					},
+					fail: function (res) {
+
+					},
+					error: function(msg){
+						// alert(JSON.stringify(msg));
+					}
+				});
+			},
+			tabChange: function (e) {
+
+				var self = this;
+				self.tab = e;
+				self.weekDay = '';
+
+				if (self.tab == 1){
+
+					if (self.lookFinished == false) {
+						self.lookList = [];
+						self.lookPage = 1;
+						self.lookLoading = false;
+					}
+				}else if(self.tab == 2){
+
+					if (self.sqFinished == false) {
+						self.sqList = [];
+						self.sqPage = 1;
+						self.sqLoading = false;
+					}
+				}else if(self.tab == 3){
+
+					if (self.jobFinished == false) {
+						self.jobList = [];
+						self.jobPage = 1;
+						self.jobLoading = false;
+					}
+				}else if(self.tab == 4){
+
+				}
+			},
+
+			getLookList() {
+				var self = this;
+				lookData.append('uid', self.info.uid);
+				lookData.append('page', self.lookPage);
+				lookData.append('limit', self.lookLimit);
+				$.ajax({
+					url: weburl + '/wap/index.php?c=work&a=getLookList',
+					type: 'post',
+					data: lookData,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function (res) {
+						var res = JSON.stringify(res);
+						var list = JSON.parse(res);
+
+						list.forEach(item => {
+
+							if (item.week_day != self.weekDay){
+
+								item.day = 1;
+								self.weekDay = item.week_day;
+							}
+							self.lookList.push(item);
+						});
+
+						self.lookLoading = false;
+
+						if (list.length < self.lookLimit) {
+
+							self.lookFinished = true;
+						} else {
+
+							self.lookPage = self.lookPage + 1;
+						}
+					},
+					fail: function (res) {
+
+					}
+				});
+			},
+
+			getSqList() {
+				var self = this;
+				sqData.append('uid', self.info.uid);
+				sqData.append('page', self.sqPage);
+				sqData.append('limit', self.sqLimit);
+				$.ajax({
+					url: weburl + '/wap/index.php?c=work&a=getSqList',
+					type: 'post',
+					data: sqData,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function (res) {
+						var res = JSON.stringify(res);
+						var list = JSON.parse(res);
+
+						list.forEach(item => {
+
+							if (item.week_day != self.weekDay){
+
+								item.day = 1;
+								self.weekDay = item.week_day;
+							}
+							self.sqList.push(item);
+						});
+
+						self.sqLoading = false;
+
+						if (list.length < self.sqLimit) {
+
+							self.sqFinished = true;
+						} else {
+
+							self.sqPage = self.sqPage + 1;
+						}
+					},
+					fail: function (res) {
+
+					}
+				});
+			},
+
+			searchJob: function(){
+
+				var self = this;
+				self.jobPage = 1;
+
+				jobData	=	new FormData();
+
+				jobData.append('keyword', self.keyword);
+				self.jobFinished = false;
+				self.jobList = [];
+				self.getJobList();
+			},
+
+			getJobList() {
+
+				var self = this;
+				jobData.append('uid', self.info.uid);
+				jobData.append('page', self.jobPage);
+				jobData.append('limit', self.jobLimit);
+				$.ajax({
+					url: weburl + '/wap/index.php?c=work&a=getJobList',
+					type: 'post',
+					data: jobData,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function (res) {
+
+						var res = JSON.stringify(res);
+						var list = JSON.parse(res);
+
+						list.forEach(item => {
+
+							if (item.week_day != self.weekDay){
+
+								item.day = 1;
+								self.weekDay = item.week_day;
+							}
+							self.jobList.push(item);
+						});
+
+						self.jobLoading = false;
+
+						console.log(self.jobLimit);
+
+						if (list.length < self.jobLimit) {
+
+							self.jobFinished = true;
+						} else {
+
+							self.jobPage = self.jobPage + 1;
+						}
+					},
+					fail: function (res) {
+
+					}
+				});
+			},
+
+			remark() {
+				var self = this;
+				var remarkData = new FormData();
+
+				remarkData.append('uid', self.info.uid);
+				remarkData.append('content', self.info.subInfo.content);
+
+				$.ajax({
+					url: weburl + '/wap/index.php?c=work&a=remarkResume',
+					type: 'post',
+					data: remarkData,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function (res) {
+						var res = JSON.stringify(res);
+						var data = JSON.parse(res);
+						showToast(data.msg);
+					},
+					fail: function (res) {
+						showToast(data.msg);
+					}
+				});
+			},
+
+			shareRegUrl() {
+				wx.invoke('sendChatMessage', {
+					msgtype: "news", //消息类型，必填
+					enterChat: true, //为true时表示发送完成之后顺便进入会话，仅移动端3.1.10及以上版本支持该字段
+					news:
+							{
+								link: weburl+"/wap/index.php?c=login", //H5消息页面url 必填
+								title: "{yun:}$config.sy_webname{/yun} - 邀请您注册", //H5消息标题
+								desc: "{yun:}$config.sy_webname{/yun}找工作，职位多、福利待遇好，总有一份职位适合您！", //H5消息摘要
+								imgUrl: "{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_sharelogo{/yun}", //H5消息封面图片URL
+							}
+				}, function (res) {
+					if (res.err_msg == 'sendChatMessage:ok') {
+						//发送成功
+					}
+				})
+			},
+			shareResumeUrl() {
+				wx.invoke('sendChatMessage', {
+					msgtype: "news", //消息类型，必填
+					enterChat: true, //为true时表示发送完成之后顺便进入会话，仅移动端3.1.10及以上版本支持该字段
+					news:
+							{
+								link: weburl+"/wap/index.php?c=login", //H5消息页面url 必填
+								title: "{yun:}$config.sy_webname{/yun} - 邀请您完善简历", //H5消息标题
+								desc: "一份完善的简历，能够提高您的找工作效率，更多工作信息，上{yun:}$config.sy_webname{/yun}！", //H5消息摘要
+								imgUrl: "{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_sharelogo{/yun}", //H5消息封面图片URL
+							}
+				}, function (res) {
+					if (res.err_msg == 'sendChatMessage:ok') {
+						//发送成功
+					}
+				})
+			},
+			shareResumeSubUrl(title) {
+				wx.invoke('sendChatMessage', {
+					msgtype: "news", //消息类型，必填
+					enterChat: true, //为true时表示发送完成之后顺便进入会话，仅移动端3.1.10及以上版本支持该字段
+					news:
+							{
+								link: weburl+"/wap/index.php?c=login", //H5消息页面url 必填
+								title: "{yun:}$config.sy_webname{/yun} - 完善"+title, //H5消息标题
+								desc: "一份完善的简历，能够提高您的找工作效率，完善"+title+"，抓住更多机遇！{yun:}$config.sy_webname{/yun}！", //H5消息摘要
+								imgUrl: "{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_sharelogo{/yun}", //H5消息封面图片URL
+							}
+				}, function (res) {
+					if (res.err_msg == 'sendChatMessage:ok') {
+						//发送成功
+					}
+				})
+			},
+			shareJobUrl(job) {
+				wx.invoke('sendChatMessage', {
+					msgtype: "news", //消息类型，必填
+					enterChat: true, //为true时表示发送完成之后顺便进入会话，仅移动端3.1.10及以上版本支持该字段
+					news:
+							{
+								link: job.url, //H5消息页面url 必填
+								title: job.name, //H5消息标题
+								desc: job.description, //H5消息摘要
+								imgUrl: "{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_sharelogo{/yun}", //H5消息封面图片URL
+							}
+				}, function (res) {
+					if (res.err_msg == 'sendChatMessage:ok') {
+						//发送成功
+					}
+				})
+			}
+		}
+	})
+</script>
+</body>
+</html>

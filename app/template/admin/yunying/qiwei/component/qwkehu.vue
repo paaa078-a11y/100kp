@@ -1,0 +1,344 @@
+<template>
+    <div class="moduleElHight" style="padding: 0 20px;">
+        <div class="moduleSeachs">
+            <div class="moduleSeachInpt">
+                <el-input v-model="keyword" size="small" placeholder="请输入内容" clearable></el-input>
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+            </div>
+            <div class="moduleSeachButn" style="display: flex;align-items: center;">
+                <el-button type="text" @click="drawersm = true">功能说明 <i class="el-icon-question"></i></el-button>
+                <el-button type="primary" icon="el-icon-document-add" size="mini">同步企微</el-button>
+            </div>
+        </div>
+        <div class="moduleElTable" style="height: calc(100% - 101px);">
+            <div class="admin_datatip"><i class="el-icon-document"></i>
+                <span class="admin_datatip_n">客户数量：{{numArr.customerNum}} 条 </span>
+                <span class="admin_datatip_n">去重数量 ：{{numArr.qcNum}} 条</span>
+                <span class="admin_datatip_n">平台用户：{{numArr.regNum}} 条 </span>
+                <span class="admin_datatip_n">今日新增 ：{{numArr.newNum}} 条</span>
+                <span class="admin_datatip_n">今日流失：{{numArr.delNum}} 条 </span>
+                <span class="admin_datatip_n">搜索结果： {{total}} 条</span>
+            </div>
+            <el-table :data="tableData" border style="width: 100%" ref="multipleTable" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="calc(100% - 42px)" v-loading="loading">
+                <template slot="empty">
+                    <p>{{dataText}}</p>
+                </template>
+                <el-table-column label="客户信息">
+                    <template slot-scope="props">
+                        <div class="moduleProps moduleTrButn">
+                            <div class="comImage">
+                                <el-avatar icon="el-icon-user-solid" :src="props.row.avatar"></el-avatar>
+                            </div>
+                            <div class="moduComInfo">
+                                <span class="oneName">{{ props.row.name }}</span>
+                                <span class="twoLaiy" v-html="props.row.name_sub"></span>
+                            </div>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="平台信息" width="320">
+                    <template slot-scope="props">
+                        <div v-if="props.row.uid && props.row.usertype == '1'">
+                            个人：{{props.row.r_name}}
+                            <div>注册：{{props.row.reg_date_n}}</div>
+                        </div>
+                        <div v-else-if="props.row.uid && props.row.usertype == '2'">
+                            企业：{{props.row.com_name}}
+                            <div>注册：{{props.row.reg_date_n}}</div>
+                        </div>
+                        <div v-else-if="props.row.uid && !props.row.usertype">
+                            暂未绑定企业、暂未创建简历
+                            <div>注册：{{props.row.reg_date_n}}</div>
+                        </div>
+                        <div v-else>尚未注册</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sfruq" label="是否入群" width="160">
+                    <template slot-scope="props">
+                        <span v-if="props.row.chat_num">已入{{props.row.chat_num}}群</span>
+                        <span v-else>尚未入群</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="khztai" label="客户状态" width="120">
+                    <template slot-scope="props">
+                        <div class="admin_state" v-if="props.row.delete_time > 0">
+                            <img style="padding-right: 3px;" src="../../../../../app/template/admin/images/state1.png"><span class="admin_state2">已流失</span>
+                        </div>
+                        <div class="admin_state" v-else>
+                            <img style="padding-right: 3px;" src="../../../../../app/template/admin/images/state2.png"><span class="admin_state1">未流失</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="70">
+                    <template slot-scope="scope">
+                        <div class="cz_button">
+                            <el-button type=" " size="small" @click="getinfo(scope.row.external_userid)">详情</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div></div>
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+            </div>
+        </div>
+        <!-- 客户详情弹窗 -->
+        <el-drawer title="客户详情" :visible.sync="drawerinfo" append-to-body size="80%">
+            <div class="infoboxp" style="padding:0 20px ;">
+                <div class="tty_table-bom">
+                    <div class="searchBoxStrTwoRight right_back" style="width: 70px; margin-left: 0px;"></div>
+                    <div>
+                        <div class="company_list">
+                            <img :src="customerInfo.avatar" width="40" height="40" style="border-radius: 50%; margin-right: 5px;">
+                            <span>{{customerInfo.name}}</span>
+                        </div>
+                    </div>
+                    <div class="tty_table" style="padding: 10px;border: 1px solid #e6e6e6;border-radius: 4px;">
+                        <div class="table-list">
+                            <div class="admin_table_border">
+                                <div class="admin_table_border_top">
+                                    <span>平台信息</span>
+                                </div>
+                                <div class="admin_table_border_bottom">
+                                    <div class="customer_info_platinfo">
+                                        <p>注册时间：{{customerInfo.is_reg == '2' ? '未注册' : customerInfo.reg_date_n}}</p>
+                                        <p>简历完整度：{{customerInfo.is_reg == '2' ? '未注册' : customerInfo.integrity}}</p>
+                                    </div>
+                                    <div class="customer_info_platinfo">
+                                        <p>企业名称：{{customerInfo.is_reg == '2' ? '未注册' : customerInfo.com_name}}</p>
+                                        <p>绑定手机：{{customerInfo.is_reg == '2' ? '未注册' : customerInfo.moblie}}</p>
+                                    </div>
+                                    <div class="customer_info_platinfo">
+                                        <p>简历姓名：{{customerInfo.is_reg == '2' ? '未注册' : customerInfo.resume_name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tty_table-bom"
+                         style="border: 1px solid #e6e6e6; padding: 10px 10px;border-radius: 4px;margin-top: 15px;">
+                        <span style="padding: 10px 0;font-size: 16px;color: #000;font-weight: bold;">已添加员工</span>
+                        <div class="moduleElTable" style="padding: 0; width: 100%;">
+                            <el-table :data="customerInfo.userList" border style="width: 100%" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+                                <template slot="empty">
+                                    <p>{{dataText}}</p>
+                                </template>
+                                <el-table-column prop="userid" label="员工ID"></el-table-column>
+                                <el-table-column prop="name_n" label="员工姓名"></el-table-column>
+                                <el-table-column prop="way_n" label="客户来源"></el-table-column>
+                                <el-table-column prop="create_time_n" label="添加时间"></el-table-column>
+                                <el-table-column fixed="right" label="操作">
+                                    <template slot-scope="scope">
+                                        <div class="cz_button">
+                                            <el-button size="small" @click="setcurrinfoid(scope.row.userid)">查看</el-button>
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </div>
+                    <div class="tty_table-bom" style="border: 1px solid #e6e6e6; padding: 10px 10px;border-radius: 4px;margin-top: 15px;">
+                        <span style="padding: 10px 0;font-size: 16px; color: #000;font-weight: bold;">所在群聊</span>
+                        <div class="moduleElTable" style="padding: 0; width: 100%;">
+                            <el-table :data="customerInfo.chatList" border style="width: 100%" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+                                <template slot="empty">
+                                    <p>{{dataText}}</p>
+                                </template>
+                                <el-table-column prop="name" label="群聊名称"></el-table-column>
+                                <el-table-column prop="owner" label="群主"></el-table-column>
+                                <el-table-column prop="join_time_n" label="入群时间"></el-table-column>
+                                <el-table-column fixed="right" label="操作">
+                                    <template slot-scope="scope">
+                                        <div class="cz_button">
+                                            <el-button size="small" @click="showchatinfo(scope.row.chat_id)">查看</el-button>
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-drawer>
+        <!-- 功能说明弹窗 -->
+        <div class="modluDrawer">
+            <el-dialog title="功能说明" :visible.sync="drawersm" :with-header="true" append-to-body :show-close="true" width="500px">
+                <div class=" ">
+                    <div> 数量统计 - 去重数量</div>
+                    <div> 存在多个员工添加统一客户情况，去重数量为实际客户数量总数</div>
+                    <div> 客户状态 - 流失客户</div>
+                    <div>1-配置了客户联系功能的成员删除外部联系人</div>
+                    <div>2-配置了客户联系功能的成员被外部联系人删除</div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="drawersm = false">取 消</el-button>
+                    <el-button type="primary" @click="drawersm = false">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <!-- 员工详情弹窗 -->
+        <yuanginfo ref="yginfo"></yuanginfo>
+        <!-- 群聊详情弹窗 -->
+        <chatinfo ref="chatinfo"></chatinfo>
+    </div>
+</template>
+<script>
+    module.exports = {
+        props: {
+            userid: {
+                type: String,
+                default: null
+            }
+        },
+        data: function () {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                drawerinfo: false,
+                drawersm: false,
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                total: 0,
+                keyword: '',
+                numArr: {},
+                customerInfo: [],
+                curruid: '',
+                islook: false,
+                prevPage: 0
+            }
+        },
+        components: {
+            'yuanginfo': httpVueLoader('./yuanginfo.vue'),
+            'chatinfo': httpVueLoader('./chatinfo.vue'),
+        },
+        created: function () {
+            this.getBaseData();
+            this.getList();
+        },
+        methods: {
+            showchatinfo(cid) {
+                this.$refs.chatinfo.chatid = cid
+                this.$refs.chatinfo.getinfo()
+            },
+            setcurrinfoid(id) {
+                this.curruid = id
+                this.$refs.yginfo.getinfo()
+            },
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                console.log(that.userid, 11111)
+                if (that.userid) {
+                    params.userid = that.userid
+                }
+                that.loading = true;
+                httpPost('m=yunying&c=workwx_customer&a=index', params).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total)
+                        if (that.prevPage != that.page) {
+                            that.prevPage = that.page;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0) {
+                            that.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            getBaseData() {
+                let _this = this;
+                httpPost('m=yunying&c=workwx_customer&&a=index_base_data', {}, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    _this.numArr = Object.freeze(res.data.numArr);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            async getinfo(id) {
+                let that = this;
+                var params = {userid: id};
+                that.loading = true;
+                httpPost('m=yunying&c=workwx_customer&a=info', params).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.customerInfo = res.data;
+                        that.loading = false;
+                        that.drawerinfo = true;
+                        if (that.customerInfo.userList.length === 0 || that.customerInfo.chatList) {
+                            that.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            }
+        },
+        watch: {
+            userid: function (val, oldVal) {
+                this.keyword = '';
+                this.search();
+            },
+        }
+    };
+</script>
+<style>
+    .company_list {
+        padding: 0 0 15px 0;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .admin_table_border_bottom {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        padding-top: 12px;
+        display: flex;
+        /* align-items: center; */
+    }
+
+    .customer_info_platinfo {
+        overflow: hidden;
+        position: relative;
+        padding-right: 10%;
+    }
+
+    .customer_info_platinfo p {
+        overflow: hidden;
+        position: relative;
+        font-size: 14px;
+        color: #888;
+        padding: 4px 0;
+    }
+</style>

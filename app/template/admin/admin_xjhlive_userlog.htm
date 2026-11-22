@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+
+    <title>后台管理</title>
+</head>
+<style>
+    .admin_new_cz_tj{
+        margin-right: 5px;
+    }
+</style>
+<body class="body_ifm">
+<!-- 弹窗列表 Start -->
+<div class="newtck_pad" style="background-color: #fff;">
+    <div class="chqy_com">入场记录</div>
+
+    <div class="tty-tishi_top">
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get" style="padding:0px;">
+                <div>
+                    <input name="m" value="admin_xjhlive" type="hidden"/>
+                    <input name="c" value="userlog" type="hidden"/>
+                </div>
+                <div class="adminNewEarch">
+                    <div class="admin_statistics">
+                    </div>
+                </div>
+            </form>
+            {yun:}include file="admin/admin_search.htm"{/yun}
+        </div>   </div>
+
+    <div class="clear"></div>
+</div>
+
+<div class="tty_table-bom"style="margin-top: 0px;;">
+    <div class="table-list" style="color:#898989">
+        <div class="admin_table_border" style="padding:0px">
+            <iframe id="supportiframe"  name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+            <form action="index.php" name="myform" method="post" target="supportiframe" id='myform'>
+                <table width="100%">
+                    <thead>
+                    <tr class="admin_table_top" align="left">
+                        <th width="10">
+                        </th>
+
+                        <th>名称</th>
+                        <th>IP</th>
+                        <th>进入时间</th>
+                        <th>类型</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tableBackColorTwo">
+                    {yun:}foreach item=v key=key from=$List{/yun}
+                    <tr align="left"{yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td></td>
+                        <td>{yun:}$v.name{/yun}</td>
+                        <td>{yun:}$v.ip{/yun}</td>
+                        <td>{yun:}$v.ctime_n{/yun}</td>
+                        <td>{yun:}$v.utype{/yun}</td>
+                        <td align="center">
+
+
+                        </td>
+                    </tr>
+                    {yun:}/foreach{/yun}
+
+                    {yun:}if $total > $config.sy_listnum {/yun}
+                    <tr>
+                        {yun:}if $pagenum==1{/yun}
+                        <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                        <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}else if $pagenum == $pages{/yun}
+                        <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                        {yun:}/if{/yun}
+                        <td colspan="6" class="digg">{yun:}$pagenav{/yun}</td>
+                    </tr>
+                    {yun:}/if{/yun}
+                    </tbody>
+                </table>
+                <input type="hidden" name="pytoken" id="pytoken"  value="{yun:}$pytoken{/yun}">
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<!-- 弹窗列表 End -->
+
+<script>
+    var form;
+    var needLoad = false;
+    layui.use(['form'], function(){
+        form = layui.form;
+    });
+</script>
+</body>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

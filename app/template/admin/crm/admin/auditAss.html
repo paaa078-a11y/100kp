@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="auditAssApp" class="moduleElenAl moduleElenAuto">
+        <cj_amount></cj_amount>
+    </div>
+    <script>
+        const auditAssApp = new Vue({
+            el: '#auditAssApp',
+            data: function () {
+                return {
+
+                }
+            },
+            mounted() {
+
+            },
+            components: {
+                'cj_amount': httpVueLoader('../component/cjAmount.vue'),
+            },
+            methods: {
+
+            }
+        });
+    </script>
+</body>
+
+</html>

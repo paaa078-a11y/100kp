@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="等级设置" name="first" :lazy="true">
+                    <lttaocan :sy_chat_name="sy_chat_name" :coupon="coupon"></lttaocan>
+                </el-tab-pane>
+                <el-tab-pane label="增值服务" name="second" :lazy="true">
+                    <ltzzvip></ltzzvip>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    uri: "m=user&c=",
+                    sy_chat_name:'',
+                    coupon:[]
+                }
+            },
+            components: {
+                'lttaocan': httpVueLoader('./component/lttaocan.vue'),
+                'ltzzvip': httpVueLoader('./component/ltzzvip.vue'),
+            },
+            created:function () {
+                this.getConfig();
+                this.getCoupon();
+            },
+            methods: {
+                getConfig:function () {
+                    let _this = this;
+                    let url = _this.uri + 'admin_lt_rating&a=returnConfig';
+                    httpPost(url, {}).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            _this.sy_chat_name = res.data.sy_chat_name;
+                        }
+                    })
+                },
+                getCoupon:function () {
+                    let _this = this;
+                    let url = _this.uri + 'admin_lt_rating&a=getCoupon';
+                    httpPost(url, {}).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            _this.coupon = res.data;
+                        }
+                    })
+                },
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

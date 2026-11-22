@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+<div id="daohaapp" class="moduleElenAl">
+    <div class="tableDome">
+        <div class="moduleTable">
+            <table class="tableVue">
+                <thead>
+                <tr align="left">
+                    <th width="150" colspan="2">
+                        <div class="tool_hc_tit"> 百度百聘</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td width="150">
+                        <div class="TableTite">XML保存路径</div>
+                    </td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input
+                                placeholder="/data/xml/baidu.xml"
+                                :disabled="true">
+                            </el-input>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="setBasicButn" style="border: none;">
+                <el-button type="primary" size="medium" @click="submitForm">生成缓存</el-button>
+            </div>
+            <div class="tool_hc_sm">
+                <div class=""><i class="el-icon-question"></i> 百度百聘生成说明</div>
+                <div> 生成请确保/data/xml/目录有可写权限，否则无法生成</div>
+                <div> 在百度百聘平台，提交 {{ sy_weburl }}/data/xml/baidu.xml网址即可</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function () {
+            return {
+                sy_weburl: localStorage.getItem("sy_weburl"),
+            }
+        },
+        methods: {
+            submitForm() {
+                let _this = this;
+                if (_this.submitLoading) {
+                    return false;
+                }
+                _this.submitLoading = true;
+                message.success('正在生成...');
+                httpPost('m=tool&c=generate_baipin&a=add', {}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        message.success(res.msg);
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                }).finally(function () {
+                    setTimeout(() => {
+                        _this.submitLoading = false;
+                    }, 1000);
+                });
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

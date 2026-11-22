@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+    <script src="../../../admin/js/xjhlive.js"></script>
+
+    <link rel="stylesheet" href="../../../../../js/live/tcplayer/tcplayer.min.css" type="text/css" />
+    <script src="../../../../../js/live/tcplayer/hls.min.1.1.5.js"></script>
+    <script src="../../../../../js/live/tcplayer/tcplayer.v4.6.0.min.js"></script>
+    <script src="../../../../../js/live/tcplayer/TcPlayer-2.3.3.js"></script>
+</head>
+
+<body>
+    <div id="cityfl" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="moduleSeachleft">
+                <div class="newsinput">
+                    <el-input v-model="keyword" clearable placeholder="请输入搜索内容" size="small"
+                        prefix-icon="el-icon-search">
+                    </el-input>
+                </div>
+                <div class="tableSeachInptsmall newsinput">
+                    <el-select v-model="end" size="small" slot="prepend" placeholder="创建时间" clearable @change="search">
+                        <el-option label="今天" value="1"></el-option>
+                        <el-option label="最近三天" value="3"></el-option>
+                        <el-option label="最近七天" value="7"></el-option>
+                        <el-option label="最近半月" value="15"></el-option>
+                        <el-option label="最近一个月" value="30"></el-option>
+                    </el-select>
+                </div>
+                <div class="tableSeachInptsmall newsinput">
+                    <el-select v-model="livestatus" size="small" slot="prepend" placeholder="直播状态" clearable @change="search">
+                        <el-option label="未开始" value="1"></el-option>
+                        <el-option label="已结束" value="2"></el-option>
+                        <el-option label="直播中" value="3"></el-option>
+                    </el-select>
+                </div>
+                <div class="newsbtnbox">
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+                </div>
+            </div>
+            <div class="nrtopbtn">
+                <el-button type="primary" icon="el-icon-document-add" size="mini" @click="addxjh({id: ''})">添加直播
+                </el-button>
+            </div>
+        </div>
+        <div class="moduleElTable">
+            <el-table :data="tableData" stripe border style="width: 100%;"
+                :header-cell-style="{ background: '#f5f7fa', color: '#606266' }" height="100%"
+                @selection-change="handleSelectionChange" ref="multipleTable" :empty-text="emptytext"
+                :default-sort="{ prop: 'id', order: 'descending' }" @sort-change="sortChange" v-loading="loading">
+                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column prop="id" label="直播ID" width="90" sortable="custom">
+                </el-table-column>
+                <el-table-column label="标题" prop="title">
+                    <template slot-scope="scope">
+                        <div class="">
+                            <el-link type="primary" :href="preview_url+scope.row.id" target="_blank"> {{ scope.row.name
+                                }}</el-link>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="参会企业" width="110">
+                    <template slot-scope="scope">
+                        <div style=" padding-top: 10px;">
+                            <el-button type="text" @click="tocomlist(scope.row)">
+                                <el-badge :value="scope.row.comnum ? scope.row.comnum : '0'" :max="99" class="item">
+                                    查看
+                                </el-badge>
+                            </el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="封面" width="80">
+                    <template slot-scope="scope">
+                        <div class="demo-image__preview">
+                            <el-image style="width: 40px; height: 40px" :src="scope.row.pic"
+                                :preview-src-list="scope.row.picarr">
+                            </el-image>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="上架时间" prop="sjtime">
+                    <template slot-scope="scope">{{scope.row.statetime_n ? scope.row.statetime_n : '未上架'}}</template>
+                </el-table-column>
+                <el-table-column prop="stime_n" label="开始时间" prop="starttime">
+                </el-table-column>
+                <el-table-column prop="subnum" label="预约次数">
+                </el-table-column>
+                <el-table-column label="分站">
+                    <template slot-scope="scope">
+                        <span>{{ dnamearr[scope.row.did] }}</span><br />
+                        <el-link type="primary" @click="fp(scope.row)">分配</el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="zt" label="状态">
+                    <template slot-scope="scope">
+                        <div class="admin_state">
+                            <span v-if="scope.row.livestatus == 1" class="admin_state1">未开始</span>
+                            <span v-else-if="scope.row.livestatus == 2" class="admin_state2">已结束</span>
+                            <span v-else-if="scope.row.livestatus == 3" class="admin_state3">直播中</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="200" fixed="right">
+                    <template slot-scope="scope">
+                        <div class="cz_button elinksButn">
+                            <el-button size="small " plain @click="tocontrol(scope.row)">控制台</el-button>
+                            <!--<el-link :underline="false" :href="'livekztai.html?xid=' + scope.row.id">控制台</el-link>-->
+                            <el-button size="small" plain @click="addxjh(scope.row)">修改</el-button>
+                            <el-popover placement="bottom" width="90" trigger="hover">
+                                <div class="moduleMores">
+                                    <el-button type="text" @click="getCode(scope.row.id)">直播码</el-button>
+                                    <el-button type="text" @click="getPushUrl(scope.row.id)">推流地址</el-button>
+                                    <el-button type="text" @click="chatlog(scope.row)">聊天记录</el-button>
+                                    <el-button type="text" @click="delrow(scope.row.id)">删除</el-button>
+                                </div>
+                                <el-button size="small" plain slot="reference"
+                                    @click="visible = !visible">更多
+                                </el-button>
+                            </el-popover>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div class="">
+                <el-checkbox v-model="checkedAll" @change="selectAllBottom" style="margin-right: 8px">全选</el-checkbox>
+                <el-button @click="delAllBottom" size="mini">批量删除</el-button>
+            </div>
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage"
+                    layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <!--添加直播-->
+        <div class="modluDrawer">
+            <el-drawer :title="curr_data.id ? '修改直播': '添加直播'" :visible.sync="draweradd" append-to-body
+                :modal-append-to-body="false" :show-close="true" :with-header="true" size="50%">
+                <livexiug ref="xjhadd" :id="curr_data.id" :dnamearr="dnamearr"></livexiug>
+            </el-drawer>
+        </div>
+        <!--聊天记录-->
+        <div class="modluDrawer">
+            <el-drawer title="聊天记录" :visible.sync="drawerchatlog" append-to-body :modal-append-to-body="false"
+                :show-close="true" :with-header="true" size="80%">
+                <livechat ref="chatlog" :id="curr_data.id"></livechat>
+            </el-drawer>
+        </div>
+        <!--参会企业-->
+        <div class="modluDrawer">
+            <el-drawer :title="curr_data.name + '参会企业'" :visible.sync="drawercomlist" append-to-body
+                :modal-append-to-body="false" :show-close="true" :with-header="true" size="80%">
+                <livecom ref="comlist" :id="curr_data.id"></livecom>
+            </el-drawer>
+        </div>
+        <!--分配站点弹窗-->
+        <div class="modluDrawer">
+            <el-dialog title="分配站点" width="300px" :visible.sync="drawerfp" :modal-append-to-body="false">
+                <div class="toolClasDia fenpeizhand">
+                    <div class="toolClasList">
+                        <div class="toolClasTite" style="width: 90px;">
+                            <span>招聘会标题：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <span>{{curr_data.title}}</span>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>切换站点：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-select v-model="fp_did" placeholder="请选择" filterable>
+                                <el-option v-for="(item,index) in dnamearr" :key="index" :label="item" :value="index">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="drawerfp = false">取 消</el-button>
+                    <el-button type="primary" @click="fpSave(1)">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <!--直播码-->
+        <div class="tck_setbox">
+            <el-dialog title="微信扫码开始直播" :visible.sync="drawercode" :with-header="true" :modal-append-to-body="false"
+                :show-close="true" width="240px">
+                <div class="code_img">
+                    <img :src="code_img" width="200" height="200">
+                </div>
+                <div class="code_p">请使用微信扫描二维码开始直播</div>
+            </el-dialog>
+        </div>
+        <!--推流地址-->
+        <div class="modluDrawer">
+            <el-dialog title="推流地址" :visible.sync="drawerpushurl" :with-header="true" :modal-append-to-body="false"
+                :show-close="true">
+                <div style="height: 50px;">{{pushurl}}</div>
+            </el-dialog>
+        </div>
+        <!--控制台-->
+        <div class="modluDrawer">
+            <el-drawer title="控制台" :visible.sync="drawerctl" append-to-body :modal-append-to-body="false"
+                :show-close="true" :with-header="false" size="95%">
+                <div class="liveconSubModel">
+                    <livecontrol @setsyncid="setxjhsyncid" ref="control" :id="curr_data.id"></livecontrol>
+                </div>
+
+            </el-drawer>
+        </div>
+    </div>
+</body>
+<script>
+    var xjhsyncid = null, weburl = localStorage.getItem("sy_weburl")
+    const custoapp = new Vue({
+        el: '#cityfl',
+        data: function () {
+            return {
+                emptytext: '暂无数据',
+                loading: false,
+                keyword: '',
+                livestatus: '',
+                end: '',
+                checkedAll: false,
+                selectedItem: [],
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                dnamearr: {},
+                total: 0,
+                preview_url: '',
+                picarr: [],
+                drawerfp: false,
+                curr_data: {},
+                draweradd: false,
+                visible: false,
+                drawercode: false,
+                code_img: '',
+                drawerpushurl: false,
+                pushurl: '',
+                drawerchatlog: false,
+                drawerctl: false,
+                drawercomlist: false,
+                fp_did: '',
+                islook: false,
+                prevPage:0
+            }
+        },
+        components: {
+            'livexiug': httpVueLoader('./component/livexiug.vue'),
+            'livechat': httpVueLoader('./component/livechat.vue'),
+            'livecom': httpVueLoader('./component/livecom.vue'),
+            'livecontrol': httpVueLoader('./component/livecontrol.vue'),
+        },
+        created: function () {
+            this.getGroup();
+            this.getList()
+        },
+        methods: {
+            setxjhsyncid(val) {
+                xjhsyncid = val
+            },
+            tocontrol(data) {
+                this.curr_data = data
+                this.drawerctl = true
+            },
+            tocomlist(data) {
+                this.curr_data = data
+                this.drawercomlist = true
+            },
+            chatlog(data) {
+                this.curr_data = data
+                this.drawerchatlog = true
+            },
+            getCode(id) {
+                var that = this
+                let params = { id: id }
+                httpPost('m=neirong&c=xjhlive&a=getLive', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.code_img = response.data.data.url
+                        that.drawercode = true
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            getPushUrl(id) {
+                var that = this
+                let params = { id: id }
+                httpPost('m=neirong&c=xjhlive&a=getPushurl', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.pushurl = response.data.data.push_url
+                        that.drawerpushurl = true
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            addxjh(data) {
+                if (data.id == '') {
+                    this.curr_data = { id: '' }
+                } else {
+                    this.curr_data = data
+                }
+                this.draweradd = true
+                this.$nextTick(function () {
+                    this.$refs.xjhadd.initEditor();
+                })
+            },
+            fp(data) {
+                this.curr_data = data
+                this.fp_did = data.did ? data.did : ''
+                this.drawerfp = true
+            },
+            fpSave() {
+                var that = this
+                let params = {}
+                params.uid = that.curr_data.id
+                params.did = that.fp_did
+                httpPost('m=neirong&c=xjhlive&a=checksitedid', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success(response.data.msg, function () {
+                            that.drawerfp = false
+                            that.getList();
+                        });
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            handleSelectionChange(val) {
+                this.selectedItem = [];
+                let _this = this;
+                if (val.length) {
+                    val.forEach(item => {
+                        _this.selectedItem.push(item.id);
+                    });
+                }
+                if (_this.selectedItem.length == 0) {
+                    _this.checkedAll = false;
+                } else {
+                    if (_this.selectedItem.length == _this.tableData.length) {
+                        _this.checkedAll = true;
+                    } else {
+                        _this.checkedAll = false;
+                    }
+                }
+            },
+            selectAllBottom(value) {
+                value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+            },
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            sortChange: function (column) {
+                if (column.order == 'descending') {
+                    this.sort_type = 'desc';
+                } else if (column.order == 'ascending') {
+                    this.sort_type = 'asc';
+                } else {
+                    this.sort_type = '';
+                }
+                this.sort_col = column.prop
+                this.search();
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getGroup(){
+                let that = this;
+                httpPost('m=neirong&c=xjhlive&a=getGroup', {}, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.dnamearr = res.data.Dname
+                        that.preview_url = res.data.preview_url
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            async getList() {
+                let that = this;
+                that.curr_data = {};
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.livestatus) {
+                    params.livestatus = that.livestatus
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                if (that.end) {
+                    params.end = that.end
+                }
+                if (that.sort_type && that.sort_col) {
+                    params.order = that.sort_type
+                    params.t = that.sort_col
+                }
+                that.loading = true;
+                that.emptytext = "数据加载中";
+                httpPost('m=neirong&c=xjhlive&a=index', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total)
+                        that.picarr = res.data.picarr
+                        if(that.prevPage != that.currentPage){
+                            that.prevPage = that.currentPage;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0) {
+                            that.emptytext = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            delrow(id) {
+                delConfirm(this, id, this.delete);
+            },
+            delAllBottom() {
+                if (!this.selectedItem.length) {
+                    message.error('请选择要删除的数据项');
+                    return false;
+                }
+                delConfirm(this, this.selectedItem, this.delete);
+            },
+            async delete(id) {
+                let that = this;
+                let params = {
+                    del: id
+                };
+                httpPost('m=neirong&c=xjhlive&a=del', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success(response.data.msg);
+                        that.getList();
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+
+</html>
+<style>
+
+</style>

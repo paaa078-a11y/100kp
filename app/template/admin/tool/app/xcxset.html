@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="微信小程序" name="wechat">
+                    <xcxwx ref="wechat"></xcxwx>
+                </el-tab-pane>
+                <el-tab-pane label="订阅消息模板" name="sub_mb">
+                    <subscribemb ref="sub_mb"></subscribemb>
+                </el-tab-pane>
+                <el-tab-pane label="订阅消息记录" name="sub_log">
+                    <subscribelog ref="sub_log"></subscribelog>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'wechat'
+                }
+            },
+            components: {
+                'xcxwx': httpVueLoader('./component/xcxwx.vue'),
+                'subscribemb': httpVueLoader('./component/subscribemb.vue'),
+                'subscribelog': httpVueLoader('./component/subscribelog.vue'),
+            },
+            created: function(){
+                setTimeout(() => {
+                    this.$refs.wechat.getinfo();
+                }, 500)
+            },
+            methods: {
+                handleClick(tab) {
+                    if (tab.name == 'wechat') {
+                        this.$refs.wechat.getinfo();
+                    } else if (tab.name == 'baidu') {
+                        this.$refs.baidu.getinfo();
+                    } else if (tab.name == 'alipay') {
+                        this.$refs.alipay.getinfo();
+                    } else if (tab.name == 'dy') {
+                        this.$refs.dy.getinfo();
+                    } else if (tab.name == 'other') {
+                        this.$refs.other.getinfo();
+                    } else if (tab.name == 'sub_mb') {
+                        this.$refs.sub_mb.getinfo();
+                    } else if (tab.name == 'sub_log') {
+                        this.$refs.sub_log.getList();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

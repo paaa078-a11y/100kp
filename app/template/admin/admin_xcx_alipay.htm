@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"
+		 type="text/css" />
+
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+		<title>后台管理</title>
+	</head>
+	<style>
+	.layui-form-item{ margin-bottom:0px;}
+	</style>
+	<body class="body_ifm">
+		<div id="subboxdiv" style="width:100%;height:100%;display:none;position: absolute;"></div>
+
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+				
+				<div class="ttyTishiTopAll">
+					<h3>支付宝小程序设置</h3>
+					<div class="shiTopAllTips">
+						<span>设置后，联系授权客服提交代码！</span>
+					</div>
+				</div>
+			
+				<div class="clear"></div>
+
+				<div id="right" style="display:block">
+					<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+					<form method="post" target="supportiframe" action="" name="config"  class="layui-form">
+
+						<div>
+							<table width="100%" class="table_form tableFormBlocks">
+								<tr>
+									<th class="t_fr">Appid:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<input name="sy_xcxAppid" value="{yun:}$alipaydata.sy_xcxAppid{/yun}" autocomplete="off" class="layui-input"
+											 type="text" size="60" maxlength="255" />
+										</div>
+										<span class="admin_web_tip">支付宝小程序Appid</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">aesKey:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<input name="sy_appKey" value="{yun:}$alipaydata.sy_appKey{/yun}" autocomplete="off" class="layui-input"
+											 type="text" size="60" maxlength="255" />
+										</div>
+										<span class="admin_web_tip">必须配置，支付宝小程序管理-开发设置-开发信息-接口内容加密方式中查看</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">开发者私钥:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<textarea name="sy_privateKey" cols="100" rows="5" class="layui-textarea" style="height:100px">{yun:}$alipaydata.sy_privateKey{/yun}</textarea>
+										</div>
+										<span class="admin_web_tip">必须配置，通过支付宝开放平台开发助手生成秘钥</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">支付宝公钥:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<textarea name="sy_publicKey" cols="100" rows="5" class="layui-textarea" style="height:100px">{yun:}$alipaydata.sy_publicKey{/yun}</textarea>
+										</div>
+										<span class="admin_web_tip">必须配置，支付宝小程序管理-开发设置-开发信息-接口加签方式中设置公钥后查看</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">聊天开关:</th>
+									<td>
+										<div class="layui-input-block">
+											<input type="checkbox" name="sy_alipay_chat" lay-skin="switch" lay-text="开启|关闭" {yun:}if $alipaydata.sy_alipay_chat=="1" {/yun} checked {yun:}/if{/yun} />
+										</div>
+										<span class="admin_web_tip">支付宝小程序验收需要，关闭聊天，支付宝小程序岗位详情不显示聊天；</span>
+									</td>
+								</tr>
+								 <tr>
+									<th colspan="2" class="admin_bold_box adminBoldRasd">
+										<div class="admin_bold">支付宝就业中心API设置</div>
+									</th>
+								</tr>
+								<tr class="admin_table_trbg">
+									<th width="200" class="t_fr">开启状态：</th>
+									<td>
+										<div class="layui-form-item">
+											<div class="layui-input-block">
+												<input type="radio" lay-filter="sy_synctype" name="sy_synctype" value="0" title="关闭" {yun:}if $alipaydata.sy_synctype==0{/yun}checked{yun:}/if{/yun}>
+												<input type="radio" lay-filter="sy_synctype" name="sy_synctype" value="1" title="测试环境" {yun:}if $alipaydata.sy_synctype==1{/yun}checked{yun:}/if{/yun}>
+												<input type="radio" lay-filter="sy_synctype" name="sy_synctype" value="2" title="预发环境" {yun:}if $alipaydata.sy_synctype==2{/yun}checked{yun:}/if{/yun}>
+												<input type="radio" lay-filter="sy_synctype" name="sy_synctype" value="3" title="正式环境" {yun:}if $alipaydata.sy_synctype==3{/yun}checked{yun:}/if{/yun}>
+											</div>
+											
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">数据周期（天）:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<input name="sy_syncday" value="{yun:}$alipaydata.sy_syncday{/yun}" autocomplete="off" class="layui-input"
+											 type="text" size="60" maxlength="255" /> 
+										</div>
+										<span class="admin_web_tip">向支付宝就业中心推送N天内更新的职位数据</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="t_fr">单次最大推送（条）:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<input name="sy_syncnum" value="{yun:}$alipaydata.sy_syncnum{/yun}" autocomplete="off" class="layui-input"
+											 type="text" size="60" maxlength="255" />
+										</div>
+										<span class="admin_web_tip">计划任务单次向支付宝最大推送N条 建议不超过200条，防止超时</span>
+									</td>
+								</tr>
+								 <tr>
+									<th colspan="2" class="admin_bold_box adminBoldRasd">
+										<div class="admin_bold">支付宝职得电子工作证设置</div>
+									</th>
+								</tr>
+								<tr>
+									<th class="t_fr">芝麻信用服务ID:</th>
+									<td>
+										<div class="layui-input-block t_w480">
+											<input name="zm_service_id" value="{yun:}$alipaydata.zm_service_id{/yun}" autocomplete="off" class="layui-input"
+											 type="text" size="60" maxlength="255" /> 
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<th>&nbsp;</th>
+									<td align="left">
+										<input class="tty_sub" id="pay_config" type="submit" name="pay_config" value="&nbsp; 修 改 &nbsp;" />&nbsp;&nbsp;
+										<input class="tty_cz" type="reset" name="reset" value="&nbsp; 重 置 &nbsp;" />
+									</td>
+								</tr>
+							</table>
+						</div>
+						<input type="hidden" id="layupload_type" value="2" />
+						<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+					</form>
+				</div>
+			</div>
+		</div>
+		<script>
+			var weburl = "{yun:}$config.sy_weburl{/yun}";
+		</script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+		<script>
+				layui.use(['layer', 'form'], function() {
+					var layer = layui.layer,
+						form = layui.form,
+						$ = layui.$;
+
+					
+					form.on('radio(sy_synctype)', function (data) {
+
+						if (data.value == 1){
+							$('.upJobSon').show();
+						}else{
+							$('.upJobSon').hide();
+						}
+					});
+				});
+
+				
+				
+			</script>
+	</body>
+</html>

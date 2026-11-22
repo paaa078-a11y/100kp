@@ -1,0 +1,462 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body style="background: #FFFFFF;">
+<div id="indexVue" class="scolloeAllHome" style="margin-top: 1rem;display: none;">
+<div class="crmIndexVueAlls">
+    <van-skeleton :row="30" :row-width="skwidth" :loading="loading">
+        <section class="homeTop">
+            <div class="homeWecome">
+                <div class="wecomeTxt">
+                    <h3>HI！欢迎来到后台管理系统</h3>
+                </div>
+                <div data-method="tuichu" class="layui-btn">
+                    <img src="img/tuic.png" @click="logout" alt="">
+                </div>
+            </div>
+            <div class="homeTopNav layerDemo">
+                <div class="homeTopLogo">
+                    <div class="homePhoto">
+                        <img src="img/user.png" alt="">
+                    </div>
+                    <div class="homeTopName">
+                        <p>{{statis.name}}</p>
+                        <span>{{statis.group_name}}</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="homeDaohang">
+            <div class="daohangAll">
+                <ul>
+                    <li>
+                        <a href="index.php?m=user&c=company">
+                            <div>
+                                <img src="img/dao1.png" alt="">
+                            </div>
+                            <span>企业</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.php?m=user&c=users_member">
+                            <div>
+                                <img src="img/dao2.png" alt="">
+                            </div>
+                            <span>个人</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.php?m=admin_webdt&c=index">
+                            <div>
+                                <img src="img/dao3.png" alt="">
+                            </div>
+                            <span>动态</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.php?m=user&c=users_resume">
+                            <div>
+                                <img src="img/dao4.png" alt="">
+                            </div>
+                            <span>简历</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.php?m=user&c=company_job">
+                            <div>
+                                <img src="img/dao5.png" alt="">
+                            </div>
+                            <span>职位</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        {yun:}if $index_lookstatistc==2{/yun}
+        <van-swipe class="my-swipe"  :loop="false" :show-indicators="false">
+            <van-swipe-item>
+                <section class="homeNewlyAdded">
+                    <div class="homeDataAll">
+                        <div class="homeDataAllbord">
+                            <div class="ataAllbImg">
+                                <img src="img/moeicon.png" alt="">
+                            </div>
+                            <div class="ataAllbInfo">
+                                <p>{{statis.money_total}}</p>
+                                <span>今日成交金额</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <ul class="homeDataAll_tj">
+                            <li @click="pageTo('index.php?m=user&c=users_member&adtime=1')">
+                                <div class="newlyAdded1">
+                                    <span>{{statis.user_num_now}}</span>
+                                    <div class="newlyAdded1One">
+                                        <p>新增个人</p>
+                                        <div class="newlyAdded2">
+                                            <img src="img/xin1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li @click="pageTo('index.php?m=user&c=users_resume&adtime=1')">
+                                <div class="newlyAdded1">
+                                    <span>{{statis.resume_num_now}}</span>
+                                    <div class="newlyAdded1One">
+                                        <p>新增简历</p>
+                                        <div class="newlyAdded2">
+                                            <img src="img/xin2.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li @click="pageTo('index.php?m=user&c=company&adtime=1')">
+                                <div class="newlyAdded1">
+                                    <span>{{statis.com_num_now}}</span>
+                                    <div class="newlyAdded1One">
+                                        <p>新增企业</p>
+                                        <div class="newlyAdded2">
+                                            <img src="img/xin3.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li @click="pageTo('index.php?m=user&c=company_job&adtime=1')">
+                                <div class="newlyAdded1">
+                                    <span>{{statis.job_num_now}}</span>
+                                    <div class="newlyAdded1One">
+                                        <p>新增职位</p>
+                                        <div class="newlyAdded2">
+                                            <img src="img/xin4.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </van-swipe-item>
+
+            <van-swipe-item v-if="monthShow">
+                <section class="homeNewlyAdded">
+                    <div class="homeDataAll">
+                        <div class="homeDataAllbord">
+                            <div class="ataAllbImg">
+                                <img src="img/moeicon.png" alt="">
+                            </div>
+                            <div class="ataAllbInfo">
+                                <p>{{statis.month_price}}</p>
+                                <span>本月成交金额</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="homeSweiperTwo">
+                        <div class="swiperTwoPadd">
+                            <p>业绩排行</p>
+                            <ul>
+                                <li :class="key==0?'woPadxuan':''" v-if="key<4" v-for="(item, key) in jebList" :key="key">
+                                    <div class="woPaddTree">
+                                        <img src="img/paih1.png" alt="" v-if="key==0">
+                                        <img src="img/paih2.png" alt="" v-if="key==1">
+                                        <img src="img/paih3.png" alt="" v-if="key==2">
+                                        <img src="img/paih4.png" alt="" v-if="key==3">
+                                        <span>{{item.name}}</span>
+                                    </div>
+                                    <div class="woPaddkue">
+                                        <span>{{item.total}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </van-swipe-item>
+        </van-swipe>
+        {yun:}/if{/yun}
+        <section class="homeTodoList">
+            <h3>待办事项</h3>
+            <ul>
+                <li>
+                    <a href="index.php?m=user&c=company&r_status=4">
+                        <div class="odoLisOne">
+                            <img src="img/ban1.png" alt="">
+                            <span>待审核企业</span>
+                        </div>
+                        <div class="odoLisTwo">
+                            <p>{{statis.com_num_dsh}}</p>
+                            <img src="img/righthome.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?m=user&c=company_job&state=4">
+                        <div class="odoLisOne">
+                            <img src="img/ban2.png" alt="">
+                            <span>待审核职位</span>
+                        </div>
+                        <div class="odoLisTwo">
+                            <p>{{statis.job_num_dsh}}</p>
+                            <img src="img/righthome.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?m=user&c=users_resume&state=4">
+                        <div class="odoLisOne">
+                            <img src="img/ban3.png" alt="">
+                            <span>待审核简历</span>
+                        </div>
+                        <div class="odoLisTwo">
+                            <p>{{statis.resume_num_dsh}}</p>
+                            <img src="img/righthome.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?m=user&c=company_cert&status=0">
+                        <div class="odoLisOne">
+                            <img src="img/ban4.png" alt="">
+                            <span>待审核资质</span>
+                        </div>
+                        <div class="odoLisTwo">
+                            <p>{{statis.comcert_num_dsh}}</p>
+                            <img src="img/righthome.png" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?m=crm&c=order&a=crm_order">
+                        <div class="odoLisOne">
+                            <img src="img/crmk3.png" alt="">
+                            <span>待审批订单</span>
+                        </div>
+                        <div class="odoLisTwo">
+                            <p>{{statis.comorder_num_dsp}}</p>
+                            <img src="img/righthome.png" alt="">
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        {yun:}if $index_lookstatistc==2{/yun}
+        <section class="HomeUserInfo">
+            <div class="omeUserTop">
+                <h3>数据看板</h3>
+                <div class="omeUserTimeList">
+                    <a style="width: 1.36rem;" :class="tjTimeCur == '1' ? 'timeClick' : ''" href="javascript:void(0)" @click="tjTimeCurChange(1)">近7天</a>
+                    <a style="width: 1.36rem;" :class="tjTimeCur == '2' ? 'timeClick' : ''" href="javascript:void(0)" @click="tjTimeCurChange(2)">近30天</a>
+                    <a :class="tjTimeCur == '' ? 'timeClick' : ''" href="javascript:void(0)" @click="tjTimeShow = true"><span>{{tjTimeStart}}</span> <img style="padding-left: 0.2rem;" src="img/duob.png" alt=""></a>
+                </div>
+                
+            </div>
+
+            <van-popup v-model:show="tjTimeShow" position="bottom">
+                <van-datetime-picker v-model="tjCurrentDate" type="year-month" title="选择年月" :max-date="tjMaxDate" @cancel="tjTimeShow = false" @confirm="tjConfirm"/>
+            </van-popup>
+
+            <div class="tongjiListAll">
+                <div @click="show = !show" class="listAllClick">
+                    <div class="lickTitle">
+                        <span>数据选择</span>
+                    </div>
+                    <div class="lickFangx">
+                        <img style="width: 0.3rem;" src="img/downhom.png" alt="">
+                    </div>
+                </div>
+                <div v-if="show" class="listAllCont">
+                    <ul>
+                        <li :class="tjTabs == 'getweb' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('getweb')">个人注册</a></li>
+                        <li :class="tjTabs == 'comtj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('comtj')">企业注册</a></li>
+                        <li :class="tjTabs == 'resumetj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('resumetj')">简历统计</a></li>
+                        <li :class="tjTabs == 'jobtj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('jobtj')">职位统计</a></li>
+                        <li :class="tjTabs == 'ujobtj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('ujobtj')">简历投递</a></li>
+                        <li :class="tjTabs == 'yqmstj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('yqmstj')">邀请面试</a></li>
+                        <li :class="tjTabs == 'downresumetj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('downresumetj')">简历下载</a></li>
+                        {yun:}if $config.sy_chat_open == 1{/yun}
+                        <li :class="tjTabs == 'chattj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('chattj')">聊天统计</a></li>
+                        {yun:}else{/yun}
+                        <li :class="tjTabs == 'adtj' ? 'tj-tab-cur' : ''"><a href="javascript:void(0);" @click="tjTab('adtj')">广告点击</a></li>
+                        {yun:}/if{/yun}
+                    </ul>
+                </div>
+            </div>
+            <div class="homeEcharts">
+                <iframe id="tjiframe" src="" class="chartsHeight" name="chart" onload="this.height=chart.document.body.scrollHeight" width="100%" scrolling="no" frameborder="0"></iframe>
+            </div>
+        </section>
+        {yun:}/if{/yun}
+    </van-skeleton>
+	</div>
+    <div class="homeNavBar">
+        <ul>
+            <li>
+                <a class="navBarClick" href="index.php">
+                    <div class="navBarOne navBarOne3">
+                    </div>
+                    <div class="navBarTwo">
+                        <span>首页</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?m=crm&c=crm_index">
+                    <div class="navBarOne navBarOne1">
+                    </div>
+                    <div class="navBarTwo">
+                        <span>工作台</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?m=crm&c=crm_my_customer">
+                    <div class="navBarOne navBarOne2">
+                    </div>
+                    <div class="navBarTwo">
+                        <span>客户</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?m=crm&c=crm_customer">
+                    <div class="navBarOne navBarOne4">
+                    </div>
+                    <div class="navBarTwo">
+                        <span>公海</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+<script>//获取完整的日期
+var date = new Date;
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+month = month < 10 ? "0" + month : month;
+var index_lookstatistc = '{yun:}$index_lookstatistc{/yun}'
+
+var tjTime = (year.toString() + '-' + month.toString());
+
+var indexVue = new Vue({
+    el: '#indexVue',
+    data: {
+        loading: true,
+        skwidth: skwidth,
+        statis: {},
+        monthShow: false,
+        jebList: {},
+        adtime: '',
+        adstatis: {},
+        show: false,
+        statusShows: false,
+        tjTimeCur: '',
+        tjTimeShow: false,
+        tjCurrentDate: new Date(),
+        tjMaxDate: new Date(),
+        tjTimeStart: tjTime,
+        tjTimeEnd: '',
+        tjTabs: 'getweb',
+    },
+    mounted() {
+        this.getIndex();
+        if (index_lookstatistc == '2') {
+            this.getStatis();
+            this.tjTab(this.tjTabs);
+        }
+    },
+    methods: {
+        getIndex: function () {
+            var self = this;
+            $.post('index.php', {a: 1}, function (res) {
+                self.loading = false;
+                $('body').css('background', '#f3f3f3');
+                $('#indexVue').removeAttr('style');
+                self.statis = res;
+                if (res.jebList){
+                    self.monthShow = true;
+                    self.jebList = res.jebList.data;
+                }
+
+            }, 'json');
+        },
+        getStatis: function () {
+            var that = this;
+            var param = {
+                adtime: that.adtime
+            };
+            $.post('index.php?c=getStatis', param, function (res) {
+                that.adstatis = res;
+            }, 'json');
+        },
+
+        setType: function (e) {
+            this.adtime = e;
+            this.getStatis();
+        },
+        logout: function () {
+            showConfirm('您确定退出登录？', function () {
+                $.post('index.php?c=logout', {a: 1}, function (res) {
+                    showToast('退出成功！', 2, function () {
+                        window.location.href = 'index.php';
+                    });
+                }, 'json');
+            })
+        },
+        pageTo: function (url) {
+            window.location.href = url
+        },
+
+        tjTimeCurChange: function(val) {
+            this.tjTimeCur = val;
+            this.tjTab(this.tjTabs);
+        },
+
+        tjConfirm: function (e) {
+            let y = e.getFullYear();
+            let m = e.getMonth() + 1;
+            m = m < 10 ? "0" + m : m;
+
+            this.tjTimeStart = (y.toString() + '-' + m.toString());
+
+            let ym = new Date(y, m, 0).getDate(); // 月未最后一天
+
+            this.tjTimeEnd = this.tjTimeStart + '-' + (ym < 10 ? "0" + ym : ym);
+
+            this.tjTimeCur = '';
+            this.tjTab(this.tjTabs)
+            this.tjTimeShow = false;
+        },
+
+        tjTab: function (tab) {
+            // this.tjTimeStart = tjTime;
+            // this.tjCurrentDate = new Date();
+            this.tjTabs = tab;
+            if ($("#tjiframe").length == 0) {// 解决部分情况下页面加载完成iframe对像还没有，延迟加载
+                let that = this;
+                setTimeout(function () {
+                    that.tjTab(tab);
+                }, 500);
+                return;
+            }
+            let url = "index.php?m=admin_right&c=" + this.tjTabs;
+            if (this.tjTimeCur == 1) {
+                $("#tjiframe").attr("src", url + "&days=7");
+            } else if (this.tjTimeCur == 2) {
+                $("#tjiframe").attr("src", url + "&days=30");
+            } else if (this.tjTimeEnd != '') {
+                $("#tjiframe").attr("src", url + "&sdate=" + this.tjTimeStart + "&edate=" + this.tjTimeEnd);
+            } else {
+                $("#tjiframe").attr("src", url);
+            }
+        }
+    }
+});
+</script>
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"KcU0aPo7V03OPq1y",ck:"KcU0aPo7V03OPq1y"})</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{yun:}$title{/yun}</title>
+    <meta name="keywords" content="{yun:}$keywords{/yun}" />
+    <meta name="description" content="{yun:}$description{/yun}" />
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+	<link rel="stylesheet" href="{yun:}$style{/yun}/style/skill.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+    {yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
+    <script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+</head>
+<body>
+	{yun:}include file="$tplstyle/header.htm"{/yun}
+		<div class="clear"></div>
+  <div class="skill_detail">
+      <div class="detail_top">
+          <div class="top_box">
+              <div class="topbox_left">
+                  <img src="{yun:}$res.cover_n{/yun}" alt="">
+              </div>
+              <div class="topbox_right">
+                  <div class="topbox_title">
+                      {yun:}$res.title{/yun}
+                  </div>
+                  <div class="topbox_tag">
+                      {yun:}foreach from=$res.welfare_n key=wkey item=wval{/yun}
+                      <div>{yun:}$wval{/yun}</div>
+                      {yun:}/foreach{/yun}
+                  </div>
+                  <div class="topbox_info">
+                      {yun:}$res.desc{/yun}
+                  </div>
+                  <div class="topbox_price">
+                      {yun:}if $res.price != 0{/yun}
+                      <div class="price">
+                          ¥{yun:}$res.price{/yun}
+                      </div>
+                      {yun:}else{/yun}
+                      <div class="price">
+                          免费
+                      </div>
+                      {yun:}/if{/yun}
+                      <div class="enroll" id="btn">
+                          立即报名
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="detail_content">
+          <div class="detail_box">
+              <div class="content_title">
+                  课程介绍
+              </div>
+              <div class="content_sub">
+                 <p class="sub_info">
+                     {yun:}$res.introduce{/yun}
+                 </p>
+                 <div class="content_img">
+                      <img src="{yun:}$style{/yun}/images/skill_detail_content.png" alt="">
+                 </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="detail_mask" id="myModal">
+      <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" class="none"></iframe>
+      <form name="myform" id="telform" method="post" action="index.php?m=skill&c=baoming" target="supportiframe" onsubmit="return checkform();">
+      <div class="mask_box">
+          <div class="left">
+              <div class="img">
+                  <img  class="qrcode_img"  src="{yun:}$res.wx_qr_code_n{/yun}" alt="">
+              </div>
+              <div class="ask">
+                  立即咨询
+              </div>
+              <div class="tel">
+                  <img src="{yun:}$style{/yun}/images/mask_call.png" alt="">
+                  <div onclick="callTel('{yun:}$res.telphone{/yun}')">{yun:}$res.telphone{/yun}</div>
+              </div>
+          </div>
+          <div class="right">
+              <div class="right_top">
+                  在线报名
+
+              </div>
+              <div class="close" id="close">
+                  <img src="{yun:}$style{/yun}/images/mask_close.png" alt="">
+              </div>
+
+              <div class="right_input">
+                  <div class="input_box">
+                      <input type="text" id="name" name="name" autocomplete="off" placeholder="请输入姓名">
+                  </div>
+                 <div class="input_box">
+                      <input type="text" id="tel" name="tel" autocomplete="off" placeholder="请输入手机号">
+                 </div>
+                  
+              </div>
+              <div class="right_btn">
+                  <input type="hidden" name="skill_id" value="{yun:}$res.id{/yun}">
+                  <input type="submit" name="submit" value="报名"  class="submit">
+              </div>
+          </div>
+      </div>
+      </form>
+    </div>
+<div class="clear"></div>
+
+
+		
+
+
+</body>
+<script>var weburl = '{yun:}$config.sy_weburl{/yun}';</script>
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script language="javascript">
+    layui.use(['layer'], function() {
+        var layer = layui.layer,
+            $ = layui.$;
+    });
+    var btn=document.getElementById("btn");
+    var close = document.getElementById("close")
+    var myModal=document.getElementById("myModal");
+    window.onload=function () {
+        btn.onclick=function () {
+            myModal.style.display="block";
+        }
+        close.onclick=function () {
+            myModal.style.display="none";
+        }
+    }
+    window.onclick=function (event) {
+        if(event.target ==myModal){
+            myModal.style.display="none";
+            }
+        }
+
+    function checkform(myform){
+        var name = $("#name").val(),
+            tel = $("#tel").val();
+        if (name=="" || $.trim(name) == '') {
+            parent.layer.msg('请填写姓名！', 2,8);return false;
+        }
+        if (tel=="" || $.trim(tel) == '') {
+            parent.layer.msg('请填写手机号！', 2,8);return false;
+        }
+        var reg= /^[1][3456789]\d{9}$/;
+        if (!reg.test(tel)) {
+            parent.layer.msg('请填写正确的手机号！', 2,8);return false;
+        }
+
+        loadlayer();
+
+        return true;
+    }
+
+    function callTel(tel) {
+        window.location.href='tel://' + tel;
+    }
+</script>
+{yun:}include file="$tplstyle/footer.htm"{/yun}
+</html>

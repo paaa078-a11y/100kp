@@ -1,0 +1,1300 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="crmIndexVue" class="scolloeAllHome" style="margin-top: 1rem;display: none;">
+    <div class="crmIndexVueAlls">
+        <van-skeleton :row="30" :row-width="skwidth" :loading="loading">
+            <section class="homeTop crmHomeTop">
+                <div class="homeWecome">
+                    <div class="wecomeTxt">
+                        <h3>HI！欢迎来到后台管理系统</h3>
+                    </div>
+                    <div data-method="tuichu" class="layui-btn">
+                        <img src="img/tuic.png" @click="logout" alt="">
+                    </div>
+                </div>
+                <div class="homeTopNav layerDemo">
+                    <div class="homeTopLogo">
+                        <div class="homePhoto">
+                            <img :src=" uInfo.photo_n ? uInfo.photo_n : 'img/user.png'" alt="">
+                        </div>
+                        <div class="homeTopName">
+                            <p>{{uInfo.name}}<span class="tipsicon">{{uInfo.group_name}}</span></p>
+                            <span>本月业绩：{{uInfo.achieve}}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="homeDaohang crmHomeDaohang">
+                <div class="daohangAll">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&a=add')">
+                                <div>
+                                    <img src="img/crmk1.png" alt="">
+                                </div>
+                                <span>录客户</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" @click="showFollow">
+                                <div>
+                                    <img src="img/crmk2.png" alt="">
+                                </div>
+                                <span>写跟进</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" @click="showDeal">
+                                <div>
+                                    <img src="img/crmk3.png" alt="">
+                                </div>
+                                <span>录订单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" @click="showTask">
+                                <div>
+                                    <img src="img/crmk5.png" alt="">
+                                </div>
+                                <span>建任务</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" @click="showLog">
+                                <div>
+                                    <img src="img/crmk4.png" alt="">
+                                </div>
+                                <span>写日志</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="homeNewlyAdded" v-if="!rankingNoPermissions">
+                <div class="homeDataAll">
+                    <div class="homeDataAllbord">
+                        <div class="ataAllbImg">
+                            <img src="img/moeicon.png" alt="">
+                        </div>
+                        <div class="ataAllbInfo">
+                            <p>{{statis.month_price}}</p>
+                            <span>本月成交金额</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="homeSweiperTwo">
+                    <div class="swiperTwoPadd">
+                        <p>业绩排行</p>
+                        <ul>
+                            <li :class="key==0?'woPadxuan':''" v-if="key<4" v-for="(item, key) in jebList" :key="key">
+                                <div class="woPaddTree">
+                                    <img src="img/paih1.png" alt="" v-if="key==0">
+                                    <img src="img/paih2.png" alt="" v-if="key==1">
+                                    <img src="img/paih3.png" alt="" v-if="key==2">
+                                    <img src="img/paih4.png" alt="" v-if="key==3">
+                                    <span>{{item.name}}</span>
+                                </div>
+                                <div class="woPaddkue">
+                                    <span>{{item.total}}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="crmIndexInfo">
+                <div class="crmIndexInfoTop">
+                    <img src="img/crminfo.png" alt="">
+                    <p>消息提醒</p>
+                </div>
+                <div class="crmIndexInfoBottm">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&nextFtime=1')">
+                                <div class="infoTitle">
+                                    <span>今日待跟进</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.todayFollowNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                        <li style="background: #FAF3F2;">
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&vipEtime=5')">
+                                <div class="infoTitle">
+                                    <span>过期未续费</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.vipedNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                        <li style="background: #F2F5F1;">
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&vipEtime=3')">
+                                <div class="infoTitle">
+                                    <span>15天内到期</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.willDoneNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                        <li style="background: #F2F3FF;">
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&lastFtime=1')">
+                                <div class="infoTitle">
+                                    <span>从未跟进</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.noFollowNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                        <li style="background: #f1eced;">
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&kh=6')">
+                                <div class="infoTitle">
+                                    <span>今日登录</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.loginNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                        <li style="background: #dcf3e7;">
+                            <a href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&kh=3')">
+                                <div class="infoTitle">
+                                    <span>30天从未跟进</span>
+                                </div>
+                                <div class="infoData">
+                                    <span>{{msg.recentFollowNum}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="crmRemind" style="margin-bottom: 2rem;">
+                <div class="crmRemindone">
+                    <div class="crmRemindoneName">
+                        <img src="img/crmremi.png" alt="">
+                        <p>跟进提醒</p>
+                    </div>
+                    <ul v-if="followShow">
+                        <li v-for="(item, followKey) in msg.followData" :key="followKey">
+                            <a @click="pageTo('index.php?m=crm&c=crm_my_customer&rating='+item.rating+'&last_Ftime='+item.day)">
+                                <div class="remiTitle">
+                                    <p>{{item.name}}，超过<span>{{item.day}}</span>天 未跟进</p>
+                                </div>
+                                <div class="remiData">
+                                    <span>{{item.num}}</span>
+                                    <img src="img/righthome.png" alt="">
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="no_tip_box" v-else>
+                        暂无跟进提醒
+                    </div>
+                </div>
+                <div class="crmRemindone" style="margin-top: 0.1rem;">
+                    <div class="crmRemindoneName">
+                        <img src="img/shifd.png" alt="">
+                        <p>释放提醒</p>
+                    </div>
+                    <template v-if="releaseShow">
+                        <ul>
+                            <li v-for="(item, releaseKey) in msg.releaseData" :key="releaseKey">
+                                <a @click="pageTo('index.php?m=crm&c=crm_my_customer&rating='+item.rating+'&last_Ftime='+item.day)">
+                                    <div class="remiTitle">
+                                        <p>{{item.name}}，超过<span>{{item.day}}</span>天 未跟进，即将释放</p>
+                                    </div>
+                                    <div class="remiData">
+                                        <span>{{item.num}}</span>
+                                        <img src="img/righthome.png" alt="">
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li v-for="(item, dealKey) in msg.dealData" :key="dealKey">
+                                <a @click="pageTo('index.php?m=crm&c=crm_my_customer&rating='+item.rating+'&vipStime='+item.day)">
+                                    <div class="remiTitle">
+                                        <p>{{item.name}}，超过<span>{{item.day}}</span>天 未变更会员，即将释放</p>
+                                    </div>
+                                    <div class="remiData">
+                                        <span>{{item.num}}</span>
+                                        <img src="img/righthome.png" alt="">
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </template>
+                    <div class="no_tip_box" v-else>
+                        暂无释放提醒
+                    </div>
+                </div>
+            </section>
+        </van-skeleton>
+    </div>
+    <div class="homeNavBar">
+        <ul>
+            <li>
+                <a href="index.php">
+                    <div class="navBarOne navBarOne3"></div>
+                    <div class="navBarTwo">
+                        <span>首页</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="navBarClick" href="index.php?m=crm&c=crm_index">
+                    <div class="navBarOne navBarOne1"></div>
+                    <div class="navBarTwo">
+                        <span>工作台</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?m=crm&c=crm_my_customer">
+                    <div class="navBarOne navBarOne2"></div>
+                    <div class="navBarTwo">
+                        <span>客户</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="index.php?m=crm&c=crm_customer">
+                    <div class="navBarOne navBarOne4"></div>
+                    <div class="navBarTwo">
+                        <span>公海</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="followPopup">
+
+        <van-popup v-model:show="customerShow" round position="bottom">
+            <van-picker show-toolbar :default-index="customerIndex" :columns="customer.name" @cancel="onCustomerCancel" @confirm="onCustomerConfirm"/>
+        </van-popup>
+
+        <!--写跟进-->
+        <div class="followgen">
+            <img class="folCloseGe" src="img/close.png" @click="followClose">
+            <div class="genForms">
+                <h3>跟进记录</h3>
+                <form class="layui-form" action="javascript:;">
+                    <div class="followSubec followSubSousuod">
+                        <p>客户名称：</p>
+                        <van-search v-model="cus_name" show-action placeholder="客户名称" @clear="clearCus">
+                            <template #action>
+                                <div class="soudye" @click="searchCus">搜索</div>
+                            </template>
+                        </van-search>
+                    </div>
+                    <div class="followSubec">
+                        <p>客户等级：</p>
+                        <div class="layui-input-inline">
+                            <van-popup v-model:show="showCrmTypePicker" round position="bottom">
+                                <van-picker show-toolbar :columns="crmTypeArr" value-key="name" title="客户等级选择" @cancel="showCrmTypePicker = false" @confirm="onCrmTypeConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="crm_type_name" is-link readonly name="picker" placeholder="点击选择客户等级" @click="showCrmTypePicker = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubec">
+                        <p>客户标签：</p>
+                        <div class="layui-input-inline">
+                            <van-popup v-model:show="showCrmStatusPicker" round position="bottom">
+                                <van-picker show-toolbar :columns="crmStatusArr" value-key="name" title="客户标签选择" @cancel="showCrmStatusPicker = false" @confirm="onCrmStatusConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="crm_status_name" is-link readonly name="picker" placeholder="点击选择客户标签" @click="showCrmStatusPicker = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubec">
+                        <p>跟进时间：</p>
+                        <div class="followTime">
+                            <van-popup v-model="followTimeShow" round position="bottom" default-date="">
+                                <van-datetime-picker v-model="currentDate" type="datetime" title="选择跟进时间" @confirm="followTimeConfirm" @cancel="followTimeShow = false"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <input type="text" placeholder="请选择跟进时间" :value="followTime" @click="followTimeShow = true" readonly>
+                                <button></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubec">
+                        <p>跟进方式：</p>
+                        <div class="layui-input-inline">
+                            <van-popup v-model:show="followWayShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="followIndex" :columns="followWay.name" @cancel="followWayShow = false" @confirm="onFollowWayConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="followWayName" is-link readonly name="picker" placeholder="请选择跟进方式" @click="followWayShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubec flexsubjectren">
+                        <p>跟进内容：</p>
+                        <div class="followCont followContTwo" style="width: 100% !important;">
+                            <textarea class="follotextarea" v-model="followRemark" placeholder="请输入内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="followSubec flexsubUploader">
+                        <p style="margin-bottom: 6px;">上传图片：</p>
+                        <van-uploader v-model="followList" multiple :max-count="5" :after-read="afterRead">
+                            <van-button icon="plus" plain size="small" type="info">上传文件</van-button>
+                        </van-uploader>
+                    </div>
+
+
+                    <div class="followSubec">
+                        <p>下次跟进：</p>
+                        <div class="followCont">
+                            <van-checkbox v-model="nextFollowChecked" shape="square" @change="nextFollowCk"/>
+                        </div>
+                        <div id="nextFollowTimeContainer" class="followTime"
+                             style="display:none; background: none;">
+                            <van-popup v-model="nextFollowTimeShow" round position="bottom" default-date="">
+                                <van-datetime-picker v-model="currentDate" type="datetime" @confirm="nextTimeConfirm" @cancel="nextFollowTimeShow = false"/>
+                            </van-popup>
+                            <div class="layuiTnputuy" style="width: 5.5rem; margin-left: 0.3rem;">
+                                <input type="text" placeholder="请选择下次跟进时间" :value="nextFollowTime" @click="nextFollowTimeShow = true" readonly>
+                                <button></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubec">
+                        <div class="followCont">
+                            <button @click="addFollow">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 录订单 -->
+        <div class="followdeal">
+            <img class="folClosedeal" src="img/close.png" @click="dealClose">
+            <div class="dealForms">
+                <h3>录订单</h3>
+                <form class="layui-form" action="javascript:;">
+                    <div class="followSubedeal followSubedealOne followSubSousuod">
+                        <p>客户名称：</p>
+                        <van-search v-model="cus_name" show-action placeholder="客户名称" @clear="clearCus">
+                            <template #action>
+                                <div class="soudye" @click="searchCus">搜索</div>
+                            </template>
+                        </van-search>
+                    </div>
+                    <div class="followSubedeal followSubedealOne">
+                        <p>支付方式：</p>
+                        <div class="layui-input-inline" style="border: 1px solid #eee;">
+                            <van-popup v-model:show="canPayShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="canPayIndex" :columns="canPay.name" @cancel="canPayShow = false" @confirm="onCanPayConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="canPayName" is-link readonly placeholder="点击选择支付方式" @click="canPayShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubedeal followSubedealOne">
+                        <p>订单类型：</p>
+                        <div class="layui-input-inline" style=" display: flex; align-items: center;">
+                            <div class="ubedealOneLeft" style="border: 1px solid #eee;">
+                                <van-popup v-model:show="orderTypeShow" round position="bottom">
+                                    <van-picker show-toolbar :default-index="orderTypeIndex" :columns="orderType.name" @cancel="orderTypeShow = false" @confirm="onOrderTypeConfirm"/>
+                                </van-popup>
+                                <div class="layuiTnputuy">
+                                    <van-field v-model="orderTypeName" is-link readonly placeholder="选择订单类型" @click="orderTypeShow = true"/>
+                                </div>
+                            </div>
+                            <div @click="showTips" class="ubedealOneRight"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="followSubedeal followSubedealOne" v-if="ratingDivShow">
+                        <p>会员套餐：</p>
+                        <div class="layui-input-inline" style="border: 1px solid #eee;">
+                            <van-popup v-model:show="ratingShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="ratingIndex" :columns="ratingArr.name" @cancel="ratingShow = false" @confirm="onRatingConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="ratingName" is-link readonly placeholder="选择会员类型" @click="ratingShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubedeal followSubedealOne" v-if="modelDivShow">
+                        <p>业务模式：</p>
+                        <div class="layui-input-inline" style="border: 1px solid #eee;">
+                            <van-popup v-model:show="modelShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="modelIndex" :columns="modelArr.name" @cancel="modelShow = false" @confirm="onModelConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="modelName" is-link readonly placeholder="请选择业务模式" @click="modelShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSubedeal followSubedealOne">
+                        <p>订单金额：</p>
+                        <div class="followIupur">
+                            <input type="text" v-model="order_price" placeholder="请输入订单金额"/>
+                        </div>
+                    </div>
+                    <div class="followSubedeal flexsubjectren flexsubUploader">
+                        <p style="margin: auto 0;">合同图片：</p>
+                        <div style="flex: 1;">
+                            <van-uploader v-model="htpicList" multiple :max-count="5" :before-delete="beforeHtpicDel" :after-read="afterhtpicread">
+                                <van-button icon="plus" plain size="small" type="info">上传文件</van-button>
+                            </van-uploader>
+                        </div>
+                    </div>
+                    <div class="followSubedeal flexsubjectdeal">
+                        <p>备注信息：</p>
+                        <div class="followCont followContTwo">
+                            <textarea class="follotextarea" v-model="orderRemark" placeholder="请输入备注信息"></textarea>
+                        </div>
+                    </div>
+                    <div class="followSubedeal">
+                        <div class="followCont">
+                            <button @click="addDeal">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <van-popup v-model:show="orderTips" style="border-radius: 0.21333rem;width: 8rem; height: 3.2rem;">
+            <div style="overflow: hidden;padding:0.5rem 0.4rem; border-radius: 0.1rem; font-size: 0.3733rem; line-height: 0.6rem; color: #333;text-align: center;">
+                <span>当业务员录入“会员充值“类型的订单，并且选择择开通业务的模式，管理员在审批订单时，会充值会员到企业账号；其他情况的录入，则不会涉及业务逻辑处理</span>
+            </div>
+
+        </van-popup>
+
+        <!-- 建任务 -->
+        <div class="followren">
+            <img class="folCloseren" src="img/close.png" @click="taskClose">
+            <div class="renForms">
+                <h3>建任务</h3>
+                <form class="layui-form" action="javascript:;">
+                    <div class="followSuberen followSubSousuod">
+                        <p>客户名称：</p>
+                        <van-search v-model="cus_name" show-action placeholder="客户名称" @clear="clearCus">
+                            <template #action>
+                                <div class="soudye" @click="searchCus">搜索</div>
+                            </template>
+                        </van-search>
+                    </div>
+                    <div class="followSuberen">
+                        <p>任务类型：</p>
+                        <div class="layui-input-inline" style="border: 1px solid #eee;">
+                            <van-popup v-model:show="taskTypeShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="taskTypeIndex" :columns="taskType.name" @cancel="taskTypeShow = false" @confirm="onTaskTypeConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="taskTypeName" is-link readonly placeholder="点击选择任务类型" @click="taskTypeShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSuberen" v-if="taskTypeId != '22'">
+                        <p>处理人员：</p>
+                        <div class="layui-input-inline" style="border: 1px solid #eee;">
+                            <van-popup v-model:show="taskUserShow" round position="bottom">
+                                <van-picker show-toolbar :default-index="taskUserIndex" :columns="taskUser.name" @cancel="taskUserShow = false" @confirm="onTaskUserConfirm"/>
+                            </van-popup>
+                            <div class="layuiTnputuy">
+                                <van-field v-model="taskUserName" is-link readonly placeholder="选择任务处理人" @click="taskUserShow = true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="followSuberen" v-if="taskTypeId == '22'">
+                        <p>执行时间：</p>
+                        <div class="followTime">
+                            <van-popup v-model="taskTimeShow" round position="bottom" default-date="">
+                                <van-datetime-picker v-model="currentDate" type="datetime" title="选择执行时间" @confirm="taskTimeConfirm" @cancel="taskTimeShow = false"/>
+                            </van-popup>
+                            <div class="layuiTnputuy" style="width: 6.25rem;">
+                                <input type="text" placeholder="请选择时间" :value="taskTime" @click="taskTimeShow = true" readonly>
+                                <button></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="followSuberen flexsubjectren">
+                        <p>备注任务：</p>
+                        <div class="followCont followContTwo">
+                            <textarea class="follotextarea" v-model="taskRemark" placeholder="请输入内容"></textarea>
+                        </div>
+                    </div>
+                    <div class="followSuberen">
+                        <div class="followCont">
+                            <button @click="addTask">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 写日志 -->
+        <div class="followlog">
+            <img class="folCloselog" src="img/close.png" @click="logClose">
+            <div class="logForms">
+                <h3>写日志</h3>
+                <form class="layui-form" action="javascript:;">
+                    <div class="followSubelog followSubedealOne">
+                        <p>日志标题：</p>
+                        <div class="followIupur">
+                            <input type="text" v-model="log_title" placeholder="请输入标题"/>
+                        </div>
+                    </div>
+                    <div class="followSubelog flexsubjectlog">
+                        <p>日志内容：</p>
+                        <div class="followCont followContTwo">
+                            <textarea class="follotextarea" v-model="log_content" placeholder="请输入内容"></textarea>
+                        </div>
+                    </div>
+                    <div class="followSubelog">
+                        <div class="followCont">
+                            <button @click="addLog">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+
+    var crmIndexVue = new Vue({
+        el: '#crmIndexVue',
+        data: {
+            loading: true,
+            skwidth: skwidth,
+            uInfo: {},
+            msg: {},
+
+            followShow: true,
+            releaseShow: true,
+
+            cus_name: '',
+            cus_uid: 0,
+
+            customerShow: false,
+            customerIndex: 0,
+            customer: {
+                uid: [],
+                name: [],
+                crm_uid: []
+            },
+
+            currentDate: new Date(),
+            followTime: '',
+            followTimeShow: false,
+
+            followWayShow: false,
+            followWay: {
+                id: [],
+                name: []
+            },
+            followIndex: 0,
+            followWayName: '',
+            followWayId: '',
+
+            followRemark: '',
+
+            followList: [],
+            followAdd: [],
+
+            htpicList: [],
+            htpicAdd: [],
+
+            nextFollowChecked: false,
+            nextFollowTime: '',
+            nextFollowTimeShow: false,
+
+            canPayShow: false,
+            canPay: {
+                id: [],
+                name: []
+            },
+            canPayIndex: 0,
+            canPayName: '',
+            canPayId: '',
+
+            orderTypeShow: false,
+            orderType: {
+                id: [],
+                name: []
+            },
+            orderTypeIndex: 0,
+            orderTypeName: '',
+            orderTypeId: '',
+
+            orderTips: false,
+
+            ratingDivShow: false,
+            ratingShow: false,
+            ratingArr: {
+                id: [],
+                name: [],
+                price: []
+            },
+            ratingIndex: 0,
+            ratingName: '',
+            ratingId: '',
+
+            modelDivShow: false,
+            modelShow: false,
+            modelArr: {
+                id: [1, 2],
+                name: ['开通', '不开通']
+            },
+            modelIndex: 0,
+            modelName: '开通',
+            deal_model: 1,
+
+            order_price: '',
+            orderRemark: '',
+
+            taskTypeShow: false,
+            taskType: {
+                id: [],
+                name: []
+            },
+            taskTypeIndex: 0,
+            taskTypeName: '',
+            taskTypeId: 22,
+
+            taskUserShow: false,
+            taskUser: {
+                uid: [],
+                name: []
+            },
+            taskUserIndex: 0,
+            taskUserName: '',
+            taskUserUid: '',
+
+            taskTime: '',
+            taskTimeShow: false,
+
+            taskRemark: '',
+
+            log_title: '',
+            log_content: '',
+
+            // 客户等级
+            showCrmTypePicker: false,
+            crm_type: '',
+            crm_type_name: '',
+            crmTypeArr: [],
+            // 客户标签
+            showCrmStatusPicker: false,
+            crm_status: '',
+            crm_status_name: '',
+            crmStatusArr: [],
+
+            rankingNoPermissions: false, // 无查看榜单权限 false 有 true 无
+            statis: {},
+            jebList: {}
+        },
+        mounted() {
+            this.getUserInfo();
+            this.getJebList();
+            this.getNotice();
+            this.getCrmClass();
+        },
+        methods: {
+            getUserInfo: function () {
+                var self = this;
+                $.post('index.php?m=crm&c=crm_index', {a: 1}, function (res) {
+                    self.loading = false;
+                    $('body').css('background', '#f3f3f3');
+                    $('#crmIndexVue').removeAttr('style');
+                    self.uInfo = res;
+
+                }, 'json');
+            },
+            getJebList: function () {
+                var self = this;
+                $.post('index.php?m=crm&c=crm_index&a=getJebList', {}, function (res) {
+                    self.loading = false;
+                    if (res.error > 0) {
+                        self.rankingNoPermissions = res.error == 403;
+                    } else {
+                        self.statis.month_price = res.data.month_price;
+                        self.jebList = res.data.jebList.data;
+                    }
+                }, 'json');
+            },
+            getNotice: function () {
+
+                var self = this;
+                $.post('index.php?m=crm&c=crm_index&a=getNotice', {a: 1}, function (res) {
+                    self.loading = false;
+                    self.msg = res;
+                    if (res.followData.length == 0) {
+                        self.followShow = false;
+                    }
+                    if (res.releaseData.length == 0 && res.dealData.length == 0) {
+                        self.releaseShow = false;
+                    }
+                }, 'json');
+            },
+            getCrmClass: function () {
+                let that = this;
+                var params = {
+                    rand: Math.random()
+                };
+                $.post('index.php?m=crm&c=crm_index&a=getCrmClass', params, function (res) {
+                    if (res.error === 0) {
+                        data = res.data;
+
+                        var userData = {
+                            uid: [],
+                            name: []
+                        };
+                        data.adminUser.forEach(val => {
+                            userData.uid.push(val.uid);
+                            userData.name.push(val.name);
+                        });
+                        that.taskUser = userData;
+
+                        var wayData = {
+                            id: [],
+                            name: []
+                        };
+                        data.followWay.forEach(val => {
+                            wayData.id.push(val.id);
+                            wayData.name.push(val.name);
+                        });
+                        that.followWay = wayData;
+
+                        that.crmTypeArr = data.crmType;
+                        that.crmStatusArr = data.crmStatus;
+
+                        var typeData = {
+                            id: [],
+                            name: []
+                        };
+
+                        data.taskType.forEach(val => {
+
+                            typeData.id.push(val.id);
+                            typeData.name.push(val.name);
+                            if (val.id == 22) {
+                                that.taskTypeName = val.name;
+                            }
+                        });
+                        that.taskType = typeData;
+
+                        var canData = {
+                            id: [],
+                            name: []
+                        };
+
+                        data.canPay.forEach(val => {
+
+                            canData.id.push(val.id);
+                            canData.name.push(val.name);
+                        });
+                        that.canPay = canData;
+
+                        var otData = {
+                            id: [],
+                            name: []
+                        };
+
+                        data.orderType.forEach(val => {
+
+                            otData.id.push(val.id);
+                            otData.name.push(val.name);
+                        });
+                        that.orderType = otData;
+
+                        var raData = {
+                            id: [],
+                            name: [],
+                            price: []
+                        };
+
+                        data.ratingArr.forEach(val => {
+
+                            raData.id.push(val.id);
+                            raData.name.push(val.name);
+                            raData.price.push(parseFloat(val.price));
+                        });
+                        that.ratingArr = raData;
+
+                    }
+                }, 'json')
+            },
+
+            formatDate(date) {
+                var that = this;
+                let year = date.getFullYear();
+                let month = date.getMonth() < 9 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                let hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+                let minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+                return year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
+            },
+            searchCus: function () {
+                var that = this;
+                if (that.cus_name == '') {
+                    return showToast('请输入客户名称');
+                }
+                var param = {
+                    name: that.cus_name,
+                };
+                showLoading('...');
+                $.post('index.php?m=crm&c=crm_index&a=searchCom', param, function (res) {
+                    hideLoading();
+
+                    if (res.length > 0) {
+
+                        var cusData = {
+                            uid: [],
+                            name: [],
+                            crm_uid: [],
+                            crm_type: [],
+                            crm_status: [],
+                            crm_type_n: [],
+                            crm_status_n: [],
+                        };
+                        res.forEach(val => {
+                            cusData.uid.push(val.uid);
+                            cusData.name.push(val.name);
+                            cusData.crm_uid.push(val.crm_uid);
+                            cusData.crm_type.push(val.crm_type);
+                            cusData.crm_status.push(val.crm_status);
+                            cusData.crm_type_n.push(val.crm_type_n);
+                            cusData.crm_status_n.push(val.crm_status_n);
+                        });
+                        that.customer = cusData;
+                        that.customerShow = true;
+                    } else {
+                        showToast('搜索失败，请确认客户名称是否正确！');
+                        that.clearCus();
+                        return false;
+                    }
+
+                }, 'json');
+            },
+            clearCus: function() {
+                this.customerIndex = 0;
+                this.cus_uid = 0;
+                this.cus_name = '';
+                this.cus_crm_uid = 0;
+                this.crm_type = '';
+                this.crm_status = '';
+                this.crm_type_name = '';
+                this.crm_status_name = '';
+            },
+            onCustomerConfirm(value, index) {
+
+                this.customerIndex = index
+                this.cus_uid = this.customer.uid[index];
+                this.cus_name = this.customer.name[index];
+                this.cus_crm_uid = this.customer.crm_uid[index];
+                this.crm_type = this.customer.crm_type[index];
+                this.crm_status = this.customer.crm_status[index];
+                this.crm_type_name = this.customer.crm_type_n[index];
+                this.crm_status_name = this.customer.crm_status_n[index];
+                this.customerShow = false
+            },
+            onCustomerCancel(value, index) {
+
+                this.customerIndex = 0
+                this.cus_uid = 0;
+                this.cus_name = '';
+                this.cus_crm_uid = 0;
+                this.customerShow = false
+            },
+
+            /**
+             * 添加跟进 - Start
+             */
+            // 显示添加跟进
+            showFollow() {
+                $(".followPopup").css('display', 'block');
+                $(".followgen").css('display', 'block');
+                $(".followgen").animate({
+                    bottom: '0',
+                });
+            },
+            // 关闭添加跟进
+            followClose() {
+                $(".followPopup").css('display', 'none');
+                $(".followgen").css('display', 'none');
+                $(".followgen").animate({
+                    bottom: '-11rem',
+                });
+            },
+            // 跟进时间
+            followTimeConfirm(date) {
+                this.followTime = this.formatDate(date);
+                this.followTimeShow = false;
+            },
+            onCrmTypeConfirm(value) {
+                this.crm_type = value.id
+                this.crm_type_name = value.name
+                this.showCrmTypePicker = false
+            },
+            onCrmStatusConfirm(value) {
+                this.crm_status = value.id
+                this.crm_status_name = value.name
+                this.showCrmStatusPicker = false
+            },
+            onFollowWayConfirm(value, index) {
+
+                this.followIndex = index
+                this.followWayId = this.followWay.id[index];
+                this.followWayName = this.followWay.name[index];
+                this.followWayShow = false
+            },
+            afterRead(file) {
+                if (file.length > 1) {
+                    var index = 0;
+                    file.forEach(item => {
+                        let obj = {
+                            error: true,
+                            url: item.content,
+                            index: index
+                        };
+                        index++;
+                        this.followAdd.push(obj);
+                    });
+                } else {
+                    let obj = {
+                        error: true,
+                        url: file.content,
+                        index: 0
+                    };
+                    this.followAdd.push(obj);
+                }
+            },
+            afterhtpicread(file) {
+                if (file.length > 1) {
+                    var index = 0;
+                    file.forEach(item => {
+                        let obj = {
+                            error: true,
+                            url: item.content,
+                            index: index
+                        };
+                        index++;
+                        this.htpicAdd.push(obj);
+                    });
+                } else {
+                    let obj = {
+                        error: true,
+                        url: file.content,
+                        index: 0
+                    };
+                    this.htpicAdd.push(obj);
+                }
+            },
+            beforeHtpicDel(file, detail) {
+                var self = this;
+                self.htpicAdd.forEach(function (val, index) {
+                    if (val.index == detail.index) {
+                        // 删除的是本次选择的，不是已经上传的
+                        self.htpicAdd.splice(index, 1);
+                    }
+                });
+                return true;
+            },
+            nextFollowCk(checked) {
+                this.nextFollowChecked = checked
+                if (checked) {
+                    $("#nextFollowTimeContainer").css('display', 'block');
+                } else {
+                    $("#nextFollowTimeContainer").css('display', 'none');
+                }
+            },
+            nextTimeConfirm(date) {
+                this.nextFollowTime = this.formatDate(date);
+                this.nextFollowTimeShow = false;
+            },
+            addFollow() {
+                var that = this;
+
+                if (that.cus_uid == 0) {
+                    return showToast('跟进企业不能为空');
+                }
+                var param = {
+                    comid: that.cus_uid,
+                    crm_type: that.crm_type,
+                    crm_status: that.crm_status,
+                    type: that.followWayId,
+                    ftime: that.followTime,
+                    remark: that.followRemark,
+                    follow: that.nextFollowChecked ? 1 : 0
+                };
+
+                if (that.followAdd.length > 0) {
+                    var uimage = [];
+                    that.followAdd.forEach(item => {
+
+                        uimage.push(item.url)
+                    });
+                    param.uimage = uimage;
+                }
+
+                if (that.nextFollowChecked) {
+                    param.ptime = that.nextTime
+                }
+
+                showLoading('添加中');
+                $.post('index.php?m=crm&c=crm_my_customer&a=addFollow', param, function (res) {
+                    hideLoading();
+                    if (res.errcode == 9) {
+                        that.followClose()
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            /**
+             * 添加跟进 - End
+             */
+
+            /**
+             * 录订单 - Start
+             */
+            showDeal() {
+                $(".followPopup").css('display', 'block');
+                $(".followdeal").css('display', 'block');
+                $(".followdeal").animate({
+                    bottom: '0',
+                });
+            },
+            dealClose() {
+                $(".followPopup").css('display', 'none');
+                $(".followdeal").css('display', 'none');
+                $(".followdeal").animate({
+                    bottom: '-11rem',
+                });
+            },
+            onCanPayConfirm(value, index) {
+
+                this.canPayIndex = index
+                this.canPayId = this.canPay.id[index];
+                this.canPayName = this.canPay.name[index];
+                this.canPayShow = false
+            },
+            onOrderTypeConfirm(value, index) {
+
+                this.orderTypeIndex = index;
+                this.orderTypeId = this.orderType.id[index];
+                this.orderTypeName = this.orderType.name[index];
+                this.orderTypeShow = false
+
+                if (this.orderTypeId == 1) {
+
+                    this.ratingDivShow = true;
+                    this.modelDivShow = true;
+                } else {
+                    this.ratingDivShow = false;
+                    this.modelDivShow = false;
+                }
+            },
+            onRatingConfirm(value, index) {
+
+                this.ratingIndex = index;
+                this.ratingId = this.ratingArr.id[index];
+                this.ratingName = this.ratingArr.name[index];
+                this.order_price = this.ratingArr.price[index];
+                this.ratingShow = false
+            },
+            onModelConfirm(value, index) {
+                this.modelIndex = index;
+                this.deal_model = this.modelArr.id[index];
+                this.modelName = this.modelArr.name[index];
+                this.modelShow = false;
+            },
+            showTips: function () {
+                this.orderTips = true;
+            },
+            addDeal() {
+                var that = this;
+                if (that.cus_uid == 0) {
+                    return showToast('请填写客户名称');
+                }
+                var param = {
+                    uid: that.cus_uid,
+                    crm_uid: that.cus_crm_uid,
+                    order_type: that.canPayId,
+                    type: that.orderTypeId,
+                    order_price: that.order_price,
+                    order_remark: that.orderRemark
+                };
+
+                if (that.htpicAdd.length > 0) {
+                    var htpicimage = [];
+                    that.htpicAdd.forEach(item => {
+                        htpicimage.push(item.url)
+                    });
+                    param.uimage = htpicimage;
+                }
+                if (that.orderTypeId == 1) {
+                    param.rating = that.ratingId;
+                    param.deal_model = that.deal_model;
+                }
+                showLoading('添加中');
+                $.post('index.php?m=crm&c=crm_index&a=addDeal', param, function (res) {
+                    hideLoading();
+                    if (res.errcode == 9) {
+                        that.followClose()
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            /**
+             * 录订单 - End
+             */
+
+            /**
+             * 新建任务 - Start
+             */
+            showTask() {
+                $(".followPopup").css('display', 'block');
+                $(".followren").css('display', 'block');
+                $(".followren").animate({
+                    bottom: '0',
+                });
+            },
+            // 关闭添加任务
+            taskClose() {
+                $(".followPopup").css('display', 'none');
+                $(".followren").css('display', 'none');
+                $(".followren").animate({
+                    bottom: '-10rem',
+                });
+            },
+            onTaskTypeConfirm(value, index) {
+
+                this.taskTypeIndex = index
+                this.taskTypeId = this.taskType.id[index];
+                this.taskTypeName = this.taskType.name[index];
+                this.taskTypeShow = false
+            },
+            taskTimeConfirm(date) {
+                this.taskTime = this.formatDate(date);
+                this.taskTimeShow = false;
+            },
+            onTaskUserConfirm(value, index) {
+                this.taskUserIndex = index
+                this.taskUserUid = this.taskUser.uid[index];
+                this.taskUserName = this.taskUser.name[index];
+                this.taskUserShow = false
+            },
+            // 添加任务
+            addTask() {
+                var that = this;
+                if (that.cus_uid == 0) {
+                    return showToast('请填写客户名称');
+                }
+                var param = {
+                    comid: that.cus_uid,
+                    type: that.taskTypeId,
+                    content: that.taskRemark,
+                    stime: that.taskTime,
+                    taskHuid: that.taskUserUid
+                };
+                showLoading('添加中');
+                $.post('index.php?m=crm&c=crm_my_customer&a=addTask', param, function (res) {
+                    hideLoading();
+                    if (res.errcode == 9) {
+                        that.followClose()
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            /**
+             * 新建任务 - End
+             */
+
+            /**
+             * 写日志 - Start
+             */
+            showLog() {
+                $(".followPopup").css('display', 'block');
+                $(".followlog").css('display', 'block');
+                $(".followlog").animate({
+                    bottom: '0',
+                });
+            },
+            logClose() {
+                $(".followPopup").css('display', 'none');
+                $(".followlog").css('display', 'none');
+                $(".followlog").animate({
+                    bottom: '-10rem',
+                });
+            },
+            // 添加任务
+            addLog() {
+                var that = this;
+                var param = {
+                    title: that.log_title,
+                    content: that.log_content,
+                };
+                showLoading('添加中');
+                $.post('index.php?m=crm&c=crm_my_customer&a=addWorkLog', param, function (res) {
+                    hideLoading();
+                    if (res.errcode == 9) {
+                        that.logClose();
+                        showToast(res.msg, 2, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            /**
+             * 写日志 - End
+             */
+            logout: function () {
+                showConfirm('您确定退出登录？', function () {
+                    $.post('index.php?c=logout', {}, function (res) {
+                        showToast('退出成功！', 2, function () {
+                            window.location.href = 'index.php';
+                        });
+                    }, 'json');
+                })
+            },
+            pageTo: function (url) {
+                window.location.href = url
+            }
+        }
+    });
+</script>
+</body>
+<style>
+    .van-uploader__preview-image {
+        width: 70px;
+        height: 70px;
+    }
+</style>
+</html>

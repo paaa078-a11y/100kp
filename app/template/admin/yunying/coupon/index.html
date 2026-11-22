@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<script src="../../../admin/header.js"></script>
+		<script src="../../../admin/httpVueLoader.js"></script>
+	</head>
+
+	<body>
+		<div id="daohaapp" class="moduleElenAl">
+			<div class="moduleSeachs">
+				<div class="moduleSeachInpt">
+					<span>优惠券管理</span>
+				</div>
+				<div class="moduleSeachButn" style="display: flex;align-items: center;">
+					<el-button type="primary" plain icon="el-icon-s-goods" size="mini"
+						@click="openGift">赠送优惠劵</el-button>
+					<el-button type="primary" icon="el-icon-document-add" size="mini"
+						@click="openAdd('')">添加优惠劵</el-button>
+				</div>
+			</div>
+			<div class="moduleElTable">
+				<el-table :data="list" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange"
+						  @sort-change="sortChange" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+					<template slot="empty">
+						<p>{{dataText}}</p>
+					</template>
+					<el-table-column type="selection" width="55">
+					</el-table-column>
+					<el-table-column prop="id" label="编号" width="120" sortable="custom">
+					</el-table-column>
+					<el-table-column prop="name" label="名称" min-width="240">
+					</el-table-column>
+					<el-table-column label="金额" width="200">
+						<template slot-scope="scope">
+							{{scope.row.amount}}元
+						</template>
+					</el-table-column>
+					<el-table-column label="有效期" width="180">
+						<template slot-scope="scope">
+							{{scope.row.time}}天
+						</template>
+					</el-table-column>
+					<el-table-column label="使用条件" min-width="160">
+						<template slot-scope="scope">
+							消费{{scope.row.scope}}元
+						</template>
+					</el-table-column>
+					<el-table-column fixed="right" label="操作" width="150">
+						<template slot-scope="scope">
+							<div class="cz_button">
+								<el-button type="" size="small" @click="openAdd(scope.row)">修改</el-button>
+								<el-button type="danger" size="small" @click="del(scope.$index)">删除</el-button>
+							</div>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+			<div class="modulePaging">
+				<div class="modulecz modulePagButn">
+                    <el-checkbox v-model="checkedAll" :indeterminate="checkedAllIndeterminate" @change="checkAll">全选</el-checkbox>
+                    <el-button @click="batch('del')">批量删除</el-button>
+                </div>
+				<div class="modulePagNum">
+					<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					   :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+					   layout="total, sizes, prev, pager, next, jumper" :total="total">
+					</el-pagination>
+				</div>
+			</div>
+			<!--赠送优惠劵弹出-->
+			<div class="modluDrawer">
+				<el-dialog title="赠送优惠劵" :visible.sync="dialogGift" :with-header="true" :modal-append-to-body="false"
+					:show-close="true" width="400px">
+					<el-alert title="赠送时请正确填写用户名和选择要赠送的优惠券。" type="warning" show-icon></el-alert>
+					<div class="wxsettip_small ">用户名</div>
+					<el-input v-model="ruleFormGift.username" placeholder="请输入用户名"></el-input>
+					<div class="wxsettip_small ">优惠券</div>
+					<div class="wxsettip_select">
+					<el-select v-model="ruleFormGift.coupon" placeholder="请选择">
+							<el-option v-for="couponItem in couponList" :key="couponItem.id" :label="couponItem.name"
+								:value="couponItem.id">
+							</el-option>
+						</el-select></div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogGift = false">取 消</el-button>
+						<el-button type="primary" @click="saveGift" :disabled="saveLoading">确 定</el-button>
+					</span>
+				</el-dialog>
+			</div>
+
+			<!--添加优惠券弹出-->
+			<div class="modluDrawer">
+				<el-dialog :title="ruleForm.id ? '修改优惠券' : '添加优惠券'" :visible.sync="dialogAdd" :with-header="true" :modal-append-to-body="false"
+					:show-close="true" width="500px">
+					<div class="wxsettip_small ">优惠券名称</div>
+					<el-input v-model="ruleForm.name" placeholder="请输入优惠券名称"></el-input>
+					<div class="wxsettip_small ">优惠券金额</div>
+					<el-input v-model="ruleForm.amount" type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" placeholder="请输入优惠券金额">
+						<template slot="append">元</template>
+					</el-input>
+					<div class="wxsettip_small ">有效期</div>
+					<el-input v-model="ruleForm.time" type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" placeholder="请输入有效天数">
+						<template slot="append">天</template>
+					</el-input>
+					<div class="wxsettip_small ">使用条件 <el-tooltip class="item" effect="dark" content="至少消费多少金额才可以使用优惠券"
+                            placement="right-start"><i class="el-icon-warning-outline"></i>
+                        </el-tooltip></div>
+					<el-input v-model="ruleForm.scope" type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" placeholder="请输入至少消费金额">
+						<template slot="append">元</template>
+					</el-input>
+
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogAdd = false">取 消</el-button>
+						<el-button type="primary" @click="save" :disabled="saveLoading">确 定</el-button>
+					</span>
+				</el-dialog>
+			</div>
+		</div>
+		<!-- script -->
+		<script>
+			const custoapp = new Vue({
+				el: '#daohaapp',
+				data: function() {
+					return {
+						loading: false,
+						dataText: '数据加载中',
+						// 列表
+						page: 1,
+						limit: 0,
+						list: [],
+						total: 0,
+						pageSizes: [],
+
+						checkedAll: false, // 全选
+						checkedAllIndeterminate: false,
+						multipleSelection: [], // 多选值存储
+						idArr: [],
+
+						// 列表排序
+						t: '',
+						order: '',
+
+						// 添加优惠券
+						dialogAdd: false,
+						ruleForm: {
+							id: '',
+							name: '',
+							amount: '',
+							time: '',
+							scope: '',
+						},
+
+						// 赠送优惠券
+						dialogGift: false,
+						couponList: [],
+						ruleFormGift: {
+							username: '',
+							coupon: ''
+						},
+
+						saveLoading: false,
+						prevPage:0
+					}
+				},
+				created: function () {
+					this.getList();
+				},
+				methods: {
+					handleSizeChange(val) {
+						this.limit = val;
+						this.getList();
+					},
+					handleCurrentChange(val) {
+						this.page = val;
+						this.getList();
+					},
+					sortChange(event) {
+						this.t = event.order ? event.prop : '';
+						this.order = event.order ? event.order == 'descending' ? 'desc' : 'asc' : '';
+
+						this.page = 1;
+						this.getList();
+					},
+					getList() {
+						let that = this,
+							params = {
+								page: that.page,
+								limit: that.limit,
+								t: that.t,
+								order: that.order,
+							};
+						that.loading = true;
+
+						httpPost('m=yunying&c=coupon', params, {hideloading: true}).then(function (response) {
+							let res = response.data,
+								data = res.data;
+
+							that.list = data.list;
+							that.total = parseInt(data.total);
+							that.pageSizes = data.page_sizes;
+							if (that.limit === 0) {
+								that.limit = parseInt(data.limit); // 取系统配置默认数量
+							}
+							if (that.page > data.page) {
+								that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+							}
+							if(that.prevPage != that.page){
+								that.prevPage = that.page;
+								that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+							}
+							that.loading = false;
+							if (that.list.length === 0) {
+			                    that.dataText = "暂无数据";
+			                }
+						})
+					},
+
+					// 批量操作
+					handleSelectionChange(val) {
+						if (val.length == 0) {
+							this.checkedAll = false;
+							this.checkedAllIndeterminate = false;
+						} else {
+							if (val.length === this.list.length) {
+								this.checkedAll = true;
+								this.checkedAllIndeterminate = false;
+							} else {
+								this.checkedAll = false;
+								this.checkedAllIndeterminate = true;
+							}
+						}
+						this.multipleSelection = val;
+					},
+					batch(type) {
+						if (this.multipleSelection.length == 0) {
+							message.error('请选择要删除的数据');
+							return false;
+						}
+
+						let idArr = [];
+						this.multipleSelection.forEach(function(item) {
+							idArr.push(item.id);
+						})
+						this.idArr = idArr;
+
+						if (type == 'del') {
+							this.del();
+						}
+					},
+					checkAll(val) {
+						val ? this.checkedAllIndeterminate = false : '';
+						this.$refs.multipleTable.toggleAllSelection();
+					},
+
+					del(idx) {
+						let that = this,
+							params = {},
+							msg = '';
+
+						if (typeof idx == 'undefined') { // 批量删除
+							params.del = this.idArr;
+							msg = '你确定要删除选中项吗？';
+						} else {// 单个删除
+							params.del = that.list[idx].id;
+							msg = '你确定要删除当前项吗？';
+						}
+
+						delConfirm(this, params, function (params) {
+							httpPost('m=yunying&c=coupon&a=del', params).then(function(res) {
+								if (res.data.error > 0) {
+									message.error(res.data.msg);
+								} else {
+									message.success(res.data.msg, function () {
+										that.$refs.multipleTable.clearSelection();
+										that.getList();
+									});
+								}
+							})
+						}, msg)
+					},
+
+					openAdd(data) {
+						if (data != '') {
+							this.ruleForm = {
+								id: data.id,
+								name: data.name,
+								amount: data.amount,
+								time: data.time,
+								scope: data.scope,
+							}
+						} else {
+							this.ruleForm = {id: '', name: '', amount: '', time: '', scope: ''};
+						}
+						this.dialogAdd = true;
+					},
+					save() {
+						let that = this,
+							params = that.ruleForm;
+
+						if (params.name === '') {
+							message.warning('请输入优惠券名称');
+							return;
+						}
+
+						if (that.saveLoading) {
+							return false;
+						}
+						that.saveLoading = true;
+
+						httpPost('m=yunying&c=coupon&a=save', params).then(function (response) {
+							let res = response.data;
+
+							if (res.error > 0) {
+								that.saveLoading = false;
+								message.error(res.msg);
+							} else {
+								that.dialogAdd = false;
+								that.getList();
+								message.success(res.msg, function () {
+									that.saveLoading = false;
+								});
+							}
+						})
+					},
+
+					openGift() {
+						let that = this;
+						httpPost('m=yunying&c=coupon&a=getListAll', {}).then(function (response) {
+							let res = response.data;
+
+							that.couponList = res.data.list;
+							that.dialogGift = true;
+						})
+					},
+					saveGift() {
+						let that = this,
+							params = that.ruleFormGift;
+
+						if (params.username === '') {
+							message.warning('请输入用户名');
+							return;
+						}
+
+						if (params.coupon === '') {
+							message.warning('请选择优惠券');
+							return;
+						}
+
+						if (that.saveLoading) {
+							return false;
+						}
+						that.saveLoading = true;
+
+						httpPost('m=yunying&c=coupon&a=saveGift', params).then(function (response) {
+							let res = response.data;
+
+							if (res.error > 0) {
+								that.saveLoading = false;
+								message.error(res.msg);
+							} else {
+								that.dialogGift = false;
+								message.success(res.msg, function () {
+									that.saveLoading = false;
+									that.ruleFormGift = {
+										username: '',
+										coupon: ''
+									};
+								});
+							}
+						})
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>
+<style>
+	.el-dialog__body {
+	    padding: 0px 20px;
+	}
+	.wxsettip_select .el-select{WIDTH:100%}
+</style>

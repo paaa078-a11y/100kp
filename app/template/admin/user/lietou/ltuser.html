@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="猎头用户" name="first" :lazy="true">
+                    <ltall :status="status" @show-log="showlog"></ltall>
+                </el-tab-pane>
+                <el-tab-pane label="解绑记录" name="second" :lazy="true">
+                    <unbinding ></unbinding>
+                </el-tab-pane>
+                <el-tab-pane label="会员日志" name="third" :lazy="true">
+                    <huiylog v-if="activeName == 'third'" :time="time" :typelist="typeArr" :uid="uid" :weburl="weburl"></huiylog>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+</body>
+    <!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function () {
+            return {
+                activeName: 'first',
+                status: '',
+                uri: "m=user&c=",
+                dname: null,
+                typeArr: [
+                    {
+                        value: 1,
+                        label: "用户名"
+                    }, {
+                        value: 3,
+                        label: "用户ID"
+                    }
+                ],
+                time: [{
+                    value: 1,
+                    label: "今天"
+                }, {
+                    value: 3,
+                    label: "最近三天"
+                }, {
+                    value: 7,
+                    label: "最近七天"
+                }, {
+                    value: 15,
+                    label: "最近半月"
+                }, {
+                    value: 30,
+                    label: "最近一个月"
+                }],
+                uid:'',
+                weburl:localStorage.getItem("sy_weburl"),
+
+            }
+        },
+        components: {
+            'ltall': httpVueLoader('./component/ltall.vue'),
+            'unbinding': httpVueLoader('./component/unbinding.vue'),
+            'huiylog': httpVueLoader('./component/huiylog.vue'),
+        },
+        created: function () {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.status) {
+                that.status = query.status;
+            }
+            if (query.tabs) {
+                that.activeName = query.tabs;
+            }
+        },
+        methods: {
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            showlog:function (params) {
+                this.uid = params.id;
+                this.activeName = 'third';
+            }
+        }
+    });
+</script>
+</html>

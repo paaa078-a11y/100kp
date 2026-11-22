@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script type="application/javascript">var cachecode = '{yun:}$config.cachecode{/yun}';</script>
+	<title>后台管理 - 会员 - 行为轨迹设置</title>
+</head>
+
+<style>
+	.layui-form-radio{
+		margin-top: 4px;
+	}
+</style>
+
+<body class="body_ifm">
+<form class="layui-form">
+
+	<div id="subboxdiv" style="width:100%;height:100%;display:none;position:absolute;"></div>
+
+	<div class="infoboxp">
+		<div class="tty-tishi_top">
+
+			<div class="tabs_info">
+				<ul>
+					<li><a href="index.php?m=admin_weblog">轨迹记录</a></li>
+					<li class="curr"><a href="index.php?m=admin_weblog&c=config">轨迹设置</a></li>
+				</ul>
+			</div>
+
+			<div class="admin_new_tip adminNewtipse">
+				<div class="admin_new_tip_list_cont">
+					<div class="admin_new_tip_list">本页面可设置行为轨迹开关，也可以根据运行需求，筛选不同模块进行记录。</div>
+				</div>
+			</div>
+
+			<div class="clear"></div>
+
+			<div class="tag_box">
+				<div class="">
+					<table width="100%" class="table_form">
+						<tr>
+							<th colspan="2" class="admin_bold_box adminBoldRasd">
+								<div class="admin_bold">开关设置</div>
+							</th>
+						</tr>
+						<tr>
+							<th width="100">会员行为轨迹：</th>
+							<td>
+								<div class="layui-input-block">
+									<input type="checkbox" {yun:}if $config.sy_web_log_switch == '1'{/yun}checked{yun:}/if{/yun} name="sy_web_log_switch" lay-skin="switch" lay-filter="switchTest" lay-text="开启|关闭">
+									<div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch">
+										<em>开启</em><i></i>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2" class="admin_bold_box adminBoldRasd">
+								<div class="admin_bold">模块设置</div>
+							</th>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th width="100">个人行为模块：</th>
+							<td>
+								<div class="layui-input-inline">
+									{yun:}foreach from=$userModel item=user key=userKey{/yun}
+									<input name="web_user_model" value="{yun:}$userKey{/yun}" title="{yun:}$user{/yun}" {yun:}if in_array($userKey,$userModelArr){/yun} checked {yun:}/if{/yun} type="checkbox" lay-skin="primary"/>
+									{yun:}/foreach{/yun}
+								</div>
+							</td>
+						</tr>
+
+						<tr class="admin_table_trbg">
+							<th width="100">企业行为模块：</th>
+							<td>
+								<div class="layui-input-inline">
+									{yun:}foreach from=$comModel item=com key=comKey{/yun}
+									<input name="web_com_model" value="{yun:}$comKey{/yun}" title="{yun:}$com{/yun}" {yun:}if in_array($comKey,$comModelArr){/yun} checked {yun:}/if{/yun} type="checkbox" lay-skin="primary"/>
+									{yun:}/foreach{/yun}
+								</div>
+							</td>
+						</tr>
+
+						<tr class="">
+							<th>&nbsp;</th>
+							<td align="left">
+								<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}"/>
+								<input class="tty_sub" id="config" type="button" name="config" value="提交"/>&nbsp;&nbsp;
+								<input class="tty_cz" type="reset" value="重置" />
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script>
+	layui.use(['layer', 'form','laydate'], function() {
+		var layer = layui.layer,
+				form = layui.form,
+				laydate = layui.laydate,
+				$ = layui.$;
+	});
+
+	$(function() {
+		$("#config").click(function() {
+
+			var web_user_model = "";
+
+			$('input[name="web_user_model"]:checked').each(function() {
+				if (web_user_model == "") {
+					web_user_model = $(this).val();
+				} else {
+					web_user_model = web_user_model + "," + $(this).val();
+				}
+			});
+
+			var web_com_model = "";
+
+			$('input[name="web_com_model"]:checked').each(function() {
+				if (web_com_model == "") {
+					web_com_model = $(this).val();
+				} else {
+					web_com_model = web_com_model + "," + $(this).val();
+				}
+			});
+
+			loadlayer();
+			$.post("index.php?m=admin_weblog&c=config", {
+				config: $("#config").val(),
+				sy_web_log_switch:$("input[name=sy_web_log_switch]").is(":checked") ? 1 : 0,
+				web_user_model: web_user_model,
+				web_com_model: web_com_model,
+				pytoken: $("#pytoken").val(),
+			}, function(data, textStatus) {
+				parent.layer.closeAll('loading');
+				config_msg(data);
+			});
+		});
+	})
+</script>
+</body>
+</html>

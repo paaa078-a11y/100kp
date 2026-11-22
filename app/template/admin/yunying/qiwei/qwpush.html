@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="moduapp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="企业群发" name="comqf">
+                <qiyequfa ref="comqf"></qiyequfa>
+            </el-tab-pane>
+            <el-tab-pane label="客户欢迎语" name="cushyy">
+                <khwelcome ref="cushyy"></khwelcome>
+            </el-tab-pane>
+            <el-tab-pane label="入群欢迎语" name="inhyy">
+                <rqwelcome ref="inhyy"></rqwelcome>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function () {
+            return {
+                activeName: 'comqf'
+            }
+        },
+        components: {
+            'qiyequfa': httpVueLoader('./component/qiyequfa.vue'),
+            'khwelcome': httpVueLoader('./component/khwelcome.vue'),
+            'rqwelcome': httpVueLoader('./component/rqwelcome.vue'),
+        },
+        created: function () {
+            setTimeout(() => {
+                if (this.activeName == 'comqf') {
+                    this.$refs.comqf.getList();
+                } else if (this.activeName == 'cushyy') {
+                    this.$refs.cushyy.getList();
+                } else {
+                    this.$refs.inhyy.getList();
+                }
+            }, 500)
+        },
+        methods: {
+            handleClick(tab) {
+                if (tab.name == 'comqf') {
+                    this.$refs.comqf.getList();
+                } else if (tab.name == 'cushyy') {
+                    this.$refs.cushyy.getList();
+                } else {
+                    this.$refs.inhyy.getList();
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

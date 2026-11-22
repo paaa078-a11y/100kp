@@ -1,0 +1,163 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" style="display: none;">
+    <section class="innerPageTop">
+        <div class="subjectNav claimInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <p class="followTitle">{{cominfo.name}} 跟进记录</p>
+        </div>
+    </section>
+    <section class="enterNameTab">
+        <div class="enterTabTitle">
+            <a class="abTitleLink" href="javascript:void(0)" @click="typeChange(0)">我的联系记录</a>
+            <a href="javascript:void(0)" @click="typeChange(1)">全部记录</a>
+        </div>
+    </section>
+    <section class="dynamicTab">
+        <div class="dynamicTabTight" style="width:100%">
+            <div class="dynamicCont dynamicOn syueywhds" ref="box" @scroll="scrollEvent" v-if="total>0 || logList.length > 0">
+                <div class="dynamicContList" v-for="(litem,lkey) in logList" :key="lkey">
+                    <div class="crm_com_show_last">
+                        {{litem.aname}}
+                        【{{litem.ctime_n}}】
+                        {{litem.content}}
+                    </div>
+                </div>
+
+                <div class="dynamicContList" v-for="(item,key) in list" :key="'concern' + key">
+                    <span class="crm_com_czx_user">{{item.aname}}</span>
+                    【{{item.type_n}}】 联系 <span class="crm_com_czx_user">{{item.linkman}}</span>
+                    <span v-if="item.moblie">【{{item.moblie}}】</span>
+                    {{item.atime_n}}
+                    <div v-if="item.crm_type_n || item.crm_status_n">
+                        <span v-if="item.crm_type_n">客户等级：{{item.crm_type_n}}</span>
+                        <span v-if="item.crm_type_n && item.crm_status_n">&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
+                        <span v-if="item.crm_status_n">客户标签：{{item.crm_status_n}}</span>
+                    </div>
+                    <div class="">{{item.content}}</div>
+                    <div class="" v-if="item.imgArr">
+                        <div v-for="(img, k) in item.imgArr" :key="'c_img' + k">
+                            <img :src="img" style="max-width: 100%;" />
+                        </div>
+                    </div>
+                    <div class="" v-show="item.is_note==1">批注信息：{{item.noteContent}}</div>
+                </div>
+            </div>
+            <div id="pageLoading" :class="loadFlag==true && total>limit? 'lodbox' :'lodbox none'"><span class="lodbox_p"><i class="lodbox_iocn"></i>正在加载...</span></div>
+            <div id="pageNoMore" :class="loadFlag==false? 'lodbox' :'lodbox none'"> -没有更多了-</div>
+        </div>
+    </section>
+</div>
+<script>
+    var uid = '{yun:}$smarty.get.uid{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                limit: 14,
+                page: 1,
+                pageTotal: 1,
+                total: 0,
+                logList: [],
+                cominfo: [],
+                all: 0,
+                loadFlag: true,
+            }
+        },
+        created() {
+            this.getInfo();
+            this.getLog();
+            this.getList();
+        },
+        methods: {
+            typeChange: function (key) {
+                this.all = key;
+                this.page = 1;
+                this.list = [];
+                this.getList();
+            },
+            getList: function () {
+
+                var that = this;
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                    uid: uid,
+                    all: that.all
+                };
+                $.post('index.php?m=crm&c=crm_my_customer&a=concern', param, function (res) {
+                    if (res && res.error == '0') {
+                        let data = res.data;
+                        that.list = that.list.concat(data.list);
+                        that.pageTotal = data.pageTotal ? data.pageTotal : 1;
+                        that.total = data.total ? data.total : 0;
+
+                        if (that.pageTotal <= that.page) {
+                            that.loadFlag = false;
+                        } else {
+                            that.loadFlag = true;
+                        }
+                    } else {
+                        showToast(res.msg);
+                    }
+                    $("#yunvue").show();
+                }, 'json');
+            },
+            getLog: function () {
+                var that = this;
+                var param = {
+                    uid: uid,
+                    limit: 1,
+                    page: 1
+                };
+                $.post('index.php?m=crm&c=crm_my_customer&a=comlog', param, function (res) {
+                    if (res && res.error == '0') {
+                        that.logList = res.data.list;
+                    }
+                }, 'json');
+            },
+            getInfo: function () {
+                var that = this;
+                var param = {
+                    uid: uid
+                };
+
+                $.post('index.php?m=user&c=company&a=info', param, function (res) {
+                    that.cominfo = res.com ? res.com : [];
+                }, 'json');
+            },
+            scrollEvent: function () {
+                if (this.loadFlag) {
+                    let clientHeight = this.$refs.box.clientHeight;
+                    let scrollTop = this.$refs.box.scrollTop;
+                    let scrollHeight = this.$refs.box.scrollHeight;
+                    //滚动条到底部的条件:div 到头部的距离 + 屏幕高度 = 可滚动的总高度
+                    if (scrollTop + clientHeight === scrollHeight) {
+                        if (this.pageTotal === 1) {//第一页
+                            this.loadFlag = false;
+                        } else if ((this.page + 1) < this.pageTotal) {//中间页
+
+                            this.page += 1;
+                            this.getList();
+                        } else {//最后一页
+
+                            this.page += 1;
+                            this.getList();
+                            this.loadFlag = false;
+                        }
+                    }
+                } else {
+                    return;
+                }
+            },
+        }
+    });
+    $(".enterTabTitle a").click(function () {
+        $(this).addClass("abTitleLink").siblings().removeClass('abTitleLink');
+    });
+</script>
+</body>
+</html>

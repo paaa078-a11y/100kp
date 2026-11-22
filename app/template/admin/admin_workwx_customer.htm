@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 微群客户</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top" style="height: 75px;">
+        <div class="tabs_info">
+            <ul>
+                <li class="curr">
+                    <a href="index.php?m=admin_workwx_customer">企微客户</a>
+                </li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get">
+
+                <input name="m" value="admin_workwx_customer" type="hidden"/>
+
+                <div class="admin_new_search_name">客户名称：</div>
+
+                <!--<div class="admin_Filter_text formselect" did='dkeytype'>
+                    <input type="button" id="bkeytype" {yun:}if $smarty.get.keytype=='' ||$smarty.get.keytype=='1' {/yun} value="客户名称" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="昵称" {yun:}/if{/yun} class="admin_Filter_but" >
+                    <input type="hidden" name="keytype" id="keytype" {yun:}if $smarty.get.keytype=='' ||$smarty.get.keytype=='1' {/yun} value="1" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="2" {yun:}/if{/yun}/>
+                    <div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" onClick="formselect('1','keytype','客户名称')">客户名称</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onClick="formselect('2','keytype','昵称')">昵称</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>-->
+                <input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword' class="admin_new_text">
+                <input type="submit" value="搜索" name='search' class="admin_new_bth">
+            </form>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="tty_table-bom">
+        <div class="admin_statistics">
+            数据统计：
+            <em class="admin_statistics_s">客户数量 <a class="ajaxCustomer">0</a></em>
+            <em class="admin_statistics_s">客户群 <a class="ajaxGroup">0</a></em>
+            <em class="admin_statistics_s">群成员 <a class="ajaxGroupMember">0</a></em>
+            <em class="admin_statistics_s">内部成员 <a class="ajaxInGroup">0</a></em>
+            <em class="admin_statistics_s">外部联系人 <a class="ajaxOutGroup">0</a></em>
+            搜索结果：<span>{yun:}$total{/yun}</span>；
+        </div>
+        <div class="clear"></div>
+        <div class="tty_table-bom" style="padding: 0px 15px 0px 15px;">
+            <div class="table-list">
+                <div class="admin_table_border tableBorderAll">
+                    <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                    <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                        <input name="m" value="admin_" type="hidden"/>
+                        <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+
+                        <table width="100%">
+                            <thead>
+                            <tr class="admin_table_top">
+                                <th width="5%">
+                                    <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label>
+                                </th>
+                                <th align="left">客户名称</th>
+                                <th align="left">所属群</th>
+                                <th align="left">身份类型</th>
+                                <th align="left">是否注册</th>
+                                <th align="left">注册用户</th>
+                                <th align="left">UID</th>
+                                <th align="left">简历完善度</th>
+                                <th align="left">投递次数</th>
+                                <th align="left">进群方式</th>
+                                <th align="left">进群时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {yun:}foreach item=v key=key from=$list{/yun}
+                            <tr align="center" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                            <td class="od" align="left">{yun:}$v.name{/yun}{yun:}$v.name_sub{/yun}</td>
+                            <td class="od" align="left">
+                                {yun:}if $v.chat_id{/yun}
+                                    <span style="color:#2DB34A">{yun:}$v.group_name{/yun}</span>
+                                {yun:}else{/yun}
+                                    <span style="color:#FF6600">未入群</span>
+                                {yun:}/if{/yun}
+                            </td>
+                            <td align="left" class="iconCloud1">
+                                {yun:}if $v.chat_id{/yun}
+                                {yun:}if $v.owner == 1{/yun}
+                                    <span class="iconst">主</span>
+                                {yun:}else if $v.type == 1{/yun}
+                                    <span class="iconst" style="background: #41D667;">内</span>
+                                {yun:}else if $v.type == 2{/yun}
+                                    <span class="iconst" style="background: #FF6600;">外</span>
+                                {yun:}/if{/yun}
+                                {yun:}$v.type_n{/yun}
+                                {yun:}else{/yun}
+                                --
+                                {yun:}/if{/yun}
+                            </td>
+                            <td align="left" class="iconCloud1">
+                                {yun:}if $v.reg == '是'{/yun}
+                                    <span class="iconst">是</span>
+                                {yun:}else if $v.reg == '否'{/yun}
+                                    <span class="iconst" style="background: #FF6600;">否</span>
+                                {yun:}else{/yun}
+                                    {yun:}$v.reg{/yun}
+                                {yun:}/if{/yun}
+                            </td>
+                            <td align="left" class="iconCloud1">
+                                {yun:}if $v.uid>0{/yun}
+                                {yun:}if $v.usertype == 1{/yun}
+                                <span class="iconst" style="background: #41D667">个</span>
+                                {yun:}else if $v.usertype == 2{/yun}
+                                <span class="iconst" style="background: rgba(177,18,68,0.98);">企</span>
+                                {yun:}else if $v.type == 3{/yun}
+                                <span class="iconst" style="background: #FF6600;">猎</span>
+                                {yun:}/if{/yun}
+                                {yun:}/if{/yun}
+                                <span style="color:#267EF0">{yun:}$v.uinfo_n{/yun}</span>
+                            </td>
+                            <td align="left">{yun:}$v.uid{/yun}</td>
+                            <td align="left">{yun:}$v.integrity{/yun}</td>
+                            <td align="left">{yun:}$v.sq_num{/yun}</td>
+                            
+                            <td align="left">
+                                {yun:}if $v.chat_id{/yun}
+                                {yun:}$v.scene_n{/yun}
+                                {yun:}else{/yun}
+                                --
+                                {yun:}/if{/yun}
+                            </td>
+
+                            <td align="left">
+                                {yun:}if $v.chat_id{/yun}
+                                    {yun:}$v.time_n{/yun}
+                                {yun:}else{/yun}
+                                    --
+                                {yun:}/if{/yun}
+                            </td>
+                            </tr>
+                            {yun:}/foreach{/yun}
+                            <tr>
+                                <td align="center"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/></td>
+                                <td colspan="11"><label for="chkAll2">全选</label>
+                            </tr>
+                            {yun:}if $total > $config.sy_listnum {/yun}
+                            <tr>
+                                {yun:}if $pagenum==1{/yun}
+                                <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum == $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}/if{/yun}
+                                <td colspan="9" class="digg">{yun:}$pagenav{/yun}</td>
+                            </tr>
+                            {yun:}/if{/yun}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            '{yun:}if $smarty.get.chat_id{/yun}'
+            var chat_id = '{yun:}$smarty.get.chat_id{/yun}';
+            var url = 'index.php?m=admin_workwx_customer&c=customerNum&chat_id='+chat_id;
+            '{yun:}else{/yun}'
+            var url = 'index.php?m=admin_workwx_customer&c=customerNum';
+            '{yun:}/if{/yun}'
+            $.get(url, function (data) {
+                var datas = eval('(' + data + ')');
+                if (datas.customerNum) {
+                    $('.ajaxCustomer').html(datas.customerNum);
+                }
+                if (datas.groupNum) {
+                    $('.ajaxGroup').html(datas.groupNum);
+                }
+                if (datas.groupMemberNum) {
+                    $('.ajaxGroupMember').html(datas.groupMemberNum);
+                }
+                if (datas.inGroupNum) {
+                    $('.ajaxInGroup').html(datas.inGroupNum);
+                }
+                if (datas.outGroupNum) {
+                    $('.ajaxOutGroup').html(datas.outGroupNum);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

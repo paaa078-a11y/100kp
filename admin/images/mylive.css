@@ -1,0 +1,2037 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+html {
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    background: #1A2033;
+}
+
+body ::selection {
+    background: #fff;
+    color: #222;
+}
+
+
+a,
+li {
+    list-style: none;
+    text-decoration: none;
+}
+
+a {
+    color: #333;
+    font-size: 14px;
+}
+
+a:hover {
+    color: #5259F4;
+}
+
+button,
+input {
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/***
+ * _ooOoo_
+ * o8888888o
+ * 88" . "88
+ * (| -_- |)
+ *  O\ = /O
+ * ___/`---'\____
+ * .   ' \\| |// `.
+ * / \\||| : |||// \
+ * / _||||| -:- |||||- \
+ * | | \\\ - /// | |
+ * | \_| ''\---/'' | |
+ * \ .-\__ `-` ___/-. /
+ * ___`. .' /--.--\ `. . __
+ * ."" '< `.___\_<|>_/___.' >'"".
+ * | | : `- \`.;`\ _ /`;.`/ - ` : | |
+ * \ \ `-. \_ __\ /__ _/ .-` / /
+ * ======`-.____`-.___\_____/___.-`____.-'======
+ * `=---='
+ *          .............................................
+ *           佛曰：bug泛滥，我已瘫痪！
+ */
+.liveBroaAll {
+    overflow: hidden;
+    width: calc(100% - 0.7rem);
+    height: calc(100% - 0.7rem);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 0.35rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* ----分割线--上部样式---- */
+.liveBroaAll .liveBroaUps {
+    overflow: hidden;
+    width: 49.5%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft {
+    overflow: hidden;
+    width: 100%;
+    height: 56.5%;
+    position: relative;
+    background: #28304A;
+    border-radius: 0.1rem;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftVide {
+    overflow: hidden;
+    width: 100%;
+    height: calc(100% - 1rem);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*cursor: pointer;*/
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftVide img {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftVide .psLeftVideClck {
+    overflow: hidden;
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    z-index: 33;
+    width: 1.5rem;
+    height: 0.5rem;
+    background: #D94758;
+    border-radius: 0.26rem;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftVide .psLeftVideClck a {
+    overflow: hidden;
+    display: block;
+    width: 1.5rem;
+    height: 0.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.185rem;
+}
+
+.liveBroaUpsLeft .qplayer-center-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveBroaUpsLeft .qplayer-center-btn img{
+    position: relative;
+    top: initial;
+    left: initial;
+    width: 50px !important;
+    height: 50px !important;
+}
+.liveBroaUpsLeft .qplayer-controlbtns img{
+    width: 100% !important;
+    height: 100% !important;
+}
+.liveBroaUpsLeft .qplayer-time{
+    width: 86px !important;
+}
+
+
+
+
+
+
+
+.roaUpsLefEnds{
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+.roaUpsLefEnds p{
+    font-size: 0.5rem;
+    /*color: #fff;*/
+    padding-bottom: 0.1rem;
+    background: linear-gradient(90deg, #FD9763 0%, #FD634F 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.roaUpsLefEnds span{
+    font-size: 0.3rem;
+    display: block;
+    color: #eee;
+    background: linear-gradient(90deg, #FD9763 0%, #FD634F 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.countTimeFlex{
+    overflow: hidden;
+    text-align: center;
+}
+.countTimeFlex #countnotice{
+    overflow: hidden;
+    position: relative;
+    font-size: 0.2rem;
+    color: #fff;
+    padding-bottom: 10px;
+}
+.countTimeFlex #countdown{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.countTimeFlex #countdown span{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.35rem;
+    height: 0.35rem;
+    background: #fff;
+    border-radius: 3px;
+    font-size: 0.175rem;
+    color: #2778F8;
+    margin: 0 5px;
+    font-weight: 600;
+}
+.countTimeFlex #countdown b{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.35rem;
+    height: 0.35rem;
+    background: #fff;
+    border-radius: 3px;
+    font-size: 0.175rem;
+    color: #333;
+    font-weight: 500;
+    margin: 0 5px;
+}
+
+
+
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp {
+    overflow: hidden;
+    width: calc(100% - 0.6rem);
+    height: 1rem;
+    position: relative;
+    background: rgba(255, 2555, 255, 0.16);
+    padding: 0 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompName {
+    overflow: hidden;
+    width: calc(3.125rem - 0.4rem);
+    height: 0.55rem;
+    position: relative;
+    background: linear-gradient(90deg, #FD9763 0%, #FD634F 100%);
+    padding: 0 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.3rem;
+    font-size: 0.175rem;
+    color: #fff;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompName a {
+    font-size: 0.175rem;
+    color: #fff;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompName span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompName i {
+    display: block;
+    overflow: hidden;
+    width: 1px;
+    height: 0.15rem;
+    background: #fff;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompPost {
+    overflow: hidden;
+    width: calc(100% - 3.25rem);
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompPost .swiper-slide {
+    overflow: hidden;
+}
+
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompPost .swiper-slide a {
+    overflow: hidden;
+    display: flex;
+    height: calc(0.55rem - 2px);
+    border: 1px solid #eee;
+    border-radius: 0.3rem;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 0.175rem;
+    padding: 0 0.25rem;
+    cursor: pointer;
+}
+.liveBroaAll .liveBroaUps .liveBroaUpsLeft .roaUpsLeftComp .upsLeftCompPost .swiper-slide a span{
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+
+
+.liveBroaUpsRight {
+    overflow: hidden;
+    width: 100%;
+    height: 56.5%;
+    position: relative;
+    background: #28304A;
+    border-radius: 0.1rem;
+}
+
+.liveBroaUpsRight .roaUpsRightNavs {
+    overflow: hidden;
+    width: calc(100% - 0.4rem);
+    height: 0.7rem;
+    position: relative;
+    padding: 0 0.2rem;
+}
+
+.liveBroaUpsRight .roaUpsRightNavs ul {
+    overflow: hidden;
+    width: 100%;
+    height: 0.5rem;
+    position: relative;
+    padding-top: 0.178rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #374366;
+}
+
+.liveBroaUpsRight .roaUpsRightNavs ul li {
+    overflow: hidden;
+    width: 1.25rem;
+    height: 0.49rem;
+    background: #2F3A5B;
+    border-radius: 8px 8px 0px 0px;
+    border: 1px solid #374366;
+    margin: 0 0.03rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.2rem;
+    color: #AEB0C4;
+    cursor: pointer;
+}
+
+.liveBroaUpsRight .roaUpsRightNavs ul li.aUpsRightCur {
+    color: #fff;
+    background: #2778F8;
+}
+
+
+.liveBroaUpsRight .roaUpsRightContAll {
+    overflow: hidden;
+    width: calc(100% - 0.5rem);
+    height: calc(100% - 0.9rem);
+    padding: 0 0.25rem;
+    margin-top: .1rem;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList {
+    overflow: hidden;
+    display: none;
+    height: 100%;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .upGhtcList {
+    overflow: hidden;
+    display: block !important;
+    position: relative;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo {
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100% - 0.1rem);
+    position: relative;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboZanwu{
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #28304A;
+    z-index: 22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboZanwu .oidsu{
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+}
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboZanwu .oidsu span{
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 22;
+    font-size: 0.2rem;
+    color: 555970;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul {
+    overflow: hidden;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 0.9rem;
+    border-bottom: 1px solid #374366;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne .ontTaboOneImg {
+    overflow: hidden;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.05rem;
+    margin-right: 0.12rem;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne .ontTaboOneImg img {
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne .ontTaboOneData {
+    overflow: hidden;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne .ontTaboOneData p {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #fff;
+    padding-bottom: 0.05rem;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboOne .ontTaboOneData span {
+    font-size: 0.15rem;
+    color: #AEB0C4;
+}
+
+.liveBroaUpsRight .roaUpsRightContAll .roaUpsRightcList .upContTaboo ul li .ontTaboTwo {
+    overflow: hidden;
+    width: 1.2rem;
+    height: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2778F8;
+    font-size: 0.175rem;
+    color: #fff;
+    border-radius: 0.06rem;
+    cursor: pointer;
+}
+
+
+
+.roaUpsRigAllChat {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat {
+    width: 100%;
+    height: calc(100% - 1.9rem);
+    overflow-y: auto;
+    /*background: #f30;*/
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir {
+    /*overflow: hidden;*/
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.3rem;
+    position: relative;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatphoto {
+    overflow: hidden;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 0.05rem;
+    margin-right: 0.06rem;
+    cursor: pointer;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatphoto img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts {
+    overflow: hidden;
+    width: calc(100% - 0.61rem);
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsName {
+    overflow: hidden;
+    padding-bottom: 0.1rem;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsName span {
+    font-size: 0.175rem;
+    color: #AEB0C4;
+
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsCont {
+    overflow: hidden;
+    padding-left: 0.08rem;
+    position: relative;
+    display: flex;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsCont:after {
+    overflow: hidden;
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.08rem;
+    left: 0;
+    width: 0.1125rem;
+    height: 0.1375rem;
+    background: url(../images/live/Polygon3.png) center no-repeat;
+    background-size: 100%;
+    /*-webkit-transform: rotateX(45deg);
+    transform: rotateX(45deg);*/
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsCont .extsContSpoa {
+    font-size: 0.175rem;
+    color: #AEB0C4;
+    padding-bottom: 0.1rem;
+    background: #364062;
+    padding: 0.09rem 0.13rem;
+    border-radius: 0.05rem;
+    overflow: hidden;
+    position: relative;
+    z-index: 3;
+    line-height: 0.3rem;
+    max-width: 80%;
+    width: auto;
+}
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatTexts .gChatTextsCont .extsContSpoa .chat_bq_img{
+    width: 0.5rem;
+    height: auto;
+}
+
+.psRigChatOPPOffic {
+    overflow: hidden;
+    width: 80%;
+    float: right;
+    display: flex;
+    margin-bottom: 0.3rem;
+}
+
+.psRigChatOPPOffic .gChatphoto {
+    overflow: hidden;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 0.05rem;
+    margin-left: 0.06rem;
+}
+
+.psRigChatOPPOffic .gChatphoto img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.psRigChatOPPOffic .gChatTexts {
+    width: calc(100% - 0.61rem);
+    overflow: hidden;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsName {
+    overflow: hidden;
+    text-align: right;
+    font-size: 0.175rem;
+    color: #AEB0C4;
+    display: flex;
+    align-items: center;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsName .extsNameFangx {
+    overflow: hidden;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.1rem;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsName .extsNameFangx i {
+    overflow: hidden;
+    width: 0.55rem;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FF7752;
+    color: #fff;
+    border-radius: 0.05rem;
+    margin-right: 0.1rem;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsCont {
+    overflow: hidden;
+    padding-right: 0.08rem;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsCont:after {
+    overflow: hidden;
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0.08rem;
+    right: 0;
+    width: 0.1125rem;
+    height: 0.1375rem;
+    background: url(../images/live/Polygon5.png) center no-repeat;
+    background-size: 100%;
+    /*-webkit-transform: rotateX(45deg);
+    transform: rotateX(45deg);*/
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsCont .extsContSpoa {
+    font-size: 0.175rem;
+    color: #fff;
+    padding-bottom: 0.1rem;
+    background: #2778F8;
+    padding: 0.09rem 0.13rem;
+    border-radius: 0.05rem;
+    overflow: hidden;
+    position: relative;
+    z-index: 3;
+    line-height: 0.3rem;
+    margin-left: auto;
+}
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsCont .extsContSpoa img {
+    overflow: hidden;
+    display: block;
+    width: auto;
+    max-width: 2rem;
+    height: auto;
+}
+
+
+
+.psRigChatOPPOffic .gChatTexts .gChatTextsCont .extsContSpoa .chat_bq_img {
+    width: 0.5rem;
+    height: auto;
+    float: left;
+    margin: 0 0.05rem;
+}
+
+
+
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .ChatNeirClick {
+    height: 0.55rem;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers {
+    overflow: hidden;
+    position: absolute;
+    top: 0.33rem;
+    left: 0.33rem;
+    z-index: 22;
+    width: 2.1rem;
+    height: 1.35rem;
+    padding: 0.2rem;
+    background: #2F3A5B;
+    border-radius: 0.1rem;
+    display: none;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .hatGovecur .gChatGovers {
+    overflow: hidden;
+    display: block;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid #374366;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne .hatGoverOneToux {
+    overflow: hidden;
+    height: 0.55rem;
+    width: 0.55rem;
+    border-radius: 0.07rem;
+    margin-right: 0.1rem;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne .hatGoverOneToux img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne .hatGoverOneindo {
+    overflow: hidden;
+    width: calc(100% - 0.65rem);
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne .hatGoverOneindo h4 {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #fff;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-bottom: 0.06rem;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverOne .hatGoverOneindo span {
+    overflow: hidden;
+    display: block;
+    font-size: 0.156rem;
+    color: #AEB0C4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverTwo {
+    overflow: hidden;
+    height: calc(100% - 0.68rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.roaUpsRigAllChat .roaUpsRigChat .psRigChatNeir .gChatGovers .hatGoverTwo span {
+    overflow: hidden;
+    display: flex;
+    width: 0.75rem;
+    height: 0.35rem;
+    border: 1px solid #D94758;
+    display: flex;
+    border-radius: 0.18rem;
+    align-items: center;
+    justify-content: center;
+    background: rgba(217, 71, 88, 0.1);
+    color: #D94758;
+    font-size: 0.175rem;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+.roaUpsRigAllChat .roaUpsRigInput {
+    width: 100%;
+    height: calc(1.75rem - 0.1rem);
+    /*overflow: hidden;*/
+    /*background: #f90;*/
+    margin-bottom: 0.1rem;
+    border-top: 1px solid #374366;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls {
+    width: 100%;
+    height: 0.5rem;
+    /*overflow: hidden;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputIcon {
+    /*overflow: hidden;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputIcon img {
+    overflow: hidden;
+    display: block;
+    margin: 0 0.15rem;
+    width: 0.3rem;
+    height: 0.3rem;
+    cursor: pointer;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq{
+    width: calc(7rem - 0.26rem);
+    height: 2.8rem;
+    position: absolute;
+    top: -2.9rem;
+    left: 0;
+    z-index: 999;
+    padding:0 0.13rem;
+    overflow: hidden;
+    background: #2F3A5B;
+    border-radius: 0.05rem;
+    box-shadow: 0.03rem 0.04rem 0.06rem rgba(0, 0, 0, 0.3);
+}
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul{
+    overflow-y: auto;
+    height: 2.5rem;
+    margin: 0.15rem 0;
+    position: relative;
+}
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul::-webkit-scrollbar{
+    width: 4px;
+    background: #242c44;
+    display: block;
+    border-radius: 2px;
+}
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 3px;
+}
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul::-webkit-scrollbar-thumb{
+    border-radius: 3px; 
+    height: 100px;
+    background-color: #3e4c76;
+}
+
+
+
+
+
+
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul li{
+    overflow: hidden;
+    float: left;
+}
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .showbq ul li img{
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0.06rem 0.12rem;
+}
+
+
+
+
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputSwitc {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    color: #999;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputSwitc .nputSwitcPuou {
+    overflow: hidden;
+    width: 0.7rem;
+    height: 0.3rem;
+    border-radius: 0.16rem;
+    border: 1px solid #5C6387;
+    margin-left: 0.2rem;
+    position: relative;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputSwitc .nputSwitcPuou i {
+    overflow: hidden;
+    display: block;
+    width: 0.295rem;
+    height: 0.295rem;
+    background: #5C6387;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+    transition: 0.3s;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputSwitc .witcPuocur {
+    overflow: hidden;
+    width: 0.7rem;
+    height: 0.3rem;
+    border-radius: 0.16rem;
+    border: 1px solid #D94758;
+    margin-left: 0.2rem;
+    position: relative;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputAlls .psRigInputSwitc .witcPuocur i {
+    left: calc(100% - 0.295rem);
+    background: #D94758;
+    transition: 0.3s;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru {
+    overflow: hidden;
+    height: calc(100% - 0.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru .nputShuruKuang {
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100% - 0.45rem);
+    /*background: #f90;*/
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru .nputShuruKuang textarea {
+    width: calc(100% - 0.2rem);
+    border: none;
+    height: 100%;
+    background: none;
+    padding: 0 0.1rem;
+    font-size: 0.175rem;
+    color: #fff;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru .nputShuruKuang textarea::placeholder {
+    color: #fff;
+}
+
+
+
+
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru .nputShuruAnniu {
+    width: 100%;
+    height: 0.4rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.roaUpsRigAllChat .roaUpsRigInput .psRigInputShuru .nputShuruAnniu span {
+    overflow: hidden;
+    display: block;
+    margin-left: auto;
+    height: 0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    border-radius: 0.21rem;
+    font-size: 0.175rem;
+    color: #fff;
+    border: 1px solid #5C6387;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----分割线--下部样式---- */
+.liveBroaAll .liveBroaDwon {
+    overflow: hidden;
+    width: 49.5%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.liveBroaDwonLeft {
+    overflow: hidden;
+    width: calc(100% - 0.4rem);
+    height: calc(41.8% - 0.2rem);
+    padding: 0 0.2rem 0.2rem 0.2rem;
+    position: relative;
+    background: #28304A;
+    border-radius: 0.1rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle {
+    overflow: hidden;
+    height: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle span {
+    overflow: hidden;
+    display: block;
+    font-size: 0.2rem;
+    color: #fff;
+    position: relative;
+    padding-left: 0.1rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle span::before {
+    overflow: hidden;
+    display: block;
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 0.2rem;
+    background: #2778F8;
+    left: 0;
+    top: 1px;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonSearch {
+    overflow: hidden;
+    width: 0.225rem;
+    height: 0.225rem;
+    cursor: pointer;
+    transition: 1.5s;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonSearch img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonSearcurimg {
+    overflow: hidden;
+    opacity: 0.001;
+    transition: 0.5s;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs {
+    overflow: hidden;
+    position: absolute;
+    top: 0.2rem;
+    right: -4rem;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+    width: 4rem;
+    transition: 0.5s;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .wonInpucury {
+    right: 0;
+    transition: 0.5s;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #eee;
+    height: 0.4rem;
+    border-radius: 0.22rem;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchButtons{
+    overflow: hidden;
+    width: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchButtons button{
+    width: 0.2rem;
+    height: 0.2rem;
+
+    background: none;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchButtons button img{
+    width: 0.2rem;
+    height: 0.2rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchInputs{
+    overflow: hidden;
+    position: relative;
+    width: calc(100% - 1.2rem);
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchInputs input{
+    padding-left: 0.16rem;
+    height: 0.4rem;
+    background: none;
+    width: 100%;
+    font-size: 0.15rem;
+    color: #eee;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .formInputs .searchInputs input::placeholder{
+    font-size: 0.15rem;
+    color: #2F3A5B;
+}
+.liveBroaDwonLeft .roaDwonLeftTitle .roaDwonInputs .qingchus{
+    overflow: hidden;
+    height: 0.4rem;
+    width: 0.6rem;
+    line-height: 0.4rem;
+    color: #AEB0C4;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.liveBroaDwonLeft .roaDwonLeftData {
+    overflow: hidden;
+    height: calc(100% - 0.8rem);
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .comSwiper {
+    overflow: hidden;
+    height: 100%;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .swiper-slide {
+    overflow: hidden;
+    background: #2F3A5B;
+    border-radius: 0.1rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay {
+    overflow: hidden;
+    padding: 0.5rem 0.2rem 0.28rem 0.2rem;
+    position: relative;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompOne {
+    overflow: hidden;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin: auto;
+    cursor: pointer;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompOne img {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompTwo {
+    overflow: hidden;
+    padding: 0.1rem 0;
+    text-align: center;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompTwo h4 {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompTwo p {
+    overflow: hidden;
+    font-size: 0.15rem;
+    color: #AEB0C4;
+    padding: 0.05rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompTwo span {
+    overflow: hidden;
+    display: block;
+    font-size: 0.15rem;
+    color: #AEB0C4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompThre {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.2rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompThre .eftCompThreNub {
+    overflow: hidden;
+    text-align: center;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompThre .eftCompThreNub p {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #fff;
+    padding-bottom: 0.05rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompThre .eftCompThreNub span {
+    font-size: 0.15rem;
+    color: #AEB0C4;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompThre i {
+    display: block;
+    overflow: hidden;
+    width: 1px;
+    height: 0.4rem;
+    background: #333;
+    margin: 0 0.3rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompFive {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.2rem;
+    height: 0.5rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompFive span {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0.5rem;
+    width: 2.25rem;
+    background: #2778F8;
+    color: #fff;
+    font-size: 0.175rem;
+    border-radius: 0.1rem;
+    cursor: pointer;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompDai {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 22;
+    width: 0.8rem;
+    height: 0.35rem;
+    background: linear-gradient(123deg, #74A6DC 0%, #53C4BA 100%);
+    border-radius: 2px 0.15rem 2px 0.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.175rem;
+}
+
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompDaiZhon{
+    background: linear-gradient(123deg, #58B8FA 0%, #112FF6 100%);
+}
+.liveBroaDwonLeft .roaDwonLeftData .wonLeftCompay .eftCompDaiYijan{
+    background: linear-gradient(123deg, #EA673F 0%, #E84866 100%);
+}
+
+
+.roaDwonLeftData .swiper-button-next{
+    overflow: hidden;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: rgba(0 0 0 /50%);
+    border-radius: 50%;
+}
+.roaDwonLeftData .swiper-button-next:after{
+    overflow: hidden;
+    width: 0.5rem;
+    height: 0.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.3rem;
+}
+.roaDwonLeftData .swiper-button-prev{
+    overflow: hidden;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: rgba(0 0 0 /50%);
+    border-radius: 50%;
+}
+.roaDwonLeftData .swiper-button-prev:after{
+    overflow: hidden;
+    width: 0.5rem;
+    height: 0.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.3rem;
+}
+
+
+
+
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight {
+    overflow: hidden;
+    width: calc(100% - 0.4rem);
+    height: calc(41.8% - 0.2rem);
+    padding: 0 0.2rem 0.2rem 0.2rem;
+    position: relative;
+    background: #28304A;
+    border-radius: 0.1rem;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd {
+    overflow: hidden;
+    width: 100%;
+    height: 0.7875rem;
+    border-bottom: 0.0125rem solid #374366;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd .wonRighShrink {
+    overflow: hidden;
+    width: 0.25rem;
+    height: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd .wonRighShrink img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd .wonRighShrink img.zhankai {
+    display: none;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd .liveghShrincur1 img.zhankai {
+    display: block;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd .liveghShrincur1 img.shouqi {
+    display: none;
+}
+
+
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd ul {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd ul li {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.2rem;
+    color: #AEB0C4;
+    padding: 0 0.15rem;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd ul li.wonRightCur {
+    color: #fff;
+    position: relative;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .wonRighNavcd ul li.wonRightCur::after {
+    display: block;
+    overflow: hidden;
+    content: "";
+    width: 0.45rem;
+    height: 0.05rem;
+    background: #2778F8;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 2;
+    border-radius: 0.21rem;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone {
+    overflow: hidden;
+    height: calc(100% - 0.8rem);
+
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList {
+    overflow: hidden;
+    display: none;
+    width: 100%;
+    padding-top: 0.2rem;
+    height: calc(100% - 0.2rem);
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .ghtConListOn {
+    overflow: hidden;
+    display: block !important;
+}
+
+
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordName {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 0.4rem);
+    height: 0.6rem;
+    padding: 0 0.2rem;
+    background: #2F3A5B;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordName span {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 0.6rem;
+    font-size: 0.2rem;
+    width: 25%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #AEB0C4;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordLists {
+    overflow-y: auto;
+    height: calc(100% - 0.6rem);
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordLists .cordListsData {
+    overflow: hidden;
+    width: calc(100% - 0.4rem);
+    height: 0.5rem;
+    padding: 0 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordLists .cordListsData:nth-child(2n+2) {
+    overflow: hidden;
+    background: #2F3A5B;
+}
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcord .ghtConEcordLists .cordListsData span {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 0.5rem;
+    font-size: 0.2rem;
+    width: 25%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #AEB0C4;
+}
+
+
+.liveBroaAll .liveBroaDwon .liveBroaDwonRight .roaDwonRightCone .wonRightConList .wonRightConEcharts {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+
+.wonRightInfos {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wonRightInfos .wonRightInfosZuob {
+    overflow: hidden;
+    height: 100%;
+    width: 54%;
+}
+
+.wonRightInfos .wonRightInfosZuob ul {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: space-between;
+}
+/*暂时隐藏*/
+/*.wonRightInfos .wonRightInfosZuob ul li {
+    overflow: hidden;
+    height: calc(48% - 0.4rem);
+    width: calc(48.5% - 0.4rem);
+    background: #2F3A5B;
+    border-radius: 0.1rem;
+    padding: 0.2rem;
+    position: relative;
+}*/
+
+.wonRightInfos .wonRightInfosZuob ul li {
+    overflow: hidden;
+    height: calc(48% - 0.4rem);
+    width: calc(32% - 0.4rem);
+    background: #2F3A5B;
+    border-radius: 0.1rem;
+    padding: 0.2rem;
+    position: relative;
+}
+
+.wonRightInfos .wonRightInfosZuob ul li .nfosZuobImg {
+    overflow: hidden;
+    height: 0.6rem;
+}
+
+.wonRightInfos .wonRightInfosZuob ul li .nfosZuobImg img {
+    overflow: hidden;
+    display: block;
+    width: 0.6rem;
+    height: 0.6rem;
+    float: right;
+}
+
+.wonRightInfos .wonRightInfosZuob ul li .nfosZuobNumber {
+    overflow: hidden;
+}
+
+.wonRightInfos .wonRightInfosZuob ul li .nfosZuobNumber p {
+    overflow: hidden;
+    font-size: 0.3rem;
+    color: #fff;
+    padding-bottom: 0.12rem;
+}
+
+.wonRightInfos .wonRightInfosZuob ul li .nfosZuobNumber span {
+    font-size: 0.175rem;
+    color: #fff;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+
+
+
+
+.wonRightInfos .wonRightInfosYoub {
+    overflow: hidden;
+    height: 100%;
+    width: 44%;
+}
+
+.wonRightInfos .wonRightInfosYoub ul {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.wonRightInfos .wonRightInfosYoub ul li {
+    overflow: hidden;
+    height: 31%;
+    width: calc(100% - 0.4rem);
+    background: #2F3A5B;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.2rem;
+    border-radius: 0.1rem;
+}
+
+.wonRightInfos .wonRightInfosYoub ul li .nfosYoubImgs {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #fff;
+}
+
+.wonRightInfos .wonRightInfosYoub ul li .nfosYoubImgs img {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.2rem;
+}
+
+.wonRightInfos .wonRightInfosYoub ul li .nfosYoubLinke {
+    overflow: hidden;
+}
+
+.wonRightInfos .wonRightInfosYoub ul li .nfosYoubLinke a {
+    overflow: hidden;
+    display: flex;
+    width: 1.1rem;
+    height: 0.35rem;
+    border-radius: 0.18rem;
+    border: 1px solid #2778F8;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.175rem;
+}
+
+
+
+
+
+
+/*---公司详情弹窗样式---*/
+.companyPopup {
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 444;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.companyPopup .comPopupCont {
+    overflow: hidden;
+    position: absolute;
+    width: 5.2rem;
+    height: 6.825rem;
+    border-radius: 0.1rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+    padding: 0.4rem;
+    background: #fff;
+}
+
+.companyPopup .comPopupCont .comPopuInfo {
+    overflow: hidden;
+    height: 0.75rem;
+    padding-bottom: 0.3rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoImg {
+    overflow: hidden;
+    width: 0.75rem;
+    height: 0.75rem;
+    padding-right: 0.1rem;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoImg img {
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoData {
+    overflow: hidden;
+    width: calc(100% - 0.85rem);
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoData h4 {
+    overflow: hidden;
+    font-size: 0.175rem;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoData p {
+    overflow: hidden;
+    font-size: 0.15rem;
+    color: #AEB0C4;
+    padding: 0.03rem 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoData span {
+    overflow: hidden;
+    display: block;
+    font-size: 0.15rem;
+    color: #AEB0C4;
+    padding: 0.03rem 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoClose {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 0.2rem;
+    height: 0.2rem;
+    cursor: pointer;
+}
+
+.companyPopup .comPopupCont .comPopuInfo .companInfoClose img {
+    width: 100%;
+    height: 100%;
+}
+
+.companyPopup .comPopupCont .comPopuPosit {
+    overflow-y: auto;
+    height: calc(100% - 1.01rem);
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul {
+    overflow: hidden;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li {
+    overflow: hidden;
+    height: 0.95rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPositData {
+    overflow: hidden;
+    width: calc(100% - 1.3rem);
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPositData .comPositDataNam {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.08rem;
+    width: 100%;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPositData .comPositDataNam p {
+    font-size: 0.2rem;
+    color: #000;
+    width: calc(100% - 1.25rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPositData .comPositDataNam span {
+    overflow: hidden;
+    display: block;
+    font-size: 0.2rem;
+    color: #D94758;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPositData .comPositDataMap {
+    overflow: hidden;
+    font-size: 0.165rem;
+    color: #AEB0C4;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPopuPositFenx {
+    overflow: hidden;
+    width: 1.25rem;
+    height: 0.4rem;
+    background: #2778F8;
+    border-radius: 0.21rem;
+}
+
+.companyPopup .comPopupCont .comPopuPosit ul li .comPopuPositFenx a {
+    overflow: hidden;
+    width: 1.25rem;
+    height: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.175rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+/* 收缩样式 */
+.liveBroaDwoncur1 {
+    overflow: hidden;
+    height: 0.7875rem !important;
+}
+
+.liveBroaDwoncur1 .roaDwonRightCone {
+    overflow: hidden;
+    display: none;
+}
+
+.liveBroaUpscurink {
+    overflow: hidden;
+    height: calc(100% - 1.15rem);
+}
+
+
+/*分享职位样式*/
+.sharePositions{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sharePositions .sharePosiAll{
+    overflow: hidden;
+    position: relative;
+    width: 4.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.12rem;
+    border-radius: 0.08rem;
+    background: #2F3A5B;
+    margin: 0.08rem 0 0.12rem 0;
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo{
+    overflow: hidden;
+    width: calc(100% - 1.1rem);
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo h4{
+    overflow: hidden;
+    font-size: 0.21rem;
+    color: #fff;
+    padding-bottom: 0.05rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo .spanPdiv{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.05rem;
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo .spanPdiv p{
+    overflow: hidden;
+    font-size: 0.16rem;
+    max-width: calc(100% - 1rem);
+    color: #AEB0C4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo .spanPdiv span{
+    padding-left: 0.2rem;
+    font-size: 0.16rem;
+    color: #f30;
+}
+.sharePositions .sharePosiAll .sharePosiAllInfo b{
+    font-size: 0.12rem;
+    font-weight: 500;
+    color: #999;
+}
+.sharePositions .sharePosiAll .sharePosiAllToudi{
+    overflow: hidden;
+    width: 1rem;
+    height: 0.35rem;
+    background: #2778F8;
+    border-radius: 0.18rem;
+}
+.sharePositions .sharePosiAll .sharePosiAllToudi a{
+    overflow: hidden;
+    width: 1rem;
+    height: 0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.12rem;
+}
+
+.loadingMore{
+    overflow: hidden;
+    height: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loadingMore span{
+    font-size: 0.14rem;
+    color: #AEB0C4;
+	cursor: pointer;
+}
+
+/*时间线*/
+.timelineAlls{
+    overflow: hidden;
+    padding: 0.15rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+.timelineAlls span{
+    overflow: hidden;
+    display: flex;
+    font-size: 0.15rem;
+    color: #AEB0C4;
+
+}

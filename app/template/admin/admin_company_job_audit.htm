@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+
+	</head>
+	<style>
+		.layui-form-select dl dd, .layui-form-select dl dt{white-space:pre-wrap;border-top:1px solid #eee;line-height: 24px;
+    padding: 10px;}
+		.admin_popup{
+		display: flex;
+		padding:0 0 0 20px
+	}
+	.admin_popupleft{
+		flex: 1;
+	}
+	.admin_popup_review{
+		padding: 0 40px 0 30px;
+	}
+	</style>
+<body class="admin_tc_bg" >
+	
+ <div class="chbox">
+	<div class="chbox_cominfo" id="leftbox"> 
+				
+				<div class="admin_popup_comname">{yun:}$Info.name{/yun}</div>
+				{yun:}if $Info.add_ip{/yun}
+				<div>
+					<span style="padding: 0px 15px 0 0; display: inline-block;">IP：{yun:}$Info.add_ip{/yun}</span> IP归属地：{yun:}$Info.ip_address{/yun}
+				</div>	
+				{yun:}/if{/yun}	
+				<div class="admin_jobinfo" style="padding:0px 0px 5px 0px">
+					<span class="admin_jobinfo_n">{yun:}$Info.job_salary{/yun}</span>{yun:}$Info.job_address{/yun}
+				</div>
+				{yun:}if $Info.job_welfare{/yun}
+				<div class="admin_jobfl">
+					{yun:}foreach from=$Info.job_welfare item=wlist{/yun}
+					<span class="admin_jobfl_n ">{yun:}$wlist{/yun}</span>
+					{yun:}/foreach{/yun}
+				</div>
+				{yun:}/if{/yun}
+				
+				<div class="admin_popup_h1"> 基本要求</div>
+				{yun:}if $Info.job_exp{/yun}
+					<div class="admin_popup_comifo"> 经验要求：{yun:}$Info.job_exp{/yun}</div>
+				{yun:}/if{/yun}
+				
+				{yun:}if $Info.job_edu{/yun}
+					<div class="admin_popup_comifo"> 学历要求：{yun:}$Info.job_edu{/yun} 
+					{yun:}if $Info.is_graduate{/yun}
+						<span class="admin_jobmx_n">可接受应届生</span>
+					{yun:}/if{/yun}
+					</div>
+				{yun:}/if{/yun}
+				
+				{yun:}if $Info.job_number{/yun}
+					<div class="admin_popup_comifo"> 招聘人数：{yun:}$Info.job_number{/yun} </div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.job_report{/yun}
+					<div class="admin_popup_comifo"> 到岗时间：{yun:}$Info.job_report{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.job_age{/yun}
+					<div class="admin_popup_comifo"> 年龄要求：{yun:}$Info.job_age{/yun} </div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.job_sex{/yun}
+					<div class="admin_popup_comifo"> 性别要求：{yun:}$Info.job_sex{/yun}</div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.job_marriage{/yun}
+					<div class="admin_popup_comifo"> 婚况要求：{yun:}$Info.job_marriage{/yun}</div>
+				{yun:}/if{/yun}
+
+				<div class="admin_popup_h1"> 职位描述</div>
+				<div class="admin_jobp">
+					{yun:}$Info.description{/yun}
+				</div>
+				<div class="admin_popup_h1"> 联系方式</div>
+				<div class="admin_popup_tel"> 联系人：{yun:}$Info.linkman{/yun} </div>
+				<div class="admin_popup_tel"> 联系手机：{yun:}$Info.tel{/yun} </div>
+				<div class="admin_popup_tel"> 联系电话：{yun:}$Info.phone{/yun} </div>
+				<div class="admin_popup_tel"> 联系地址：{yun:}$Info.address{/yun} </div>
+			</div>
+		
+		<div class="ch_cz">
+				<div class="layui-form">
+					<div class="admin_jobh1">职位信息审核</div>
+					{yun:}if $Info.c_status == 2{/yun}
+					<div class="ch_czlist" style="width:260px">
+						<div class="ch_czname">锁定操作：</div>
+						<div class="layui-form-item" style="margin-bottom:10px;">
+							<div class="layui-input-block">
+								<input name="lock_status" value="1" title="正常" type="radio" {yun:}if $Info.c_status == 1{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+								<input name="lock_status" value="2" title="锁定" type="radio" {yun:}if $Info.c_status == 2{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+							</div>
+						</div>
+						<div class="admin_jobshtip">锁定原因：{yun:}$Info.statusbody{/yun}</div>
+					</div>
+					{yun:}/if{/yun}
+					<div id="audit-div" {yun:}if $Info.c_status == 2{/yun} style="display:none;" {yun:}/if{/yun}>
+
+						<div class="ch_czlist"> <div class="ch_czname">审核状态：</div>
+							 
+								<div class="layui-input-block">
+									<input name="status" value="1" title="正常" type="radio" {yun:}if $Info.state != 3{/yun}checked="checked"{yun:}/if{/yun} lay-filter="userstatus" />
+									<input name="status" value="3" title="未通过" type="radio" {yun:}if $Info.state == 3{/yun}checked="checked"{yun:}/if{/yun} lay-filter="userstatus" />
+								</div> 
+						</div>
+						<div class="ch_czlist">
+							<div class="ch_czname">审核说明模板：</div>
+						
+								<div class="layui-input-block" style="margin-top: 5px; margin-bottom:5px;;">
+									<select lay-filter="tpl">
+										<option>请选择</option>
+										{yun:}foreach from=$comdata.job_audit item=v{/yun}
+										<option value="{yun:}$comclass_name[$v]{/yun}">{yun:}$comclass_name[$v]{/yun}</option>
+										{yun:}/foreach{/yun}
+									</select>
+							</div>
+						</div>
+						{yun:}if $Info.r_status == 0{/yun}
+						<div class="ch_czlist">
+							<div class="ch_czname">企业审核：</div>
+						
+								<div class="layui-input-block">
+									<input name="istb" title="同步审核" type="checkbox" value="1" lay-skin="primary" checked="checked" disabled="disabled" />
+								</div>
+							<div class="admin_jobshtip">同步说明：企业身份为未审核状态需同步审核</div>
+						</div>
+						{yun:}/if{/yun}
+						<div class="ch_czlist">
+							<div class="ch_czname">审核说明：</div>
+								<div class="ch_cztextarea"><textarea id="statusbody" name="statusbody" class="ch_cztextareaall"  >{yun:}$Info.statusbody{/yun}</textarea>
+						</div></div>
+						<div class="ch_cz_bth  ">
+							<input type="hidden" name="pid" value="{yun:}$Info.id{/yun}" />
+							<input type="hidden" name="uid" value="{yun:}$Info.uid{/yun}" />
+							<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}" />
+							<input type="button" value="保存" class="admin_popup_bth" onclick="audit(1)">
+							{yun:}if $snum{/yun}
+							<input type="button" value="保存，并审核下一个" class="admin_popup_bth2" onclick="audit(2)">
+							{yun:}/if{/yun}
+						</div>
+					</div>
+				</form>
+				<input type="hidden" id="com_status" value="{yun:}$Info.r_status{/yun}" /> 
+			</div>
+		</div>
+		<script>
+			layui.use(['layer', 'form',], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					$ = layui.$;
+					
+				$("#leftbox").css({'height':$(window).height() - 0 + 'px', 'overflow': 'auto'});
+				form.on('select(tpl)', function (data) {
+					$('#statusbody').val(data.value);
+					form.render('select');
+				});
+				form.on('radio(lock_status)', function (obj) {
+					if (obj.value == 1) {
+						$('#audit-div').show();
+					} else {
+						$('#audit-div').hide();
+					}
+				});
+			});
+			function audit(atype){
+				var status = $("input[name='status']:checked").val();
+				if(typeof status ==='undefined'){
+					parent.layer.msg("请选择审核状态！", 2, 8);
+					return false;
+				}
+				var params = {
+					single: 1,
+					status: status,
+					pid: $("input[name='pid']").val(),
+					uid: $("input[name='uid']").val(),
+					statusbody: $("#statusbody").val(),
+					atype: atype,
+					pytoken: $("#pytoken").val()
+				};
+				var lock_status = $("input[name='lock_status']:checked").val();
+				if(typeof lock_status !== 'undefined'){
+					if (lock_status == 1) { // 解锁才能正常提交
+						params.lock_status = lock_status;
+					} else {
+						parent.layer.msg("锁定操作异常！", 2, 8);
+						return false;
+					}
+				}
+				if($("#com_status").val() == '0'){
+					var url = 'index.php?m=admin_company_job&c=cjobstatus';
+				}else{
+					var url = 'index.php?m=admin_company_job&c=status';
+				}
+				loadlayer();
+				$.ajax({
+					data: params,
+					type: 'post',
+					dataType: 'json',
+					url: url,
+					success: function (res) {
+						parent.layer.closeAll('loading');
+						if(res.st == 9){
+							parent.layer.msg(res.msg, 2, 9, function(){
+								if(res.url){
+									parent.needLoad = true;
+									window.location.href = res.url;
+								}else{
+									parent.window.location.reload();
+								}
+							});
+						}else{
+							parent.layer.msg(res.msg, 2, 8);
+						}
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

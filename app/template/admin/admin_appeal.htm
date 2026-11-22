@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"
+		 type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+				<div class="admin_new_search_box">
+					<form action="index.php" name="myform" method="get">
+						<div style="float: left;">
+							<span class="company_m6" style="float:left;">
+								<input name="m" value="admin_appeal" type="hidden" />
+								<input class="admin_Filter_search" type="text" name="keyword" size="25" style="float:left;" placeholder="请输入你要搜索的关键字">
+								<input class="admin_new_bth" type="submit" name="news_search" value="查询" style="margin-left:0;" />
+								<span class='admin_search_div'>
+									<div class="admin_adv_search">
+										<div class="admin_adv_search_bth">高级选项</div>
+									</div>
+								</span>
+							</span>
+						</div>
+						<!-- shuju -->
+						<div class="adminNewEarch" style="float: right;  overflow: hidden;">
+							<div class="admin_statistics">
+								<em class="admin_statistics_s">总数：<a href="index.php?m=admin_member" class="ajaxall">0</a></em>
+							    <em class="admin_statistics_s">已锁定：<a href="index.php?m=admin_member&status=2" class="StatusNum3">0</a></em>
+								<span>搜索结果：{yun:}$total{/yun}</span>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			{yun:}include file="admin/admin_search.htm"{/yun}
+			<div class="tty_table-bom">
+				<div class="table-list">
+				<div class="admin_table_border">
+					<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+					<form action="index.php?m=admin_appeal&c=del" target="supportiframe" name="myform" method="post" id='myform'>
+						<table width="100%">
+							<thead>
+								<tr class="admin_table_top" align="left">
+									<th width="20">
+										<label for="chkall">
+											<input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' />
+										</label>
+									</th>
+									<th width="60"> 
+										{yun:}if $smarty.get.t=="uid" && $smarty.get.order=="asc"{/yun}
+										<a href="{yun:}searchurl order=desc t=uid m=admin_appeal untype='order,t'{/yun}" class="admin_px">用户ID</a>
+										{yun:}else if $smarty.get.t=="uid" && $smarty.get.order=="desc"{/yun}
+										<a href="{yun:}searchurl order=asc t=uid m=admin_appeal untype='order,t'{/yun}" class="admin_px2">用户ID</a>
+										{yun:}else{/yun}
+										<a href="{yun:}searchurl order=desc t=uid m=admin_appeal untype='order,t'{/yun}" class="admin_px0">用户ID</a>
+										{yun:}/if{/yun}
+									</th>
+									<th width="100">申诉账号</th>
+									
+									<th width=" ">联系方式</th>
+									 <th width=" ">申诉信息</th>
+									<th width="120 "> 
+										{yun:}if $smarty.get.t=="appealtime" && $smarty.get.order=="asc"{/yun}
+										<a href="{yun:}searchurl order=desc t=appealtime m=admin_appeal untype='order,t'{/yun}"class="admin_px">申诉时间</a>
+										{yun:}else if $smarty.get.t=="appealtime" && $smarty.get.order=="desc"{/yun}
+										<a href="{yun:}searchurl order=asc t=appealtime m=admin_appeal untype='order,t'{/yun}"class="admin_px2">申诉时间</a>
+										{yun:}else{/yun}
+										<a href="{yun:}searchurl order=desc t=appealtime m=admin_appeal untype='order,t'{/yun}"class="admin_px0">申诉时间</a>
+										{yun:}/if{/yun}
+									</th>
+									<th width="50 " align="center">状态</th>
+								<th width="50 ">重置密码</th>
+									<th align="center" width="120">操作</th>
+								</tr>
+							</thead>
+							<tbody class="tableBackColorTwo">
+
+								{yun:}foreach item=v key=key from=$rows{/yun}
+								<tr {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.uid{/yun}" align="left">
+									<td><input type="checkbox" value="{yun:}$v.uid{/yun}" name='del[]' onclick='unselectall()' rel="del_chk" /></td>
+									<td><span>{yun:}$v.uid{/yun}</span></td>
+									<td>{yun:}$v.username{/yun}</td>
+									
+									<td>
+										<div>
+										{yun:}$v.moblie{/yun}
+										{yun:}if $v.moblie && $moblie_promiss{/yun}
+											<a href="javascript:void(0);" class="admin_com_send" onClick="send_moblie('{yun:}$v.moblie{/yun}');">发信息</a>
+											{yun:}/if{/yun}
+										</div>
+										<div class="admin_mb5">{yun:}$v.email{/yun}{yun:}if $v.email&&$email_promiss{/yun}
+											<a href="javascript:void(0);" class="admin_com_send" onClick="send_email('{yun:}$v.email{/yun}');">发邮件</a>
+											{yun:}/if{/yun}
+										</div>
+									</td> 
+									<td>{yun:}$v.appeal{/yun}</td>
+									<td>{yun:}$v.appealtime|date_format:"%Y-%m-%d %H:%M"{/yun}</td>
+									<td align="center">
+										{yun:}if $v.appealstate==1{/yun}
+										<span class="admin_wsh">未完成</span>
+										{yun:}else{/yun}
+										<span class="admin_ysh">已完成</span>
+										{yun:}/if{/yun}
+									</td>
+									<td>	<a href="javascript:void(0)" onClick="resetpw('{yun:}$v.username{/yun}','{yun:}$v.uid{/yun}');" class="admin_newcolor">重置密码</a></td>
+									<td>
+										<div class="operationSeries">
+										
+											<a href="javascript:void(0)" pid="{yun:}$v.uid{/yun}" class="admin_cz_sc xiaClick">详情</a>
+											{yun:}if $v.appealstate==1{/yun}
+											<a href="javascript:void(0)" onClick="layer_del('确定申诉已完成？', 'index.php?m=admin_appeal&c=success&id={yun:}$v.uid{/yun}');">确认</a>
+											{yun:}/if{/yun}
+											<a href="javascript:void(0)" onClick="layer_del('确定要删除？', 'index.php?m=admin_appeal&c=del&id={yun:}$v.uid{/yun}');">删除</a>
+										</div>
+									</td>
+								</tr>
+								{yun:}/foreach{/yun}
+								<tr>
+									<td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' /></td>
+									<td colspan="9">
+										<label for="chkAll2">全选</label>&nbsp;
+										<input class="admin_button" type="button" name="delsub" value="删除所选" onClick="return really('del[]')" /></td>
+								</tr>
+								{yun:}if $total > $config.sy_listnum {/yun}
+								<tr>
+									{yun:}if $pagenum==1{/yun}
+									<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+									{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun} <td colspan="3"> 从 {yun:}($pagenum-1) *
+										$config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+										{yun:}else if $pagenum == $pages{/yun}
+										<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共
+											{yun:}$total{/yun} 条</td>
+										{yun:}/if{/yun}
+										<td colspan="6" class="digg">{yun:}$pagenav{/yun}</td>
+								</tr>
+								{yun:}/if{/yun}
+							</tbody>
+
+						</table>
+						<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+					</form>
+				</div>
+			</div>
+			</div>
+		</div>
+		{yun:}include file="$adminstyle/member_send_email.htm"{/yun}
+		<div class="userInforOpup">
+			<div class="opupContAll">
+				<div class="opupContInfo">
+					<span>用户信息</span>
+					<img class="opupCloser" src="images/closeimg.png?v={yun:}$config.cachecode{/yun}" alt="">
+				</div>
+				<div class="opupContList">
+					<ul>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">用户名：</span>
+								<span class="spanTwo">HSP12345</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">企业名称：</span>
+								<span class="spanTwo">易虹实业有限公司南京分公司</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">电话：</span>
+								<span class="spanTwo">15022331144</span>
+								<span class="spanThree">已认证</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">邮箱：</span>
+								<span class="spanTwo">1826121245@qq.com</span>
+								<span class="spanThree">已认证</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">执照：</span>
+								<!-- <span class="spanTwo">HSP12345</span> -->
+								<span class="spanThree">已认证</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">注册时间：</span>
+								<span class="spanTwo">2019-03-03</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">登录次数：</span>
+								<span class="spanTwo">25</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">最近登录时间：</span>
+								<span class="spanTwo">2022-03-03</span>
+							</div>
+						</li>
+						<li>
+							<div class="textSpan">
+								<span class="spanOne">公司地址：</span>
+								<span class="spanTwo">沭阳县软件产业园B栋</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="opupContClick">
+					<div class="clickLis">
+						<a href="javascript:void(0);" class="confirm">确认</a>
+						<a href="javascript:void(0);">重置密码</a>
+						<a href="javascript:void(0);">删除</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+	        $(".xiaClick").click(function() {
+				var id = $(this).attr("pid");
+				$('body').css('overflow-y', 'hidden');
+				$.layer({
+					type: 2,
+					shadeClose: true,
+					title: '用户信息',
+					area: ['550px','575px'],
+					iframe: {src: 'index.php?m=admin_appeal&c=info&id='+id},
+					close: function(){
+						window.location.reload();
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

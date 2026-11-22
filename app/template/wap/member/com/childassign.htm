@@ -1,0 +1,219 @@
+{yun:}include file="$wapstyle/member/cheader.htm"{/yun}
+<style>
+	body{ background:#fff}
+</style>
+<div id="yunvue" class="none">
+	<div class="yun_com_msg" style="padding: 10px 10px;">说明：<br>1、子账号套餐量调整上限为可分配套餐总量<br>2、职位上架套餐不可分配<br>3、时间会员可分配套餐为：职位置顶、职位推荐、紧急招聘</div>
+
+	<div class="clear"></div>
+
+	<form id="editchildForm">
+		<div>
+			<div class="child_cont">
+				<div class="child_data_list">
+					<div class="child_data_z">可分配套餐总量</div>
+					<div class="child_data_zi">主账号套餐量</div>
+					<div class="child_data_name">子账号套餐量</div>
+				</div>
+				<div class="child_data_list assignDiv">
+					<div class="child_name">上架职位：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.job_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.job_num}}</span></div>
+					<div class="child_list_b">
+						<span class="child_data child_data_bg_jt">0</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">刷新职位：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.breakjob_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.breakjob_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg" v-if="fa.rating_type=='1'">
+						<input type="number" name="breakjob_num" :value="son.breakjob_num" oninput="value=value.replace(/^0|[\^d]/g,'')" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+						<span class="child_data child_data_bg_jt" v-else>0</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">下载简历：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.down_resume}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.down_resume}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg" v-if="fa.rating_type=='1'">
+						<input type="number" name="down_resume" :value="son.down_resume" oninput="value=value.replace(/^0|[\^d]/g,'')" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+						<span class="child_data child_data_bg_jt" v-else>0</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">邀请面试：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.invite_resume}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.invite_resume}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg" v-if="fa.rating_type=='1'">
+						<input type="number" name="invite_resume" :value="son.invite_resume" oninput="value=value.replace(/^0|[\^d]/g,'')" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+						<span class="child_data child_data_bg_jt" v-else>0</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">招聘会报名：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.zph_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.zph_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg" v-if="fa.rating_type=='1'">
+						<input type="number" name="zph_num" :value="son.zph_num" oninput="value=value.replace(/^0|[\^d]/g,'')" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+						<span class="child_data child_data_bg_jt" v-else>0</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">职位置顶：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.top_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.top_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg">
+						<input type="number" name="top_num" :value="son.top_num" oninput="value=value.replace(/^0|[\^d]/g,'')" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">职位紧急：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.urgent_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.urgent_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg">
+						<input type="number" name="urgent_num" oninput="value=value.replace(/^0|[\^d]/g,'')" :value="son.urgent_num" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv">
+					<div class="child_name">职位推荐：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.rec_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.rec_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg">
+						<input type="number" name="rec_num" oninput="value=value.replace(/^0|[\^d]/g,'')" :value="son.rec_num" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+					</div>
+				</div>
+
+				<div class="child_data_list assignDiv" v-if="chatOpen == 1">
+					<div class="child_name">{{chatName}}：</div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{all.chat_num}}</span></div>
+					<div class="child_list_b"><span class="child_data child_data_jt">{{fa.chat_num}}</span></div>
+					<div class="child_list_b">
+					<span class="child_data child_data_bg">
+						<input type="number" name="chat_num" oninput="value=value.replace(/^0|[\^d]/g,'')" :value="son.chat_num" placeholder="0" autocomplete="off" class="distribution_setmeal_span numCheck">
+					</span>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="child_fot">
+				<div class="child_fot_c">
+					<div @click="saveAssign" class="child_fot_bth" style="background-color: #2778F8; text-align: center;">修改</div><br/>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+	var cuid = parseInt('{yun:}$smarty.get.cuid{/yun}');
+	new Vue({
+		el: '#yunvue',
+		data: {
+			all: {},
+			fa: {},
+			son: {},
+			cuid: cuid?cuid:'',
+			chatOpen: 2,
+			chatName: ''
+		},
+		created() {
+			this.getinfo();
+		},
+		methods:{
+			getinfo:function(){
+				var that = this;
+				var paramer = {cuid: that.cuid};
+				showLoading();
+				$.post('{yun:}url d=wxapp h=com m=set c=childassign{/yun}',paramer,function(data){
+					hideLoading();
+
+					if (data.error == 1) {
+						let info = {};
+						info = JSON.stringify(data.data);
+						if (info != "{}" && info != "null") { //获取主子账号套餐数据
+							info = JSON.parse(info);
+							that.all = info.alls;
+							that.fa = info.fathers;
+							that.son = info.sons;
+							that.chatOpen = info.chat_open;
+							that.chatName = info.chat_name;
+						}
+					}else{
+						showToast(data.msg,2, function() {
+							goBack();
+						});
+					}
+					$("#yunvue").css('display', 'block');
+				},'json');
+			},
+			saveAssign:function(){
+				var v = getFormValue('editchildForm');
+				var that = this,
+						obj = getFormValue('editchildForm'),
+						fanum = 0,
+						num = 0,
+						noway = true;
+				if (that.cuid == 0) {
+					return showToast('数据错误');
+				}
+				Object.keys(obj).forEach(function(key) {
+					num = parseInt(obj[key]);
+					fanum = parseInt(that.fa[key]);
+				});
+				if (noway) {
+					var param = {
+						cuid: that.cuid
+					};
+					param.submit = 'submit';
+					param.breakjob_num = parseInt(obj.breakjob_num) ? parseInt(obj.breakjob_num) : 0;
+					param.down_resume = parseInt(obj.down_resume) ? parseInt(obj.down_resume) : 0;
+					param.invite_resume = parseInt(obj.invite_resume) ? parseInt(obj.invite_resume) : 0;
+					param.zph_num = parseInt(obj.zph_num) ? parseInt(obj.zph_num) : 0;
+					param.top_num = parseInt(obj.top_num) ? parseInt(obj.top_num) : 0;
+					param.urgent_num = parseInt(obj.urgent_num) ? parseInt(obj.urgent_num) : 0;
+					param.rec_num = parseInt(obj.rec_num) ? parseInt(obj.rec_num) : 0;
+					param.chat_num = parseInt(obj.chat_num) ? parseInt(obj.chat_num) : 0;
+					showLoading('分配中...');
+					$.post('{yun:}url d=wxapp h=com m=set c=childassign{/yun}',param,function(data){
+						hideLoading();
+						if (data.error == 1) {
+							if (data.msg != '') { //分配成功
+								showToast(data.msg,2, function() {
+									goBack();
+								})
+							}
+						}else{
+							showToast(data.msg,2, function() {
+								that.getinfo();
+							});
+						}
+					},'json');
+				}
+			},
+		}
+	});
+</script>
+</body>
+</html>

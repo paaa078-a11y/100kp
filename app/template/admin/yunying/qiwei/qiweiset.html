@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="workConfigApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="基本信息" name="baseconfig">
+                <qwjibenpz ref="baseconfig" :save="save"></qwjibenpz>
+            </el-tab-pane>
+            <el-tab-pane label="用户画像" name="userpic">
+                <userimage ref="userpic" :save="save"></userimage>
+            </el-tab-pane>
+            <el-tab-pane label="消息推送" name="msgpush">
+                <infotuson ref="msgpush" :save="save"></infotuson>
+            </el-tab-pane>
+            <el-tab-pane label="回调配置" name="callbackconfig">
+                <huidiaopz ref="callbackconfig" :save="save"></huidiaopz>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+    const workConfigApp = new Vue({
+        el: '#workConfigApp',
+        data: function () {
+            return {
+                activeName: 'baseconfig',
+                saveLoading: false,
+            }
+        },
+        components: {
+            'qwjibenpz': httpVueLoader('./component/qwjibenpz.vue'),
+            'huidiaopz': httpVueLoader('./component/huidiaopz.vue'),
+            'userimage': httpVueLoader('./component/userimage.vue'),
+            'infotuson': httpVueLoader('./component/infotuson.vue'),
+        },
+        created: function () {
+            this.getinfo()
+        },
+        methods: {
+            async getinfo() {
+                let that = this;
+                httpPost('m=yunying&c=workwx_config&a=getinfo', {}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        //企微基本配置
+                        if (res.data.wx_qy_corpid) {
+                            that.$refs.baseconfig.wx_qy_corpid = res.data.wx_qy_corpid
+                        }
+                        if (res.data.sy_workwx_secret) {
+                            that.$refs.baseconfig.sy_workwx_secret = res.data.sy_workwx_secret
+                        }
+                        if (res.data.sy_contact_secret) {
+                            that.$refs.baseconfig.sy_contact_secret = res.data.sy_contact_secret
+                        }
+                        setTimeout(function () {
+                            //用户画像
+                            if (res.data.wx_photo_agentId) {
+                                that.$refs.userpic.wx_photo_agentId = res.data.wx_photo_agentId
+                            }
+                            if (res.data.wx_photo_secret) {
+                                that.$refs.userpic.wx_photo_secret = res.data.wx_photo_secret
+                            }
+                            //消息推送
+                            if (res.data.wx_qy_agentid) {
+                                that.$refs.msgpush.wx_qy_agentid = res.data.wx_qy_agentid
+                            }
+                            if (res.data.wx_qy_secret) {
+                                that.$refs.msgpush.wx_qy_secret = res.data.wx_qy_secret
+                            }
+                            //回调配置
+                            if (res.data.wx_contact_url) {
+                                that.$refs.callbackconfig.wx_contact_url = res.data.wx_contact_url
+                            }
+                            if (res.data.wx_contact_token) {
+                                that.$refs.callbackconfig.wx_contact_token = res.data.wx_contact_token
+                            }
+                            if (res.data.wx_contact_EncodingAESKey) {
+                                that.$refs.callbackconfig.wx_contact_EncodingAESKey = res.data.wx_contact_EncodingAESKey
+                            }
+                        }, 100);
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            save(params) {
+                let that = this;
+
+                if (that.saveLoading) {
+                    return false;
+                }
+                that.saveLoading = true;
+                httpPost('m=yunying&c=workwx_config&a=save', params).then(function (res) {
+                    if (res.data.error == 0) {
+                        message.success(res.data.msg, function () {
+                            that.saveLoading = false;
+                        })
+                    } else {
+                        message.success(res.data.msg, function () {
+                            that.saveLoading = false;
+                        })
+                    }
+                });
+            },
+            handleClick(tab) {
+            }
+        }
+    });
+</script>
+</body>
+</html>

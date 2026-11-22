@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="systemvip">
+        <div class="setDomeAll setDomehuiyuan">
+            <!--培训分类-->
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="课程类别" name="px_subject_class" :lazy="true">
+                    <px_subject_class></px_subject_class>
+                </el-tab-pane>
+                <el-tab-pane label="开课类型" name="px_subject_type" :lazy="true">
+                    <px_subject_type></px_subject_type>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+
+    <script>
+        const custoapp = new Vue({
+            el: '#systemvip',
+            data: function () {
+                return {
+                    activeName: 'px_subject_class'
+                }
+            },
+            mounted() {
+            },
+            components: {
+                'px_subject_class': httpVueLoader('./component/px_subject_class.vue'),
+                'px_subject_type': httpVueLoader('./component/px_subject_type.vue'),
+            },
+            methods: {
+                handleClick(tab, event) {
+                }
+            }
+        });
+    </script>
+</body>
+<style>
+    .el-table {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .el-table .el-table__body-wrapper {
+        flex: 1;
+    }
+</style>
+</html>

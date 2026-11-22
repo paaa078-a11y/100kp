@@ -1,0 +1,121 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<style>body, html {
+    padding: 0;
+    margin: 0;
+   overflow: auto;
+}
+</style>
+<body >
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav claimInput layerDemo">
+            <a href="javascript:goBack()">
+                <img src="img/fh.png" alt="">
+            </a>
+            <p class="followTitle">{{cominfo.name}} 企业日志</p>
+        </div>
+    </section>
+    <section class="com_log_box">
+        <div class="" style="width:100%">
+            <div class=" " v-if="!noLog">
+                <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                    <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                        <div class="com_logo_list " v-for="(item,key) in list" :key="key">
+                            <span class="com_logo_listtime">{{item.ctime_n}}</span>
+						<div class="com_logo_list_p">{{item.content}}   </div>
+                        </div>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
+            <div v-else class="noneInfoAll">
+                <div class="nfoAllConu">
+                    <img src="img/zwtip.png" alt="">
+                    <p>暂无信息</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var uid = '{yun:}$smarty.get.uid{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 14,
+                page: 1,
+                refreshing: false,
+                noLog: false,
+                cominfo: []
+            }
+        },
+        created() {
+            this.getInfo();
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                    uid: uid
+                };
+                $.post('index.php?c=admin_company&a=member_log', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noLog = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noLog = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+                }, 'json');
+            },
+            getInfo: function () {
+                var that = this;
+                var param = {
+                    uid: uid
+                };
+                $.post('index.php?c=admin_company&a=info', param, function (res) {
+                    that.cominfo = res.com ? res.com : [];
+                }, 'json');
+            }
+        }
+    });
+</script>
+</body>
+</html>

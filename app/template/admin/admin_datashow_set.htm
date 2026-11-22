@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+				<div class="tabs_info">
+					<ul>
+						<li {yun:}if !$smarty.get.c{/yun}class="curr" {yun:}/if{/yun}>
+						<a href="index.php?m=admin_hr_log">HR报告</a>
+						</li>
+						<li {yun:}if $smarty.get.c=='datashowset'{/yun}class="curr" {yun:}/if{/yun}>
+						<a href="index.php?m=admin_hr_log&c=datashowset">区域报告</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="clear"></div>
+				<div class="ttyTishiTopAll">
+					<h3>年度数据展示</h3>
+				</div>
+				<div class="clear"></div>
+				<div class="tag_box">
+					<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+					<form id="pushform" class="layui-form" action="index.php?m=admin_hr_log&c=datashowset" method="post" target="supportiframe">
+						<table class="table_form">
+							<tr>
+								<th width="160" class="t_fr">标题名称：</th>
+								<td>
+									<div class="layui-input-block">
+										<input class="tty_input t_w480" type="text" name="sy_datashow_title" id="sy_datashow_title" value="{yun:}$config.sy_datashow_title{/yun}"
+										 size="50" maxlength="255" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160" class="t_fr">活跃趋势基数：</th>
+								<td>
+									<div class="layui-input-block">
+										<input class="tty_input t_w480" type="text" name="sy_datashowhy_base" id="sy_datashowhy_base" value="{yun:}$config.sy_datashowhy_base{/yun}"
+											   size="50" maxlength="255" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160" class="t_fr">注册趋势基数：</th>
+								<td>
+									<div class="layui-input-block">
+										<input class="tty_input t_w480" type="text" name="sy_datashowreg_base" id="sy_datashowreg_base" value="{yun:}$config.sy_datashowreg_base{/yun}"
+											   size="50" maxlength="255" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160" class="t_fr">登陆趋势基数：</th>
+								<td>
+									<div class="layui-input-block">
+										<input class="tty_input t_w480" type="text" name="sy_datashowlogin_base" id="sy_datashowlogin_base" value="{yun:}$config.sy_datashowlogin_base{/yun}"
+											   size="50" maxlength="255" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="160" class="t_fr">发布岗位趋势基数：</th>
+								<td>
+									<div class="layui-input-block">
+										<input class="tty_input t_w480" type="text" name="sy_datashowjob_base" id="sy_datashowjob_base" value="{yun:}$config.sy_datashowjob_base{/yun}"
+											   size="50" maxlength="255" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="150">预览地址：</th>
+								<td align="left">
+									<div class="layui-input-block">
+										<input name="datashowurl" id="datashowurl" autocomplete="off" value="{yun:}$url{/yun}" readonly class="tty_input t_w480" type="text" />
+										<input class="datav_list_bth " type="button" onclick="showQrcode();"  value="预览" />
+										<input class="datav_list_bth_fz " type="button" onclick="copyurl();" value="复制链接" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="150">地区层级：</th>
+								<td align="left">
+									<div class="layui-input-block">
+										<input name="sy_datashow_city_lev" {yun:}if $config.sy_datashow_city_lev==1{/yun}checked{yun:}/if{/yun} value="1" title="一级" type="radio" />
+										<input name="sy_datashow_city_lev" {yun:}if $config.sy_datashow_city_lev==2{/yun}checked{yun:}/if{/yun} value="2" title="二级" type="radio" />
+										<input name="sy_datashow_city_lev" {yun:}if $config.sy_datashow_city_lev==3{/yun}checked{yun:}/if{/yun} value="3" title="三级" type="radio" />
+									</div>
+								</td>
+							</tr>
+							<tr class="admin_table_trbg">
+								<th></th>
+								<td>
+									<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+									<input class="tty_sub" id="chatconfig" name="submit" type="submit" value="提交" />&nbsp;&nbsp;
+									<input class="tty_cz" type="reset" value="重置" />
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div id="preview" class="wx_login_show none">
+						<div class="job_tel_wx_box">
+							<div id="wx_login_qrcode" class=" job_tel_wx_zs">
+								<img src="{yun:}url m=ajax c=pubqrcode toc=ajax toa=dataShowIndex toid=-1{/yun}" width="140" height="140">
+							</div>
+							<div class="job_tel_wx_p"><span class="job_tel_wx_bth">扫码预览</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var weburl = '{yun:}$config.sy_weburl{/yun}';
+			layui.use(['layer', 'form'], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					$ = layui.$;
+			});
+            function copyurl() {
+                var value = document.querySelector('#datashowurl');
+                value.select(); // 选择对象
+                if (document.execCommand("copy")) {
+                    document.execCommand("copy");
+                    layer.msg('已复制');
+                };
+            }
+            // 获取预览二维码，显示预览弹窗
+            function showQrcode(){
+                $.layer({
+                    type: 1,
+                    title: '手机扫码预览',
+                    closeBtn: [0, true],
+                    offset: ['100px', ''],
+                    border: [10, 0.3, '#000', true],
+                    area: ['300px', '300px'],
+                    page: {
+                        dom: "#preview"
+                    }
+                });
+            }
+		</script>
+	</body>
+</html>

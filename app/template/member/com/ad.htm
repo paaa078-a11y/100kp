@@ -1,0 +1,99 @@
+{yun:}include file="$comstyle/header.htm"{/yun}
+<div class="w1000">
+	<div class="admin_mainbody">
+		{yun:}include file="$comstyle/left.htm"{/yun} 
+	 
+		<div class=right_box>
+			<div class="newmember_tit">
+							<ul>
+								<li> <a href="index.php?c=right">会员服务</a></li>
+											<li> <a  href="index.php?c=pay" >充值服务</a></li>
+											<li> <a  href="index.php?c=paylogtc" class=" ">我的服务</a></li>
+											{yun:}if $config.sy_help_open == 1{/yun}
+											<li><a href="index.php?c=friendhelp" >好友助力</a></li>
+											{yun:}/if{/yun}
+											<li><a  href="index.php?c=integral">{yun:}$config.integral_pricename{/yun}管理</a></li>
+								<li class="newmember_titcur"> <a href="index.php?c=ad" class=" ">购买广告位</a></li> 
+									 
+							</ul>
+						</div>
+						<div class="newmember_screenbox">
+							<div class="newmember_screen">
+											<ul>
+												 
+										 <li {yun:}if $smarty.get.c=="ad"{/yun}  class="job_list_tit_cur"{yun:}/if{/yun} >
+												<a href="index.php?c=ad">广告位</a>
+											</li> 
+											<li {yun:}if $smarty.get.c=="ad_order"{/yun}class="job_list_tit_cur"{yun:}/if{/yun}>
+												<a href="index.php?c=ad_order">广告订单</a>
+											</li>
+												</ul>
+						
+							   
+						 
+						</div></div> 
+						
+						  <div class="clear"></div> 
+			
+			
+			<div id="grow_freedom" >
+		 
+			<div class=admincont_box>
+			 
+			    <div class="com_body">  
+		  
+				 
+          <table width="100%" cellspacing="1" cellpadding="1" class=" com_table">
+            <tr>
+              <th>广告位名称</th>
+               <th>价格</th>
+              <th>广告位说明</th>
+              <th>购买</th>
+            </tr>
+            {yun:}foreach item=v from=$rows{/yun}
+             <tr id="m2" >
+              <td>{yun:}$v.class_name{/yun}{yun:}if $v.hrefn{/yun}
+										<a href="{yun:}$v.hrefn{/yun}" target="_blank" class="ad_buy_list_pic_bth">查看广告位置</a>
+									{yun:}/if{/yun}</td>
+               <td><span class="ad_but_btn_n">{yun:}$v.integral_buy{/yun}</span> 
+									{yun:}if $v.btype==2{/yun}元{yun:}else{/yun}{yun:}$config.integral_pricename{/yun}{yun:}/if{/yun}/月</td>
+              <td>{yun:}$v.remark{/yun}</td>
+              <td align="center"><a href="index.php?c=ad&act=adinfo&id={yun:}$v.id{/yun}" class="ad_buy_list_buy">购买</a></td>
+            </tr>
+            
+						{yun:}/foreach{/yun}
+                        
+            
+            
+             </table>
+						<div class="clear"></div>
+
+						<!--{yun:}foreach item=v from=$rows{/yun}
+						<div id="m2" class="ad_buy_list">
+							<div class="ad_buy_list_cont">
+								<div class="ad_buy_list_name">{yun:}$v.class_name{/yun}</div>
+								<div class="ad_buy_list_p">{yun:}$v.remark{/yun}</div>
+								<div class="ad_buy_list_pic">
+									{yun:}if $v.hrefn{/yun}
+										<a href="{yun:}$v.hrefn{/yun}" target="_blank" class="ad_buy_list_pic_bth">查看广告位置</a>
+									{yun:}/if{/yun}
+								</div>
+							</div>
+
+							<div class="ad_buy_list_bot">
+								<span class="ad_buy_list_cont_s">
+									<span class="ad_but_btn_n">{yun:}$v.integral_buy{/yun}</span> 
+									{yun:}if $v.btype==2{/yun}元{yun:}else{/yun}{yun:}$config.integral_pricename{/yun}{yun:}/if{/yun}/月
+								</span>
+								<a href="index.php?c=ad&act=adinfo&id={yun:}$v.id{/yun}" class="ad_buy_list_buy">购买</a>
+							</div>
+						</div>
+						{yun:}/foreach{/yun}-->
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{yun:}include file="$comstyle/footer.htm"{/yun}

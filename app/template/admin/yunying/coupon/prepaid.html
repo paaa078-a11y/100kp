@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+        	<div class="moduleSeachleft">
+				<div class="moduleSeachInpt" style="margin-right: 12px;">
+					<el-input placeholder="请输入你要搜索的关键字" v-model="searchForm.keyword" class="input-with-select"
+							  clearable size="small">
+						<el-select v-model="searchForm.ctype" size="small" slot="prepend" placeholder="用户名">
+							<el-option label="编号" :value="1"></el-option>
+							<el-option label="使用者" :value="2"></el-option>
+						</el-select>
+					</el-input>
+				</div>
+				<div v-for="(searchItem, searchIndex) in searchList" class="tableSeachInptsmall newsinput">
+					<el-select v-model="searchForm[searchItem.param]" size="small" slot="prepend" :clearable="true" :placeholder="searchItem.name" @change="search">
+						<el-option v-for="(searchLabel, searchValue) in searchItem.value" :label="searchLabel" :key="searchValue" :value="searchValue"></el-option>
+					</el-select>
+				</div>
+                <div class="newsbtnbox"  >
+		            <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+                </div>
+		    </div>
+        	<div class="moduleSeachButn" style="display: flex;align-items: center;">
+        		<el-button type="primary" plain icon="el-icon-s-goods" size="mini" @click="openAdd()">批量生成充值卡
+                </el-button>
+        		<el-button type="primary" icon="el-icon-document-add" size="mini" @click="batch('export')">批量导出</el-button>
+        	</div>
+        </div>
+        <div class="moduleElTable">
+            <el-table :data="list" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+                <template slot="empty">
+					<p>{{dataText}}</p>
+				</template>
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="card" label="编号" width="220">
+                </el-table-column>
+                <el-table-column prop="password" label="密码" width="140">
+                </el-table-column>
+                <el-table-column prop="quota" label="抵用额度" width="120">
+                </el-table-column>
+                <el-table-column label="有效期" width="300">
+					<template slot-scope="scope">
+						<div class="admin_state">
+							<span v-if="scope.row.validity == 1" class="admin_state1">已使用</span>
+							<span v-else-if="scope.row.validity == 2" class="admin_state2">已过期</span>
+							<span v-else class="">
+								{{scope.row.stime_n}} 至 {{scope.row.etime_n}}
+							</span>
+						</div>
+					</template>
+                </el-table-column>
+                <el-table-column label="使用者/使用时间" min-width="160">
+                    <template slot-scope="scope">
+                        <div class="moduleProps">
+                            <span v-if="scope.row.username">{{ scope.row.username }}</span>
+                            <span v-if="scope.row.utime_n">{{ scope.row.utime_n }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否可用" width="120">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.type" active-value="1" inactive-value="2"
+								   @change="typeChange($event, scope.$index)"
+								   active-color="#1890FF" inactive-color="#B8BDC9">
+                        </el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="130"  align="center">
+                    <template slot-scope="scope">
+                        <div class="cz_button">
+                			 <el-button v-if="!scope.row.username" size="small" @click="openEdit(scope.row)" type=" " >修改</el-button>
+                			<el-button   size="small " @click="del(scope.$index)" type="danger" >删除</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+			<div class="modulecz modulePagButn">
+				<el-checkbox v-model="checkedAll" :indeterminate="checkedAllIndeterminate" @change="checkAll">全选</el-checkbox>
+				<el-button @click="batch('del')">批量删除</el-button>
+			</div>
+			<div class="modulePagNum">
+				<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+							   :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+							   layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
+        </div>
+
+		<!--批量生成充值卡弹出-->
+		<div class="modluDrawer">
+			<el-dialog title="批量生成充值卡" :visible.sync="dialogAdd" :with-header="true" :modal-append-to-body="false"
+				:show-close="true" width="500px">
+				<div class="wxsettip_small ">额　　度</div>
+				<el-input v-model="ruleFormAdd.quota" placeholder="请输入额度"
+						  @input="inputFloatNumber($event, 'ruleFormAdd', 'quota')"></el-input>
+				<div class="wxsettip_small ">生成数量</div>
+				<el-input v-model="ruleFormAdd.num" placeholder="请输入生成数量"
+						  @input="inputIntNumber($event, 'ruleFormAdd', 'num')"></el-input>
+				<div class="wxsettip_small ">开始时间</div>
+				<el-date-picker
+						v-model="ruleFormAdd.stime"
+						type="datetime"
+						placeholder="请选择开始时间"
+						default-time="00:00:00">
+				</el-date-picker>
+				<div class="wxsettip_small ">结束时间 </div>
+				<el-date-picker
+						v-model="ruleFormAdd.etime"
+						type="datetime"
+						placeholder="请选择结束时间"
+						default-time="23:59:59">
+				</el-date-picker>
+				<div class="wxsettip_small ">状　　态</div>
+				<div class="wxsettip_select">
+					<el-select v-model="ruleFormAdd.type" placeholder="请选择">
+						<el-option label="可用" :value="1"></el-option>
+						<el-option label="不可用" :value="2"></el-option>
+					</el-select>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="dialogAdd = false">取 消</el-button>
+					<el-button type="primary" @click="add" :disabled="saveLoading">确 定</el-button>
+				</span>
+			</el-dialog>
+		</div>
+
+
+		<!--编辑弹出-->
+		<div class="modluDrawer">
+			<el-dialog title="修改充值卡" :visible.sync="dialogEdit" :with-header="true" :modal-append-to-body="false"
+					   :show-close="true" width="500px">
+				<div class="wxsettip_small ">卡号</div>
+				<el-input v-model="ruleFormEdit.card" disabled></el-input>
+				<div class="wxsettip_small ">密码</div>
+				<el-input v-model="ruleFormEdit.password" placeholder="请输入密码"
+						  @input="inputIntNumber($event, 'ruleFormEdit', 'password')"></el-input>
+				<div class="wxsettip_small ">额　　度</div>
+				<el-input v-model="ruleFormEdit.quota" placeholder="请输入额度"
+						  @input="inputFloatNumber($event, 'ruleFormEdit', 'quota')"></el-input>
+				<div class="wxsettip_small ">开始时间</div>
+				<el-date-picker
+						v-model="ruleFormEdit.stime"
+						type="datetime"
+						placeholder="请选择开始时间"
+						default-time="00:00:00">
+				</el-date-picker>
+				<div class="wxsettip_small ">结束时间 </div>
+				<el-date-picker
+						v-model="ruleFormEdit.etime"
+						type="datetime"
+						placeholder="请选择结束时间"
+						default-time="23:59:59">
+				</el-date-picker>
+				<div class="wxsettip_small ">状　　态</div>
+				<div class="wxsettip_select">
+					<el-select v-model="ruleFormEdit.type" placeholder="请选择">
+						<el-option label="可用" :value="1"></el-option>
+						<el-option label="不可用" :value="2"></el-option>
+					</el-select>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="dialogEdit = false">取 消</el-button>
+					<el-button type="primary" @click="edit" :disabled="saveLoading">确 定</el-button>
+				</span>
+			</el-dialog>
+
+			<!-- 导出字段选择弹出 -->
+			<el-dialog title="确认导出" :visible.sync="dialogExport" :with-header="true" :modal-append-to-body="false"
+					   :show-close="true" width="500px">
+				<div class="tck_setname">
+					<el-checkbox-group v-model="ruleFormExport.type">
+						<el-checkbox :label="field" v-for="(fieldName, field) in exportType">{{fieldName}}</el-checkbox>
+					</el-checkbox-group>
+				</div>
+				<!--<el-divider content-position="left">操作提示</el-divider>-->
+				<!--<div class="wxsettip">-->
+				<!--	请选择要导出的字段-->
+				<!--</div>-->
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="dialogExport = false">取 消</el-button>
+					<el-button type="primary" @click="exportXls" :disabled="saveLoading">确 认</el-button>
+                </span>
+			</el-dialog>
+		</div>
+
+    </div>
+
+    <!-- script -->
+	<script src="../../js/base64ToFile.js"></script>
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                	loading: false,
+                	dataText: '数据加载中',
+					// 搜索筛选项
+					searchList: [],
+					searchForm: {
+                        ctype: 1
+					},
+
+					// 列表
+					page: 1,
+					limit: 0,
+					list: [],
+					total: 0,
+					pageSizes: [],
+
+					checkedAll: false, // 全选
+					checkedAllIndeterminate: false,
+					multipleSelection: [], // 多选值存储
+					idArr: [],
+
+					// 批量生成充值卡
+					dialogAdd: false,
+					ruleFormAdd: {
+						quota: '',
+						num: '',
+						stime: '',
+						etime: '',
+                    	type: 1,
+					},
+
+					// 编辑充值卡
+					dialogEdit: false,
+					ruleFormEdit: {
+						id: '',
+						card: '',
+						password: '',
+						quota: '',
+						stime: '',
+						etime: '',
+						type: 1,
+					},
+
+					// 导出
+					dialogExport: false,
+					exportType: {},
+					ruleFormExport: {
+						type: []
+					},
+
+					saveLoading: false,
+					prevPage:0
+                }
+            },
+			created: function () {
+				this.getBaseData();
+				this.getList();
+				this.getExportFields();
+			},
+            methods: {
+				handleSizeChange(val) {
+					this.limit = val;
+					this.getList();
+				},
+				handleCurrentChange(val) {
+					this.page = val;
+					this.getList();
+				},
+				search() {
+					this.page = 1;
+					this.getList();
+				},
+				getList() {
+					let that = this,
+						searchForm = that.searchForm,
+						params = {
+							page: that.page,
+							limit: that.limit,
+						};
+					that.loading = true;
+
+					httpPost('m=yunying&c=coupon_prepaid', {...params, ...searchForm}, {hideloading: true}).then(function (response) {
+						let res = response.data,
+							data = res.data;
+						that.list = data.list;
+						that.total = parseInt(data.total);
+						that.pageSizes = data.page_sizes;
+						if (that.limit === 0) {
+							that.limit = parseInt(data.limit); // 取系统配置默认数量
+						}
+						if (that.page > data.page) {
+							that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+						}
+						if(that.prevPage != that.page){
+							that.prevPage = that.page;
+							that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+						}
+						that.loading = false;
+						if (that.list.length === 0) {
+		                    that.dataText = "暂无数据";
+		                }
+					})
+				},
+				getExportFields() {
+					let _this = this;
+					httpPost('m=yunying&c=coupon_prepaid&a=getExportFields', {}, {hideloading: true}).then(function (response) {
+						let res = response.data;
+						_this.exportType = res.data.exportType;
+					}).catch(function (error) {
+						console.log(error);
+					});
+				},
+				getBaseData() {
+					let _this = this;
+					httpPost('m=yunying&c=coupon_prepaid&a=index_base_data', {}, {hideloading: true}).then(function (response) {
+						let res = response.data;
+						_this.searchList = Object.freeze(res.data.search_list);
+					}).catch(function (error) {
+						console.log(error);
+					});
+				},
+				// 批量操作
+				handleSelectionChange(val) {
+					if (val.length == 0) {
+						this.checkedAll = false;
+						this.checkedAllIndeterminate = false;
+					} else {
+						if (val.length === this.list.length) {
+							this.checkedAll = true;
+							this.checkedAllIndeterminate = false;
+						} else {
+							this.checkedAll = false;
+							this.checkedAllIndeterminate = true;
+						}
+					}
+					this.multipleSelection = val;
+				},
+				batch(type) {
+					if (this.multipleSelection.length == 0) {
+						switch (type) {
+							case 'export':
+								message.error('请选择要导出的数据');
+								break;
+							default:
+								message.error('请选择要删除的数据');
+								break;
+						}
+						return false;
+					}
+
+					let idArr = [];
+					this.multipleSelection.forEach(function(item) {
+						idArr.push(item.id);
+					})
+					this.idArr = idArr;
+
+					if (type == 'del') {
+						this.del();
+					}
+					if (type == 'export') {
+						this.dialogExport = true;
+					}
+				},
+				checkAll(val) {
+					val ? this.checkedAllIndeterminate = false : '';
+					this.$refs.multipleTable.toggleAllSelection();
+				},
+
+				del(idx) {
+					let that = this,
+							params = {},
+							msg = '';
+
+					if (typeof idx == 'undefined') { // 批量删除
+						params.del = this.idArr;
+						msg = '你确定要删除选中项吗？';
+					} else {// 单个删除
+						params.del = that.list[idx].id;
+						msg = '你确定要删除当前项吗？';
+					}
+
+					delConfirm(this, params, function (params) {
+						httpPost('m=yunying&c=coupon_prepaid&a=del', params).then(function(res) {
+							if (res.data.error > 0) {
+								message.error(res.data.msg);
+							} else {
+								message.success(res.data.msg, function () {
+									that.$refs.multipleTable.clearSelection();
+									that.getList();
+								});
+							}
+						})
+					}, msg)
+				},
+
+				typeChange(val, idx) {
+					let params = {
+						type: val,
+						id: this.list[idx].id
+					};
+
+					httpPost('m=yunying&c=coupon_prepaid&a=type', params).then(function(res) {
+						if (res.data.error > 0) {
+							message.error(res.data.msg);
+						}
+					})
+				},
+
+				inputIntNumber(val, form, key) {
+					this.$data[form][key] = val.replace(/[^0-9]/g,'');
+				},
+				inputFloatNumber(val, form, key) {
+					this.$data[form][key] = val.replace(/[^0-9.]/g,'');
+				},
+				openAdd() {
+					this.dialogAdd = true;
+				},
+				add() {
+					let that = this,
+						params = that.ruleFormAdd;
+
+					if (params.quota === '') {
+						message.warning('请输入额度');
+						return;
+					}
+					if (params.num === '') {
+						message.warning('请输入生成数量');
+						return;
+					}
+					if (params.stime === '') {
+						message.warning('请选择开始时间');
+						return;
+					}
+					if (params.etime === '') {
+						message.warning('请选择结束时间');
+						return;
+					}
+
+					if (params.stime > params.etime) {
+						message.warning('开始时间不得大于结束时间');
+						return false;
+					}
+
+					if (that.saveLoading) {
+						return false;
+					}
+					that.saveLoading = true;
+
+					params.stime = formatDatetime(params.stime);
+					params.etime = formatDatetime(params.etime);
+
+					httpPost('m=yunying&c=coupon_prepaid&a=add', params).then(function (response) {
+						let res = response.data;
+
+						if (res.error > 0) {
+							that.saveLoading = false;
+							message.error(res.msg);
+						} else {
+							that.dialogAdd = false;
+							that.getList();
+							message.success(res.msg, function () {
+								that.saveLoading = false;
+								that.ruleFormAdd = {quota: '', num: '', stime: '', etime: '', type: 1};
+							});
+						}
+					})
+				},
+
+				openEdit(data) {
+					this.dialogEdit = true;
+					this.ruleFormEdit = {
+						id: data.id,
+						card: data.card,
+						password: data.password,
+						quota: data.quota,
+						stime: new Date(data.stime_n.replace('-', '/').replace('-', '/')),
+						etime: new Date(data.etime_n.replace('-', '/').replace('-', '/')),
+						type: parseInt(data.type)
+					};
+				},
+				edit() {
+					let that = this,
+						params = that.ruleFormEdit;
+
+					if (params.password === '') {
+						message.warning('请输入密码');
+						return;
+					}
+					if (params.quota === '') {
+						message.warning('请输入额度');
+						return;
+					}
+					if (params.stime === '') {
+						message.warning('请选择开始时间');
+						return;
+					}
+					if (params.etime === '') {
+						message.warning('请选择结束时间');
+						return;
+					}
+
+					if (params.stime > params.etime) {
+						message.warning('开始时间不得大于结束时间');
+						return false;
+					}
+
+					if (that.saveLoading) {
+						return false;
+					}
+					that.saveLoading = true;
+
+					params.stime = formatDatetime(params.stime);
+					params.etime = formatDatetime(params.etime);
+
+					httpPost('m=yunying&c=coupon_prepaid&a=upcard', params).then(function (response) {
+						let res = response.data;
+
+						if (res.error > 0) {
+							that.saveLoading = false;
+							message.error(res.msg);
+						} else {
+							that.dialogEdit = false;
+							that.getList();
+							message.success(res.msg, function () {
+								that.saveLoading = false;
+								that.ruleFormEdit = {id: '', card: '', password: '', quota: '', stime: '', etime: '', type: 1};
+							});
+						}
+					})
+				},
+
+				exportXls() {
+					let that = this,
+						params = that.ruleFormExport;
+
+					if (that.idArr.length == 0) {
+						message.warning('请选择要导出的数据');
+						return;
+					}
+					if (params.type.length == 0) {
+						message.warning('请选择导出字段');
+						return;
+					}
+
+					if (that.saveLoading) {
+						return false;
+					}
+					that.saveLoading = true;
+
+					params.exportId = that.idArr;
+
+					httpPost('m=yunying&c=coupon_prepaid&a=xls', params).then(function (response) {
+						let res = response.data;
+
+						if (res.error > 0) {
+							message.error(res.msg);
+						} else {
+							that.dialogExport = false;
+							// that.ruleFormExport = {type: []};
+							utilFile.downloadFileByByte(res.data.file, res.data.file_name);
+						}
+						that.saveLoading = false;
+					})
+				},
+            }
+        });
+    </script>
+</body>
+
+</html>
+<style>
+	.el-dialog__body {
+	    padding: 0px 20px;
+	}
+	.wxsettip_select .el-select{WIDTH:100%}
+</style>

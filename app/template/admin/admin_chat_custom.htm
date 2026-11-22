@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$config.sy_weburl{/yun}/app/template/chat/custom/custom.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="infoboxp">
+			<!--聊天框-->
+			<div class="kefu_chatbox" style="border-top:1px solid #eee">
+				<div class="kefu_chat_tit">
+					<ul>
+						<li class="{yun:}if !$smarty.get.c{/yun}kefu_chat_cur{yun:}/if{/yun}">
+							<a href="index.php?m=admin_chat_custom">{yun:}$rnum{/yun}人待回复</a>
+						</li>
+						<li class="{yun:}if $smarty.get.c == 'list'{/yun}kefu_chat_cur{yun:}/if{/yun}">
+							<a href="index.php?m=admin_chat_custom&c=list"><em id="pnum">{yun:}$pnum{/yun}</em>人待接入</a>
+						</li>
+					</ul>
+				</div>
+				{yun:}if !$smarty.get.c{/yun}
+				<!--待回复-->
+				<div id="custom" class="" style="display: none;">
+					<div id="picklist" class="kefu_chatleft">
+						<ul class="kefu_chatleftlist">
+							<template v-for="(item,pk) in pickList" :key="pk">
+								<li :class="logid == item.id ? 'kefu_chatleftlistcur' : ''" @click="csgo(item.id)">
+									<div class="kefu_chatleftpic"><img :src="item.avatar" width="50" height="50"></div>
+									<div class="kefu_chatleftname">{{item.uname}}</div>
+									<div class="kefu_chat_leftp">{{item.content}}
+										<span class="kefu_chat_lefttime">{{item.stime}}</span>
+									</div>
+								</li>
+							</template>
+						</ul>
+					</div>
+					<div class="kefu_chatright"  >
+						{yun:}if $smarty.get.id{/yun}
+						<div class="kefu_chatright_user">{yun:}$user.name{/yun}</div>
+						<!--内容-->
+						{yun:}if $ismy == 1 && $timeout == 1{/yun}
+						<!--当前接入客服符合并且最新回复时间不超过48小时，会话框正常-->
+						<div class="kefu_chat_cont"style="height:325px;">
+							<div id="chat_content" class="kefu_chat_cont_p">
+						{yun:}else{/yun}
+						<div class="kefu_chat_cont" style="height: 495px;">
+							<div id="chat_content" class="kefu_chat_cont_p" style="height: 480px;">
+						{yun:}/if{/yun}
+								<template v-for="(item, ck1) in logList" :key="ck1">
+									<div class="kefu_chat_time" v-if="item.timeval">{{item.timeval}}</div>
+									<!--左-->
+									<div class="kefu_chat_pleft" v-if="item.auid == 0">
+										<img :src="item.avatar" width="50" height="50" class="kefu_chat_pic">
+										<div class="kefu_chat_p" v-html="item.content"></div>
+									</div>
+									<!--右-->
+									<div class="kefu_chat_prightbox" v-else>
+										<div class="kefu_chat_pright"> 
+											<img :src="item.avatar" width="50" height="50" class="kefu_chat_pic">
+											<div class="kefu_chat_p" v-html="item.content"></div>
+										</div>
+									</div>
+								</template>
+								{yun:}if $ismy == 2 && isset($aname){/yun}
+								<div class="chat_time_tip"><span class="chat_time_tip_n">会话结束，客服{yun:}$aname{/yun}已接入</span></div>
+								{yun:}elseif $timeout == 2{/yun}
+								<div class="chat_time_tip"><span class="chat_time_tip_n">超过48小时未对话，会话已过期</span></div>
+								{yun:}/if{/yun}
+							</div>
+						</div>
+						<!--内容 end-->
+						{yun:}if $ismy == 1 && $timeout == 1{/yun}
+						<!--输入框 当前接入客服符合并且最新回复时间不超过48小时才显示-->
+						<div class="kefu_chat_textareabox">
+							<div class="kefu_chat_cz">
+							<iframe id="cs_iframe" name="cs_iframe"></iframe>
+								<form id="imgform" target="cs_iframe" method="post"  enctype="multipart/form-data" action="{yun:}$config.sy_weburl{/yun}/index.php?m=chat&c=uploadImage">
+									<div class="kefu_chat_cz_bq_box">
+										<i id="face" class="kefu_chat_cz_icon sendbq_i" title="笑脸"></i>
+										<div id="commonly" class="showbq"></div>
+									</div>
+									<span class="kefu_chat_tp_icon"><input type="file" name="file" accept="image/*" onchange="upImage(this)" value="" class="chat_footer_czk_tj_bth"></span>
+								</form>
+							</div>
+							<div class="kefu_chat_textarea">
+								<textarea id="send_content"></textarea>
+							</div>
+							<div class="kefu_chat_textarea_p"> 按Enter发送 <input id="send" type="submit" value="发送" class="chat_footer_bth disclick"></div>
+						</div>
+						<!--输入框 end-->
+						{yun:}/if{/yun}
+						{yun:}/if{/yun}
+					</div>
+				</div>
+				<!--待回复 end-->
+				<input type="hidden" id="logid" value="{yun:}$log.id{/yun}" />
+				<input type="hidden" id="pickid" value="{yun:}$log.pickid{/yun}" />
+				{yun:}/if{/yun}
+				
+				{yun:}if $smarty.get.c == 'list'{/yun}
+				<div id="custom" class="" style="display: none;">
+					<div class="kefu_chat_tablenav">
+						<span class="kefu_chat_tabletit {yun:}if !$smarty.get.tl{/yun}kefu_chat_tablecur{yun:}/if{/yun}"><a href="index.php?m=admin_chat_custom&c=list">待接入</a></span>
+						<span class="kefu_chat_tabletit {yun:}if $smarty.get.tl == '2'{/yun}kefu_chat_tablecur{yun:}/if{/yun}"><a href="index.php?m=admin_chat_custom&c=list&tl=2">已过期</a></span>
+					</div>
+					<!--待接入/已过期 start-->
+                    <div id="picklist" class="chat_jr_box">
+						<table width="100%" class="kefu_chat_table">
+							<tr>
+								<th>客户信息</th>
+								<th>消息时间</th>
+								<th>操作</th>
+							</tr>
+							<tr :id="'p' + item.u" v-for="(item,pk) in pickList" :key="pk">
+								<td>
+									<div class="kefu_chat_table_user">
+										<img :src="item.avatar" width="50" height="50" class="kefu_chat_table_userpic">
+										{{item.uname}}
+										<div class="kefu_chat_table_p">{{item.content}}</div>
+									</div>
+								</td>
+								<td>{{item.stime}}<div class="">{{item.ltime == 0 ? '已过期' : item.ltime + '小时后过期'}}</div>
+								</td>
+								<td>
+									<span @click="popShow(item.id)" v-if="item.ltime == 0" class="chatjr">查看</span>
+									<span @click="csPicker(item.id)" v-else  class="chatjr">接入</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+                    {yun:}if $smarty.get.tl{/yun}
+                    
+					<!--已过期，查看聊天记录 start-->
+					<div id="pop_box" class="kefu_chat_cont" style="display: none;">
+						<div id="chat_content" class="kefu_chat_cont_p" style="width: 500px;height: 500px;">
+							<template v-for="(item, ck1) in logList" :key="ck1">
+								<div class="kefu_chat_time" v-if="item.timeval">{{item.timeval}}</div>
+								<!--左-->
+								<div class="kefu_chat_pleft" v-if="item.auid == 0">
+									<img :src="item.avatar" width="50" height="50" class="kefu_chat_pic">
+									<div class="kefu_chat_p" v-html="item.content"></div>
+								</div>
+								<!--右-->
+								<div class="kefu_chat_prightbox" v-else>
+									<div class="kefu_chat_pright"> 
+										<img :src="item.avatar" width="50" height="50" class="kefu_chat_pic">
+										<div class="kefu_chat_p" v-html="item.content"></div>
+									</div>
+								</div>
+							</template>
+						</div>
+					</div>
+					<!--已过期，查看聊天记录 end-->
+					{yun:}/if{/yun}
+				</div>
+				<!--待接入/已过期 end-->
+				<input type="hidden" id="timelimit" value="{yun:}$smarty.get.tl{/yun}" />
+				{yun:}/if{/yun}
+			</div>
+			<!--聊天框 end-->
+			<input type="hidden" id="pytoken" value="{yun:}$pytoken{/yun}" />
+		</div>
+			<script type="text/javascript">
+				var isAdmin = true,
+					socketUrl = "{yun:}$config.sy_chat_weburl{/yun}",
+					weburl = "{yun:}$config.sy_weburl{/yun}",
+					toid = "{yun:}$user.uid{/yun}",
+					totype = "{yun:}$user.usertype{/yun}",
+					chat_u = "{yun:}$user.chat_u{/yun}";
+			</script>
+			<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+			<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/custom/socket.js?v={yun:}$config.cachecode{/yun}"></script>
+			<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+			<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+			<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+			<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+			<script>
+				var pytoken = $("#pytoken").val(),
+					auid = "{yun:}$auid{/yun}",
+					ismy = "{yun:}$ismy{/yun}",
+					pickid = '',
+					timelimit = '',
+					page = 1,
+					listpage = 1;
+				if(document.getElementById('logid')){
+					var ispick = 1;
+					pickid = document.getElementById('pickid').value;
+				}else{
+					var ispick = 2;
+					timelimit = document.getElementById('timelimit').value;
+				}
+				var app = new Vue({
+						el: '#custom',
+						data: {
+							logid: 0,
+							logList: [],
+							pickList:[]
+						},
+						created() {
+							if(document.getElementById('logid')){
+								var logid = document.getElementById('logid').value;
+								this.$data.logid = logid;
+								if(logid > 0){
+									this.cslog(logid);
+								}
+							}
+						},
+						methods:{
+							// 客服接入
+							csPicker(id){
+								parent.layer.load();
+								$.ajax({
+									url: "index.php?m=admin_chat_custom&c=pick",
+									data: {id: id, pytoken: pytoken},
+									type: 'POST',
+									dataType: 'json',
+									success:function(res){
+										parent.layer.closeAll();
+										if(res.error == 9){
+											// 通知用户已接入
+											adminPick(res.toid, res.pickid);
+											layer.msg(res.msg, 2, 9, function(){
+												window.location.href = 'index.php?m=admin_chat_custom&id=' + id;
+											})
+										}else{
+											layer.msg(res.msg, 2, 8, function(){
+												window.location.reload();
+											})
+										}
+									}
+								})
+							},
+							// 进入聊天界面
+							csgo(id){
+								window.location.href='index.php?m=admin_chat_custom&id=' + id;
+							},
+							// 查询聊天记录
+							cslog(id, timelimit = 1){
+								$.ajax({
+									url: "index.php?m=admin_chat_custom&c=cslog",
+									data: {id: id, page: page, timelimit: timelimit,pytoken: pytoken},
+									type: 'POST',
+									dataType: 'json',
+									success:function(res){
+										if(res.list.length > 0){
+											var scroll = null;
+											if (page > 1) {
+												// 第二页开始，记录前一次滚动距离
+												scroll = document.getElementById('chat_content').scrollHeight;
+											}
+											for (let i = 0; i < res.list.length; i++){
+												res.list[i].content = rexContent(res.list[i].content);
+											}
+											var list = res.list.reverse();
+											app.$data.logList = list.concat(app.$data.logList);
+											if(page == 1){
+												setTimeout(function(){
+													var scroll = document.getElementById('chat_content').scrollHeight;
+													chatScrollTo(scroll);
+												},100);
+											}else{
+												setTimeout(function(){
+													// 渲染后，滚动到上一页的距离
+													var newScroll = document.getElementById('chat_content').scrollHeight;
+													var dis = newScroll - scroll;
+													chatScrollTo(dis);
+												},100);
+											}
+										}
+										ismore = res.ismore;
+										loaded = true;
+										page++;
+									}
+								})
+							},
+							popShow(id){
+								page = 1;
+								this.cslog(id, 2);
+								$.layer({
+									type : 1,
+									title : '聊天记录',
+									area : ['500px','500px'],
+									page : {dom :"#pop_box"},
+									close: function(){
+										app.$data.logList = [];
+									}
+								});
+							}
+						}
+					});
+				$(function(){
+					getUnpick();
+				});
+				function getUnpick(){
+					parent.layer.load();
+					pickloaded = false;
+					$.post("index.php?m=admin_chat_custom&c=pickList",{ispick: ispick,timelimit:timelimit,page:listpage,pytoken: pytoken},function(data){
+						if(data){
+							parent.layer.closeAll();
+							pickloaded = true;
+							listpage++;
+							$("#custom").show();
+							var res = eval('(' + data + ')');
+							if(res.list.length > 0){
+								app.$data.pickList = app.$data.pickList.concat(res.list);
+								if(document.getElementById('chat_content')){
+									var scroll = document.getElementById('chat_content').scrollHeight;
+									chatScrollTo(scroll);
+								}
+							}
+						}
+					})
+				}
+			</script>
+	</body>
+</html>

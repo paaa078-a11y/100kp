@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 企业员工</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <style>
+        .shiTopAllTips span{overflow: hidden;display: block;font-size: 13px;color: #61687c;padding-bottom: 5px;}
+    </style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tty-tishi_top">
+            <div class="admin_new_search_box">
+                <form action="index.php" name="myform" method="get">
+                    <div>
+                        <input name="m" value="admin_workwx_list" type="hidden"/>
+                        <input class="admin_Filter_search" type="text" name="keyword" maxlength="25" placeholder="请输入您要搜索的员工ID"/>
+                        <input class="admin_new_bth" type="submit" name="work_search" value="查询"/>
+                    </div>
+                    <div class="adminNewEarch">
+                        <div class="admin_statistics">
+                            <em class="admin_statistics_s">员工数量 <a class="ajaxAllNum">0</a></em>
+                            <em class="admin_statistics_s">授权数量 <a class="ajaxSqNum">0</a></em>
+                            <span>搜索结果：{yun:}$total{/yun}</span>
+                            <div class="addEnterp" style="width: 96px;">
+                                <a href="javascript:;" onclick="syncWorkUserId(50, '');">同步企微</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="tty-tishi_top">
+        <div style="margin-top: 10px;overflow: hidden;padding: 20px 0 20px 20px;">
+            <div class="shiTopAllTips">
+                <span>
+                    <em style="font-weight: bold">员工信息：</em>
+                    企业员工通过扫码授权，获取员工个人信息（头像、手机号等）；未授权不展示员工信息；
+                    <a href="javascript:;" onclick="getCode();" style="font-size: 14px;color:#3a7dff;cursor: pointer;font-weight: bold;">授权二维码</a>
+                </span>
+                <span><em style="font-weight: bold">客户数量：</em> 员工已添加的客户数量，可通过列表后操作‘同步’，获取最新客户信息</span>
+                <span><em style="font-weight: bold">客户联系：</em> 企业微信后台 - 客户联系 - 权限配置 - 客户联系和客户群，员工在使用范围内即表示“已授权”；</span>
+            </div>
+        </div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                    <input name="m" value="admin_workwx_list" type="hidden"/>
+                    <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th width="25">
+                                <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label>
+                            </th>
+                            <th width="25">编号</th>
+                            <th width="250">员工ID</th>
+                            <th width="180">员工信息</th>
+                            <th align="center" width="100">客户数量</th>
+                            <th width="150">客户联系</th>
+                            <th>导入时间</th>
+                            <th width="80" align="center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$list{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                        <td>{yun:}$v.id{/yun}</td>
+                        <td>{yun:}$v.userid{/yun}</td>
+                        <td>
+                            {yun:}if !empty($v.mobile){/yun}
+                            <div style="display: flex;">
+                                <div onclick="showLarge('{yun:}$v.avatar{/yun}');">
+                                    <img src="{yun:}$v.avatar{/yun}" width="40" height="40" style="border-radius: 50%; margin-right: 5px;;">
+                                </div>
+                                <div style="display: flex;flex-direction: column;">
+                                    <span>{yun:}$v.name_n{/yun}</span>
+                                    <span style="padding-top: 3px;">{yun:}$v.mobile{/yun}</span>
+                                </div>
+                            </div>
+                            {yun:}else{/yun}
+                            <img style="padding-right: 3px;" src="images/state1.png"> 未授权
+                            {yun:}/if{/yun}
+                        </td>
+                        <td align="center">
+                            {yun:}$v.customer_num{/yun}
+                            <a href="index.php?m=admin_workwx_customer&userid={yun:}$v.userid{/yun}"><p style="color: #2778f8;"> 查看</p></a>
+                        </td>
+                        <td>
+                            <span>{yun:}$v.follow{/yun}</span>
+                        </td>
+                        <td>{yun:}$v.create_time_n{/yun}</td>
+                        <td align="center">
+                            <div class="operationSeries">
+                                <a href="javascript:;" onclick="syncCustomer(100, '', '{yun:}$v.userid{/yun}');">同步</a>
+                                <a href="index.php?m=admin_workwx_list&c=info&id={yun:}$v.userid{/yun}">详情</a>
+                            </div>
+                        </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/></td>
+                            <td colspan="7"><label for="chkAll2">全选</label>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="urlCodeDiv" style="display:none; width: 320px; ">
+        <div style="text-align: center;width: 100%; padding: 5px 0 10px 0;">请使用“企业微信”扫码授权</div>
+        <div id="workCode" class="admin_census"></div>
+        <div class="admin_census_bd">请将此二维码发送给员工</div>
+        <div class="admin_census_bd">授权完成刷新页面即可获取最新信息</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = 'index.php?m=admin_workwx_list&c=userNum';
+        $.get(url, function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.allNum) {
+                $('.ajaxAllNum').html(datas.allNum);
+            }
+            if (datas.sqNum) {
+                $('.ajaxSqNum').html(datas.sqNum);
+            }
+        });
+    });
+    function syncWorkUserId(limit, cursor) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('员工信息同步中，请稍候', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_list&c=syncWorkUserId", {
+            pytoken: pytoken,
+            limit: limit,
+            cursor: cursor
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+
+            if (data.errcode == 0) {
+
+                if (data.next_cursor) {
+
+                    syncWorkUserId(limit, data.next_cursor)
+                } else {
+
+                    parent.layer.close(ii);
+                    parent.layer.alert('员工信息同步成功', 9);
+                    location.reload();
+                }
+            } else {
+
+                parent.layer.close(ii);
+                parent.layer.alert(data.errmsg, 8);
+                return false;
+            }
+        })
+    }
+    function syncCustomer(limit, cursor, userid) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('客户信息同步中，请稍候', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_list&c=syncCustomer", {
+            pytoken: pytoken,
+            limit: limit,
+            cursor: cursor,
+            id: userid
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+
+            if (data.errcode == 0) {
+
+                if (data.next_cursor) {
+
+                    syncCustomer(limit, data.next_cursor, userid)
+                } else {
+
+                    parent.layer.close(ii);
+                    parent.layer.alert('客户信息同步成功', 9);
+                    location.reload();
+                }
+            } else {
+
+                parent.layer.close(ii);
+                parent.layer.alert(data.errmsg, 8);
+                return false;
+            }
+        })
+    }
+    function getCode() {
+
+        var pytoken = '{yun:}$pytoken{/yun}';
+        var qrCode = 'index.php?m=admin_workwx_list&c=getUrlCode&pytoken='+pytoken;
+        $('#workCode').html('<img src="'+qrCode+'" width="140" height="140">');
+        $.layer({
+            type: 1,
+            title: '信息授权',
+            offset: [($(window).height() - 600) / 2 + 'px', ''],
+            closeBtn: [0, true],
+            border: [10, 0.3, '#000', true],
+            area: ['320px', '330px'],
+            page: {dom: "#urlCodeDiv"}
+        });
+    }
+
+</script>
+</body>
+
+</html>

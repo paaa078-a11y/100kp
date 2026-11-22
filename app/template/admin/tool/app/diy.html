@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/js/Sortable.min.js"></script>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="移动端模板" name="app">
+                    <mouldapp ref="app"></mouldapp>
+                </el-tab-pane>
+                <el-tab-pane label="WAP端模板" name="wap">
+                    <mouldwap ref="wap"></mouldwap>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'app'
+            }
+        },
+        components: {
+            'mouldapp': httpVueLoader('./component/mouldapp.vue'),
+            'mouldwap': httpVueLoader('./component/mouldwap.vue'),
+        },
+        mounted() {
+            // app组件拖动排序
+            setTimeout(() => {
+                this.initsort()
+            }, 1500)
+        },
+        created: function() {
+            
+        },
+        methods: {
+            handleClick(tab) {
+                if (tab.name == 'wap') {
+                    this.$refs.wap.getinfo();
+                }
+            },
+            initsort() {
+                var _this = this
+                var $ul = document.querySelector('.tabSign .el-tabs__nav')
+                new Sortable($ul, {
+                    handle: '.el-icon-rank',
+                    onEnd: function(event) {
+                        //修改items数据顺序
+                        var newIndex = event.newIndex,
+                            oldIndex = event.oldIndex,
+                            $li = $ul.children[newIndex],
+                            $oldLi = $ul.children[oldIndex];
+                        if (newIndex < 7 || newIndex > _this.$refs.app.newsort.length + 6) {
+                            // 复原拖拽之前的 dom
+                            const items = event.from.getElementsByClassName('is-left');
+                            if (oldIndex > newIndex) {
+                                event.from.insertBefore(event.item, items[oldIndex + 1]);
+                            } else {
+                                event.from.insertBefore(event.item, items[oldIndex]);
+                            }
+                        } else {
+                            // 先删除移动的节点
+                            $ul.removeChild($li)
+                            // 再插入移动的节点到原有节点，还原了移动的操作
+                            if (newIndex > oldIndex) {
+                                $ul.insertBefore($li, $oldLi)
+                            } else {
+                                $ul.insertBefore($li, $oldLi.nextSibling)
+                            }
+                            var real_old = oldIndex - 7,
+                                real_new = newIndex - 7
+                            // 更新items数组
+                            var item = _this.$refs.app.newsort.splice(real_old, 1)
+                            _this.$refs.app.newsort.splice(real_new, 0, item[0])
+                            _this.$refs.app.sortChange()
+                            // 下一个tick就会走patch更新
+                        }
+                    },
+                    animation: 0,
+                })
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>

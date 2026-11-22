@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<script src="../../../admin/header.js"></script>
+	<script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+<div id="daohaapp" class="moduleElenAl">
+	<div class="moduleSeachs">
+		<div class="moduleSeachleft">
+			<div class="crmperforTips">
+				<span :class="searchForm.time=='' ? 'crmSpancur' : ''" @click="timeChange('')">全部</span>
+				<span :class="searchForm.time=='1' ? 'crmSpancur' : ''" @click="timeChange('1')">今天</span>
+				<span :class="searchForm.time=='2' ? 'crmSpancur' : ''" @click="timeChange('2')">昨天</span>
+				<span :class="searchForm.time=='3' ? 'crmSpancur' : ''" @click="timeChange('3')">本周</span>
+				<span :class="searchForm.time=='4' ? 'crmSpancur' : ''" @click="timeChange('4')">本月</span>
+			</div>
+		</div>
+		<div class="moduleSeachButn" style="display: flex;align-items: center;">
+			<el-button type="primary" icon="el-icon-document-add" size="mini" @click="recjobOpen('')">新增推广</el-button>
+		</div>
+	</div>
+	<div class="moduleElTable">
+		<el-table :data="list" border style="width: 100%" ref="tgTable"
+				  :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading">
+			<template slot="empty">
+				<p>{{dataText}}</p>
+			</template>
+			<el-table-column prop="time_n" label="推送日期" width="200">
+			</el-table-column>
+			<el-table-column prop="url" label="推送链接" width="">
+				<template slot-scope="scope">
+					<div>
+						<el-link :underline="false" type="primary" :href="scope.row.url"
+								 target="_blank">{{scope.row.url}}</el-link>
+					</div>
+				</template>
+			</el-table-column>
+			<el-table-column prop="jnum" label="关联职位数" width="120">
+			</el-table-column>
+			<el-table-column prop="auto_n" label="职位匹配方式" width="120">
+			</el-table-column>
+			<el-table-column prop="hits" label="链接点击数" width="120">
+			</el-table-column>
+			<el-table-column fixed="right" label="操作" width="200"  align="center">
+				<template slot-scope="scope">
+					<div class="cz_button">
+						<el-button size="small" @click="detailOpen(scope.row)">详细</el-button>
+						<el-button size="small" @click="recjobOpen(scope.row)">修改</el-button>
+						<el-button size="small" @click="del(scope.$index)" type="danger" >删除</el-button>
+					</div>
+				</template>
+			</el-table-column>
+		</el-table>
+	</div>
+	<div class="modulePaging">
+		<div class="modulecz modulePagButn">
+		</div>
+		<div class="modulePagNum">
+			<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+						   :current-page="page" :page-sizes="pageSizes" :page-size="limit"
+						   layout="total, sizes, prev, pager, next, jumper" :total="total">
+			</el-pagination>
+		</div>
+	</div>
+
+	<div class="modluDrawer">
+		<el-drawer title="推荐职位" :visible.sync="recjob_show" append-to-body :show-close="true"
+				   :with-header="true" size="90%" @closed="recjobClosed">
+			<crmjob :key="timer" :lid="detail ? detail.id : ''"></crmjob>
+		</el-drawer>
+		<el-drawer title="推送详情" :visible.sync="drawerDetail" append-to-body :show-close="true"
+				   :with-header="true" size="70%">
+			<detail :id="detail ? detail.id : ''"></detail>
+		</el-drawer>
+	</div>
+</div>
+
+<!-- script -->
+<script src="../../js/base64ToFile.js"></script>
+<script>
+	const custoapp = new Vue({
+		el: '#daohaapp',
+		data: function () {
+			return {
+				loading: false,
+				dataText: '数据加载中',
+				// 搜索筛选项
+				searchForm: {
+					time: ''
+				},
+
+				// 列表
+                prevPage: 0,
+				page: 1,
+				limit: 0,
+				list: [],
+				total: 0,
+				pageSizes: [],
+
+				detail: null,
+
+				// 推荐职位
+				timer: 0,
+				recjob_show: false,
+
+				// 推送详细
+				drawerDetail: false,
+			}
+		},
+		components: {
+			'crmjob': httpVueLoader('../component/crmjob.vue'),
+			'detail': httpVueLoader('./component/recJobDetail.vue'),
+		},
+		created: function () {
+			var that = this
+			let query = window.parent.homeapp.$route.query;
+
+			if (!$.isEmptyObject(query)) {
+				if (query.time) {
+					that.searchForm.time = query.time;
+				}
+			}
+
+			this.getList();
+		},
+		methods: {
+			handleSizeChange(val) {
+				this.limit = val;
+				this.getList();
+			},
+			handleCurrentChange(val) {
+				this.page = val;
+				this.getList();
+			},
+			timeChange(time) {
+				this.searchForm.time = time;
+				this.search();
+			},
+			search() {
+				this.page = 1;
+				this.getList();
+			},
+			getList() {
+				let that = this,
+					searchForm = that.searchForm,
+					params = {
+						page: that.page,
+						limit: that.limit,
+					};
+				that.loading = true;
+
+				httpPost('m=crm&c=crm_index&a=recJob', {...params, ...searchForm}).then(function (response) {
+					let res = response.data,
+							data = res.data;
+
+					that.list = data.list;
+					that.total = parseInt(data.total);
+					that.pageSizes = data.page_sizes;
+					if (that.limit === 0) {
+						that.limit = parseInt(data.limit); // 取系统配置默认数量
+					}
+					if (that.page > data.page) {
+						that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+					}
+                    if(that.prevPage != that.page){
+                        that.prevPage = that.page;
+                        that.$refs.tgTable.bodyWrapper.scrollTop = 0;
+                    }
+					that.loading = false;
+					if (that.list.length === 0) {
+						that.dataText = "暂无数据";
+					}
+				})
+			},
+
+			del(idx) {
+				let that = this,
+					params = {
+						del: that.list[idx].id
+					};
+
+				delConfirm(this, params, function (params) {
+					httpPost('m=crm&c=crm_index&a=delRecJob', params).then(function(res) {
+						if (res.data.error > 0) {
+							message.error(res.data.msg);
+						} else {
+							message.success(res.data.msg, function () {
+								that.getList();
+							});
+						}
+					})
+				})
+			},
+
+			// 推荐职位
+			recjobOpen: function (row) {
+				this.timer = new Date().getTime();
+				this.detail = row ? row : null;
+				this.recjob_show = true;
+			},
+			recjobClosed: function () {
+				this.getList();
+			},
+
+			// 推送详细
+			detailOpen(row) {
+				this.detail = row;
+				this.drawerDetail = true;
+			},
+
+			inputIntNumber(val, form, key) {
+				this.$data[form][key] = val.replace(/[^0-9]/g,'');
+			},
+			inputFloatNumber(val, form, key) {
+				this.$data[form][key] = val.replace(/[^0-9.]/g,'');
+			},
+			openAdd() {
+				this.dialogAdd = true;
+			},
+			add() {
+				let that = this,
+						params = that.ruleFormAdd;
+
+				if (params.quota === '') {
+					message.warning('请输入额度');
+					return;
+				}
+				if (params.num === '') {
+					message.warning('请输入生成数量');
+					return;
+				}
+				if (params.stime === '') {
+					message.warning('请选择开始时间');
+					return;
+				}
+				if (params.etime === '') {
+					message.warning('请选择结束时间');
+					return;
+				}
+
+				if (params.stime > params.etime) {
+					message.warning('开始时间不得大于结束时间');
+					return false;
+				}
+
+				if (that.saveLoading) {
+					return false;
+				}
+				that.saveLoading = true;
+
+				params.stime = formatDatetime(params.stime);
+				params.etime = formatDatetime(params.etime);
+
+				httpPost('m=yunying&c=coupon_prepaid&a=add', params).then(function (response) {
+					let res = response.data;
+
+					if (res.error > 0) {
+						that.saveLoading = false;
+						message.error(res.msg);
+					} else {
+						that.dialogAdd = false;
+						that.getList();
+						message.success(res.msg, function () {
+							that.saveLoading = false;
+							that.ruleFormAdd = {quota: '', num: '', stime: '', etime: '', type: 1};
+						});
+					}
+				})
+			},
+
+			openEdit(data) {
+				this.dialogEdit = true;
+				this.ruleFormEdit = {
+					id: data.id,
+					card: data.card,
+					password: data.password,
+					quota: data.quota,
+					stime: new Date(data.stime_n.replace('-', '/').replace('-', '/')),
+					etime: new Date(data.etime_n.replace('-', '/').replace('-', '/')),
+					type: parseInt(data.type)
+				};
+			},
+			edit() {
+				let that = this,
+						params = that.ruleFormEdit;
+
+				if (params.password === '') {
+					message.warning('请输入密码');
+					return;
+				}
+				if (params.quota === '') {
+					message.warning('请输入额度');
+					return;
+				}
+				if (params.stime === '') {
+					message.warning('请选择开始时间');
+					return;
+				}
+				if (params.etime === '') {
+					message.warning('请选择结束时间');
+					return;
+				}
+
+				if (params.stime > params.etime) {
+					message.warning('开始时间不得大于结束时间');
+					return false;
+				}
+
+				if (that.saveLoading) {
+					return false;
+				}
+				that.saveLoading = true;
+
+				params.stime = formatDatetime(params.stime);
+				params.etime = formatDatetime(params.etime);
+
+				httpPost('m=yunying&c=coupon_prepaid&a=upcard', params).then(function (response) {
+					let res = response.data;
+
+					if (res.error > 0) {
+						that.saveLoading = false;
+						message.error(res.msg);
+					} else {
+						that.dialogEdit = false;
+						that.getList();
+						message.success(res.msg, function () {
+							that.saveLoading = false;
+							that.ruleFormEdit = {id: '', card: '', password: '', quota: '', stime: '', etime: '', type: 1};
+						});
+					}
+				})
+			},
+		}
+	});
+</script>
+</body>
+
+</html>
+<style>
+	.el-dialog__body {
+		padding: 0px 20px;
+	}
+	.wxsettip_select .el-select{WIDTH:100%}
+</style>

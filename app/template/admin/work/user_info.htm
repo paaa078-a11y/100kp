@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 企业员工详情</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+    .shiTopAllTips span{
+        overflow: hidden;
+        display: block;
+        font-size: 13px;
+        color: #61687c;
+        padding-bottom: 5px;
+    }
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get">
+                <input type="hidden" name="m" value="admin_workwx_list"/>
+                <input type="hidden" name="c" value="info"/>
+                <input type="hidden" name="id" value="{yun:}$id{/yun}"/>
+                <div>
+                    <input type="text" name="time" class="admin_Filter_search " id="time" placeholder="请筛选日期范围">
+                    <input class="admin_new_bth" type="submit" value="查询"/>
+                </div>
+                <div class="adminNewEarch">
+                    <div class="admin_statistics">
+                        <span class="admin_statistics_s">聊天总人数：{yun:}$chat_cnt{/yun}</span>
+                        <span class="admin_statistics_s">发送消息总数：{yun:}$message_cnt{/yun}</span>
+                        <span class="admin_statistics_s">流失总数：{yun:}$negative_feedback_cnt{/yun}</span>
+                        <span class="admin_statistics_s">发起申请数：{yun:}$new_apply_cnt{/yun}</span>
+                        <span class="admin_statistics_s">新增客户数：{yun:}$new_contact_cnt{/yun}</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="tty-tishi_top">
+        <div style="margin-top: 10px;overflow: hidden;padding: 20px 0 20px 20px;">
+            <div class="shiTopAllTips">
+                <span><em style="font-weight: bold">日期范围：</em>支持的最大查询跨度为30天，用户最多可获取最近180天内的数据</span>
+                <span></span>
+                <span><em style="font-weight: bold">1、发起申请数：</em>成员通过「搜索手机号」、「扫一扫」、「从微信好友中添加」、「从群聊中添加」、「添加共享、分配给我的客户」、「添加单向、双向删除好友关系的好友」、「从新的联系人推荐中添加」等渠道主动向客户发起的好友申请数量。</span>
+                <span><em style="font-weight: bold">2、新增客户数：</em>成员新添加的客户数量。</span>
+                <span><em style="font-weight: bold">3、聊天总数：</em>成员有主动发送过消息的单聊总数。</span>
+                <span><em style="font-weight: bold">4、发送消息数：</em>成员在单聊中发送的消息总数。</span>
+                <span><em style="font-weight: bold">5、已回复聊天占比：</em>客户主动发起聊天后，成员在一个自然日内有回复过消息的聊天数/客户主动发起的聊天数比例，不包括群聊。</span>
+                <span><em style="font-weight: bold">6、平均首次回复时长：</em>客户主动发起聊天后，成员在一个自然日内首次回复的时长间隔为首次回复时长，所有聊天的首次回复总时长/已回复的聊天总数即为平均首次回复时长，不包括群聊。</span>
+                <span><em style="font-weight: bold">7、流失客户数：</em>将成员删除或加入黑名单的客户数。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th>日期</th>
+                            <th>发起申请数</th>
+                            <th>新增客户数</th>
+                            <th>聊天总数</th>
+                            <th>发送消息数</th>
+                            <th>已回复聊天占比</th>
+                            <th>平均首次回复时长</th>
+                            <th>流失客户数</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$behavior_data{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td>{yun:}$v.time_n{/yun}</td>
+                            <td>{yun:}$v.new_apply_cnt{/yun}</td>
+                            <td>{yun:}$v.new_contact_cnt{/yun}</td>
+                            <td>{yun:}$v.chat_cnt{/yun}</td>
+                            <td>{yun:}$v.message_cnt{/yun}</td>
+                            <td>{yun:}if $v.reply_percentage{/yun}{yun:}$v.reply_percentage{/yun}{yun:}else{/yun}0{yun:}/if{/yun}%</td>
+                            <td>{yun:}if $v.avg_reply_time{/yun}{yun:}$v.avg_reply_time{/yun}{yun:}else{/yun}0{yun:}/if{/yun}分钟</td>
+                            <td>{yun:}$v.negative_feedback_cnt{/yun}</td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        {yun:}if empty($behavior_data){/yun}
+                        <tr>
+                            <td colspan="8" align="center">暂无数据</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#time'
+            , min: -180
+            , max: 0
+            , range: '~'
+            , format: 'yyyy-MM-dd'
+            , done: function (value, date, endDate) {
+
+                var dateOneObj = new Date(date.year, date.month, date.date);
+                var dateTwoObj = new Date(endDate.year, endDate.month, endDate.date);
+
+                var days = Math.floor((dateTwoObj.getTime() - dateOneObj.getTime()) / (1000 * 60 * 60 * 24));
+
+                if (parseInt(days) > 30) {
+
+                    parent.layer.alert('支持的最大查询跨度为30天，请重新选择时间范围', 8);
+                    return false;
+                }
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

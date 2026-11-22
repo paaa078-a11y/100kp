@@ -1,0 +1,824 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <title>{yun:}$title{/yun}</title>
+    <meta name="keywords" content="{yun:}$keywords{/yun},wap" />
+    <meta name="description" content="{yun:}$description{/yun}" />
+    <meta http-equiv="X-UA-compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" initial-scale="1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no,email=no" />
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no, width=device-width" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/app/template/wap/css/mycss.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <link href="{yun:}$wap_style{/yun}/css/yunwap.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+    <script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}" charset="utf-8"></script>
+    <script src="{yun:}$wap_style{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}" charset="utf-8"></script>
+	<style type="text/css">
+		.liveAboutCont img{max-width: 100%;}
+	</style>
+</head>
+
+<body>
+    <!-- start -->
+    <section class="subjectFlexse">
+        <!-- 头部主题切换 -->
+		{yun:}if $info.recordurl && $info.playback == 1{/yun}
+		<div class="liveTopsAll">
+			<div class="themeSwitch">
+			    <div class="themeSwitNavs">
+			        <div class="themeSwitNavClisk">
+			            <a href="javascript:history.go(-1)" style="display: block;"><img src="{yun:}$wap_style{/yun}/images/live/Vector2.png" alt=""></a>
+			        </div>
+			        <div class="themeSwitNumber">
+			            <img src="{yun:}$wap_style{/yun}/images/live/Frame2.png" alt="">
+			            <span><script src="{yun:}url m=wap c=xjhlive a=GetHits id=$info.id hits=$info.hits{/yun}" ></script></span>
+			        </div>
+			    </div>
+			</div>
+			<div id="playered" class="liveTopImg player-size liveTopEnds">
+				<div>
+					<p>直播已结束</p>
+					<span>谢谢您的观看</span>
+				</div>
+			</div>
+			<input type="hidden" id="playurl" value="{yun:}$info.recordurl{/yun}" />
+		</div>
+		{yun:}else{/yun}
+		<div class="liveTopsAll" id="livebox">
+            <div class="themeSwitch">
+                <div class="themeSwitNavs">
+                    <div class="themeSwitNavClisk">
+                        <a href="javascript:history.go(-1)" style="display: block;"><img src="{yun:}$wap_style{/yun}/images/live/Vector2.png" alt=""></a>
+                    </div>
+                    <div class="themeSwitNumber">
+                        <img src="{yun:}$wap_style{/yun}/images/live/Frame2.png" alt="">
+                        <span id="looknum"><script src="{yun:}url m=wap c=xjhlive a=GetHits id=$info.id hits=$info.hits{/yun}" ></script></span>
+                    </div>
+                </div>
+            </div>
+            <div id="poster" class="liveTopImg {yun:}if $info.livestatus == 3{/yun}none{yun:}/if{/yun}">
+				<div class="swiper-container" id="imgswiper">
+					<div class="swiper-wrapper">
+						{yun:}foreach item=pic from=$info.picarr{/yun}
+						<div class="swiper-slide" >
+						<img src="{yun:}$pic.url{/yun}" />
+						</div>
+						{yun:}/foreach{/yun}
+					</div>
+					<!-- 如果需要分页器 -->
+					<div class="swiper-pagination"></div>
+				</div>
+            </div>
+			{yun:}if $info.livestatus == 3{/yun}
+			<!--  直播 -->
+			<div class="liveTopImg" id="livediv">
+				
+			</div>
+			{yun:}/if{/yun}
+			<input type="hidden" id="live_hls" value="{yun:}$info.hls{/yun}" />
+			<input type="hidden" id="live_stime" value="{yun:}$info.stime{/yun}" />
+			<input type="hidden" id="live_poster" value="{yun:}$config.sy_weburl{/yun}/app/template/wap/images/livewaiting.png" />
+        </div>
+			{yun:}if $info.livestatus == 1{/yun}
+		<!-- 倒计时 -->
+		<div class="countDownAll" id="waitbox">
+		    <div class="countDownConts">
+		        <div class="ownContsOne">
+		            <div class="ownContsOneKai">
+		                <span>距开播</span>
+		            </div>
+		            <div class="ownContsOneTian" id="waitshow">
+						<van-count-down :time="time" @finish="onFinish">
+							<template #default="timeData">
+								<span>{{ timeData.days }}</span><b>天</b>
+								<span>{{ timeData.hours }}</span><b>时</b>
+								<span>{{ timeData.minutes }}</span><b>分</b>
+								<span>{{ timeData.seconds }}</span><b>秒</b>
+							 </template>
+						</van-count-down>
+		            </div>
+		        </div>
+				{yun:}if $substatus==1{/yun}
+		        <div class="ownContsTwo">
+					<a href="javascript:void(0);" onclick="xjhyy('{yun:}$info.id{/yun}')">
+					    <img src="{yun:}$wap_style{/yun}/images/live/Vector3.png" alt="">
+					    <span>开播提醒</span>
+					</a>
+		        </div>
+				{yun:}elseif $substatus==2{/yun}
+				<div class="ownContsTwo">
+					<a href="javascript:void(0);">
+					    <img src="{yun:}$wap_style{/yun}/images/live/Vector3.png" alt="">
+					    <span>您已预约</span>
+					</a>
+				</div>
+				{yun:}/if{/yun}
+		    </div>
+		</div>
+			{yun:}/if{/yun}
+		{yun:}/if{/yun}
+        <!-- 主体内容 -->
+        <div class="liveSubjects none" id="xjhbox" style="{yun:}if $info.livestatus!=1{/yun}height: calc(100% - 5.7rem);{yun:}/if{/yun}">
+            <div class="liveSubTab">
+                <ul>
+                    <li :class="boxtab == 'chat' ? 'liveSubTabCur' : ''" @click.stop="boxClick('chat')">聊天互动</li>
+                    <li :class="boxtab == 'intro' ? 'liveSubTabCur' : ''" @click.stop="boxClick('intro')">直播介绍</li>
+                    <li :class="boxtab == 'com' ? 'liveSubTabCur' : ''" @click.stop="boxClick('com')">企业介绍</li>
+                </ul>
+            </div>
+            <div class="liveSubCont">
+				<!--聊天互动-start-->
+                <div id="hudong" class="liveSubList" :class="boxtab == 'chat' ? 'liveSubListOn' : ''">
+                    <div class="liveSubConInfo">
+						<!--点赞-->
+                        <div class="liveTelecast">
+                            <div class="liveNumber">
+                                <span v-if="zan>0">{{zan}}</span>
+                            </div>
+                            <div class="clickImage">
+                                <img src="{yun:}$style{/yun}/images/live/givea.png" class="journal-reward" />
+                            </div>
+                        </div>
+                        
+						<!--聊天内容-->
+                        <div class="liveSubChat" id="chat_content" @click.stop="chatOne = true">
+                            <!-- 公告提示 -->
+                            <div class="liveChatPrompt" v-if="notice">
+                                <span>{{notice}}</span>
+                            </div>
+                            <ul>
+                                <li v-for="(item,chatkey) in chatlist" :key="chatkey">
+                                    <div class="liveChatPhoto">
+                                        <img :src="item.avatar" alt="">
+                                    </div>
+                                    <div class="liveChatInfo">
+                                        <div class="liveChatInfoGuan">
+                                    		<h4>{{item.username}}</h4>
+                                    		<b v-if="item.usertype == 9">官方</b>
+                                    	</div>
+                                        <div class="liveChatInfoCont liveChatInfoZhus" v-if="item.msgtype == 'job' && item.job">
+                                            <div class="chatInfoAssist">
+                                                <div class="nfoAssOne">
+                                                    <p>{{item.job.name}}</p>
+                                                    <span>{{item.job.salary}}</span>
+                                                </div>
+                                                <div class="nfoAssTwo">
+                                                    <span>{{item.job.citystr}}·{{item.job.job_exp}}经验·{{item.job.job_edu}}学历</span>
+                                                </div>
+                                                <div class="nfoAssThre">
+                                                    <div class="nfoAssThreName">
+                                                        <img :src="item.job.logo" alt="">
+                                                        <span>{{item.job.com_name}}</span>
+                                                    </div>
+                                                    <div class="nfoAssThreLink"> <a @click="chatJob(item.job.id)">查看</a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+										<div class="liveChatInfoCont" v-else-if="item.msgtype == 'char'">
+										    <div class="chatInfoText">
+										        <div class="chatInfoDivs" v-html="item.content"></div>
+										        <!--img src="{yun:}$wap_style{/yun}/images/live/image-29.jpg" alt=""-->
+										    </div>
+										</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="liveSubConInput">
+                        <div v-if="chatOne && nochat == '0'" class="liveSubInput1">
+                            <div class="ubInput1Alls">
+                                <div class="liveSubInpshuru">
+                                    <input type="text" placeholder="说点什么..." readonly @click="chatClick">
+                                    <i @click="faceClick"></i>
+                                </div>
+                                <div class="liveSubInpIcos">
+                                    <div class="liveSubPiost" @click="liveComShow">
+                                        <img src="{yun:}$wap_style{/yun}/images/live/Group61.png" class="comPosButton" alt="">
+                                        <div class="liveZboz" v-if="livestatus == 3">
+                                            <img src="{yun:}$wap_style{/yun}/images/live/Vecto6.png" alt="">
+                                            <span>直播中</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <img id="shareClick" src="{yun:}$wap_style{/yun}/images/live/Group55.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!-- 禁止发言 -->
+						<div v-if="chatOne && nochat == '1'" class="liveSubInput2 liveSubInput2Cur">
+						    <div class="ubInput2Alls">
+						        <div class="liveSubInpshuru liveSubInpJinyan">
+						            <input type="text" placeholder="全员禁言中，无法发言" readonly>
+						            <i class="sendbq"></i>
+						            <div class="showbq none"></div>
+						        </div>
+						        <div class="liveSubInpIcos liveSubInpSous">
+						            <img src="{yun:}$wap_style{/yun}/images/live/Group122.png" alt="">
+						        </div>
+						    </div>
+						</div>
+                        <div v-if="!chatOne" class="liveSubInput2 liveSubInput2Cur">
+                            <div class="ubInput2Alls">
+                                <div class="liveSubInpshuru">
+                                    <input id="send_content" type="text" placeholder="说点什么..." :autofocus="sendFocus">
+                                    <i @click="faceClick" id="face" class="sendbq"></i>
+									<div id="commonly" class="showbq none"></div>
+                                </div>
+                                <div class="liveSubInpIcos liveSubInpSous" @click="sendChat">
+                                    <img src="{yun:}$wap_style{/yun}/images/live/Group122.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<!--聊天互动-end-->
+				<!--直播介绍-start-->
+                <div class="liveSubList" :class="boxtab == 'intro' ? 'liveSubListOn' : ''">
+                    <div class="liveSubAbout">
+                        <div class="liveAboutCont">
+                            <span v-html="xjhbody"></span>
+                        </div>
+                    </div>
+                </div>
+				<!--直播介绍-end-->
+				<!--招聘企业-start-->
+                <div class="liveSubList" :class="boxtab == 'com' ? 'liveSubListOn' : ''">
+                    <div class="liveCompanyAll">
+                        <ul>
+                            <li v-for="(item,comkey) in comlist" :key="comkey" @click="comClick(comkey)">
+                                <div class="liveComOne">
+                                    <div class="liveComOneImg">
+                                        <img :src="item.logo" alt="">
+                                    </div>
+                                    <div class="liveComOneData">
+                                        <a>{{item.comname}}</a>
+                                        <span>{{item.com_hy}} · {{item.com_mun}} · {{item.com_pr}}</span>
+                                    </div>
+                                </div>
+                                <div class="liveComTwo">
+                                    <div class="liveComTwoText">
+                                        <span>招聘</span>
+                                    </div>
+                                    <div class="liveComTwoMingc">
+                                        <span>{{item.jobname}}</span>
+                                    </div>
+                                    <div class="liveComTwoText">
+                                        <span>{{item.jobcount > 2 ? '等' :''}}{{item.jobcount}}个岗位</span>
+                                    </div>
+                                </div>
+                                <!-- 讲解中 -->
+                                <div class="liveComSuspen" v-if="item.status == 1 && livestatus == 3">
+                                    <div class="liveComSuspenOne"><img src="{yun:}$wap_style{/yun}/images/live/Group27.png" alt=""></div>
+                                    <div class="liveComSuspenTwo"><span href="">讲解中</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+				<!--招聘企业-end-->
+            </div>
+			<van-popup v-model="comBox" position="bottom" round :lock-scroll="false">
+				<!-- 企业弹窗 -->
+				<div class="companyPopup">
+				    <div class="compaOpupOne">
+				        <div class="compaOpupOneMing">
+				            <p>{{comdisplay.comname}}</p>
+				            <img @click="comClose" class="comClose" src="{yun:}$wap_style{/yun}/images/live/Vecto5.png" alt="">
+				        </div>
+				        <div class="compaOpupOneNub">
+				            <div class="pupOneNubPost">
+				                <p>在招职位<span>{{comdisplay.jobcount}}</span>个</p>
+				            </div>
+				            <div class="pupOneNubJie" v-if="comdisplay.status == 1">
+				                <img src="{yun:}$wap_style{/yun}/images/live/Vecto6.png" alt="">
+				                <span>讲解中</span>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="compaOpupTwo">
+				        <ul>
+				            <li v-for="(jitem,jobkey) in comdisplay.joblist" :key="jobkey" @click="jobClick(jobkey)">
+				                <div class="comOpuTwoInfo">
+				                    <div class="comTwoInfoName">
+				                        <h4 class="comShowLink">{{jitem.name}}</h4>
+				                        <p>{{jitem.salary}}</p>
+				                        <span>{{jitem.citystr}}·{{jitem.job_exp}}经验·{{jitem.job_edu}}学历</span>
+				                    </div>
+				                    <div class="comTwoInfoTips" v-if="jitem.job_welfare">
+										<template v-for="(witem,cjwkey) in jitem.job_welfare">
+											<span v-if="cjwkey < 5">{{witem}}</span>
+										</template>
+				                    </div>
+				                </div>
+				                <div class="comOpuTwoLink" @click.stop="apply(jitem.id)">
+				                    <a href="javascript:void(0);">投简历</a>
+				                </div>
+				            </li>
+				        </ul>
+				    </div>
+				</div>
+			</van-popup>
+			<van-popup v-model="jobBox" position="bottom" round :lock-scroll="false">
+				<!-- 职位详情弹窗 -->
+				<div class="comShowPopup">
+				    <div class="comShowTops">
+				        <p>岗位详情</p>
+				        <img @click="jobClose" class="comShowLose" src="{yun:}$wap_style{/yun}/images/live/Vecto5.png" alt="">
+				    </div>
+					
+				    <div class="comShowCenter">
+				        <div class="comShowInfo">
+				            <h4>{{jobdisplay.name}}</h4>
+				            <p>{{jobdisplay.salary}}</p>
+				            <div class="comShowInfoMab">
+				                <span>{{jobdisplay.citystr}}</span>
+				                <i></i>
+				                <span>{{jobdisplay.job_exp}}经验</span>
+				                <i></i>
+				                <span>{{jobdisplay.job_edu}}学历</span>
+				            </div>
+				        </div>
+				        <div class="comShowTipse" v-if="jobdisplay.job_welfare">
+							<template v-for="(jwitem,jwkey) in jobdisplay.job_welfare">
+								<span v-if="jwkey < 5">{{jwitem}}</span>
+							</template>
+				        </div>
+				        <div class="comShowConters">
+							<template v-if="jobdisplay.job_number || jobdisplay.job_age || jobdisplay.job_sex">
+								<div class="comConterOne">
+								    <span>职位要求</span>
+								</div>
+								<div class="comConterTwo">
+								    <span v-if="jobdisplay.job_number">招聘{{jobdisplay.job_number}}人</span>
+								    <span v-if="jobdisplay.job_age">{{jobdisplay.job_age}}</span>
+									<span v-if="jobdisplay.job_sex">性别：{{jobdisplay.job_sex}}</span>
+								</div>
+							</template>
+							<div class="comConterOne">
+							    <span>职位简介</span>
+							</div>
+				            <div class="comConterThree">
+				                <span v-html="jobdisplay.description"></span>
+				            </div>
+				        </div>
+				    </div>
+					<div class="comOpuTwoLink" @click.stop="apply(jobdisplay.id)">
+						<div class="pop_link">
+							<a href="javascript:void(0);">投简历</a>
+						</div>
+					</div>
+				</div>
+			</van-popup>
+			<van-popup v-model="resumeBox" position="bottom" round lock-scroll>
+				<!-- 简历弹窗布局 -->
+				<div class="comResumePopup">
+				    <div class="comShowTops">
+				        <p>我的简历</p>
+				        <img class="comResuLose" @click="resumeBox = false" src="{yun:}$wap_style{/yun}/images/live/Vecto5.png" alt="">
+				    </div>
+				    <div class="comResumeLogin">
+				        <a href="{yun:}url m=wap c=login{/yun}">
+				            <span>已有账号，直接登录</span>
+				            <img src="{yun:}$wap_style{/yun}/images/live/Vecto7.png" alt="">
+				        </a>
+				    </div>
+				    <div class="comResumeInput">
+				        <form id="firstSubmit">
+				            <div class="sumeInputList">
+				                <div class="sumeInputName"><span>姓 名<b>*</b></span></div>
+				                <div class="sumeInputConts">
+				                    <input type="text" name="uname" v-model="info.uname" placeholder="请输入您的真实姓名">
+				                </div>
+				            </div>
+				            <div class="sumeInputList" @click="sexShow = true">
+				                <div class="sumeInputName"><span>性 别<b>*</b></span></div>
+				                <div class="sumeInputConts">
+									<span v-if="info.sex_n">{{info.sex_n}}</span>
+									<span v-else>请选择性别</span>
+				                    <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+				                </div>
+								<input type="hidden" name="sex" :value="info.sex">
+				            </div>
+				            <div class="sumeInputList" @click="birthdayShow = true">
+				                <div class="sumeInputName"><span>出生年月<b>*</b></span></div>
+				                <div class="sumeInputConts">
+									<span v-if="info.birthYear">{{info.birthYear}}</span>
+				                    <span v-else>请选择出生年月</span>
+				                    <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+				                </div>
+								<input type="hidden"name="birthday" :value="info.birthday" />
+				            </div>
+				            <div class="sumeInputList" @click="eduPicker">
+				                <div class="sumeInputName"><span>最高学历<b>*</b></span></div>
+				                <div class="sumeInputConts">
+									<span v-if="info.edu_n">{{info.edu_n}}</span>
+				                    <span v-else>请选择最高学历</span>
+				                    <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+				                </div>
+								<input type="hidden" id="edu"name="edu" :value="info.edu" />
+				            </div>
+				            <div class="sumeInputList" @click="expPicker">
+				                <div class="sumeInputName"><span>工作经验<b>*</b></span></div>
+				                <div class="sumeInputConts sumeInputWork">
+									<span v-if="info.exp_n">{{info.exp_n}}</span>
+				                    <span v-else>请选择工作经验</span>
+				                    <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+				                </div>
+								<input type="hidden" id="exp" name="exp" :value="info.exp" />
+				            </div>
+				            <div class="sumeInputList">
+				                <div class="sumeInputName"><span>手 机 号<b>*</b></span></div>
+				                <div class="sumeInputConts">
+				                    <input type="number" name="telphone" v-model="info.telphone" placeholder="请输入手机号" oninput="value=value.replace(/^0|[\^d]/g,'')">
+				                </div>
+				            </div>
+							{yun:}if strpos($config.code_web,"注册会员")!==false && $config.code_kind == 1{/yun}
+							<div class="sumeInputList">
+								<div class="sumeInputName"><span>验 证 码<b>*</b></span></div>
+								<div class="sumeInputConts">
+									<input ame="authcode" v-model="info.authcode" placeholder="请输入验证码">
+									<div class="sumYanzm">
+										<img id="vcode_img" class="authcode" src="{yun:}$config.sy_wapdomain{/yun}/authcode.inc.php"
+											onclick="checkCode('vcode_img');" />
+									</div>
+								</div>
+							</div>
+							{yun:}/if{/yun}
+							{yun:}if $config.sy_msg_isopen==1 && $config.reg_real_name_check==1 && $config.sy_msg_regcode==1{/yun}
+							<div class="sumeInputList">
+							    <div class="sumeInputName"><span>短信验证<b>*</b></span></div>
+							    <div class="sumeInputConts">
+							        <input class="yanzenm" type="number" name="checkcode" oninput="value=value.replace(/^0|[\^d]/g,'')" v-model="info.checkcode" placeholder="请输入短信验证码">
+							        <span class="fasond" id="send_msg_tip" @click="getcode" v-if="codeview">获取验证码</span>
+									<span v-else>{{flag}}</span>
+							    </div>
+							</div>
+							{yun:}/if{/yun}
+				            <div class="sumeInputList">
+				                <div class="sumeInputName"><span>登录密码<b>*</b></span></div>
+				                <div class="sumeInputConts">
+				                    <input type="password" name="password" v-model="info.password" placeholder="请输入登录密码">
+				                </div>
+				            </div>
+				            <div class="sumeInpButton sumeInputWork">
+								{yun:}if $config.resume_create_project==1 || $config.resume_create_exp==1 || $config.resume_create_edu==1{/yun}
+				                <span id="nextadd" @click="firstSubmit">下一步</span>
+								{yun:}else{/yun}
+								<span id="applybtn" @click="firstSubmit">立即投递</span>
+								{yun:}/if{/yun}
+				            </div>
+				        </form>
+				    </div>
+				</div>
+			</van-popup>
+			<van-popup v-model="workBox" position="bottom" round lock-scroll>
+				<!-- 工作经历弹窗布局 -->
+				<div class="comWorkExperie">
+				    <div class="comWorkTops">
+				        <img class="comWorkGoblak" src="{yun:}$wap_style{/yun}/images/live/Vector7.png" alt="" @click="workBox = false">
+				        <p>工作经历</p>
+				        <img class="comWorkClose" src="{yun:}$wap_style{/yun}/images/live/Vecto5.png" alt="" @click="workBox = false">
+				    </div>
+				    <div class="comWorksInput">
+				        <form id="workSubmit">
+				            <div class="sumeInputSkip">
+				                <div class="sumeInputName"><span>暂无工作经历</span></div>
+				                <div class="sumeInputConts" @click="skipPage('work')">
+				                    <span>跳过</span>
+				                    <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+				                </div>
+				            </div>
+							<span v-for="(item, wk) in workList" :key="wk">
+								<div class="sumeInputList">
+								    <div class="sumeInputName"><span>公司名称<b>*</b></span></div>
+								    <div class="sumeInputConts">
+								        <input type="text" :name="'workname_' + wk" value="" placeholder="请输入公司名称">
+								    </div>
+								</div>
+								<div class="sumeInputList">
+								    <div class="sumeInputName"><span>担任职位<b>*</b></span></div>
+								    <div class="sumeInputConts">
+								        <input :name="'worktitle_' + wk" value="" placeholder="请输入担任职务">
+								    </div>
+								</div>
+								<div class="sumeInputList" @click="showContent('workList', wk)">
+								    <div class="sumeInputName"><span>工作内容<b style="opacity: 0.001;">*</b></span></div>
+								    <div class="sumeInputConts">
+										<span v-if="item.content">{{item.content}}</span>
+								        <span v-else>请填写工作内容</span>
+								        <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+								    </div>
+								</div>
+								<div class="sumeInputList" @click="timeShow('workList', wk, 'sdate')">
+								    <div class="sumeInputName"><span>入职时间<b>*</b></span></div>
+								    <div class="sumeInputConts">
+										<span v-if="item.sdate">{{item.sdate}}</span>
+								        <span v-else>请选择</span>
+								        <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+								    </div>
+									<input type="hidden" :name="'worksdate_' + wk" :value="item.sdate">
+								</div>
+								<div class="sumeInputList" @click="timeShow('workList', wk, 'edate')">
+								    <div class="sumeInputName"><span>离职时间<b>*</b></span></div>
+								    <div class="sumeInputConts">
+								        <span v-if="item.edate">{{item.edate}}</span>
+								        <span v-else>请选择</span>
+								        <img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+								    </div>
+									<input type="hidden" :name="'workedate_' + wk" :value="item.edate">
+									<input type="hidden" :name="'totoday_' + wk" :value="item.totoday">
+								</div>
+							</span>
+				            <div class="sumeInpButton sumeInpClick" @click="workSubmit">
+								{yun:}if $config.resume_create_edu=='1'{/yun}
+								<span>下一步</span>
+								{yun:}else{/yun}
+								<span>立即投递</span>
+								{yun:}/if{/yun}
+				            </div>
+				        </form>
+				    </div>
+				</div>
+			</van-popup>
+			<van-popup v-model="eduBox" position="bottom" round lock-scroll>
+				<!-- 教育经历弹窗布局 -->
+				<div class="comEducational">
+					<div class="comWorkTops">
+						<img class="comEducatGoblak" src="{yun:}$wap_style{/yun}/images/live/Vector7.png" alt="" @click="eduBox = false">
+						<p>教育经历</p>
+						<img class="comEducatClose" src="{yun:}$wap_style{/yun}/images/live/Vecto5.png" alt="" @click="eduBox = false">
+					</div>
+					<div class="comWorksInput">
+						<form id="eduSubmit">
+							<div class="sumeInputSkip">
+								<div class="sumeInputName"><span>暂无教育经历</span></div>
+								<div class="sumeInputConts" @click="skipPage('edu')">
+									<span>跳过</span>
+									<img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+								</div>
+							</div>
+							<span v-for="(item, ek) in eduList" :key="ek">
+								<div class="sumeInputList">
+									<div class="sumeInputName"><span>学校名称<b>*</b></span></div>
+									<div class="sumeInputConts">
+										<input type="text" :name="'eduname_' + ek" value="" placeholder="请输入学校名称">
+									</div>
+								</div>
+								<div class="sumeInputList">
+									<div class="sumeInputName"><span>专业名称<b style="opacity: 0.001;">*</b></span></div>
+									<div class="sumeInputConts">
+										<input type="text" :name="'specialty_' + ek" value="" placeholder="请输入专业名称">
+									</div>
+								</div>
+								<div class="sumeInputList" @click="eduPicker(ek)">
+									<div class="sumeInputName"><span>最高学历<b style="opacity: 0.001;">*</b></span></div>
+									<div class="sumeInputConts">
+										<span v-if="item.edu">{{item.edu}}</span>
+										<span v-else>请选择学历</span>
+										<img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+									</div>
+									<input type="hidden" :name="'eduid_' + ek" :value="item.eduid">
+								</div>
+								<div class="sumeInputList" @click="timeShow('eduList', ek, 'sdate')">
+									<div class="sumeInputName"><span>入学时间<b>*</b></span></div>
+									<div class="sumeInputConts">
+										<span v-if="item.sdate">{{item.sdate}}</span>
+										<span v-else>请选择</span>
+										<img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+									</div>
+									<input type="hidden" :name="'edusdate_' + ek" :value="item.sdate">
+								</div>
+								<div class="sumeInputList" @click="timeShow('eduList', ek, 'edate')">
+									<div class="sumeInputName"><span>离校时间<b>*</b></span></div>
+									<div class="sumeInputConts">
+										<span v-if="item.edate">{{item.edate}}</span>
+										<span v-else>请选择</span>
+										<img src="{yun:}$wap_style{/yun}/images/live/Vecto8.png" alt="">
+									</div>
+									<input type="hidden" :name="'eduedate_' + ek" :value="item.edate">
+								</div>
+							</span>
+							<div class="sumeInpButton" @click="eduSubmit">
+								<span>立即投递</span>
+							</div>
+						</form>
+					</div>
+				</div>
+			</van-popup>
+			<van-popup v-model="birthdayShow" round position="bottom">
+				<van-datetime-picker v-model="currentYear" type="date" :min-date="minYear" :max-date="maxYear"
+					@cancel="birthdayShow = false" @confirm="birthdayConfirm" />
+			</van-popup>
+			<van-popup v-model="sexShow" round position="bottom">
+				<van-picker show-toolbar :columns="sex" :default-index="sexIndex" @cancel="sexShow = false"
+					@confirm="sexConfirm" />
+			</van-popup>
+			<van-popup v-model="eduShow" round position="bottom">
+				<van-picker show-toolbar :columns="edu" :default-index="eduIndex" @cancel="eduShow = false"
+					@confirm="eduConfirm" />
+			</van-popup>
+			<van-popup v-model="expShow" round position="bottom">
+				<van-picker show-toolbar :columns="exp" :default-index="expIndex" @cancel="expShow = false"
+					@confirm="expConfirm" />
+			</van-popup>
+			<!--开始、结束时间选择器-->
+			<van-popup v-model="timeBox" round position="bottom">
+				<van-picker show-toolbar :columns="timeData" @cancel="timeBox = false" @confirm="timeConfirm"
+					@change="timeChange" />
+			</van-popup>
+			<!--描述-->
+			<van-popup v-model="contentBox" position="bottom" round :style="{ height: 'auto',width:'100%',backgroundColor:'#f3f3f3'}">
+				<!-- 页面头部 -->
+                <div class="contentBoxAllsd">
+    				<div class="fast_box_header">
+    					<div class="fast_box_headericon" @click="contentSubmit">
+    						<img src="{yun:}$wap_style{/yun}/images/nav_icon_return.png" alt="">
+    					</div>
+    					<div class="fast_box_header_p">{{contentTitle}}</div>
+    				</div>
+    				<div class="fast_textarea">
+    					<div class="fast_textarea_c">
+    						<textarea v-model="content" placeholder="请输入描述" class="fast_textarea_text"></textarea>
+    					</div>
+    					<div class="fast_bth" @click="contentSubmit">
+    						<div class="fast_bth_sub">确认</div>
+    					</div>
+    				</div>
+                </div>
+			</van-popup>
+			<van-popup v-model="yzmBox" position="center" round closeable :style="{  width:'65%' }">
+				<div class="yzm_box">
+					<div class="yzm_tit">验证码</div>
+					<div class="yzm_input">
+						<input type="text" @input="yzmInput" placeholder="请输入下方验证码" />
+					</div>
+					<div class="yzm_input_img">
+						<img id="vcode_imgs" :src="code_url" onclick="checkCode('vcode_imgs');" />
+					</div>
+				</div>
+			</van-popup>
+            
+			<van-popup v-model="ewmBox" position="center" round @closed="ewmClose" class="weChatFlwx" :style="{'z-index': '100000'}">
+				<div class="wx_bdtck_pic">
+					<img :src="ewmurl" width="180" height="180">
+				</div>
+				<div class="wx_bdtck_p">关注公众号及时接收面试消息</div>
+			</van-popup>
+			<van-dialog v-model="xjhyyQrcodeBoxShow" title="开播提醒" :show-confirm-button="false" :before-close="xjhyyClose" close-on-click-overlay>
+    			<div class="tel_wxqrcodebox">
+    				<div id="tel_wxqrcode" class="tel_wxqrcodebox_ewm" v-html="xjhyyQrcode"></div>
+    				<div class="tel_wxqrcodebox_p">长按识别二维码预约开播提醒</div>
+    			</div>
+    		</van-dialog>
+        </div>
+    </section>
+	
+	<div id="xjhbody" class="none">{yun:}$info.body{/yun}</div>
+	<link rel="stylesheet" href="{yun:}$wap_style{/yun}/js/swiper/swiper.min.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script src="{yun:}$wap_style{/yun}/js/swiper/swiper.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	{yun:}if $info.livestatus == 2{/yun}
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/qiniu-web-player-1.2.3.js"></script>
+	<style>
+		.player-size {
+			width: 100%;
+			height: 220px;
+		}
+		@media screen and (max-width: 640px) {
+			.player-size {
+				width: 100%;
+				height: 220px;
+			}
+		}
+		.van-count-down{color: #f7f8fa}
+	</style>
+	{yun:}else{/yun}
+	<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.min.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/hls.min.1.1.5.js"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.v4.6.0.min.js"></script>
+	{yun:}/if{/yun}
+	<script>
+		'{yun:}if $config.sy_xjhlive_ext == 2{/yun}'
+		document.documentElement.setAttribute('theme', 'dark');
+		'{yun:}/if{/yun}'
+		
+		var zanImages = [
+			'{yun:}$wap_style{/yun}/images/live/apple.png',
+			'{yun:}$wap_style{/yun}/images/live/heart.png',
+			'{yun:}$wap_style{/yun}/images/live/praise.png',
+			'{yun:}$wap_style{/yun}/images/live/star.png',
+			'{yun:}$wap_style{/yun}/images/live/watermelon.png',
+		];
+		
+		var config = {
+			url: '{yun:}url m=wap c=xjhlive a=show id=$info.id{/yun}',
+			title: '{yun:}$info.name{/yun}-{yun:}$config.sy_webname{/yun}',
+			desc: '',
+			img: '{yun:}$info.pic_n{/yun}',
+			img_title: '{yun:}$info.name{/yun}',
+			from: '{yun:}$config.sy_webname{/yun}'
+		};
+		var weburl = "{yun:}$config.sy_weburl{/yun}";
+		var socketUrl = "{yun:}$config.sy_chat_weburl{/yun}",
+			wapurl = "{yun:}$config.sy_wapdomain{/yun}/",
+			mine = {
+				usertype: '{yun:}$usertype{/yun}'
+			},
+			xjhsyncid = '{yun:}$info.syncid{/yun}',
+			xjhid = '{yun:}$info.id{/yun}',
+			chat_name = '{yun:}$config.sy_chat_name{/yun}',
+			uid = '{yun:}$uid{/yun}',
+			livestatus = '{yun:}$info.livestatus{/yun}',
+			usertype = '{yun:}$usertype{/yun}',
+			eid = '{yun:}$eid{/yun}',
+			mbstyle = '{yun:}$wap_style{/yun}',
+			isweiixn = '{yun:}$isweixin{/yun}',
+			getwxurl = '{yun:}url m=wap c=login a=wxlogin{/yun}',
+			getwxstatusurl = '{yun:}url m=wap c=login a=getwxloginstatus{/yun}',
+			ewmurl = '{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_qcode{/yun}',
+			resumename = '{yun:}$config.sy_resumename_num{/yun}',
+			resume_create_exp = '{yun:}$config.resume_create_exp{/yun}',
+			resume_create_edu = '{yun:}$config.resume_create_edu{/yun}',
+			code_web = '{yun:}$config.code_web{/yun}',
+			code_kind = '{yun:}$config.code_kind{/yun}',
+			code_strlength = '{yun:}$config.code_strlength{/yun}',
+			code_url = '{yun:}$config.sy_wapdomain{/yun}/authcode.inc.php',
+			nochat = '{yun:}$info.nochat{/yun}',
+			vistor_nochat = '{yun:}$info.vistor_nochat{/yun}',
+			zan = '{yun:}$info.zan{/yun}';
+			
+		var myimgswiper = new Swiper('#imgswiper', {
+			direction: 'horizontal',
+			autoplay: true,
+			loop: true
+		});
+			
+		var sexData = [];
+		'{yun:}foreach item=v key=key from=$sexData{/yun}';
+		sexData.push({
+			value: '{yun:}$key{/yun}',
+			text: '{yun:}$v{/yun}'
+		});
+		'{yun:}/foreach{/yun}';
+		
+		function loadJs() {
+			let a = document.createElement('script');
+			a.src = "{yun:}$plusstyle{/yun}/user.cache.js?v={yun:}$config.cachecode{/yun}";
+			document.body.appendChild(a);
+		
+			let b = document.createElement('script');
+			b.src = "{yun:}$wap_style{/yun}/js/userPicker.js?v={yun:}$config.cachecode{/yun}";
+			document.body.appendChild(b);
+			
+			let c = document.createElement('script');
+			c.src = "{yun:}$plusstyle{/yun}/job.cache.js?v={yun:}$config.cachecode{/yun}";
+			document.body.appendChild(c);
+		}
+	</script>
+	{yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
+	
+	{yun:}if strpos($config.code_web,"注册会员")!==false{/yun}
+	{yun:}if $config.code_kind>2{/yun}
+	<div class="gtdx-captcha">
+		<input type='hidden' id="verify_token" name="verify_token" value="">
+		{yun:}if $config.code_kind == 6{/yun}
+		<input type='hidden' id="verify_str" name="verify_str" value="">
+		{yun:}/if{/yun}
+		<input type='hidden' id="popup-submit">
+		<input type='hidden' id="bind-submit">
+	</div>
+	{yun:}if $config.resume_create_project==1 || $config.resume_create_exp==1 || $config.resume_create_edu==1{/yun}
+	{yun:}if $config.sy_msg_isopen==1 && $config.sy_msg_regcode==1{/yun}
+	<div id="bind-captcha" data-id='send_msg_tip' data-type='click'></div>
+	{yun:}else{/yun}
+	<div id="bind-captcha" data-id='nextadd' data-type='click'></div>
+	{yun:}/if{/yun}
+	{yun:}else{/yun}
+	{yun:}if $config.sy_msg_isopen==1 && $config.sy_msg_regcode==1{/yun}
+	<div id="bind-captcha" data-id='send_msg_tip' data-type='click'></div>
+	{yun:}else{/yun}
+	<div id="bind-captcha" data-id='applybtn' data-type='click'></div>
+	{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}include file="$wapstyle/verify_js.htm"{/yun}
+	
+	<script src="{yun:}$wap_style{/yun}/js/xjhlive.js?v={yun:}$config.cachecode{/yun}" charset="utf-8"></script>
+	{yun:}if $config.sy_chat_open == 1{/yun}
+	<script src="{yun:}$wap_style{/yun}/chat/yunliao/xjhsocket.js?v={yun:}$config.cachecode{/yun}"></script>
+	{yun:}/if{/yun}
+	<script src="{yun:}$wap_style{/yun}/js/zhibos.js?v={yun:}$config.cachecode{/yun}" charset="utf-8"></script>
+    {yun:}if $config.sy_wx_sharelogo{/yun}
+    <!--微信分享专用-->
+    <div style='margin:0 auto;width:0px;height:0px;overflow:hidden;'><img src="{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_wx_sharelogo{/yun}"></div>
+    {yun:}/if{/yun}
+</body>
+
+</html>

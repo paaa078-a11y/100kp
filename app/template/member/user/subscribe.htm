@@ -1,0 +1,291 @@
+{yun:}include file="$userstyle/header.htm"{/yun}
+<script src="{yun:}$config.sy_weburl{/yun}/data/plus/job.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/data/plus/jobparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+<link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/newclass.public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script> 
+<div class="yun_w1200">
+    {yun:}include file="$userstyle/left.htm"{/yun}
+    <div class="yun_m_rightbox fltR mt20 re">
+        <div class="member_right_index_h1 fltL">
+            <span class="member_right_h1_span fltL">订阅管理</span>
+            <i class="member_right_h1_icon user_bg"></i>
+        </div>
+        <div class="resume_Prompt_box">
+            <div class="resume_Prompt">
+                <i class="resume_Prompt_icon"></i>订阅职位，系统会根据您订阅的职位信息，按照您设定的条件自动发送到你的邮箱！
+                {yun:}if empty($rows){/yun}
+                <a class="cblue" href="javascript:;" onclick='toSubscribe();'>立即订阅</a>
+                {yun:}/if{/yun}
+            </div>
+        </div>
+        <div class="remindbox01 mt10">
+            <div id="gms_showclew"></div>
+            <form action="index.php" method="get" target="supportiframe" id='myform' class="layui-form">
+                <input type="hidden" name="c" value="subscribe"/>
+                <input type="hidden" name="act" value="del"/>
+                <div class="resumelistbox01 mt10">
+                    <div class="resume_box_list">
+                        {yun:}if !empty($rows){/yun}
+                        <div class="jobsubscribe_list_tit">
+                            <div class="jobsubscribe_list_span jobsubscribe_listcheck">&nbsp;</div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobname">职位类别</div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobzq">发送周期</div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobcz">操作</div>
+                        </div>
+                        {yun:}/if{/yun}
+                        {yun:}foreach item=v from=$rows{/yun}
+                        <div class="jobsubscribe_list_list">
+                            <div class="jobsubscribe_list_span jobsubscribe_listcheck">
+                                <input type="checkbox" name="del[]" value="{yun:}$v.id{/yun}" class="jobsubscribe_listcheckbox" lay-skin="primary" />
+                            </div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobname">
+                                <span class="List_Title_span_com">{yun:}$v.jobname{/yun}</span>&nbsp;
+                            </div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobzq">&nbsp;{yun:}$v.time{/yun}天</div>
+                            <div class="jobsubscribe_list_span jobsubscribe_list_jobcz">
+                                <a href="index.php?c=subscribe&act=record&id={yun:}$v.id{/yun}" class="List_dete cblue">发送记录</a>
+                                <em class="jobnotice_cz_line">|</em>
+                                <a href="javascript:void(0);" onclick="editSub('{yun:}$v.id{/yun}','{yun:}$v.time{/yun}','{yun:}$v.jobclass_id{/yun}');" class="List_dete cblue"> 修改</a>
+                                <em class="jobnotice_cz_line">|</em>
+                                <a href="javascript:void(0)" onclick="layer_del('确定要删除？','index.php?c=subscribe&act=del&id={yun:}$v.id{/yun}');" class="List_dete cblue"> 删除</a>
+                            </div>
+                        </div>
+                        {yun:}foreachelse{/yun}
+                        <div class="msg_no">
+                            <p>亲爱的用户，您还没有订阅职位哦，想要获得更多工作机会</p>
+                            <p>立即订阅职位吧！</p>
+                            <a class="msg_no_sq uesr_submit" href="javascript:;" onclick='toSubscribe();'>立即订阅</a>
+                        </div>
+                        {yun:}/foreach{/yun}
+                        {yun:}if $rows{/yun}
+                        <div class="job_operation_bot" style="padding:10px 0;">
+                            <input id="checkAll" type="checkbox" lay-skin="primary" lay-filter="alluser" class="job_operation_botcheckbox">
+                            <input type="button" name="subdel" value="批量删除" onclick="return really('del[]');" class="job_operation_bth">
+                        </div>
+                        <div class="diggg">{yun:}$pagenav{/yun}</div>
+                        {yun:}/if{/yun}
+                    </div>
+                </div>
+                <input type="hidden" id="jionly" name="jionly" value="{yun:}$jionly{/yun}">
+            </form>
+        </div>
+    </div>
+</div>
+<div id="bdwx" style="display:none;">
+    <div class="yun_wxbd_tit">关注微信公众号，找工作快人一步</div>
+    <div class="yun_wxbd_box">
+        <div class="yun_wxbd_img_c">
+            <div class="yun_wxbd_img" id="wx_login_qrcode"></div>
+        </div>
+        <div id="wx_sx" class="none">
+            <div class="wx_login_show_sxbox">
+                <a href="javascript:;" onclick="getwxbindcode();" class="wx_login_show_sxicon"></a>二维码已失效点击刷新
+            </div>
+        </div>
+        <div class="yun_wxbd_p">微信扫码关注公众号</div>
+        <div class="yun_wxbd_ok">
+            <a class="close_yd" href="javascript:void(0)">好，知道了</a>
+        </div>
+    </div>
+</div>
+
+<div id="subbox" style="display:none;">
+	<div class="dingyutit">职位订阅</div>
+    <div class="dingyutit_p">筛选订阅条件，实现精准匹配</div>
+	<div class="dingyutext"><span class="dingyuname">发送周期：</span>
+	    <input type="hidden" id="timeid" name="time" value="" />
+	    <span id="time1" class="m_name_tag  time" onclick="ck_box('1','time')" >每天 </span>
+	    <span id="time3" class="m_name_tag  time" onclick="ck_box('3','time')" >3天 </span>
+	    <span id="time7" class="m_name_tag  time" onclick="ck_box('7','time')" >7天</span>
+	</div>
+    <div class="dingyutext dingyutextzn" >
+        <span class="dingyuname">工作职能：</span>        
+        <div class="yun_resume_popup_chose_box news_expect_text_new  news_expect_text_re10" style="width:384px;"> 
+            <select id="jobclass_search" name="jobclass_search" xm-select-type="jobclass" xm-select="jobclass_search" xm-select-search="" xm-select-max="5" xm-select-skin="default" xm-select-direction="down">
+                <option value="">输入搜索，最多选5项</option>
+            </select>
+            {yun:}if $jionly!='1'{/yun}
+            <div onclick="index_job_new(5,'#workadds_job','#job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="选择职位类别"></div>
+            {yun:}/if{/yun}
+            <input type="hidden" name="job_class" id="job_class" value=""/>
+        </div>
+    </div>
+    
+    <div class="dingyubth">
+          <input id="sid" name='sid' type='hidden' value='' />
+        <input type="button" value="立即订阅" onclick="subpost();" class="dingyubth_bot" /></div>
+    </div>
+</div>
+<style>
+	.dingyutext{  display: flex;padding:12px 12px 0px 12px}
+	.dingyuname{ display: block;width:80px;line-height:30px; padding-left: 10px;;  }
+	.dingyubth{text-align:center;}
+	.dingyutextzn{width:;min-height:80px;}
+	.dingyutext .m_name_tag{width:80px;height:30px; line-height:30px;     text-align: center;;border:1px solid #E6E6E6; margin-right: 10px; cursor: pointer;}
+	.dingyutext .m_name_tag01{border:1px solid #06a7ff;color:#06a7ff}
+	.dingyutit{ font-size: 18px;padding:15px 0px 10px 15px;}
+	.dingyutit_p{ padding-left: 15px;color:#999; padding-bottom: 15px;;}
+	.dingyubth_bot{width:150px;height:40px; background-color:#06a7ff;color:#fff;border:none;border-radius:30px}
+	.List_Title_span_com{ font-weight: bold; margin-left: 5px;;}
+</style>
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/formSelects-v4.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"
+ type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/formSelects-v4.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    layui.use(['form'], function () {
+        var $ = layui.$,
+            formSelects = layui.formSelects,
+            form = layui.form;
+
+        form.on('checkbox(alluser)', function (data) {
+            $("input[name='del[]']").each(function () {
+                this.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        formSelects.btns('jobclass_search', []);
+        //实时获取选中值
+        formSelects.on('jobclass_search', function(id, vals, val, isAdd, isDisabled){
+            var jobvalue = [];
+            vals.forEach(function(item,index){
+              jobvalue.push(item.value);
+            })
+            $('#job_class').val(jobvalue.join(','));
+        }, true);
+        formSelects.maxTips('jobclass_search', function(id, vals, val, max){
+            layer.msg('最多只能选择5个！', 2, 8);
+        });
+    });
+    function editSub(id,time,jobclass_id){
+
+        $('#sid').val(id);
+        $('#timeid').val(time);
+        $('#job_class').val(jobclass_id);
+        jobSearchReset()
+
+        $('.m_name_tag01').removeClass('m_name_tag01');
+        $(`#time${time}`).addClass('m_name_tag01');
+
+        var slayer = layer.open({
+            type: 1,
+            title: false,
+            closeBtn: [0 , true],
+            area: ['500px', '300px'],
+            content: $("#subbox"),
+            
+        });
+    }
+    function toSubscribe() {
+        
+        $.post('index.php?c=subscribe&act=toSubscribe', {'rand': Math.random()}, function (data) {
+            
+            if (data == 1) {
+
+                editSub('','','');
+
+            } else {
+                getwxbindcode();
+            }
+        });
+    }
+    function subpost(){
+
+        var id = $('#sid').val();
+        var time = $('#timeid').val();
+        var jobclass_id = $('#job_class').val();
+
+        if(jobclass_id==''){
+            layer.msg('请选择职位类别 ',2,8);return false;
+        }
+        if(time==""){
+            layer.msg('请选择发送周期',2,8);return false;
+        }
+        
+        loadlayer();
+
+        $.post('index.php?c=subscribe&act=saveSub', {id:id,time:time,jobclass_id:jobclass_id}, function (data) {
+            layer.closeAll('loading');
+            var data = eval('(' + data + ')');
+            if(data.errcode==9){
+                layer.msg(data.msg, 2,9,function(){location.reload();}); 
+            }else{
+                layer.msg(data.msg, 2, 8);
+            }
+        });
+    }
+
+    var setval = null,
+        setwout = null;
+
+    function getwxbindcode() {
+        var wxlayer = layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: ['450px', 'auto'],
+            content: $("#bdwx"),
+            end: function () {
+                if (setval) {
+                    clearInterval(setval);
+                    setval = null;
+                }
+                if (setwout) {
+                    clearTimeout(setwout);
+                    setwout = null;
+                }
+            }
+        });
+
+        $.post('{yun:}url m=login c=wxlogin{/yun}', {t: 1}, function (data) {
+            if (data == 0) {
+                $('#wx_login_qrcode').html('二维码获取失败..');
+            } else {
+                $('#wx_login_qrcode').html('<img src="' + data + '" width="180" height="180">');
+                setval = setInterval(function () {
+                    $.post('{yun:}url m=login c=getwxloginstatus{/yun}', {t: 1}, function (data) {
+                        var data = eval('(' + data + ')');
+                        if (data.url != '' && data.msg != '') {
+                            clearInterval(setval);
+                            setval = null;
+                            layer.msg(data.msg, 2, 9, function () {
+                                window.location.href = data.url;
+                            });
+                        } else if (data.url) {
+                            window.location.href = data.url;
+                        }
+                    });
+                }, 2000);
+                if (setwout) {
+                    clearTimeout(setwout);
+                    setwout = null;
+                }
+                setwout = setTimeout(function () {
+                    clearInterval(setval);
+                    setval = null;
+                    var wx_sx = $("#wx_sx").html();
+                    $('#wx_login_qrcode').html(wx_sx);
+                }, 300 * 1000);
+            }
+        });
+
+        $(".close_yd").click(function () {
+            clearInterval(setval);
+            layer.close(wxlayer);
+        })
+    }
+    function jobSearchReset(){
+
+        var formSelects = layui.formSelects,
+          jobclassArr= $("#job_class").val()!='' ? $("#job_class").val().split(",") : [],
+          jarr = [];
+        for(var i=0;i<jobclassArr.length;i++){
+            jarr.push({"name":jn[jobclassArr[i]],"value":jobclassArr[i],"selected":'selected'});
+        }
+        
+        formSelects.data('jobclass_search', 'local', {
+            arr: jarr
+        });
+    }
+</script>
+{yun:}include file="$userstyle/footer.htm"{/yun}

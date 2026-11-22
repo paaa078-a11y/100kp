@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>后台管理 - 运营 - 企微 - 客户详情</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+    .customer_info_platinfo p {padding: 10px 0;}
+    .company_list {padding: 15px 0;}
+</style>
+
+<body class="body_ifm">
+<div class="infoboxp" style="padding:0 15px ;">
+    
+    <div class="tty_table-bom" style="padding: 15px;"> 
+        <div class="searchBoxStrTwoRight right_back" style="width: 70px; margin-left: 0px;" >
+            <a href=" javascript:history.back(-1);" style="padding-left: 30px; color: #fff; line-height: 30px;"> 返回</a>
+        </div>
+       <div>
+        <div class="company_list">
+            <img src="{yun:}$customerInfo.avatar{/yun}" width="40" height="40" style="border-radius: 50%; margin-right: 5px;;"> 
+            {yun:}$customerInfo.name{/yun}
+        </div>
+    </div>
+        <div class="tty_table" style="padding: 10px 0;border: 1px solid #e6e6e6;border-radius: 4px;">
+            <div class="table-list">
+                <div class="admin_table_border">
+                    <div class="admin_table_border_top" style="padding: 10px 0;">
+                        <p style="    
+                        font-size: 16px;
+                        color: #000;
+                        font-weight: 1000;">平台信息</p>
+                    </div>
+                    <div class="admin_table_border_bottom" style="display: flex;">
+                        <div class="customer_info_platinfo" style="margin-left: 10px;">
+                            <p>注册时间：{yun:}if $customerInfo.is_reg == 2{/yun}未注册{yun:}else{/yun}{yun:}$customerInfo.reg_date_n{/yun}{yun:}/if{/yun}</p>
+                            <p>简历完整度：{yun:}if $customerInfo.is_reg == 2{/yun}未注册{yun:}else{/yun}{yun:}$customerInfo.integrity{/yun}{yun:}/if{/yun}</p>                         
+                        </div>
+                        <div class="customer_info_platinfo" style="margin-left: 24%;">
+                            <p>企业名称：{yun:}if $customerInfo.is_reg == 2{/yun}未注册{yun:}else{/yun}{yun:}$customerInfo.com_name{/yun}{yun:}/if{/yun}</p>
+                            <p>绑定手机：{yun:}if $customerInfo.is_reg == 2{/yun}未注册{yun:}else{/yun}{yun:}$customerInfo.moblie{/yun}{yun:}/if{/yun}</p>
+                        </div>
+                       <div class="customer_info_platinfo" style="margin-left: 24%;">
+                            <p>简历姓名：{yun:}if $customerInfo.is_reg == 2{/yun}未注册{yun:}else{/yun}{yun:}$customerInfo.resume_name{/yun}{yun:}/if{/yun}</p>
+                       </div>
+                    </div>   
+                </div>
+            </div>
+        </div>
+        <div class="tty_table-bom" style="border: 1px solid #e6e6e6; padding: 10px 0;border-radius: 4px;">
+            <div class="table-list">
+                <div class="admin_table_border tableBorderAll">
+                    <span style="padding: 10px 0;font-size: 16px;color: #000;font-weight: bold;">已添加员工</span>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th width="20%">员工ID</th>
+                            <th width="20%">员工姓名</th>
+                            <th width="20%">客户来源</th>
+                            <th width="20%">添加时间</th>
+                            <th align="center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$customerInfo.userList{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td>{yun:}$v.userid{/yun}</td>
+                            <td>{yun:}$v.name_n{/yun}</td>
+                            <td>{yun:}$v.way_n{/yun}</td>
+                            <td>{yun:}$v.create_time_n{/yun}</td>
+                            <td align="center">
+                                <div class="operationSeries">
+                                    <a href="index.php?m=admin_workwx_list&userid={yun:}$v.userid{/yun}">查看</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tty_table-bom" style="border: 1px solid #e6e6e6; padding: 10px 0;border-radius: 4px;">
+            <div class="table-list">
+                <div class="admin_table_border tableBorderAll">
+
+                    <span style="padding: 10px 0;font-size: 16px; color: #000;font-weight: bold;">所在群聊</span>
+
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th width="25%">群聊名称</th>
+                            <th width="25%">群主</th>
+                            <th width="25%">入群时间</th>
+                            <th align="center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+                        {yun:}foreach item=v key=key from=$customerInfo.chatList{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td>{yun:}$v.name{/yun}</td>
+                            <td>{yun:}$v.owner{/yun}</td>
+                            <td>{yun:}$v.join_time_n{/yun}</td>
+                            <td align="center">
+                                <div class="operationSeries">
+                                    <a href="index.php?m=admin_workwx_group&c=info&&chat_id={yun:}$v.chat_id{/yun}">查看</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        {yun:}if empty($customerInfo.chatList){/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td colspan="4">尚未入群</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    console.log(customerInfo,'000')
+</script>
+</html>

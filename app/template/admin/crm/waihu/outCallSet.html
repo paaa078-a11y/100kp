@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="yemanapp" class="tableDome">
+		 <div class="tableDome_tip">
+			<el-alert
+			    title="请先联系客服开通外呼服务"
+			    type="success"
+			    :closable="false">
+			</el-alert> 
+        </div>
+        <div class="moduleTable">
+            <table class="tableVue">
+                <thead>
+                    <tr align="left">
+                        <th width="200">名称</th>
+                        <th width="500">状态</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="TableTite">appKey：</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input v-model="sy_outcall_appkey"></el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>appKey</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">appSecret：</div>
+                        </td>
+                        <td>
+                            <div class="TableInpt">
+                                <el-input v-model="sy_outcall_appsecret"></el-input>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>appSecret</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="TableTite">购买套餐：</div>
+                        </td>
+                        <td>
+                            <div class="TableButn">
+								<el-link type="warning" href="https://u.phpyun.com/" target="_blank">购买地址</el-link>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="TableShuom">
+                                <span>购买套餐</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="setBasicButn" style="border: none;">
+            <el-button type="primary" size="medium" @click="setConfig" :disabled="submitLoading">提交</el-button>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#yemanapp',
+            data: function () {
+                return {
+                    sy_outcall_appkey:'',
+					sy_outcall_appsecret:'',
+					submitLoading: false
+                }
+            },
+            created: function () {
+				this.init();
+			},
+            methods: {
+				init(){
+					let that = this;
+					httpPost('m=crm&c=crm_outcall&a=getConfig').then(function(response) {
+						let res = response.data;
+					    that.sy_outcall_appkey = res.data.sy_outcall_appkey;
+					    that.sy_outcall_appsecret = res.data.sy_outcall_appsecret;
+					})
+				},
+                setConfig() {
+                    let that = this;
+					let params = {
+						config: 1,
+						sy_outcall_appkey: that.sy_outcall_appkey,
+						sy_outcall_appsecret: that.sy_outcall_appsecret
+					};
+					that.submitLoading = true;
+					httpPost('m=crm&c=crm_outcall&a=setConfig', params).then(function(response) {
+						let res = response.data;
+						that.submitLoading = false;
+						if (res.error>0){
+							message.error(res.msg);
+						}else{
+							message.success(res.msg);
+						}
+					})
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

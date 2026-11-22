@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>加入群聊</title>
+<meta name="description" content="点击海报图片，直接加入企业微信群">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(170deg,#f2f5fb 0%,#e8eef8 55%,#e3ebf7 100%);
+  color:#1a2233;display:flex;align-items:center;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{width:100%;max-width:420px}
+.hd{text-align:center;margin-bottom:18px}
+.hd h1{font-size:21px;letter-spacing:.5px}
+.hd p{margin-top:7px;font-size:13px;color:#6b7688}
+
+/* 海报卡片 */
+.poster{
+  position:relative;width:100%;border-radius:20px;overflow:hidden;
+  background:#fff;box-shadow:0 10px 30px rgba(31,45,80,.13),0 2px 8px rgba(31,45,80,.06);
+  cursor:pointer;display:block;transition:transform .18s ease,box-shadow .18s ease;
+}
+.poster:active{transform:scale(.975);box-shadow:0 6px 18px rgba(31,45,80,.12)}
+.poster img.pic{display:block;width:100%;height:auto}
+
+/* 图片加载失败占位 */
+.ph{
+  width:100%;aspect-ratio:9/16;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;padding:30px 24px;text-align:center;
+  background:linear-gradient(160deg,#eaf0fb,#dfe8f7);
+}
+.ph svg{opacity:.55}
+.ph b{font-size:16px;color:#33405c}
+.ph span{font-size:12.5px;line-height:1.75;color:#6d7a91;word-break:break-all}
+
+/* 右下角“进群”浮标 */
+.badge{
+  position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;
+  padding:9px 14px 9px 11px;border-radius:999px;color:#fff;font-size:13.5px;font-weight:600;
+  background:linear-gradient(135deg,#07c160,#05a352);
+  box-shadow:0 6px 16px rgba(7,193,96,.42);
+}
+.badge i{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+
+/* 底部跳动提示 */
+.tap{margin:16px auto 0;width:fit-content;display:flex;align-items:center;gap:7px;font-size:13px;color:#5c6678}
+.tap em{
+  font-style:normal;padding:5px 12px;border-radius:999px;background:#fff;
+  box-shadow:0 2px 8px rgba(31,45,80,.08);font-weight:600;color:#07a352;
+  animation:bob 1.6s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* 兜底入口 */
+.alt{margin-top:20px;text-align:center;font-size:13px;color:#7b8494}
+.alt a{color:#2b5cff;text-decoration:none;border-bottom:1px dashed #b9c6ff;padding-bottom:1px}
+.alt .row{margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.alt button{
+  font:inherit;font-size:13px;padding:8px 16px;border-radius:999px;border:1px solid #d8dfec;
+  background:#fff;color:#3a4557;cursor:pointer;
+}
+.alt button:active{background:#eef2fa}
+
+/* 引导弹层 */
+.mask{
+  position:fixed;inset:0;background:rgba(12,18,32,.72);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:24px;z-index:50;
+}
+.mask.on{display:flex}
+.sheet{
+  background:#fff;border-radius:18px;padding:24px 22px 20px;width:100%;max-width:330px;
+  text-align:center;animation:up .25s cubic-bezier(.2,.9,.3,1.2);
+}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.sheet h3{font-size:17px;margin-bottom:6px}
+.sheet .sub{font-size:12.5px;color:#8a93a3;margin-bottom:16px;line-height:1.6}
+.steps{text-align:left;display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.6;color:#39435a}
+.step b{
+  flex:0 0 20px;height:20px;border-radius:50%;background:#eaf3ff;color:#2b5cff;
+  font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.sheet .ok{
+  margin-top:18px;width:100%;padding:12px;border:0;border-radius:12px;color:#fff;
+  font:inherit;font-size:15px;font-weight:600;background:linear-gradient(135deg,#07c160,#05a352);cursor:pointer;
+}
+.sheet .cancel{margin-top:10px;font-size:13px;color:#98a1b0;cursor:pointer}
+.hl{color:#07a352;font-weight:600}
+.code{
+  margin-top:14px;background:#f4f7fc;border:1px dashed #cfd9ea;border-radius:10px;
+  padding:10px;font-size:11.5px;color:#5b6678;word-break:break-all;text-align:left;
+}
+
+/* 非微信环境提示条 */
+.tipbar{
+  position:fixed;left:0;right:0;top:0;z-index:60;display:none;
+  background:#ff7d41;color:#fff;font-size:13px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));
+  align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+.tipbar span{flex:1;line-height:1.5}
+.tipbar i{cursor:pointer;font-style:normal;font-size:17px;opacity:.85}
+.tipbar button{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:600;color:#ff7d41;background:#fff;
+  border:0;border-radius:999px;padding:6px 12px;cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="tipbar" id="tipbar">
+  <span id="tipTxt"></span>
+  <button id="tipBtn">复制链接</button>
+  <i onclick="this.parentNode.style.display='none'">✕</i>
+</div>
+
+<div class="wrap">
+  <div class="hd">
+    <h1>点击海报 · 加入群聊</h1>
+    <p>点一下海报，自动跳转加入</p>
+  </div>
+
+  <a class="poster" id="poster" href="javascript:;" aria-label="点击加入企业微信群">
+    <img class="pic" id="pic" alt="进群海报" style="display:none">
+    <div class="ph" id="ph" style="display:none">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#7b8aa8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 15l-4.5-4.5L7 20"/>
+      </svg>
+      <b>海报图加载失败</b>
+      <span>不影响进群，直接点下方「立即进群」</span>
+    </div>
+    <div class="badge"><i></i>点击进群</div>
+  </a>
+
+  <div class="tap"><em id="tapTxt">点海报立即进群 ↑</em></div>
+
+  <div class="alt">
+    <div>没跳转？<a href="javascript:;" id="altLink">复制进群链接，去微信打开 →</a></div>
+    <div class="row">
+      <button id="copyBtn">复制进群链接</button>
+      <button id="saveBtn">保存备用群码</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask">
+  <div class="sheet">
+    <h3 id="sTitle">请切换操作方式</h3>
+    <div class="sub" id="sSub"></div>
+    <div class="steps" id="sSteps"></div>
+    <button class="ok" id="sOk">复制链接，去微信打开</button>
+    <div class="cancel" id="sCancel">关闭</div>
+  </div>
+</div>
+
+<script>
+/* ============ 只需改这里 ============ */
+var CONFIG = {
+  poster : "https://100kp.com/dm/qun/qun.jpg",                                   // 海报图
+  joinUrl: "https://work.weixin.qq.com/gm/88eae7fe7c251b470d22d38420506093",      // 群活码落地页：点击直接跳
+  backupQr: "https://wework.qpic.cn/wwpic3az/974268_46hs4c-cTPOhk62_1751025037/0",// 备用：二维码活码图（直跳失败时兜底）
+  wechat : "",                                                                   // 管理员微信号（可选）
+  remark : "进群"
+};
+/* =================================== */
+
+var UA = navigator.userAgent;
+var isWeChat = /MicroMessenger/i.test(UA);
+var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(UA);
+
+/* 海报渲染（失败也不挡住进群入口） */
+var pic = document.getElementById('pic');
+pic.src = CONFIG.poster;
+pic.onload = function(){ document.getElementById('ph').style.display='none'; pic.style.display='block'; };
+pic.onerror = function(){ pic.style.display='none'; document.getElementById('ph').style.display='flex'; };
+
+/* 链接可用性 */
+function usable(u){ return !!u && !/\.(jpg|jpeg|png|gif|webp)(\?|#|$)/i.test(u); }
+var CAN_JUMP = usable(CONFIG.joinUrl);
+
+/* 非微信环境：落地页要求“在微信中打开”，提前告知 */
+if (!isWeChat && CAN_JUMP) {
+  document.getElementById('tipTxt').innerHTML = isMobile
+    ? '请复制链接后，切到 <b>微信</b> 粘贴打开即可进群'
+    : '请用 <b>手机微信</b> 扫描备用群码，或复制链接发到微信打开';
+  document.getElementById('tipbar').style.display = 'flex';
+  document.getElementById('tapTxt').textContent = isMobile ? '点我复制链接 ↑' : '点我查看进群方式 ↑';
+}
+document.getElementById('tipBtn').onclick = function(){ copy(CONFIG.joinUrl); };
+
+/* 弹层 */
+var mask = document.getElementById('mask');
+var STEPS_WX = [
+  '<b>1</b><div>点下方按钮，在打开的页面里点<span class="hl">「加入群聊」</span></div>',
+  '<b>2</b><div>群提示<span class="hl">满员</span>时，返回本页刷新后重试，或按下方方式换群</div>'
+];
+var STEPS_OUT = [
+  '<b>1</b><div>点下方按钮<span class="hl">复制链接</span></div>',
+  '<b>2</b><div>切到<span class="hl">微信</span>，粘贴到任意聊天框（可发给自己）后点开</div>',
+  '<b>3</b><div>在打开的页面点「加入群聊」；提示满员就返回本页重试</div>'
+];
+var STEPS_PC = [
+  '<b>1</b><div>点下方按钮<span class="hl">保存备用群码</span>，把图片发到手机</div>',
+  '<b>2</b><div>手机微信打开图片，<span class="hl">长按 → 识别图中二维码</span></div>',
+  STEPS_OUT[1]
+];
+function openSheet(steps, sub, okTxt){
+  document.getElementById('sSteps').innerHTML = steps.join('');
+  document.getElementById('sSub').innerHTML = sub;
+  document.getElementById('sOk').textContent = okTxt;
+  mask.classList.add('on');
+}
+function closeSheet(){ mask.classList.remove('on'); }
+document.getElementById('sCancel').onclick = closeSheet;
+mask.onclick = function(e){ if (e.target === mask) closeSheet(); };
+
+/* 主点击：微信内直接跳；非微信给可执行的引导，不做无效跳转 */
+document.getElementById('poster').addEventListener('click', function(){
+  if (CAN_JUMP && isWeChat) { location.href = CONFIG.joinUrl; return; }
+  if (CAN_JUMP && isMobile) { openSheet(STEPS_OUT, '这个链接<b>只能在微信里打开</b>，复制后切到微信即可，约 10 秒', '复制链接，去微信打开'); return; }
+  openSheet(STEPS_PC, '电脑端无法直接进群，用下面任一方式：<br>扫码最快，复制链接同样可以', '保存备用群码');
+});
+
+/* 弹层主按钮 */
+document.getElementById('sOk').onclick = function(){
+  if (CAN_JUMP && (isWeChat || isMobile)) { copy(CONFIG.joinUrl); closeSheet(); return; }
+  saveImg(CONFIG.backupQr);
+  closeSheet();
+};
+
+/* 保存备用群码（跨域时退化成新窗口打开，提示手动长按保存） */
+function saveImg(url){
+  if (!url) { toast('备用群码还没配置'); return; }
+  var a = document.createElement('a');
+  a.href = url; a.download = '进群活码.jpg'; a.rel = 'noopener'; a.target = '_blank';
+  try { document.body.appendChild(a); a.click(); a.remove(); }
+  catch(e){ window.open(url,'_blank'); }
+  toast('若没自动下载，已打开图片：长按保存到相册');
+}
+document.getElementById('saveBtn').onclick = function(){ saveImg(CONFIG.backupQr); };
+
+/* 复制链接 */
+function copy(txt){
+  if (!txt) { toast('链接还没配置'); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function(){ toast('已复制，去微信粘贴打开'); },function(){ fallback(txt); });
+  } else { fallback(txt); }
+  function fallback(t){
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('已复制，去微信粘贴打开'); }
+    catch(e){ prompt('长按选中并复制这条链接：', t); }
+    ta.remove();
+  }
+}
+var linkTxt = CONFIG.joinUrl || (CONFIG.wechat ? ('我的微信号：'+CONFIG.wechat+'，备注『'+(CONFIG.remark||'进群')+'』我拉你进群') : '');
+document.getElementById('copyBtn').onclick = function(){ copy(linkTxt); };
+document.getElementById('altLink').onclick = function(){ copy(linkTxt); };
+
+/* 轻提示 */
+var tt;
+function toast(msg){
+  var el = document.getElementById('toast');
+  if (!el) {
+    el = document.createElement('div'); el.id='toast';
+    el.style.cssText='position:fixed;left:50%;bottom:14%;transform:translateX(-50%);background:rgba(18,24,38,.9);color:#fff;font-size:13.5px;padding:10px 18px;border-radius:999px;z-index:99;max-width:80%;text-align:center;line-height:1.5';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg; el.style.opacity='1';
+  clearTimeout(tt); tt = setTimeout(function(){ el.style.opacity='0'; }, 2200);
+}
+</script>
+</body>
+</html>

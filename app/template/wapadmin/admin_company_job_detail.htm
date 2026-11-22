@@ -1,0 +1,682 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<style>
+body, html {
+    padding: 0;
+    margin: 0;
+   overflow: auto;
+}
+</style>
+<body style="overflow: auto;">
+    <div id="yunvue" style="display:none">
+		
+		<div class="new_bgcor">
+			<a href="javascript:history.go(-1)" class="new_header_fh"></a>
+			 <a class="new_bgcorbj" :href="'index.php?c=admin_company_job&a=show&id=' + info.id">编辑 </a>
+		</div>
+		<div class="new_job_box">
+		<div class="new_job_info">
+			 <h3 class="new_job_name">{{info.jobname}}</h3>
+		 	<div class="new_job_i_xz">{{info.job_salary}}</div>
+		<div class="new_job_comname">{{comInfo.name}}<span> [{{comInfo.rating_name}}]</span></div>	
+		
+		
+		
+		<span class="shzt">
+		<span v-if="info.status==1" class="wsh"><i class="wshicon"></i>已下架</span>
+		<span v-if="info.state==1" class="ysh"><i class="wshicon"></i>已审核</span>
+		<span v-else-if="info.state==0"class="wsh"><i class="wshicon"></i>未审核</span>
+		<span v-else-if="info.state==3"class="ysd"><i class="wshicon"></i>未通过</span>
+		</span>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="new_job_cz">
+            <div class="new_job_cz_a">
+                <a href="###" @click="jobTopShow = true" class="new_job_cz_l">
+                    <i class="new_job_cz_icon new_job_cz_iconzd"></i>职位置顶<i class="new_job_cz_jr"></i>
+                    <span v-if="info.xs && info.xs == 1" class="new_job_cz_ok">已置顶</span>
+                </a>
+            </div>
+            <div class="new_job_cz_a">
+                <a href="###" @click="jobRecShow = true" class="new_job_cz_r">
+                    <i class="new_job_cz_icon new_job_cz_icontj"></i>职位推荐<i class="new_job_cz_jr"></i>
+                    <span v-if="info.job_rec && info.job_rec == 1" class="new_job_cz_ok">已推荐</span>
+                </a>
+            </div>
+            <div class="new_job_cz_a">
+                <a href="###" @click="jobUrgentShow = true" class="new_job_cz_l">
+                    <i class="new_job_cz_icon new_job_cz_iconjp"></i>职位紧急<i class="new_job_cz_jr"></i>
+                    <span v-if="info.job_urgent && info.job_urgent == 1" class="new_job_cz_ok">已紧急</span>
+                </a>
+            </div>
+            <div class="new_job_cz_a">
+                <a href="###" @click="refresh" class="new_job_cz_r">
+                    <i class="new_job_cz_icon new_job_cz_iconsx"></i>职位刷新<i class="new_job_cz_jr"></i>
+                </a>
+            </div>
+		</div>
+		<div class="clear"></div>
+			<!--基本信息-->
+				
+					<div class="new_job_infobox">
+							<div class="new_job_infotit">数据统计</div>
+						<div class="new_job_date">
+							<div class="new_job_date_list">
+								<div class="new_job_date_c">
+						<span class="new_job_datename">收到简历</span>
+						<span class="new_job_date_n">{{info.sqjobNum}}</span>
+						</div>	</div>
+								<div class="new_job_date_list">
+									<div class="new_job_date_c">
+						<span class="new_job_datename">邀请面试</span>
+						<span class="new_job_date_n">{{info.yqmsNum}}</span>
+						</div>	</div>
+								<div class="new_job_date_list">
+									<div class="new_job_date_c">
+						<span class="new_job_datename">被浏览</span>
+						<span class="new_job_date_n">{{info.jobhits}}</span> 
+								</div>	</div>
+						</div>
+						
+					<div class="new_job_infotit">基本信息</div>
+			<div class="new_job_i">			
+		<ul>
+		       
+		        <li><span class="new_job_i_n">工作地点：</span>{{info.job_address}}</li>
+		        
+		        <li><span class="new_job_i_n">经验要求：</span>{{info.job_exp}}经验 <span v-if="info.is_graduate && info.is_graduate == 1">（可接受应届生）</span></li>
+		         <li><span class="new_job_i_n">学历要求：</span>{{info.job_edu}}学历</li>
+		         <li><span class="new_job_i_n">招聘人数：</span>{{info.job_number}}</li>
+		         <li><span class="new_job_i_n">性别要求：</span>{{info.job_sex}}</li>
+		         <li><span class="new_job_i_n">婚姻状况：</span>{{info.job_marriage}}</li>
+		         <li><span class="new_job_i_n">到岗时间：</span>{{info.job_report}}</li>
+		         <li v-if="info.job_age && info.job_age != '0'"><span class="new_job_i_n">年龄要求：</span>{{info.job_age}}</li>
+		        <p v-if="info.lang_n && info.lang_n != '0'">语言要求：</span><span v-for="(litem, lkey) in info.lang_n" :key="lkey"><span v-if="lkey > 0">，</span>{{comclass_name[litem]}}</span></li>
+		         <li><span class="new_job_i_n">发布时间：</span>{{info.sdate_n}}</li>
+		         <li><span class="new_job_i_n">更新时间：</span>{{info.lastupdate}}</li>
+				  <li><span class="new_job_i_n">职位类别：</span><span v-if="info.job_one || info.job_two || info.job_three">{{info.job_one}}-{{info.job_two}}<span v-if="info.job_three">-{{info.job_three}}</span></span></li>
+		</ul>
+		
+		
+		<div class="new_job_infotit">福利待遇</div>
+		<div class="new_job_fl">
+		    <span v-for="(witem, wkey) in info.arraywelfare" :key="wkey">{{witem}}</span>
+		</div>
+		
+		<div class="new_job_infotit">职位描述</div>
+		<div class="new_job_infojs" v-html="info.description">
+		</div>
+			<div class="new_job_infotit">投递要求</div>
+			   <div class="new_job_i">
+			   <ul>
+			      
+			       <li><span class="new_job_i_n">经验要求：<span v-if="info.exp_req && info.exp_req != '0' && info.exp_req != '请选择'">{{useclass_name[info.exp_req]}}</span><span v-else>不限</span></li>
+			     <li><span class="new_job_i_n">学历要求：<span v-if="info.edu_req && info.edu_req != '0' && info.edu_req != '请选择'">{{useclass_name[info.edu_req]}}</span><span v-else>不限</span></li>
+			    <li><span class="new_job_i_n">年龄要求：<span v-if="info.minage_req && info.minage_req != '0' && info.minage_req != '请选择'">{{info.minage_req}}-{{info.maxage_req}}岁</span><span v-else>不限</span></li>
+			     <li><span class="new_job_i_n">性别要求：<span v-if="info.sex_req && info.sex_req != '0' && info.sex_req != '请选择'">{{sexReq[info.sex_req]}}</span><span v-else>不限</span></li></ul>
+		</div>
+			<div class="new_job_infotit">联系方式</div>
+				<div class="new_job_i">			
+				<ul>
+			       
+			        <li><span class="new_job_i_n">联系人：</span>{{linkInfo.linkman}}</li>
+			 <li><span class="new_job_i_n">联系电话：</span>{{linkInfo.linktel}}</li>
+			 <li><span class="new_job_i_n">公司座机：</span>{{linkInfo.linkphone}}</li>
+			 	</ul>
+		</div>
+		</div>
+		
+		
+		
+			</div>
+		
+		<div class="job_footer">
+			<div class="job_footer_fix">
+				<div class="job_footer_box">
+					<div style="width: 20%;">
+			            <a class="shenhe job_sh" href="javascript:void(0);" @click="jobAuditOpen(info.id)">审核</a>
+                    </div>
+                    <div style="margin-left: 2%; width: 20%;">
+                        <a class="shenhe job_sh" href="javascript:void(0);" @click="setJobZT(info.status)">{{statusTxt}}</a>
+                    </div>
+                    <div style="width: 50%;">
+			            <a v-if="is_outcall" class="bodTel job_tel"  href="javascript:;" @click="contactMobile()">拨打电话</a>
+                        <a v-else class="bodTel job_tel"  href="javascript:;" @click="callTel">拨打电话</a>
+			        </div>
+                </div>
+			</div>
+		</div>
+		</div>
+		
+		
+		
+		 
+
+        
+        <!--拨打电话（多个的情况下）-->
+        <div class="tellOpty">
+            <van-action-sheet v-model="callShow" :actions="callActions" @select="onSelectCall">
+                <div class="tellOptyClose">
+                    <button @click="callShow = false">取消</button>
+                </div>
+            </van-action-sheet>
+        </div>
+        
+        <!--职位审核-->
+        <van-popup v-model="jobAuditShow" round position="bottom">
+            <section class="positePopup">
+                <div class="positeShen">
+                    <img class="positeClose" src="img/close.png" alt="" @click="jobAuditShow = false">
+                    <div class="positeForms">
+                        <h3>审核操作</h3>
+                        <form class="layui-form" onsubmit="return false;">
+                            <div class="positeSubes">
+                                <p>职位审核</p>
+                                <div class="positeList">
+                                    <a href="javascript:void(0);" :class="jobStatus == 1 ? 'positeButton' : ''" @click="setJobStatus(1)">正常</a>
+                                    <a href="javascript:void(0);" :class="jobStatus == 3 ? 'positeButton' : ''" @click="setJobStatus(3)">未通过</a>
+                                </div>
+                            </div>
+                            <div class="positeSubes positeSubesMoban">
+                                <p style="margin-bottom: 0.3rem;">审核模板</p>
+                                <div class="layui-input-inline" @click="jobAuditTemplateShow = true">
+                                    <div class="ubesMobanImg" style="line-height: 1.01333rem; border: 1px solid #eee; padding: 0 0.2rem;border-radius: 0.1rem;">
+                                        <p>
+                                            {{jobAuditTemplate ? comclass_name[jobAuditTemplate] : '请选择审核模板'}}
+                                        </p>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div v-if="info.r_status != 1" class="positeSubes">
+                                <p>企业审核</p>
+                                <div class="positeList">
+                                    <label><input type="checkbox" value="1" v-model="jobSyncAudit" disabled title="同步审核"><span>同步审核</span></label>
+                                </div>
+                                <div class="jobshtip">同步说明：企业身份为未审核状态需同步审核</div>
+                            </div>
+                            <div class="positeSubes">
+                                <p>审核说明</p>
+                                <div class="positeCont positeContTwo">
+                                    <textarea class="follotextarea" v-model="jobStatusbody"></textarea>
+                                </div>
+                            </div>
+                            <div class="positeSubes" style="margin-top: 0.4rem;">
+                                <div class="positeCont">
+                                    <button @click="jobAuditSub">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+			
+			
+			
+            <van-popup v-model:show="jobAuditTemplateShow" round position="bottom">
+                <van-picker title="审核模板" :columns="jobAuditTemplateColumns" show-toolbar @confirm="onJobAuditTemplateConfirm" @cancel="jobAuditTemplateShow = false" />
+            </van-popup>
+        </van-popup>
+        <!--推广-->
+        <van-popup v-model="tgShow" round position="bottom">
+            <section class="positePopup">
+                <div class="positeExtend">
+                    <img class="positeCloseTui" src="img/close.png" alt="" @click="tgShow = false">
+                    <div class="positeForms">
+                        <h3>职位推广</h3>
+                        <div class="positeSpread">
+                            <ul>
+                                <li @click="jobTopShow = true">
+                                    <div class="spreadOne">
+                                        <img src="img/ding.png" alt="">
+                                        <div class="spreadTwo">
+                                            <p>置顶</p>
+                                            <span>锁定前排好位置，坐享牛人滚滚来</span>
+                                        </div>
+                                    </div>
+                                    <a class="topping" href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+                                </li>
+                                <li @click="jobUrgentShow = true">
+                                    <div class="spreadOne">
+                                        <img src="img/emerg.png" alt="">
+                                        <div class="spreadTwo">
+                                            <p>急聘</p>
+                                            <span>快速提高招聘效率，享受更多服务</span>
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+                                </li>
+                                <li @click="jobRecShow = true">
+                                    <div class="spreadOne">
+                                        <img src="img/recom.png" alt="">
+                                        <div class="spreadTwo">
+                                            <p>推荐</p>
+                                            <span>享特殊标识，提高曝光几率</span>
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </van-popup>
+        <!--置顶-->
+        <van-popup v-model="jobTopShow" round position="bottom">
+            <section class="positePopup">
+                <div class="positeExtseo">
+                    <img class="positeCloseseo" src="img/close.png" alt="" @click="jobTopShow = false">
+                    <div class="positeForms">
+                        <h3>职位置顶</h3>
+                        <div class="positeSeoAll">
+                            <form action="" onsubmit="return false;">
+                                <div class="positeSeoAllOne">
+                                    <div class="kouye">
+                                        <p>置顶天数：</p>
+                                        <input type="text" v-model="top_days" @input="numbers($event, 'top_days')" placeholder="">
+                                        <span class="spanSeo">天</span>
+                                    </div>
+                                    <span v-if="info.xsdate && info.xsdate != '0' && info.xs == 1" class="spanSheny">当前结束日期： {{info.xstime}} </span>
+                                </div>
+                                <div class="positeSeoAllOne">
+                                    <div class="buttonTi">
+                                        <button @click="jobTopSub(0)">提交</button>
+                                    </div>
+                                    <div v-if="info.xsdate && info.xsdate != '0' && info.xs == 1" class="buttonTi">
+                                        <button @click="jobTopSub(1)" class="tijiaor">取消置顶</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </van-popup>
+        <!--推荐-->
+        <van-popup v-model="jobRecShow" round position="bottom">
+            <section class="positePopup">
+                <div class="positeExtseo">
+                    <img class="positeCloseseo" src="img/close.png" alt="" @click="jobRecShow = false">
+                    <div class="positeForms">
+                        <h3>职位推荐</h3>
+                        <div class="positeSeoAll">
+                            <form action="" onsubmit="return false;">
+                                <div class="positeSeoAllOne">
+                                    <div class="kouye">
+                                        <p>推荐天数：</p>
+                                        <input type="text" v-model="rec_days" @input="numbers($event, 'rec_days')" placeholder="">
+                                        <span class="spanSeo">天</span>
+                                    </div>
+                                    <span v-if="info.rec_time && info.rec_time != '0' && info.job_rec == 1" class="spanSheny">当前结束日期： {{info.recdate}} </span>
+                                </div>
+                                <div class="positeSeoAllOne">
+                                    <div class="buttonTi">
+                                        <button @click="jobRecSub(0)">提交</button>
+                                    </div>
+                                    <div v-if="info.rec_time && info.rec_time != '0' && info.job_rec == 1" class="buttonTi">
+                                        <button @click="jobRecSub(1)" class="tijiaor">取消推荐</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </van-popup>
+        <!--急聘-->
+        <van-popup v-model="jobUrgentShow" round position="bottom">
+            <section class="positePopup">
+                <div class="positeExtseo">
+                    <img class="positeCloseseo" src="img/close.png" alt="" @click="jobUrgentShow = false">
+                    <div class="positeForms">
+                        <h3>紧急招聘</h3>
+                        <div class="positeSeoAll">
+                            <form action="" onsubmit="return false;">
+                                <div class="positeSeoAllOne">
+                                    <div class="kouye">
+                                        <p>紧急天数：</p>
+                                        <input type="text" v-model="urgent_days" @input="numbers($event, 'urgent_days')" placeholder="">
+                                        <span class="spanSeo">天</span>
+                                    </div>
+                                    <span v-if="info.urgent_time && info.urgent_time != '0' && info.job_urgent == 1" class="spanSheny">当前结束日期： {{info.eurgent}} </span>
+                                </div>
+                                <div class="positeSeoAllOne">
+                                    <div class="buttonTi">
+                                        <button @click="jobUrgentSub(0)">提交</button>
+                                    </div>
+                                    <div v-if="info.urgent_time && info.urgent_time != '0' && info.job_urgent == 1" class="buttonTi">
+                                        <button @click="jobUrgentSub(1)" class="tijiaor">取消紧急招聘</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </van-popup>
+    </div>
+
+    <script src="{yun:}$plusstyle{/yun}/com.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$plusstyle{/yun}/user.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script>
+        let id = parseInt('{yun:}$smarty.get.id{/yun}'),is_outcall = '{yun:}$is_outcall{/yun}';
+        var yunvue = new Vue({
+            el: '#yunvue',
+            data() {
+                return {
+                    // 企业缓存
+                    comclass_name: comn,
+                    comclass_data: comd,
+                    useclass_name: usern,
+                    sexReq: [
+                        '不限',
+                        '男',
+                        '女',
+                    ],
+                    info: {}, // 职位信息
+                    comInfo: {}, // 企业信息
+                    linkInfo: {}, // 联系方式
+
+                    // 职位审核
+                    jobAuditShow: false,
+                    jobStatus: 1,
+                    jobAuditTemplateShow: false,
+                    jobAuditTemplateColumns: [],
+                    jobAuditTemplate: '',
+                    jobSyncAudit: true,
+                    jobStatusbody: '',
+
+                    // 拨打电话
+                    callActions: [],
+                    callShow: false,
+
+                    // 推广
+                    tgShow: false,
+
+                    // 职位置顶
+                    jobTopShow: false,
+                    top_days: '',
+
+                    // 职位推荐
+                    jobRecShow: false,
+                    rec_days: '',
+
+                    // 职位紧急
+                    jobUrgentShow: false,
+                    urgent_days: '',
+
+                    is_outcall: is_outcall,
+
+                    statusTxt: '下架'
+                };
+            },
+            created() {
+                this.getInfo();
+
+                let comclass_data = this.comclass_data,
+                    comclass_name = this.comclass_name,
+                    jobAuditTemplateColumns = [];
+                comclass_data.job_audit.forEach(function (item) {
+                    jobAuditTemplateColumns.push({value: item, text: comclass_name[item].slice(0,20)});
+                });
+                this.jobAuditTemplateColumns = jobAuditTemplateColumns;
+            },
+            methods: {
+                getInfo: function(){
+                    let _this = this;
+                    var params = {
+                        id: id
+                    };
+                    showLoading();
+                    $.post('index.php?c=admin_company_job&a=detail', params, function (res) {
+                        hideLoading();
+                        if (res && res.error === 0) {
+                            _this.info = res.data.info;
+                            _this.linkInfo = _this.info.linkInfo ? _this.info.linkInfo : {};
+                            _this.comInfo = res.data.comInfo;
+                            if (_this.info.status == 0){
+                                _this.statusTxt = '下架';
+                            }else if (_this.info.status == 1){
+                                _this.statusTxt = '上架';
+                            }
+                            $("#yunvue").show();
+                        } else {
+                            showToast(res.msg)
+                        }
+                    }, 'json')
+                },
+
+                jobAuditOpen: function(jobId) {
+                    let _this = this,
+                        info = _this.info;
+
+                    _this.jobAuditShow = true;
+                    _this.jobStatus = info.r_status;
+                    _this.jobStatusbody = info.statusbody;
+                },
+
+                setJobStatus: function(val) {
+                    this.jobStatus = val;
+                },
+
+                setJobZT: function(status){
+                    let _this = this,
+                        jobInfo = _this.info;
+                    var params = {
+                        status: status,
+                        job_id: jobInfo.id,
+                        uid: jobInfo.uid
+                    };
+                    var url = 'index.php?c=admin_company_job&a=checkstate';
+
+                    showLoading();
+                    $.post(url, params, function (res) {
+                        hideLoading();
+                        if(res && res.error == 9) {
+                            showToast(res.msg);
+                            window.location.reload();
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+
+                onJobAuditTemplateConfirm: function(obj, index) {
+                    this.jobAuditTemplateShow = false;
+                    this.jobAuditTemplate = obj.value;
+                    this.jobStatusbody = this.comclass_name[obj.value];
+                },
+
+                jobAuditSub: function(jobId) {
+                    let _this = this,
+                        jobInfo = _this.info,
+                        status = _this.jobStatus,
+                        statusbody = _this.jobStatusbody;
+
+                    if(status != '1' && status != '3'){
+                        showToast("请选择审核状态！");
+                        return false;
+                    }
+
+                    var params = {
+                        single: 1,
+                        status: status,
+                        pid: jobInfo.id,
+                        uid: jobInfo.uid,
+                        statusbody: statusbody
+                    };
+                    if(jobInfo.r_status != '1'){
+                        var url = 'index.php?c=admin_company_job&a=cjobstatus';
+                    }else{
+                        var url = 'index.php?c=admin_company_job&a=status';
+                    }
+
+                    showLoading();
+                    $.post(url, params, function (res) {
+                        hideLoading();
+                        if(res && res.error == 9) {
+                            showToast(res.msg);
+                            _this.jobAuditShow = false;
+                            window.location.reload();
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+                // 未开通外呼，直接拨打电话
+                callTel: function() {
+                    let linktel = this.info.linkInfo.linktel;
+                    let linkphone = this.info.linkInfo.linkphone;
+                    if(linktel && linkphone){
+                        this.callActions = [
+                            { name: linktel },
+                            { name: linkphone }
+                        ];
+                        this.callShow = true;
+                        return;
+                    }
+
+                    if(linktel || linkphone){
+                        window.location.href="tel:" + (linktel ? linktel : linkphone)
+                        return;
+                    }
+
+                    showToast('无可用联系方式');
+                },
+                // 外呼联系客户
+                contactMobile(){
+                    let linktel = this.info.linkInfo.linktel;
+                    let linkphone = this.info.linkInfo.linkphone;
+                    if (!linktel && !linkphone) {
+                        showToast('无可用联系方式');
+                        return false;
+                    }
+                    var uid = this.info.uid
+                    var mobile = linkphone ? linkphone : linktel;
+                    showConfirm('确定要联系客户吗？',function(){
+                        $.post('index.php?c=crm_my_customer&a=contactCustomer', {uid: uid, mobile: mobile}, function(res){
+                            showToast(res.msg)
+                        },'json');
+                    })
+                },
+
+                onSelectCall: function(item) {
+                    this.callShow = false;
+                    window.location.href="tel:" + item.name;
+                },
+
+                jobTopSub: function(key) {
+                    let _this = this,
+                        jobInfo = _this.info,
+                        days = _this.top_days;
+
+                    var params = {
+                        pid: jobInfo.id,
+                        days: days,
+                        s: key
+                    };
+                    showLoading();
+                    $.post('index.php?c=admin_company_job&a=xuanshang', params, function (res) {
+                        hideLoading();
+                        if (res && res.error == 9) {
+                            showToast(res.msg, 2, function() {
+                                _this.tgShow = false;
+                                _this.jobTopShow = false;
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+
+                jobRecSub: function(key) {
+                    let _this = this,
+                        jobInfo = _this.info,
+                        days = _this.rec_days;
+
+                    var params = {
+                        pid: jobInfo.id,
+                        days: days,
+                        s: key
+                    };
+                    showLoading();
+                    $.post('index.php?c=admin_company_job&a=recommend', params, function (res) {
+                        hideLoading();
+                        if (res && res.error == 9) {
+                            showToast(res.msg, 2, function() {
+                                _this.tgShow = false;
+                                _this.jobRecShow = false;
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+
+                jobUrgentSub: function(key) {
+                    let _this = this,
+                        jobInfo = _this.info,
+                        days = _this.urgent_days;
+
+                    var params = {
+                        pid: jobInfo.id,
+                        days: days,
+                        s: key
+                    };
+                    showLoading();
+                    $.post('index.php?c=admin_company_job&a=urgent', params, function (res) {
+                        hideLoading();
+                        if (res && res.error == 9) {
+                            showToast(res.msg, 2, function() {
+                                _this.tgShow = false;
+                                _this.jobUrgentShow = false;
+                                window.location.reload();
+                            });
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+
+                refresh: function() {
+                    let _this = this,
+                        jobInfo = _this.info;
+
+                    var params = {
+                        ids: jobInfo.id
+                    };
+                    showLoading('刷新中');
+                    $.post('index.php?c=admin_company_job&a=refresh', params, function (res) {
+                        hideLoading();
+                        showToast('刷新成功', 2, function() {
+                            window.location.reload();
+                        });
+                    })
+                },
+
+                numbers: function(e, key) {
+                    let number = e.target.value;
+                    if (key == 'top_days') {
+                        this.top_days = number.replace(/[^0-9]/g,'')
+                    } else if (key == 'rec_days') {
+                        this.rec_days = number.replace(/[^0-9]/g,'')
+                    } else if (key == 'urgent_days') {
+                        this.urgent_days = number.replace(/[^0-9]/g,'')
+                    }
+                },
+            }
+        });
+    </script>
+    <style type="text/css">
+        .positePopup{position: relative !important;width: auto !important;height: auto !important;display:block !important}
+        .positePopup .positeShen{position: relative !important;bottom: auto !important;display:block !important;height: auto !important;}
+        .positePopup .positeExtseo{position: relative !important;bottom: auto !important;display:block !important; height: auto !important;}
+        .positePopup .positeExtend{position: relative !important;bottom: auto !important;display:block !important; height: auto !important;}
+    </style>
+</body>
+
+</html>

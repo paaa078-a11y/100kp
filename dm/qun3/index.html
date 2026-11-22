@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>地区站点</title>
+    <style>
+        #region-link {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #region-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <a id="region-link" href="html/no.html">
+        <img id="region-image" src="pic/no.png" alt="地区站点">
+    </a>
+
+    <script>
+        // 获取当前二级域名（如bj、sh等）
+        const currentSubdomain = window.location.hostname.split('.')[0];
+        
+        // 防止重复检查的标志
+        let resourceChecked = false;
+        
+        // 检查资源是否存在
+        function checkResourceExists(url, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('HEAD', url);
+            xhr.onload = function() {
+                callback(xhr.status === 200);
+            };
+            xhr.onerror = function() {
+                callback(false);
+            };
+            xhr.send();
+        }
+        
+        // 设置图片和链接
+        const imgElement = document.getElementById('region-image');
+        const linkElement = document.getElementById('region-link');
+        
+        const imgPath = `pic/${currentSubdomain}.png`;
+        const pagePath = `html/${currentSubdomain}.html`;
+        
+        // 只在首次加载时检查
+        if (!resourceChecked) {
+            resourceChecked = true;
+            
+            // 先检查图片是否存在
+            checkResourceExists(imgPath, function(imgExists) {
+                if (imgExists) {
+                    // 使用Image对象预加载图片
+                    const tempImg = new Image();
+                    tempImg.onload = function() {
+                        imgElement.src = imgPath;
+                        
+                        // 再检查对应的HTML页面是否存在
+                        checkResourceExists(pagePath, function(pageExists) {
+                            if (pageExists) {
+                                linkElement.href = pagePath;
+                            }
+                        });
+                    };
+                    tempImg.onerror = function() {
+                        // 图片加载失败，保持默认
+                    };
+                    tempImg.src = imgPath;
+                }
+                // 如果图片不存在，保持默认的no.png和no.html
+            });
+        }
+    </script>
+</body>
+</html>

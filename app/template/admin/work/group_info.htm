@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 群聊详情</title>
+
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+
+<body class="body_ifm">
+<style>
+    .call-broad_infoname{display: flex;justify-content: space-between;}
+    .call-broad_infoname span{
+        width: 50px;
+        height: 24px;
+        line-height: 24px;
+        /* border: 1px solid #000; */
+        border-radius: 4px;
+        background: #2778f8;
+        color: white;
+        font-size: 14px;
+        text-align: center;
+    }
+    .watch_info{display: flex;flex-direction: column;}
+    .watch_info a{color: #2778f8;}
+    .admin_statisticss{padding:0;font-size:12px;color:#647386;background:#fff; height: 200px;; border-radius:5px}
+    .new_search_infobox{height:200px;display:flex}
+    .admin_statistics_top{display:flex;padding:15px 15px}
+    .admin_statistics_bottom{display:flex}
+    .admin_statistics_right{margin-left:20px}
+    .search_info_qun{display:flex;height:100%;flex-direction:column}
+    .search_info_qun_name{height:70%;display:flex;font-size:16px;font-weight:700;color:#333}
+    .search_info_qun_people{height:30%;display:flex}
+    .admin_statistics_stip{display:inline-block;width:130px;margin:15px;background:#f0f8ff;padding:15px;color: #333;border-radius: 4px;}
+    .admin_statistics_stip a{
+        display: block;
+        font-size: 18px !important;
+        font-weight: bold;
+        padding-top:8px;
+    }
+    .call-broad{flex:1;height:100%;margin-left:15px;background:#fff;border-radius:5px}
+    .call-broad_infoname{font-size:16px;padding:15px;font-weight:700;color:#333}
+    .call-broad-item{padding-left:15px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:9;-webkit-box-orient:vertical;}
+</style>
+<div class="infoboxp">
+    <div class="admin_new_search_box">
+        <div class="new_search_infobox">
+            <div class="new_search_top">
+                <div class="admin_statisticss">
+                    <div class="admin_statistics_top">
+                        <img id="link_picurl" src="images/qw_icon.png" alt="">
+                        <div class="admin_statistics_right">
+                            <div class="search_info_qun">
+                                <div class="search_info_qun_name">{yun:}$groupInfo.name{/yun}群</div>
+                                <div class="search_info_qun_people">
+                                    群主：{yun:}$groupInfo.owner_name{/yun} &nbsp;&nbsp; 共 &nbsp; <span class="ajaxIn">0</span>&nbsp; 位成员
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin_statistics_bottom">
+                        <div class="admin_statistics_stip">
+                            <p>总人数：</p>
+                            <a class="ajaxTotal">0</a>
+                        </div>
+                        <div class="admin_statistics_stip">
+                            <p>实际人数：</p>
+                            <a class="ajaxReal">0</a>
+                        </div>
+                        <div class="admin_statistics_stip">
+                            <p>注册用户：</p>
+                            <a class="ajaxReg">0</a></div>
+                        <div class="admin_statistics_stip">
+                            <p>今日新增：</p>
+                            <a class="ajaxNew">0</a></div>
+                        <div class="admin_statistics_stip">
+                            <p>今日流失：</p>
+                            <a class="ajaxDel">0</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="call-broad">
+                <div class="call-broad_infoname">
+                    群公告：
+                <span style="cursor:pointer" onclick="syncGroupNotice('{yun:}$groupInfo.chat_id{/yun}');">更新</span>
+                </div>
+                <div class="call-broad-item">
+                    {yun:}if $groupInfo.notice{/yun}{yun:}$groupInfo.notice{/yun}{yun:}else{/yun}此群暂无群公告，请在企微设置之后点击上方更新按钮~{yun:}/if{/yun}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="tty_table-bom">
+        <div class="tty_table-bom" style="padding: 0px 15px 0px 15px;">
+            <div class="table-list">
+                <div class="admin_table_border tableBorderAll">
+                    <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                    <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                        <input name="m" value="admin_" type="hidden"/>
+                        <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+                        <table width="100%">
+                            <thead>
+                            <tr class="admin_table_top" align="left">
+                                <th>成员信息</th>
+                                <th>是否注册</th>
+                                <th>简历完善度</th>
+                                <th>投递次数</th>
+                                <th>入群时间</th>
+                                <th>入群方式</th>
+                                <th>是否退群</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tableBackColorTwo">
+                            {yun:}foreach item=v key=key from=$list{/yun}
+                            <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                            <td>{yun:}$v.name{/yun}{yun:}$v.type_n{/yun}</td>
+                            <td>{yun:}$v.is_reg{/yun}</td>
+                            <td>{yun:}$v.integrity{/yun}</td>
+                            <td class="watch_info">{yun:}$v.sq_num{/yun}</td>
+                            <td>{yun:}$v.join_time_n{/yun}</td>
+                            <td>{yun:}$v.scene_n{/yun}</td>
+                            <td>{yun:}$v.quit_n{/yun}</td>
+                            </tr>
+                            {yun:}/foreach{/yun}
+                            {yun:}if $total > $config.sy_listnum {/yun}
+                            <tr>
+                                {yun:}if $pagenum==1{/yun}
+                                <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}else if $pagenum == $pages{/yun}
+                                <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                                {yun:}/if{/yun}
+                                <td colspan="4" class="digg">{yun:}$pagenav{/yun}</td>
+                            </tr>
+                            {yun:}/if{/yun}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = 'index.php?m=admin_workwx_group&c=memberNum&chat_id={yun:}$smarty.get.chat_id{/yun}';
+        $.get(url, function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.totalNum) {
+                $('.ajaxTotal').html(datas.totalNum);
+            }
+            if (datas.realNum) {
+                $('.ajaxReal').html(datas.realNum);
+            }
+            if (datas.inNum) {
+                $('.ajaxIn').html(datas.inNum);
+            }
+            if (datas.regNum) {
+                $('.ajaxReg').html(datas.regNum);
+            }
+            if (datas.newNum) {
+                $('.ajaxNew').html(datas.newNum);
+            }
+            if (datas.delNum) {
+                $('.ajaxDel').html(datas.delNum);
+            }
+        });
+    });
+    
+    function syncGroupNotice(chatId) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('信息同步中，请稍候。。。', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_group&c=syncInfo", {
+            pytoken: pytoken,
+            chat_id: chatId
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+            parent.layer.close(ii);
+            parent.layer.alert('群公告信息同步成功', 9);
+            location.reload();
+        })
+    }
+</script>
+</body>
+</html>

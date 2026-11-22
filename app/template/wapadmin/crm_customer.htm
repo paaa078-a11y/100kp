@@ -1,0 +1,420 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<body>
+<div id="yunvue" class="none">
+    <section class="innerPageTop">
+        <div class="subjectNav coubtInput UserCoubtInput layerDemo">
+            <form onsubmit="return false;">
+                <input type="text" v-model="keyword" placeholder="公司名称">
+                <button @click="searchsub">搜索</button>
+            </form>
+        </div>
+        <div class="subjectAdd">
+            <a class="claimScreen" href="javascript:void(0)" @click="screenShow=true">
+                <img src="img/serach.png" alt="" />
+                <p>筛选</p>
+            </a>
+        </div>
+    </section>
+    <section class="enterNameTab">
+        <div class="enterTabTitle">
+            <a href="javascript:void(0)" @click="crmtypeShow = true">
+                <span>{{crmtypename}}</span>
+                <img src="img/duob.png" alt="">
+            </a>
+            <a href="javascript:void(0)" @click="crmstatusShow = true">
+                <span>{{crmstatusname}}</span>
+                <img src="img/duob.png" alt="">
+            </a>
+            <a href="javascript:void(0)" @click="ratingShow = true">
+                <span>{{ratingname}}</span>
+                <img src="img/duob.png" alt="">
+            </a>
+            <a href="javascript:void(0)" @click="edtimeShow = true">
+                <span>{{edtimename}}</span>
+                <img src="img/duob.png" alt="">
+            </a>
+        </div>
+    </section>
+    <section class="positInfo claimInfo">
+        <ul v-if="!noCustomer">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多信息了" @load="getList">
+                    <li v-for="(item, cuskey) in list" :key="item.uid">
+                        <div class="positdiv1">
+                            <div class="divSpan1">
+                                <a :href="'index.php?m=user&c=company&a=show&com_id=' + item.uid">{{item.name}}
+                                    <span v-if="item.r_status == '3'" class="wsh"><i class="wshicon" style="top:5px;"></i>未通过</span>
+                                    <span v-else-if="item.r_status == '2'" class="wsh"><i class="wshicon" style="top:5px;"></i>已锁定</span>
+                                    <span v-else-if="item.r_status == '4'" class="wsh"><i class="wshicon" style="top:5px;"></i>已暂停</span>
+                                    <span v-else-if="item.r_status == '0'" class="wsh"><i class="wshicon" style="top:5px;"></i>未审核</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="positdiv2">
+                            <p>会员等级：
+                                <span v-if="(todayStart < item.vipetime) || (item.vipetime==0 && item.rating>0)">{{item.rating_name}}</span>
+                                <span v-else style="color:red">
+                                    <span v-if="item.oldrating_name">{{item.oldrating_name}}</span>
+                                    <span v-else>{{item.rating_name}}</span>
+                                </span>
+                                <span v-if="item.vipetime >= todayStart" style="color:red">{{item.vip_etime_n}} <span>（{{item.vipDay}}）</span></span>
+                                <span v-else-if="item.vipetime < todayStart && item.vipetime != 0" style="color:red">{{item.vip_etime_n}} <span>（{{item.vipDay}}）</span></span>
+                                <span v-else>永久</span>
+                            </p>
+                            <p v-if="item.login_date">登录时间：{{item.login_date_n}}</p>
+                            <p v-else>登录时间：<span style="color:red">从未登录</span></p>
+                            <p>注册时间：{{item.reg_date_n}}</p>
+                            <p>释放时间：{{item.release_time_n}}</p>
+                            <p>联系人：{{item.linkman}}</p>
+                            <p v-if="sy_crm_link==1">联系电话：{{item.linktel}}</p>
+                            <p>客户等级：<span v-if="item.crm_type">{{item.crm_type}}</span><span v-else> -- </span></p>
+                            <p>客户标签：<span v-if="item.crm_status">{{item.crm_status}}</span><span v-else> -- </span></p>
+                            <p>上次跟进时间：<span v-if="item.lastTime">{{item.lastTime}}</span><span v-else> -- </span></p>
+                            <p>下次跟进时间：<span v-if="item.nextTime">{{item.nextTime}}</span><span v-else> -- </span></p>
+                        </div>
+                        <div class="followListe" v-if="item.crm_uid==0">
+                            <a class="adminis" href="javascript:void(0);" @click="pageTo('index.php?m=crm&c=crm_my_customer&a=com&com_id='+item.uid)">管理</a>
+                            <a class="adminis" href="javascript:void(0);" @click="claimCom(item.uid, item.name, cuskey)">认领</a>
+                        </div>
+                    </li>
+                </van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-if="noCustomer" class="noneInfoAll">
+            <div class="nfoAllConu">
+                <img src="img/zwtip.png" alt="">
+                <p>暂无信息</p>
+            </div>
+        </div>
+    </section>
+	<div class="homeNavBar">
+		<ul>
+			<li>
+				<a href="index.php">
+					<div class="navBarOne navBarOne3">
+					</div>
+					<div class="navBarTwo">
+						<span>首页</span>
+					</div>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?m=crm&c=crm_index">
+					<div class="navBarOne navBarOne1">
+					</div>
+					<div class="navBarTwo">
+						<span>工作台</span>
+					</div>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?m=crm&c=crm_my_customer">
+					<div class="navBarOne navBarOne2">
+					</div>
+					<div class="navBarTwo">
+						<span>客户</span>
+					</div>
+				</a>
+			</li>
+			<li>
+				<a class="navBarClick" href="index.php?m=crm&c=crm_customer">
+					<div class="navBarOne navBarOne4">
+					</div>
+					<div class="navBarTwo">
+						<span>公海</span>
+					</div>
+				</a>
+			</li>
+		</ul>
+		</ul>
+	</div>
+    <van-popup v-model="successShow" closeable round @close="closeRLPopup">
+        <div class="clameFlex" style="display:block;position:relative">
+            <div class="clameFlexCont" style="position:relative">
+                <img class="clameClose" src="img/close.png" alt="" @click="successShow = false">
+                <div class="clameFlexContList">
+                    <img src="img/renlin.png" alt="">
+                    <p>恭喜你已成功认领企业</p>
+                    <span>{{cname}}</span>
+                </div>
+                <div class="clameFlexContLink">
+                    <a href="javascript:void(0);" @click="pageTo('index.php?m=user&c=company&a=show&com_id='+uid)">管理企业</a>
+                </div>
+            </div>
+        </div>
+    </van-popup>
+    <van-popup v-model="screenShow" closeable position="bottom" round :style="{height:'12.24rem'}">
+        <div class="Gengduos-eject pubtwo">
+            <div class="conditional_screening_box">
+                <div class="conditional_screening_pv">
+                    <div class="conditional_screening_pv">
+                        <div class="conditional_screening_alltit">全部筛选</div>
+                        <div class="conditional_screening_all">
+                            <div class="conditional_screening_cont screeningContAll">
+                                <div class="conditional_screening_tit"><span class="conditional_screening_tit_n">释放时间</span></div>
+                                <ul class="conditional_screening_list" id="Sortexp-Sortexp">
+                                    <li v-for="(item, key) in releasetimearr" :key="key" :class="item.id==releaid?'conditional_screening_cur':''" @click="setRel(item.id)"><a href="javascript:void(0)">{{item.name}}</a>
+                                </ul>
+                                <div class="beginEnd">
+                                    <div class="beginEndInp">
+                                        <input name="sreleaetime" v-model="sreleaetime" placeholder="开始时间" @click="sTimeShow= true">
+                                    </div>
+                                    <div class="beginEndInp">
+                                        <input name="ereleaetime" v-model="ereleaetime" placeholder="结束时间" @click="eTimeShow= true">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="conditional_screening_operation screeningOperationse">
+                                <div class="conditional_screening_operation_left"><a class="conditional_screening_operation_cz" @click="czSerach">重置</a></div>
+                                <div class="conditional_screening_operation_right"><a class="conditional_screening_operation_ok" @click="qdSerach">确定</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </van-popup>
+    <van-popup v-model:show="sTimeShow" round position="bottom">
+        <van-datetime-picker v-model="currentDate" type="date" title="选择开始日期" @cancel="sTimeShow=false" @confirm="stimeconfirm" />
+    </van-popup>
+    <van-popup v-model:show="eTimeShow" round position="bottom">
+        <van-datetime-picker v-model="currentDate" type="date" title="选择结束日期" @cancel="eTimeShow=false" @confirm="etimeconfirm"/>
+    </van-popup>
+    <van-popup v-model:show="ratingShow" round position="bottom">
+        <van-picker show-toolbar :columns="ratingarr" value-key="name" title="套餐类型" @cancel="ratingShow=false" @confirm="onRatConfirm"/>
+    </van-popup>
+    <van-popup v-model:show="edtimeShow" round position="bottom">
+        <van-picker show-toolbar :columns="edtimearr" value-key="name" title="套餐到期" @cancel="edtimeShow=false" @confirm="onEdtConfirm"/>
+    </van-popup>
+    <van-popup v-model:show="crmtypeShow" round position="bottom">
+        <van-picker show-toolbar :columns="crmTypeArr" value-key="name" title="客户等级" @cancel="crmtypeShow=false" @confirm="onTypeConfirm"/>
+    </van-popup>
+    <van-popup v-model:show="crmstatusShow" round position="bottom">
+        <van-picker show-toolbar :columns="crmStatusArr" value-key="name" title="客户标签" @cancel="crmstatusShow=false" @confirm="onStaConfirm"/>
+    </van-popup>
+</div>
+<script>
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                finished: false,
+                limit: 10,
+                page: 1,
+
+                refreshing: false,
+
+                noCustomer: false,
+
+                source: [],
+                keyword: '',
+
+                todayStart: '',
+                sy_crm_link: 0,
+
+                screenShow: false,
+                successShow: false,
+
+                uid: '',
+                cname: '',
+                crmtypename: '客户等级',
+                crmstatusname: '客户标签',
+                ratingname: '套餐类型',
+                edtimename: '套餐到期',
+                crmtypeShow: false,
+                crmstatusShow: false,
+                ratingShow: false,
+                edtimeShow: false,
+                ratingarr: [],
+                crmStatusArr: [],
+                crmTypeArr: [],
+                edtimearr: [],
+                crmTypeId: '',
+                crmStatusId: '',
+                ratingId: '',
+                edtimeId: '',
+
+                releasetimearr: [],
+                releaid: '',
+                sreleaetime: '',
+                ereleaetime: '',
+
+                currentDate: new Date(),
+                sTimeShow: false,
+                eTimeShow: false,
+
+                rlkey: -1, // 认领时记录的数据key
+            }
+        },
+        created() {
+            this.getStatis();
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+            },
+            getList: function (type) {
+
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    limit: that.limit,
+                    page: that.page,
+                };
+
+                if (that.crmTypeId) {
+                    param['crmType'] = that.crmTypeId;
+                }
+                if (that.crmStatusId) {
+                    param['crm_status'] = that.crmStatusId;
+                }
+                if (that.ratingId) {
+                    param['rating'] = that.ratingId;
+                }
+                if (that.edtimeId) {
+                    param['vipetime'] = that.edtimeId;
+                }
+                if (that.releaid) {
+                    param['releaseTime'] = that.releaid;
+                    param['releaseStart'] = that.sreleaetime;
+                    param['releaseEnd'] = that.ereleaetime;
+                }
+                if (that.keyword) {
+                    param['keyword'] = that.keyword;
+                }
+                $.post('index.php?m=crm&c=crm_customer', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+                    if (type == 'new'){
+                        that.list = [];
+                        that.refreshing = false;
+                        that.finished = false;
+                    }
+                    if (res.list.length > 0) {
+
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noCustomer = false;
+
+                        if (res.list.length < that.limit) {
+
+                            that.finished = true;
+                        } else {
+
+                            that.page = that.page + 1;
+                        }
+                    } else if (that.page == 1) {
+
+                        that.noCustomer = true;
+                        that.finished = true;
+                    }else{
+
+                        that.finished = true;
+                    }
+
+                    that.todayStart = res.todayStart ? res.todayStart : '';
+                    that.sy_crm_link = res.sy_crm_link ? res.sy_crm_link : 0;
+                    that.keyword = res.keyword ? res.keyword : '';
+                }, 'json');
+            },
+            getStatis: function () {
+                var that = this;
+                $.post('index.php?m=crm&c=crm_customer&a=statis', {a: 1}, function (res) {
+                    that.ratingarr = res.ratingarr ? res.ratingarr : [];
+                    that.crmStatusArr = res.crmStatusArr ? res.crmStatusArr : [];
+                    that.crmTypeArr = res.crmTypeArr ? res.crmTypeArr : [];
+                    that.edtimearr = res.edtimearr ? res.edtimearr : [];
+                    that.releasetimearr = res.releasetimearr ? res.releasetimearr : [];
+                }, 'json');
+            },
+            searchsub: function () {
+                this.getList('refresh');
+            },
+            onRatConfirm: function (e) {
+                this.ratingId = e.id;
+                this.ratingname = e.name;
+                this.ratingShow = false;
+                this.getList('refresh');
+            },
+            onEdtConfirm: function (e) {
+                this.edtimeId = e.id;
+                this.edtimename = e.name;
+                this.edtimeShow = false;
+                this.getList('refresh');
+            },
+            onTypeConfirm: function (e) {
+                this.crmTypeId = e.id;
+                this.crmtypename = e.name;
+                this.crmtypeShow = false;
+                this.getList('refresh');
+            },
+            onStaConfirm: function (e) {
+                this.crmStatusId = e.id;
+                this.crmstatusname = e.name;
+                this.crmstatusShow = false;
+                this.getList('refresh');
+            },
+            setRel: function (e) {
+                this.releaid = e;
+            },
+            formatDate(date) {
+                var that = this;
+                let year = date.getFullYear();
+                let month = date.getMonth() < 9 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                return year + '/' + month + '/' + day;
+            },
+            stimeconfirm: function (date) {
+                this.sreleaetime = this.formatDate(date);
+                this.sTimeShow = false;
+            },
+            etimeconfirm: function (date) {
+                this.ereleaetime = this.formatDate(date);
+                this.eTimeShow = false;
+            },
+            qdSerach: function () {
+                this.getList('refresh');
+                this.screenShow = false;
+            },
+            czSerach: function () {
+                window.location.href = 'index.php?m=crm&c=crm_customer';
+                window.history.replaceState({}, "", "index.php?m=crm&c=crm_customer");
+            },
+            claimCom: function (cuid, cname, key) {
+                var that = this;
+                showLoading('认领中');
+                $.post('index.php?m=crm&c=crm_customer&a=claimCom', {uids: cuid}, function (res) {
+                    hideLoading();
+                    if (res.errcode == 9) {
+                        that.uid = cuid;
+                        that.cname = cname;
+                        that.rlkey = key;
+                        that.successShow = true;
+                    } else if (res.errcode == 8) {
+                        return showToast(res.msg);
+                    }
+                }, 'json');
+            },
+            closeRLPopup() {
+                if (this.rlkey > -1) {
+                    this.list.splice(this.rlkey, 1);
+                    this.rlkey = -1;
+                }
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            }
+        }
+    });
+</script>
+</body>
+</html>

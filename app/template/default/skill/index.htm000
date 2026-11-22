@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>{yun:}$title{/yun}</title>
+    <meta name="keywords" content="{yun:}$keywords{/yun}" />
+    <meta name="description" content="{yun:}$description{/yun}" />
+	 <link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+	<link rel="stylesheet" href="{yun:}$style{/yun}/style/skill.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+</head>
+<body>
+	{yun:}include file="$tplstyle/header.htm"{/yun}
+		<div class="clear"></div>
+
+  <div class="skill">
+        <!-- <div class="skill_banner">
+            {yun:}adlist classid=515 limit=5 item=adlist_515{/yun}
+            <div class="skilBbanstr">{yun:}$adlist_515.html{/yun}</div>
+            {yun:}/adlist{/yun}
+        </div> -->
+        <div class="clear"></div>
+         <!--banner-->
+        <div class="wlzp_banner">
+            <div class="flexslider">
+                <ul class="slides">
+                    {yun:}adlist classid=515 item="lunbo" name=foo{/yun}
+                    <li style="background: url({yun:}$lunbo.pic{/yun}) 50% 0 no-repeat;">
+                        <a href="{yun:}$lunbo.src{/yun}" target="_blank" style="display:block;width:100%;height:100%;"></a>
+                    </li>
+                    {yun:}/adlist{/yun}
+                </ul>
+            </div>
+        </div>
+		<div class="clear"></div>
+
+        <div class="skill_content">
+            <div class="skill_content_box">
+                {yun:}foreach item=v key=key from=$class{/yun}
+             <div class="skill_tit">
+                 {yun:}$v.name{/yun}
+             </div>
+                <div class="item_box">
+                    {yun:}foreach item=vn key=vkey from=$v.lesson{/yun}
+                    <div class="skill_item">
+						<a href="{yun:}url m=skill c=show id='`$vn.id`'{/yun}" target="_blank">
+                        <div class="item_top">
+                            <img src="{yun:}$vn.cover_n{/yun}" alt="">
+                        </div>
+                        <div class="item_center">
+                            <div class="center_title">
+                                {yun:}$vn.title{/yun}
+                            </div>
+                            <div class="center_info">
+                                {yun:}$vn.desc{/yun}
+                            </div>
+                           <div class="center_tag"> 
+						   {yun:}if $vn.welfare{/yun}
+                               {yun:}foreach from=$vn.welfare_n key=wkey item=wval{/yun}
+                               <div>{yun:}$wval{/yun}</div>
+                               {yun:}/foreach{/yun}
+                            {yun:}/if{/yun} </div>
+                        </div>
+                        <div class="item_bottom">
+                            <div class="bottom_left">
+                                {yun:}if $vn.price != 0{/yun}
+                                <div class="price_new">
+                                    ¥{yun:}$vn.price{/yun}
+                                </div>
+                                {yun:}else{/yun}
+                                <div class="price_new">
+                                    免费
+                                </div>
+                                {yun:}/if{/yun}
+                                {yun:}if $vn.prices > 0{/yun}
+                                <div class="price_old">
+                                    ¥{yun:}$vn.prices{/yun}
+                                </div>
+                                {yun:}/if{/yun}
+                            </div> 
+                            <a href="{yun:}url m=skill c=show id='`$vn.id`'{/yun}" class="bottom_right" target="_blank">
+                                查看详情
+                            </a>
+                        </div>
+						  </a>
+                    </div>
+                    {yun:}/foreach{/yun}
+                </div>
+                {yun:}foreachelse{/yun}
+                <div class="clear"></div>
+                <div class="no_tip">很抱歉，还没有技能提升的相关信息</div>
+                {yun:}/foreach{/yun}
+                <div class="clear"></div>
+                <!--此处是分页-->
+<!--                <div class="pages fl" style="padding-top:20px; padding-bottom:10px;"> {yun:}$pagenav{/yun} </div>-->
+            </div>
+        </div>
+    </div>
+
+<div class="clear"></div>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script>
+        layui.use(['layer'], function () {
+            var layer = layui.layer,
+                $ = layui.$;
+        });
+        function page(id, page, limit, updown) {
+            if (page < 1) {
+                page == 1;
+            }
+            loadlayer();
+            $.ajax({
+                type: "POST",
+                global: false,
+                url: "{yun:}url m=skill c=prestr{/yun}",
+                data: {
+                    id: id,
+                    page: page,
+                    limit: limit,
+                    updown: updown
+                },
+                success: function (data) {
+                    layer.closeAll('loading');
+                }
+            });
+        }
+    </script>
+
+	{yun:}include file="$tplstyle/footer.htm"{/yun}
+</body>
+</html>

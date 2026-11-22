@@ -1,0 +1,589 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+html {
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+a,
+li {
+    list-style: none;
+    text-decoration: none;
+}
+
+a {
+    color: var(--color-black);
+    font-size: 14px;
+}
+
+a:hover {
+    color: var(--color-red);
+}
+
+button,
+input,
+textarea {
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.subjectConts {
+    position: absolute;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: #F6F7FB;
+}
+
+/***
+ * _ooOoo_
+ * o8888888o
+ * 88" . "88
+ * (| -_- |)
+ *  O\ = /O
+ * ___/`---'\____
+ * .   ' \\| |// `.
+ * / \\||| : |||// \
+ * / _||||| -:- |||||- \
+ * | | \\\ - /// | |
+ * | \_| ''\---/'' | |
+ * \ .-\__ `-` ___/-. /
+ * ___`. .' /--.--\ `. . __
+ * ."" '< `.___\_<|>_/___.' >'"".
+ * | | : `- \`.;`\ _ /`;.`/ - ` : | |
+ * \ \ `-. \_ __\ /__ _/ .-` / /
+ * ======`-.____`-.___\_____/___.-`____.-'======
+ * `=---='
+ *          .............................................
+ *           佛曰：bug泛滥，我已瘫痪！
+ */
+
+.swipeContAllsu{
+    overflow: hidden;
+}
+.swipeContAllsu .swiper-slide{
+    overflow: hidden;
+}
+.swipeContAllsu .swiper-slide a{
+    overflow: hidden;
+    display: block;
+}
+.swipeContAllsu .swiper-slide a img{
+    width: 100%;
+    height: auto;
+}
+/* --分割线-- */
+.detailsTops{
+    overflow: hidden;
+    height: 1.5rem;
+    background: #fff;
+    position: relative;
+    padding: 0 0.32rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.detailsTops a{
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    top: 0.43rem;
+    bottom: 0;
+    left: 0.32rem;
+    margin: auto;
+    z-index: 22;
+}
+.detailsTops a img{
+    width: 0.32rem;
+    height: 0.64rem;
+}
+.detailsTops span{
+    font-size: 0.453rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.skillImprovImg{
+    overflow: hidden;
+    position: relative;
+}
+.skillImprovImg img{
+    width: 100%;
+    height: auto;
+}
+.skillImpAlls{
+    overflow: hidden;
+    position: relative;
+    min-height: 2rem;
+    margin:0 0.32rem 0.32rem 0.32rem ;
+}
+.skillImpTitle{
+    
+    font-size: 0.42rem;
+    color: #111;
+    font-weight: bold;
+    padding: 0.3rem 0 0.4rem 0;text-align: center;
+}
+.skillImpList{
+    overflow: hidden;
+    position: relative;
+}
+.skillImpList li{
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    padding: 0.32rem;
+    border-radius: 0.2rem;
+    margin-bottom: 0.32rem;
+}
+.skillImpList .skillImInfo{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.skillImpList .skillImInfoImg{
+    overflow: hidden;
+    width: 3.2rem;
+    height: 1.96rem;
+    border-radius: 0.1rem;
+    display: flex;
+    align-items: center;
+}
+.skillImpList .skillImInfoImg img{
+    width: 100%;
+    height: auto;
+}
+
+.skillImpList .skillImInfoData{
+    overflow: hidden;
+    width: calc(100% - 3.5rem);
+}
+.skillImpList .skillImInfoData h3{
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.42rem;
+    color: #333;
+    font-weight: bold;
+}
+.skillImpList .skillImInfoData p{
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.34rem;
+    color: #999;
+    padding: 0.15rem 0 0.05rem 0;
+}
+.skillImpList .skillImInfoTips{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.skillImpList .skillImInfoTips span{
+    overflow: hidden;
+    height: 0.533rem;
+    line-height: 0.533rem;
+    font-size: 0.3rem;
+    color: #2778F8;
+    padding: 0 0.12rem;
+    margin-right: 0.14rem;
+    border-radius: 0.09rem;
+    margin-top: 0.12rem;
+    background: #F4F8FF;
+}
+.skillImpList .skillImPrice{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.32rem;
+}
+.skillImpList .skillImMoney{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-size: 0.4rem;
+}
+.skillImpList .skillImMoney span{
+    font-size: 0.4rem;
+    color: #FF0A0A;
+    font-weight: bold;
+}
+.skillImpList .skillImMoney span.yuanao{
+    font-size: 0.34rem;
+    color: #999;
+    font-weight: 500;
+    padding-left: 0.2rem;
+    text-decoration: line-through;
+}
+
+.skillImpList .skillImView{
+    font-size: 0.34rem;
+    color: #ccc;
+}
+.trainTopAll{
+    overflow: hidden;
+    background: #fff;
+}
+.trainTopAll .trainTopImg{
+    overflow: hidden;
+}
+.trainTopAll .trainTopImg img{
+    width: 100%;
+    height: auto;
+}
+.trainTopAll .trainTopInfo{
+    overflow: hidden;
+    padding: 0.32rem;
+}
+.trainTopAll .trainTopInfo h3{
+    font-size: 0.62rem;
+    color: #111;
+}
+.trainTopAll .trainTopTips{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.12rem 0;
+}
+.trainTopAll .trainTopTips span{
+    overflow: hidden;
+    height: 0.533rem;
+    line-height: 0.533rem;
+    font-size: 0.3rem;
+    color: #2778F8;
+    padding: 0 0.12rem;
+    margin-right: 0.14rem;
+	    margin-top: 0.14rem;
+    border-radius: 0.09rem;
+    background: #F4F8FF;
+}
+.trainTopAll .trainTopPay{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; margin-top: 0.14rem;
+}
+.trainTopAll .trainTopMoney{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.trainTopAll .trainTopMoney span{
+    color: #FF0A0A;
+    font-size: 0.6rem;
+}
+.trainTopAll .trainTopMoney span.yuanao{
+    font-size: 0.34rem;
+    color: #999;
+    font-weight: 500;
+    padding-left: 0.2rem;
+    text-decoration: line-through;
+}
+.trainTopAll .trainTopNum{
+    font-size: 0.32rem;
+    color: #ccc;
+}
+.trainCentec{
+    overflow: hidden;
+    padding: 0.32rem;
+    margin-top: 0.3rem;
+    background: #fff;
+}
+.trainCentec::after{
+    overflow: hidden;
+    display: block;
+    position: relative;
+    content: "";
+    width: 100%;
+    height: 2rem;
+}
+.trainCentTitle{
+    overflow: hidden;
+    font-size: 0.42rem;
+    color: #333;
+    font-weight: bold;
+}
+.trainCentTitle span{
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-left: 0.2rem;
+}
+.trainCentTitle span::before{
+    overflow: hidden;
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    width: 3px;
+    height: 15px;
+    border-radius: 2px;
+    background: #2778F8;
+}
+.trainCentText{
+    overflow: hidden;
+    padding: 0.32rem 0;
+    font-size: 0.4rem;
+    line-height: 0.8rem;
+    color: #3F3F3F;
+}
+.trainCentImage{
+    overflow: hidden;
+}
+.trainCentec img{
+    width: 100%;
+    height: auto;
+}
+.trainCentImage img{
+    width: 100%;
+    height: auto;
+}
+.trainBaom{
+    overflow: hidden;
+    position: fixed;
+    height: 2rem;
+    background: #fff;
+    bottom: 0;
+    left: 0;
+    z-index: 22;
+    width:100%;
+    padding: 0 0.32rem;
+    box-shadow: 5px 3px 5px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.trainBaom .trainPopServe{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 1.5rem;
+    cursor: pointer;
+    text-align: center;
+}
+.trainBaom .trainPopServe img{
+    width: 0.46rem;
+    height: 0.46rem;
+    margin: auto;
+}
+.trainBaom .trainPopServe span{
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    color: #2778F8;
+    padding-top: 0.1rem;
+    font-size: 0.34rem;
+}
+.trainBaom .trainPopLinks{
+    overflow: hidden;
+    width: calc(100% - 2rem);
+}
+.trainBaom .trainPopLinks a{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.17rem;
+    background: #2778F8;
+    border-radius: 0.6rem;
+    color: #fff;
+    font-size: 0.4rem;
+}
+/* 弹窗1 */
+.trainBaomPopup{
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    z-index: 33;
+    display: none;
+}
+.trainPopCon{
+    overflow: hidden;
+    background: #fff;
+    padding: 0.4rem 0.5rem;
+    width: calc(95% - 1rem);
+    height: 5.6rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+    border-radius: 0.37rem;
+}
+.trainPopTitle{
+    overflow: hidden;
+    display: flex; 
+    position: relative;
+}
+.trainPopTitle span{
+    font-size: 0.48rem;
+    color: #111;
+    font-weight: bold;
+}
+.trainPopTitle img{
+    position: absolute;
+    cursor: pointer;
+    width: 0.52rem;
+    height: 0.52rem;
+    top: 0;
+    right: 0;
+    z-index: 22;
+}
+.trainPopFrom{
+    overflow: hidden;
+    padding: 0.4rem 0;
+}
+.trainPopFrom form{
+    overflow: hidden;
+}
+.trainPopFrom form .trainPopFromInt{
+    overflow: hidden;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.34rem;
+}
+.trainPopFrom form .trainPopFromInt span{
+    overflow: hidden;
+    display: block;
+    font-size: 0.42rem;
+    width: 1.8rem;
+    color: #666;
+}
+.trainPopFrom form .trainPopFromInt input{
+    width: calc(100% - 2.08rem);
+    height: 1.2rem;
+    padding-left: 0.28rem;
+    background: #FAFAFA;
+    font-size: 0.42rem;
+    color: #999;
+}
+.trainPopFrom form .trainPopFromBut{
+    overflow: hidden;
+}
+.trainPopFrom form .trainPopFromBut button{
+    height: 1.25rem;
+    width: 100%;
+    font-size: 0.42rem;
+    color: #fff;
+    background: linear-gradient(to bottom, #279DF8, #2778F8);
+    border-radius: 0.64rem;
+}
+
+/* 弹窗2 */
+.trainServPopup{
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    z-index: 33;
+    display: none;
+}
+.trainServConts{
+    overflow: hidden;
+    background: #fff;
+    padding: 0.5rem 0.5rem;
+    width: calc(75% - 1rem);
+    height: 8.5rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 22;
+    border-radius: 0.37rem;
+}
+.trainServTitle{
+    overflow: hidden;
+    display: flex;
+    
+    position: relative;
+}
+.trainServTitle span{
+    font-size: 0.48rem;
+    color: #111;
+    font-weight: bold;
+}
+.trainServTitle img{
+    position: absolute;
+    cursor: pointer;
+    width: 0.52rem;
+    height: 0.52rem;
+    top: 0;
+    right: 0;
+    z-index: 22;
+}
+.trainServWeChat{
+    overflow: hidden;
+}
+.trainServWeChat img{
+    width: 4rem;
+    height: 4rem; margin:0.533333rem auto; display: block;
+}
+.trainServWeChat span{
+    display: block;
+    text-align: center;
+    font-size: 0.37rem;
+    color: #333;
+}
+.trainServInfo{
+    overflow: hidden;
+    width: 100%;
+    height: 0.9rem;
+    background: #2778F8;
+    border-radius: 0.5rem;
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.trainServInfo img{
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-right: 0.2rem;
+}
+.trainServInfo span{
+    font-size: 0.42rem;
+    color: #fff;
+}

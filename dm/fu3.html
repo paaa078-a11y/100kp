@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>打开小程序</title>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .float-btn {
+            position: fixed;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #07C160, #05a84e);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+            z-index: 9999;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .float-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        .float-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .content {
+            padding: 15px;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h2>页面内容区域</h2>
+        <p>向下滚动查看悬浮按钮效果...</p>
+    </div>
+    
+    <div class="float-btn" id="launchBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+        </svg>
+    </div>
+
+    <script>
+        // 配置微信JS-SDK
+        function initWechatSDK() {
+            // 注意：这里需要后端生成签名，以下为示例参数
+            wx.config({
+                debug: false,
+                appId: 'wx68bfc5c7f6f6e1b0',
+                timestamp: Math.floor(Date.now() / 1000),
+                nonceStr: 'random' + Math.random().toString(36).substr(2, 15),
+                signature: '', // 需后端计算
+                openTagList: ['wx-open-launch-weapp']
+            });
+            
+            wx.ready(function() {
+                console.log('SDK配置完成');
+            });
+            
+            wx.error(function(res) {
+                console.error('SDK配置错误:', res);
+                alert('微信配置失败，请刷新重试');
+            });
+        }
+        
+        // 打开小程序函数
+        function launchMiniProgram() {
+            // 方案1：使用开放标签（推荐）
+            const container = document.createElement('div');
+            container.innerHTML = `
+                <wx-open-launch-weapp
+                    id="launch-weapp"
+                    username="gh_5f4a9773990b"
+                    path="/pages/index/index"
+                >
+                    <script type="text/wxtag-template">
+                        <style>.btn { width:100%; height:100% }</style>
+                        <div class="btn"></div>
+                    </script>
+                </wx-open-launch-weapp>
+            `;
+            document.body.appendChild(container);
+            document.getElementById('launch-weapp').click();
+            
+            // 方案2：备用方案（3秒后检测是否跳转成功）
+            setTimeout(function() {
+                if (confirm('未成功打开小程序，是否尝试其他方式？')) {
+                    // 方式3：使用URL Scheme
+                    location.href = 'weixin://dl/business/?t=xxxxxx';
+                }
+            }, 3000);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initWechatSDK();
+            
+            document.getElementById('launchBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                launchMiniProgram();
+            });
+        });
+    </script>
+</body>
+</html>

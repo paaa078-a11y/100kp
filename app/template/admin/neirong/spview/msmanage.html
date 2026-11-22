@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="cityfl" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachleft">
+            <div class="tableSeackellsd" style="padding: 2px 0;">
+                <el-input v-model="keyword" placeholder="请输入搜索内容" class="input-with-select" size="small"
+                    prefix-icon="el-icon-search" clearable>
+                    <el-select v-model="type" size="small" slot="prepend" placeholder="用户ID">
+                        <el-option label="用户ID" value="1"></el-option>
+                        <el-option label="企业名称" value="2"></el-option>
+                    </el-select>
+                </el-input>
+            </div>
+            <div class="  tableSeachInptsmall newsinput">
+                <el-select v-model="status" clearable size="small" slot="prepend" placeholder="状态" @change="search">
+                    <el-option label="已审核" value="1"></el-option>
+                    <el-option label="未通过" value="2"></el-option>
+                    <el-option label="未审核" value="3"></el-option>
+                </el-select>
+            </div>
+            <div class="newsbtnbox">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+            </div>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" stripe border
+                  style="width: 100%;" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }" height="100%"
+                  @selection-change="handleSelectionChange" ref="multipleTable" v-loading="loading" :empty-text="emptytext">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="id" label="ID" width="90">
+            </el-table-column>
+            <el-table-column prop="uid" label="用户ID" width="90">
+            </el-table-column>
+            <el-table-column prop="name_n" label="企业名称" min-width="200" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="jobname" label="参与职位" min-width="160" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="预约简历" width="110">
+                <template slot-scope="scope">
+                    <div style=" padding-top: 10px;">
+                        <el-badge v-if="scope.row.subnum > 0" :value="scope.row.subnum" :max="99" class="item">
+                            <el-link @click="resume(scope.row.id)">查看</el-link>
+                        </el-badge>
+                        <el-link v-else @click="resume(scope.row.id)">查看</el-link>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="sdate_n" label="开始时间" min-width="160">
+            </el-table-column>
+            <el-table-column prop="roomstate" label="房间状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.roomstatus == '1'" class="admin_com_tg">关闭</span>
+                    <span v-else class="admin_com_Audited">启用</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="shstate" label="审核状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.status == '1'" class="admin_ysh"> 已审核</span>
+                    <span v-else-if="scope.row.status == '0'" class="admin_wsh"> 未审核</span>
+                    <span v-else-if="scope.row.status == '2'" class="admin_wtg"> 未通过</span>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="260">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button size="small" plain>
+                            <el-link :href="preview_url+scope.row.id" target="_blank">预览</el-link>
+                        </el-button>
+                        <el-button size="mini" plain @click="edit(scope.row)">编辑</el-button>
+                        <el-button size="mini" plain @click="setstatus(scope.row)">审核</el-button>
+                        <el-button type="danger" size="mini" @click="delrow(scope.row.id)">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div class="">
+            <el-checkbox v-model="checkedAll" @change="selectAllBottom">全选</el-checkbox>
+            <el-button @click="delAllBottom" size="mini">批量删除</el-button>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                           :current-page="currentPage" :page-sizes="pageSizes" :page-size="perPage"
+                           layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+        </div>
+    </div>
+    <div class="modluDrawer">
+        <el-dialog title="视频面试审核" width="500px" :visible.sync="drawerstatus" :modal-append-to-body="false">
+            <div class="toolClasDia fenpeizhand">
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>审核操作：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-radio v-model="curr_data.status" label="1">正常</el-radio>
+                        <el-radio v-model="curr_data.status" label="2">未通过</el-radio>
+                    </div>
+                </div>
+                <div class="toolClasList">
+                    <div class="toolClasTite">
+                        <span>审核说明：</span>
+                    </div>
+                    <div class="toolClasCont">
+                        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="curr_data.statusbody"></el-input>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="drawerstatus = false">取 消</el-button>
+                    <el-button type="primary" @click="statusSave" :disabled="saveLoading">确 定</el-button>
+                </span>
+        </el-dialog>
+    </div>
+    <div class="modluDrawer">
+        <el-drawer title="编辑视频面试" :visible.sync="draweredit" :modal-append-to-body="false" :show-close="true"
+                   :with-header="true" size="50%">
+            <div class="processDrawer">
+                <div class="shipinmianshi">
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>面试开始时间</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-date-picker v-model="curr_data.sdate_n" type="datetime" placeholder="选择日期">
+                            </el-date-picker>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>选择职位</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-select v-model="curr_data.jobid_arr" filterable multiple placeholder="请选择">
+                                <el-option v-for="item in jobarr" :key="item.value" :label="item.label"
+                                           :value="item.value"></el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div style="overflow: hidden; font-size: 16px; color: #333; padding: 10px 0;">
+                        <span>求职者面试要求</span>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>经验要求</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-select v-model="curr_data.exp" placeholder="请选择">
+                                <el-option v-for="item in exparr" :key="item.value" :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>学历要求</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-select v-model="curr_data.edu" placeholder="请选择">
+                                <el-option v-for="item in eduarr" :key="item.value" :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>性别要求</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-checkbox-group v-model="curr_data.sex_arr">
+                                <el-checkbox v-for="(item,index) in sexarr" :label="item.value" :key="index">{{item.label}}</el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>简历要求</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-checkbox-group v-model="curr_data.other_arr">
+                                <el-checkbox label="1">工作经历</el-checkbox>
+                                <el-checkbox label="2">教育经历</el-checkbox>
+                                <el-checkbox label="3">项目经历</el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                    <div style="overflow: hidden; font-size: 16px; color: #333; padding: 10px 0;">
+                        <span>备注视频面试</span>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>信息备注</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-input v-model="curr_data.remark" placeholder="添加备注信息，例：XXX等职位 - 2020/08/12 上午 面试专场"></el-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="setBasicButn" style="border: none;">
+                    <el-button type="primary" size="medium" @click="save">提交</el-button>
+                </div>
+            </div>
+        </el-drawer>
+    </div>
+    <!-- 群聊详情弹窗 -->
+    <spresume ref="spresume"></spresume>
+</div>
+</body>
+<script>
+    const custoapp = new Vue({
+        el: '#cityfl',
+        data: function () {
+            return {
+                emptytext: '暂无数据',
+                loading: false,
+                saveLoading: false,
+
+                type: '1',
+                status: '',
+                keyword: '',
+                checkedAll: false,
+                selectedItem: [],
+                tableData: [],
+                currentPage: 1,
+                perPage: 0,
+                pageSizes: [],
+                total: 0,
+                preview_url: '',
+                curr_data: {},
+                drawerstatus: false,
+                draweredit: false,
+                eduarr: [],
+                exparr: [],
+                jobarr: [],
+                sexarr: [],
+                prevPage:0,
+            }
+        },
+        components: {
+            'spresume': httpVueLoader('./component/spresume.vue'),
+        },
+        created: function () {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.status) {
+                that.status = query.status;
+            }
+
+            this.getList();
+        },
+        methods: {
+            resume(id){
+                this.$refs.spresume.sid = id
+                this.$refs.spresume.getList()
+            },
+            setstatus(data){
+                this.curr_data = deepClone(data)
+                this.drawerstatus = true
+            },
+            edit(data){
+                var that = this
+                that.curr_data = data
+                let params = {
+                    id: that.curr_data.id,
+                    uid: that.curr_data.uid,
+                    jobid: that.curr_data.jobid
+                };
+                httpPost('m=neirong&c=spview&a=add', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.exparr = response.data.data.exparr
+                        that.eduarr = response.data.data.eduarr
+                        that.jobarr = response.data.data.jobarr
+                        that.sexarr = response.data.data.sexarr
+                        that.curr_data.jobid_arr = response.data.data.jobid_arr
+                        that.draweredit = true
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            handleSelectionChange(val) {
+                this.selectedItem = [];
+                let _this = this;
+                if (val.length) {
+                    val.forEach(item => {
+                        _this.selectedItem.push(item.id);
+                    });
+                }
+                if (_this.selectedItem.length == 0) {
+                    _this.checkedAll = false;
+                } else {
+                    if (_this.selectedItem.length == _this.tableData.length) {
+                        _this.checkedAll = true;
+                    } else {
+                        _this.checkedAll = false;
+                    }
+                }
+            },
+            selectAllBottom(value) {
+                value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+            },
+            handleSizeChange(val) {
+                this.perPage = val;
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getList()
+            },
+            search() {
+                this.currentPage = 1;
+                this.getList();
+            },
+            async getList() {
+                let that = this;
+                let params = {
+                    page: that.currentPage,
+                    pageSize: that.perPage
+                }
+                if (that.type) {
+                    params.type = that.type
+                }
+                if (that.status) {
+                    params.status = that.status
+                }
+                if (that.keyword) {
+                    params.keyword = that.keyword
+                }
+                that.loading = true;
+                that.emptytext = "数据加载中";
+                httpPost('m=neirong&c=spview&a=index', params, {hideloading: true}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.tableData = res.data.list
+                        that.perPage = parseInt(res.data.perPage)
+                        that.pageSizes = res.data.pageSizes
+                        that.total = parseInt(res.data.total)
+                        that.preview_url = res.data.preview_url
+                        if(that.prevPage != that.currentPage){
+                            that.prevPage = that.currentPage;
+                            that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        that.loading = false;
+                        if (that.tableData.length === 0){
+                            that.emptytext = "暂无数据";
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            save() {
+                var that = this
+                if (!that.curr_data.sdate_n) {
+                    that.$message.error('请选择开始时间');
+                    return false;
+                }
+                if (that.curr_data.jobid_arr.length == 0) {
+                    that.$message.error('请选择面试职位');
+                    return false;
+                }
+
+                if (that.saveLoading) {
+                    return false;
+                }
+                that.saveLoading = true;
+
+                httpPost('m=neirong&c=spview&a=save', that.curr_data).then(function (result) {
+                    var res = result.data
+
+                    that.saveLoading = false;
+                    if (res.error == 0) {
+                        message.success(res.msg, function () {
+                            that.draweredit = false
+                            that.type = '1'
+                            that.status = ''
+                            that.keyword = ''
+                            that.getList()
+                        })
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            delrow(id) {
+                delConfirm(this, id, this.delete);
+            },
+            delAllBottom() {
+                if (!this.selectedItem.length) {
+                    message.error('请选择要删除的数据项');
+                    return false;
+                }
+                delConfirm(this, this.selectedItem, this.delete);
+            },
+            async delete(id) {
+                let that = this;
+                let params = {
+                    del: id
+                };
+                httpPost('m=neirong&c=spview&a=del', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success('操作成功');
+                        that.getList();
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            // 审核
+            async statusSave() {
+                var that = this
+                let params = {
+                    pid: this.curr_data.id,
+                    status: this.curr_data.status,
+                    statusbody: this.curr_data.statusbody
+                };
+
+                if (that.saveLoading) {
+                    return false;
+                }
+                that.saveLoading = true;
+
+                httpPost('m=neirong&c=spview&a=status', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.drawerstatus = false
+                        message.success(response.data.msg, function(){
+                            that.saveLoading = false;
+                            that.getList();
+                        });
+                    } else {
+                        that.saveLoading = false;
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+</html>
+<style>
+    .cell span {
+        display: flex;
+        align-items: center;
+    }
+
+    .admin_wsh {
+        color: #f00;
+    }
+
+    .admin_wtg {
+        color: #f60;
+    }
+
+    .admin_com_tg {
+        width: 50px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: #f00;
+        border-radius: 20px;
+        display: block
+    }
+
+    .admin_com_Audited {
+        width: 50px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: #707070;
+        border-radius: 20px;
+        display: block
+    }
+</style>

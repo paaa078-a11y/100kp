@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 兼职管理 - 兼职审核</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+</head>
+<style>
+    .layui-form-select dl dd, .layui-form-select dl dt {white-space: pre-wrap;border-top: 1px solid #eee;line-height: 24px;padding: 10px;}
+    .admin_popup {display: flex;padding: 0 0 0 20px}
+    .admin_popupleft {flex: 1;}
+    .admin_popup_review {padding: 0 40px 0 30px;}
+</style>
+
+<body class="admin_tc_bg">
+
+<div class="chbox">
+    <div class="chbox_cominfo" id="leftbox">
+
+        <div class="admin_popup_comname">{yun:}$Info.name{/yun}</div>
+        <div class="admin_jobinfo" style="padding:0px 0px 5px 0px">
+            <span class="admin_jobinfo_n">{yun:}$Info.salary{/yun}{yun:}$Info.salary_type_n{/yun}</span>{yun:}$Info.cityname{/yun}
+        </div>
+
+        <div class="admin_popup_h1"> 基本要求</div>
+        {yun:}if $Info.type_n{/yun}
+        <div class="admin_popup_comifo"> 工作类型：{yun:}$Info.type_n{/yun}</div>
+        {yun:}/if{/yun}
+
+        {yun:}if $Info.number{/yun}
+        <div class="admin_popup_comifo"> 招聘人数：{yun:}$Info.number{/yun}</div>
+        {yun:}/if{/yun}
+
+        {yun:}if $Info.sex_n{/yun}
+        <div class="admin_popup_comifo"> 性别要求：{yun:}$Info.sex_n{/yun}</div>
+        {yun:}/if{/yun}
+
+        {yun:}if $Info.billing_cycle_n{/yun}
+        <div class="admin_popup_comifo"> 结算周期：{yun:}$Info.billing_cycle_n{/yun}</div>
+        {yun:}/if{/yun}
+
+        {yun:}if $Info.sdate_n{/yun}
+        <div class="admin_popup_comifo"> 兼职有效期：{yun:}$Info.sdate_n{/yun} → {yun:}$Info.edate_n{/yun}</div>
+        {yun:}/if{/yun}
+
+        {yun:}if $Info.address{/yun}
+        <div class="admin_popup_comifo"> 工作地址：{yun:}$Info.address{/yun}</div>
+        {yun:}/if{/yun}
+        <div class="admin_popup_comifo" style="display: flex; flex-direction: column;">
+            <span>工作时间</span>
+            <table class="tjob_timetable" style="float:left; margin-top: 5px;" >
+                <tbody>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>周一</th>
+                    <th>周二</th>
+                    <th>周三</th>
+                    <th>周四</th>
+                    <th>周五</th>
+                    <th>周六</th>
+                    <th>周日</th>
+                </tr>
+                <tr>
+                    <th>上午</th>
+                    {yun:}foreach from=$part_morning item=v{/yun}
+                    <td><input data-mark='isneed' name='worktime[]' class="check_all" type="checkbox" disabled {yun:}if in_array($v,$Info.worktime_n){/yun}checked="checked"{yun:}/if{/yun}value='{yun:}$v{/yun}' lay-filter="partAll" lay-skin="primary" /></td>
+                    {yun:}/foreach{/yun}
+                </tr>
+                <tr>
+                    <th>下午</th>
+                    {yun:}foreach from=$part_noon item=v{/yun}
+                    <td><input data-mark='isneed' name='worktime[]' class="check_all" type="checkbox" disabled {yun:}if in_array($v,$Info.worktime_n){/yun}checked="checked"{yun:}/if{/yun} value='{yun:}$v{/yun}' lay-filter="partAll" lay-skin="primary" /></td>
+                    {yun:}/foreach{/yun}
+                </tr>
+                <tr>
+                    <th>晚上</th>
+                    {yun:}foreach from=$part_afternoon item=v{/yun}
+                    <td><input data-mark='isneed' name='worktime[]' class="check_all" type="checkbox" disabled {yun:}if in_array($v,$Info.worktime_n){/yun}checked="checked"{yun:}/if{/yun} value='{yun:}$v{/yun}' lay-filter="partAll" lay-skin="primary" /></td>
+                    {yun:}/foreach{/yun}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="admin_popup_h1"> 工作内容</div>
+        <div class="admin_jobp">
+            {yun:}$Info.content{/yun}
+        </div>
+        <div class="admin_popup_h1"> 联系方式</div>
+        <div class="admin_popup_tel"> 联&nbsp;系&nbsp;人&nbsp;：{yun:}$Info.linkman{/yun}</div>
+        <div class="admin_popup_tel"> 联系手机：{yun:}$Info.linktel{/yun}</div>
+    </div>
+
+    <div class="ch_cz">
+        <div class="layui-form">
+            <div class="admin_jobh1">职位信息审核</div>
+            {yun:}if $Info.c_status == 2{/yun}
+            <div class="ch_czlist" style="width:260px">
+                <div class="ch_czname">锁定操作：</div>
+                <div class="layui-form-item" style="margin-bottom:10px;">
+                    <div class="layui-input-block">
+                            <input name="lock_status" value="1" title="正常" type="radio" {yun:}if $Info.c_status== 1{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+                        <input name="lock_status" value="2" title="锁定" type="radio" {yun:}if $Info.c_status== 2{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+                    </div>
+                </div>
+                <div class="admin_jobshtip">锁定原因：{yun:}$Info.lock_info{/yun}</div>
+            </div>
+            {yun:}/if{/yun}
+            <div id="audit-div" {yun:}if $Info.c_status== 2{/yun} style="display:none;" {yun:}/if{/yun}>
+                <div class="ch_czlist">
+                    <div class="ch_czname">审核状态：</div>
+                    <div class="layui-input-block">
+                        <input name="status" value="1" title="正常" type="radio" {yun:}if $Info.state !=3{/yun}checked="checked"{yun:}/if{/yun} lay-filter="userstatus"/>
+                        <input name="status" value="3" title="未通过" type="radio" {yun:}if $Info.state== 3{/yun}checked="checked"{yun:}/if{/yun} lay-filter="userstatus" />
+                    </div>
+                </div>
+                {yun:}if $Info.r_status == 0{/yun}
+                <div class="ch_czlist">
+                    <div class="ch_czname">企业审核：</div>
+                    <div class="layui-input-block">
+                        <input name="istb" title="同步审核" type="checkbox" value="1" lay-skin="primary" checked="checked" disabled="disabled"/>
+                    </div>
+                    <div class="admin_jobshtip">同步说明：企业身份为未审核状态需同步审核</div>
+                </div>
+                {yun:}/if{/yun}
+                <div class="ch_czlist">
+                    <div class="ch_czname">审核说明：</div>
+                    <div class="ch_cztextarea"><textarea id="statusbody" name="statusbody" class="ch_cztextareaall">{yun:}$Info.statusbody{/yun}</textarea></div>
+                </div>
+                <div class="ch_cz_bth  ">
+                    <input type="hidden" name="pid" value="{yun:}$Info.id{/yun}"/>
+                    <input type="hidden" name="uid" value="{yun:}$Info.uid{/yun}"/>
+                    <input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}"/>
+                    <input type="button" value="保存" class="admin_popup_bth" onclick="audit(1)">
+                    {yun:}if $snum{/yun}
+                    <input type="button" value="保存，并审核下一个" class="admin_popup_bth2" onclick="audit(2)">
+                    {yun:}/if{/yun}
+                </div>
+            </div>
+        </form>
+        <input type="hidden" id="com_status" value="{yun:}$Info.r_status{/yun}"/>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form',], function () {
+        var layer = layui.layer,
+            form = layui.form,
+            $ = layui.$;
+
+        $("#leftbox").css({'height': $(window).height() - 0 + 'px', 'overflow': 'auto'});
+
+        form.on('radio(lock_status)', function (obj) {
+            if (obj.value == 1) {
+                $('#audit-div').show();
+            } else {
+                $('#audit-div').hide();
+            }
+        });
+    });
+
+    function audit(atype) {
+        var status = $("input[name='status']:checked").val();
+        if (typeof status === 'undefined') {
+            parent.layer.msg("请选择审核状态！", 2, 8);
+            return false;
+        }
+        var params = {
+            single: 1,
+            status: status,
+            pid: $("input[name='pid']").val(),
+            uid: $("input[name='uid']").val(),
+            statusbody: $("#statusbody").val(),
+            atype: atype,
+            pytoken: $("#pytoken").val()
+        };
+        var lock_status = $("input[name='lock_status']:checked").val();
+        if (typeof lock_status !== 'undefined') {
+            if (lock_status == 1) {
+                params.lock_status = lock_status;
+            } else {
+                parent.layer.msg("锁定操作异常！", 2, 8);
+                return false;
+            }
+        }
+        if ($("#com_status").val() == '0') {
+            var url = 'index.php?m=admin_partjob&c=tbStatus';
+        } else {
+            var url = 'index.php?m=admin_partjob&c=status';
+        }
+        loadlayer();
+        $.ajax({
+            data: params,
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            success: function (res) {
+                parent.layer.closeAll('loading');
+                if (res.st == 9) {
+                    parent.layer.msg(res.msg, 2, 9, function () {
+                        if (res.url) {
+                            parent.needLoad = true;
+                            window.location.href = res.url;
+                        } else {
+                            parent.window.location.reload();
+                        }
+                    });
+                } else {
+                    parent.layer.msg(res.msg, 2, 8);
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

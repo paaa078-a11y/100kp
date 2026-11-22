@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+		<div class="moduleSeachs">
+		    <div class="moduleSeachleft">
+				<div class="  tableSeachInptsmall newsinput"  >
+				    <el-select v-model="search.time" size="small" slot="prepend" placeholder="申请时间" clearable @change="doUserQuery">
+				        <el-option v-for="item in time" :key="item.value" :label="item.label" :value="item.value"></el-option>
+				    </el-select>
+				</div>
+				<div class="tableSeachInptsmall newsinput">
+				    <el-select v-model="search.status" size="small" slot="prepend" placeholder="发票状态" clearable @change="doUserQuery">
+						<el-option v-for="item in shenhe" :key="item.value" :label="item.label" :value="item.value"></el-option>
+				    </el-select>
+				</div>
+		        <div class="newsinput">
+		            <el-input placeholder="输入你要搜索的关键字" size="small" prefix-icon="el-icon-search" v-model="search.keyword" clearable>
+		            </el-input>
+		        </div>
+		      	<div class="newsbtnbox"  >
+		            <el-button type="primary" icon="el-icon-search" size="mini" @click="doUserQuery">查询</el-button>
+				</div>
+		    </div>
+		    </div>
+		 
+        <div class="moduleElTable">
+            <el-table :data="tableData" border style="width: 100%"
+					  @selection-change="selectChange"
+					  ref="multipleTable"
+					  @sort-change="shortChange"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading" :empty-text="emptytext">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="id" label="编号" width="80" sortable="custom">
+                </el-table-column>
+                <el-table-column prop="addtime" label="申请时间" width="140" sortable="custom">
+                </el-table-column>
+                <el-table-column prop="title_jie" label="发票抬头" min-width="200">
+                </el-table-column>
+                <el-table-column prop="price" label="开票总额" width="120">
+					<template slot-scope="scope">
+						￥{{scope.row.price}}
+					</template>
+                </el-table-column>
+                <el-table-column label="开票性质" width="160">
+					<template slot-scope="scope">
+						<div class="admin_state" v-if="scope.row.style == 2">
+							电子（邮箱）
+						</div>
+						<div class="admin_state" v-else>
+							纸质（快递）
+						</div>
+					</template>
+                </el-table-column>
+                <el-table-column prop="comname" label="发票申请人" min-width="200">
+                </el-table-column>
+                <el-table-column prop="link_moblie" label="联系电话" width="130">
+                </el-table-column>
+                <el-table-column prop="email" label="电子邮箱" width="160">
+                </el-table-column>
+				<el-table-column label="发票状态" width="100">
+					<template slot-scope="scope">
+					    <div class="admin_state">
+					        <span class="admin_state1" v-if="scope.row.status == 1">已审核</span>
+					        <span class="admin_state2" v-if="scope.row.status == 2">未通过</span>
+							<span class="admin_state3" v-if="scope.row.status == 3">已打印</span>
+							<span class="admin_state4" v-if="scope.row.status == 4">已邮寄</span>
+							<span class="admin_state5" v-if="scope.row.status == 0">未审核</span>
+					    </div>
+					</template>
+				</el-table-column>
+               <el-table-column fixed="right" label="操作" width="130"  align="center">
+                   <template slot-scope="scope">
+                       <div class="cz_button">
+               			 	<el-button size="small" @click="detail(scope.row)">查看</el-button>
+               				<el-button size="small"  @click="checkDrawer(scope.row)">状态</el-button>
+                       </div>
+                   </template>
+               </el-table-column>
+				 
+            </el-table>
+        </div>
+        <div class="modulePaging">
+        	<div class="modulecz modulePagButn">
+				<el-checkbox v-model="checkedAll" @change="selectAllBottom">全选</el-checkbox>
+				<el-button @click="batchDel"   size="mini" >批量删除</el-button>
+			</div>
+        	<div class="modulePagNum">
+        		<el-pagination :total="total" @current-change="userPageChange"
+							   :page-sizes="pageSizes"
+							   @size-change="userPageSizeChange"
+							   :page-size="pageSize" :current-page.sync="page"
+        			layout="total, sizes, prev, pager, next, jumper">
+        		</el-pagination>
+        	</div>
+        </div>
+        <!-- 弹窗 -->
+        <div class="modluDrawer">
+            <el-dialog title="发票状态" :visible.sync="drawer" :with-header="true" :modal-append-to-body="false"
+                :show-close="true" width="430px">
+               <div class="wxsettip_small">选择状态</div>
+			   <div class="">
+				   <el-radio-group v-model="check.status">
+					   <el-radio label="1">已审核</el-radio>
+					   <el-radio label="2">未通过</el-radio>
+					   <el-radio label="3">已打印</el-radio>
+					   <el-radio label="4">已邮寄</el-radio>
+				   </el-radio-group>
+			   </div>
+			   <div class="wxsettip_small">状态说明</div>
+				<div class="">
+				 <el-input  type="textarea" :rows="2" placeholder="请输入内容"  v-model="check.statusbody">  </el-input>
+				 </div>
+				
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="drawer = false">取 消</el-button>
+                    <el-button type="primary" @click="changeCheck" :disabled="submitLoading">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+		   <!-- 发票详情弹窗 -->
+		
+        <div class="modluDrawer">
+			<el-dialog title="发票详情" :visible.sync="drawer2" :with-header="true" :modal-append-to-body="false"
+				:show-close="true" width="450px">
+				<div>
+				<div class="fp_list" v-if="row.order_id"><span class="fp_list_name">订单号</span><span>{{row.order_id}}</span></div>
+				<div class="fp_list" v-if="row.price"><span class="fp_list_name">开票总额</span><span>￥{{row.price}}</span></div>
+				<div class="fp_list" ><span class="fp_list_name">支付状态</span><span>支付成功</span></div>
+				<div class="fp_list" v-if="row.addtime"><span class="fp_list_name">申请时间</span><span>{{row.addtime_ymd}}</span></div>
+				<div class="fp_list" v-if="row.title"><span class="fp_list_name">发票抬头</span><span>{{row.title}}</span></div>
+				<div class="fp_list" v-if="row.type"><span class="fp_list_name">开票类型</span><span>{{row.type_name}}</span></div>
+				<div class="fp_list" v-if="row.invoice_id"><span class="fp_list_name">发票税号</span><span>{{row.invoice_id}}</span></div>
+				<div class="fp_list" v-if="row.style"><span class="fp_list_name">开票性质</span><span>{{row.style_name}}</span></div>
+				<div class="fp_list" v-if="row.link_man"><span class="fp_list_name">收件人</span><span>{{row.link_man}}</span></div>
+				<div class="fp_list" v-if="row.link_moblie"><span class="fp_list_name">联系电话</span><span>{{row.link_moblie}}</span></div>
+				<div class="fp_list" v-if="row.address"><span class="fp_list_name">邮寄地址</span><span>{{row.address}}</span></div>
+				<div class="fp_list" v-if="row.status"><span class="fp_list_name">发票状态</span><span>{{row.status_name}} </span></div>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="drawer2 = false">取 消</el-button>
+					<el-button type="primary" @click="drawer2 = false">确 定</el-button>
+				</span>
+			</el-dialog>
+		</div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                	loading: false,
+                	emptytext: '暂无数据',
+
+					checkedAll:false,
+					keyword:'',
+                    value: true,
+                    radio: '1',
+                    drawer: false,
+                    drawer2: false,
+                    textarea: '',
+                    tableData: [],
+					shenhe :[{
+						value :0,
+						label:"未审核"
+					}, {
+						value :1,
+						label:"已审核"
+					}, {
+						value :2,
+						label:"未通过"
+					}, {
+						value :3,
+						label:"已打印"
+					}, {
+						value :4,
+						label:"已邮寄"
+					}],
+					time :[{
+						value :1,
+						label:"今天"
+					}, {
+						value :3,
+						label:"最近三天"
+					}, {
+						value :7,
+						label:"最近七天"
+					}, {
+						value :15,
+						label:"最近半月"
+					}, {
+						value :30,
+						label:"最近一个月"
+					}],
+					search:{
+						keyword:'',
+						status:'',
+						time:'',
+					},
+					page:1,
+					pageSize:0,
+					pageSizes:[],
+					total:0,
+					idsArr:[],
+					uri:"m=yunying&c=",
+					row:{},
+					check:{
+						status:0,
+						pid:[],
+						statusbody:''
+					},
+					submitLoading:false,
+					prevPage:0
+				}
+            },
+            components: {
+                // 'navxiugai': httpVueLoader('./component/navxiugai.vue'),
+            },
+			created(){
+				var that = this
+				let query = window.parent.homeapp.$route.query;
+				if (query.status) {
+					that.search.status = parseInt(query.status);
+				}
+				this.getList();
+			},
+            methods: {
+				doUserQuery() {
+					this.page = 1
+					this.getList()
+				},
+				selectChange: function (val) {
+					this.idsArr = [];
+					let _this = this;
+					if (val.length) {
+						val.forEach(item => {
+							_this.idsArr.push(item.id);
+						});
+					}
+					if (_this.idsArr.length == 0) {
+						_this.checkedAll = false;
+					} else {
+						if (_this.idsArr.length == _this.tableData.length) {
+							_this.checkedAll = true;
+						} else {
+							_this.checkedAll = false;
+						}
+					}
+				},
+				userPageChange(val) {
+					this.page = val
+					this.getList()
+				},
+				userPageSizeChange(val) {
+					this.pageSize = val
+					this.getList()
+				},
+				getList(){
+					let _this = this;
+					let  url= _this.uri+'finance_invoice&a=index';
+					_this.search.page = this.page;
+					_this.search.pageSize = this.pageSize;
+					_this.loading = true;
+					_this.emptytext = "数据加载中";
+					httpPost(url, _this.search, {hideloading: true}).then(function (response) {
+						let res = response.data;
+						if (res.error == 0) {
+							_this.tableData = res.data.data;
+							_this.total = res.data.total;
+							if(_this.prevPage != _this.page){
+								_this.prevPage = _this.page;
+								_this.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+							}
+							_this.loading = false;
+							_this.pageSizes =res.data.pageSizes;
+							if (_this.tableData.length === 0){
+	                            _this.emptytext = "暂无数据";
+	                        }
+						}
+					})
+				},
+				batchDel:function (){
+					let ids = this.idsArr;
+					if (!ids.length){
+						message.error('请选择需要删除的发票');
+						return
+					}
+					let _this = this;
+					let url = this.uri + 'finance_invoice&a=del'
+					_this.$confirm('你确定要删除选择的发票吗？', '温馨提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						httpPost(url, {del:ids}).then(function (response) {
+							let res = response.data;
+							if (res.error == 0) {
+								message.success(res.msg,_this.doUserQuery());
+							}
+						})
+					})
+				},
+                handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
+                },
+                handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
+                },
+				detail:function ($row){
+					let url = this.uri + 'finance_invoice&a=show'
+					let sendData={
+						id:$row.id
+					};
+					let _this =this;
+					httpPost(url, sendData).then(function (response) {
+						let res = response.data;
+						if (res.error == 0) {
+							_this.row = res.data;
+							_this.drawer2 = true
+						}else {
+							message.error(res.msg);
+						}
+					})
+				},
+				checkDrawer:function ($row) {
+					this.check.pid = [];
+					this.check.pid.push($row.id);
+					this.check.status = $row.status;
+					this.check.statusbody = $row.statusbody;
+					console.log(this.check);
+					this.drawer= true
+				},
+				changeCheck:function (){
+					let url = this.uri + 'finance_invoice&a=status'
+					let _this =this;
+					if (this.check.status == '0' || this.check.status == '' ){
+						message.error('请选择审核状态!');
+						return;
+					}
+					_this.submitLoading = true;
+					let sendData = this.check;
+					httpPost(url, sendData).then(function (response) {
+						let res = response.data;
+						if (res.error == 0) {
+							message.success(res.msg,_this.getList());
+							_this.drawer = false
+						}else {
+							message.error(res.msg);
+						}
+					}).catch(function (error) {
+						console.log(error);
+					}).finally(function () {
+						_this.submitLoading = false;
+					});
+				},
+				selectAllBottom:function (value) {
+					value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+				},
+				shortChange(e) {
+					let orderMap = {ascending: 'asc', descending: 'desc'}
+					this.search.t = e.order ? e.prop : null;
+					this.search.order = orderMap[e.order];
+					this.page = 1;
+					this.getList();
+				},
+            }
+        });
+    </script>
+</body>
+<style>
+.el-dialog__body { padding: 0px 20px; }
+</style>
+</html>

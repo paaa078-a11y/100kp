@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="moduleElTabInpt">
+                <div class="moduleInptList">
+                    <el-input placeholder="输入你要搜索的关键字" @keyup.enter.native="search" size="small" v-model="searchForm.keyword" class="input-with-select" clearable>
+                        <el-select v-model="searchForm.type" slot="prepend" placeholder="姓名">
+                            <el-option label="姓名" value="1"></el-option>
+                            <el-option label="手机号" value="2"></el-option>
+                            <el-option label="用户ID" value="3"></el-option>
+                        </el-select>
+                    </el-input>
+                </div>
+                <div v-for="(searchItem, searchIndex) in searchList" class="tableSeachInptsmall moduleInptList" style="padding-right: 0;">
+                    <el-select v-model="searchForm[searchItem.param]" size="small" slot="prepend" :clearable="true" :placeholder="searchItem.name" @change="search">
+                        <el-option v-for="(searchLabel, searchValue) in searchItem.value" :label="searchLabel" :value="searchValue"></el-option>
+                    </el-select>
+                </div>
+                <div class="moduleInptList" style="margin-left: 8px;">
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="search">查询</el-button>
+                </div>
+            </div>
+        </div>
+        <div class="moduleElTable">
+            <div class="admin_datatip">
+                <i class="el-icon-document"></i>
+                数据统计：共 {{statis.gqAllNum}} 条
+                <span class="admin_datatip_n" v-if="statis.xjhStatusNum1>0">未审核：{{statis.gqStatusNum1}} 条 </span>
+                <span class="admin_datatip_n" v-else>未审核：0 条 </span>
+                <span class="admin_datatip_n" v-if="statis.xjhStatusNum2>0">未通过：{{statis.gqStatusNum2}} 条</span>
+                <span class="admin_datatip_n" v-else>未通过：0 条 </span>
+                <span class="admin_datatip_n" v-if="statis.gqStatusNum3>0">已锁定：{{statis.gqStatusNum3}} 条</span>
+                <span class="admin_datatip_n" v-else>已锁定：0 条 </span>
+                <span class="admin_datatip_n">搜索结果：{{total}} 条</span>
+            </div>
+            <el-table :data="list" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange" :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="calc(100% - 44px)" v-loading="loading">
+                <template slot="empty">
+                    <p>{{dataText}}</p>
+                </template>
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column prop="uid" label="用户ID" width="100">
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" width="140">
+                </el-table-column>
+                <el-table-column prop="sex_n" label="性别" width="90">
+                </el-table-column>
+                <el-table-column prop="moblie" label="手机号" width="160">
+                </el-table-column>
+                <el-table-column prop="szchens" label="所在城市" min-width="150">
+                    <template slot-scope="scope">
+                        {{scope.row.provinceid_n}}-{{scope.row.cityid_n}}<span v-if="scope.row.three_cityid_n">-{{scope.row.three_cityid_n}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="shzhutai" label="审核状态" width="120">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status==1">已审核</span>
+                        <span v-else-if="scope.row.status==0" style="color: red;">未审核</span>
+                        <span v-else-if="scope.row.status==3">未通过</span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template slot-scope="scope">
+                        <div class="moduleElTaCaoz">
+                            <el-button size="mini" @click="apply(scope.row)">审核</el-button>
+                            <el-button size="mini" @click="toSupplyLog(scope.row.uid)">日志</el-button>
+                            <el-button size="mini" @click="edit(scope.row.uid)">修改</el-button>
+                            <el-button size="mini" @click="detail(scope.row)">详情</el-button>
+                            <el-button size="mini" @click="del(scope.$index)" type="danger">删除</el-button>
+
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging">
+            <div>
+                <el-checkbox v-model="checkedAll" :indeterminate="checkedAllIndeterminate" @change="checkAll">全选</el-checkbox>
+                <el-button @click="batch('del')" size="mini">批量删除</el-button>
+            </div>
+            <div class="modulePagNum">
+                <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="pageSizes" :page-size="limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <!-- 弹窗 -->
+        <div class="modluDrawer">
+            <el-dialog title="供求用户审核" :visible.sync="statusBox" :with-header="true" :modal-append-to-body="false" :show-close="true" width="500px">
+                <div class="toolClasDia fenpeizhand">
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>审核操作：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-radio v-model="status" label="1">正常</el-radio>
+                            <el-radio v-model="status" label="3">未通过</el-radio>
+                        </div>
+                    </div>
+                    <div class="toolClasList">
+                        <div class="toolClasTite">
+                            <span>审核说明：</span>
+                        </div>
+                        <div class="toolClasCont">
+                            <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="statusbody">
+                            </el-input>
+                        </div>
+                    </div>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="statusBox = false">取 消</el-button>
+                    <el-button type="primary" @click="subStatus" :disabled="submitLoading">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <div class="modluDrawer">
+            <el-drawer title="基本资料" :visible.sync="infoBox" :modal-append-to-body="false" :show-close="true" :with-header="true" size="45%">
+                <supplyedit :uid_v="pid" v-if="infoBox" @child-event-getlist="getList"></supplyedit>
+            </el-drawer>
+            <el-drawer title="账号信息" :visible.sync="userDetail" :modal-append-to-body="false" size="40%">
+                <div class="moduleSchools">
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>姓名</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.name}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>性别</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.sex_n}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>所在城市</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.provinceid_n}}<span v-if="curr_user.cityid_n">-{{curr_user.cityid_n}}</span>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>提供服务</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.services}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>技能特长</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.speciality}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>薪资待遇</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.salary}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>头像</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            <el-image :src="curr_user.photo_n" style="max-width: 50px; max-height: 50px" :preview-src-list="[curr_user.photo_n]">
+                            </el-image>
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>联系手机</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.moblie}}
+                        </div>
+                    </div>
+                    <div class="drawerModLis">
+                        <div class="drawerModTite">
+                            <span>个人简介</span>
+                        </div>
+                        <div class="drawerModInpt">
+                            {{curr_user.content}}
+                        </div>
+                    </div>
+                </div>
+            </el-drawer>
+            <!---->
+            <el-drawer title="供求日志" :visible.sync="drawerLog" append-to-body size="80%">
+                <gqlog :uid="uid"></gqlog>
+            </el-drawer>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function() {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                submitLoading: false,
+                searchList: [],
+                searchForm: {
+                    type: '',
+                    keyword: ''
+                },
+                page: 1,
+                limit: 0,
+                list: [],
+                total: 0,
+                pageSizes: [],
+
+                checkedAll: false, // 全选
+                checkedAllIndeterminate: false,
+                multipleSelection: [], // 多选值存储
+                idArr: [],
+
+                statusBox: false,
+                infoBox: false,
+                pid: '',
+                status: '1',
+                statusbody: '',
+
+                pid: '',
+                userDetail: false,
+                curr_user: [],
+
+                statis: [],
+
+                uid: null,
+                drawerLog: false,
+
+                prevPage: 0
+            }
+        },
+        components: {
+            'supplyedit': httpVueLoader('./component/supplyedit.vue'),
+            'gqlog': httpVueLoader('./component/gqlog.vue'),
+        },
+        mounted() {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.status) {
+                that.searchForm.status = query.status;
+            }
+
+            this.getList();
+            setTimeout(function () {
+                that.getStatis();
+                that.getSearchFun();
+            }, 200)
+        },
+        methods: {
+            getSearchFun:function(){
+                let that = this;
+                httpPost('m=user&c=supply_user&a=getSearchData', {},{hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        that.searchList = res.data.search_list;
+                        that.domain = res.data.domain;
+                    }
+                })
+            },
+            detail(row) {
+                this.curr_user = row;
+                this.userDetail = true;
+            },
+            edit(pid) {
+                this.pid = pid;
+                this.infoBox = true;
+            },
+            subStatus() {
+                let that = this;
+                let params = {
+                    uid: that.pid,
+                    status: that.status,
+                    statusbody: that.statusbody
+                };
+                that.submitLoading = true;
+                httpPost('m=user&c=supply_user&a=statis', params).then(function(res) {
+                    if (res.data.error > 0) {
+                        message.error(res.data.msg);
+                    } else {
+                        message.success(res.data.msg, function() {
+                            that.statusBox = false;
+                            that.getList();
+                        });
+                    }
+                }).finally(function() {
+                    setTimeout(function() {
+                        that.submitLoading = false;
+                    }, 2000);
+                });
+            },
+            apply(row) {
+                this.pid = row.uid;
+                this.statusbody = row.statusbody;
+                this.status = row.status;
+                this.statusBox = true;
+            },
+            toSupplyLog(uid) {
+                this.uid = uid;
+                this.drawerLog = true;
+            },
+            handleSizeChange(val) {
+                this.limit = val;
+                this.getList();
+            },
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getList();
+            },
+            search() {
+                this.page = 1;
+                this.getList();
+            },
+            getList() {
+                this.infoBox = false;
+                let that = this,
+                    searchForm = that.searchForm,
+                    params = {
+                        page: that.page,
+                        limit: that.limit,
+                    };
+                    that.loading = true;
+
+                httpPost('m=user&c=supply_user', { ...params, ...searchForm }, {hideloading: true}).then(function(response) {
+                    let res = response.data,
+                        data = res.data;
+
+                    that.list = data.list;
+                    that.total = parseInt(data.total);
+                    that.pageSizes = data.page_sizes;
+                    if (that.limit === 0) {
+                        that.limit = parseInt(data.limit); // 取系统配置默认数量
+                    }
+                    if (that.page > data.page) {
+                        that.page = parseInt(data.page); // 最后一页被删除后，取最新的页数
+                    }
+                    if(that.prevPage != that.page){
+                        that.prevPage = that.page;
+                        that.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                    }
+                    if (that.list.length === 0) {
+                        that.dataText = "暂无数据";
+                    }
+                    that.loading = false;
+                })
+            },
+            getStatis() {
+                let that = this;
+                httpPost('m=user&c=supply_user&a=gqNum', {}, { hideloading: true }).then(function(response) {
+                    let res = response.data,
+                        data = res.data;
+                    that.statis = data;
+                })
+            },
+            handleSelectionChange(val) {
+                if (val.length == 0) {
+                    this.checkedAll = false;
+                    this.checkedAllIndeterminate = false;
+                } else {
+                    if (val.length === this.list.length) {
+                        this.checkedAll = true;
+                        this.checkedAllIndeterminate = false;
+                    } else {
+                        this.checkedAll = false;
+                        this.checkedAllIndeterminate = true;
+                    }
+                }
+                this.multipleSelection = val;
+            },
+            batch(type) {
+                if (this.multipleSelection.length == 0) {
+                    message.error('请选择要删除的数据');
+                    return false;
+                }
+
+                let idArr = [];
+                this.multipleSelection.forEach(function(item) {
+                    idArr.push(item.uid);
+                })
+                this.idArr = idArr;
+
+                if (type == 'del') {
+                    this.del();
+                }
+            },
+            checkAll(val) {
+                val ? this.checkedAllIndeterminate = false : '';
+                this.$refs.multipleTable.toggleAllSelection();
+            },
+            del(idx) {
+                let that = this,
+                    params = {},
+                    msg = '';
+
+                if (typeof idx == 'undefined') { // 批量删除
+                    params.del = this.idArr;
+                    msg = '你确定要删除选中项吗？';
+                } else { // 单个删除
+                    params.del = that.list[idx].uid;
+                    msg = '你确定要删除当前项吗？';
+                }
+
+                delConfirm(this, params, function(params) {
+                    httpPost('m=user&c=supply_user&a=del', params).then(function(res) {
+                        if (res.data.error > 0) {
+                            message.error(res.data.msg);
+                        } else {
+                            message.success(res.data.msg, function() {
+                                that.$refs.multipleTable.clearSelection();
+                                that.getList();
+                            });
+                        }
+                    })
+                }, msg)
+            },
+        }
+    });
+    </script>
+</body>
+<style>
+    .tableSeachInptsmall .el-select{
+        margin: 0;
+    }
+</style>
+</html>

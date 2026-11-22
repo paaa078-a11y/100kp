@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="培训课程" name="subject">
+                    <subject ref="subject" :status="status"></subject>
+                </el-tab-pane>
+                <el-tab-pane label="课程报名" name="subjectbm" lazy>
+                    <subjectbm ref="subjectbm"></subjectbm>
+                </el-tab-pane>
+                <el-tab-pane label="课程咨询" name="subjectzx" lazy>
+                    <subjectzx ref="subjectzx"></subjectzx>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    let editor = null;
+    const { createEditor, createToolbar } = window.wangEditor;
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'subject',
+                status: '',
+            }
+        },
+        components: {
+            'subject': httpVueLoader('./component/subject.vue'),
+            'subjectbm': httpVueLoader('./component/subjectbm.vue'),
+            'subjectzx': httpVueLoader('./component/subjectzx.vue'),
+        },
+        created: function () {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.status) {
+                that.status = query.status;
+            }
+            if (query.tabs) {
+                that.activeName = query.tabs;
+            }
+        },
+        methods: {
+            handleClick(tab, event) {
+                // this.$refs[tab.name].init();
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>

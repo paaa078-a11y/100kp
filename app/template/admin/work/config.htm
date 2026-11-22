@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - 企微配置</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="main_tag" style="background: none;">
+            <div class="tabs_info">
+                <ul>
+                    <li class="on">基本配置</li>
+                    <li>回调配置</li>
+                    <li>用户画像</li>
+                    <li>消息推送</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+
+        <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+        <div class="wxbd_box">
+            <div class="hiddendiv">
+                <form name="myform1" target="supportiframe" action="index.php?m=admin_workwx_config" method="post" class="layui-form list_border">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">企业微信ID：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_qy_corpid" size="30" maxlength="255" value="{yun:}$config.wx_qy_corpid{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“我的企业”－“企业信息”下查看“企业ID”（需要有管理员权限）。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">客户联系Secret：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="sy_workwx_secret" size="30" maxlength="255" value="{yun:}$config.sy_workwx_secret{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“客户与上下游”－“客户联系”-“客户”下查看（需要有客户联系权限）。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">通讯录Secret：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="sy_contact_secret" size="30" maxlength="255" value="{yun:}$config.sy_contact_secret{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“管理工具”－“通讯录管理”-“通讯录同步”下查看（需要开启API接口同步）。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item pdleft180">
+                        <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}"/>
+                        <input class="layui-btn tty_sub" id="workWxConfig" type="submit" value="提交"/>&nbsp;&nbsp;
+                        <input class="layui-btn tty_cz" type="reset" value="重置"/>
+                    </div>
+                </form>
+            </div>
+            <div class="hiddendiv" style="display: none;">
+                <form name="myform1" target="supportiframe" action="index.php?m=admin_workwx_config" method="post" class="layui-form list_border">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">回调URL：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_contact_url" size="30" maxlength="255" value="{yun:}$config.wx_contact_url{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“客户与上下游”->“客户联系”->“客户”下，点击“API”，设置接收事件服务器。</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">验证Token：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_contact_token" size="30" maxlength="255" value="{yun:}$config.wx_contact_token{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“客户与上下游”->“客户联系”->“客户”下，点击“API”，设置接收事件服务器。</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">验证EncodingAESKey：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_contact_EncodingAESKey" size="30" maxlength="255" value="{yun:}$config.wx_contact_EncodingAESKey{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“客户与上下游”->“客户联系”->“客户”下，点击“API”，设置接收事件服务器。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item pdleft180">
+                        <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}"/>
+                        <input class="layui-btn tty_sub" id="contactConfig" type="submit" value="提交"/>&nbsp;&nbsp;
+                        <input class="layui-btn tty_cz" type="reset" value="重置"/>
+                    </div>
+                </form>
+            </div>
+            <div class="hiddendiv" style="display: none;">
+                <form name="myform1" target="supportiframe" action="index.php?m=admin_workwx_config" method="post" class="layui-form list_border">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用AgentId：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_photo_agentId" size="30" maxlength="255" value="{yun:}$config.wx_photo_agentId{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“应用管理”->“应用”->“自建”，点进“用户画像”应用，即可看到agentId。</span>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用Secret：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_photo_secret" size="30" maxlength="255" value="{yun:}$config.wx_photo_secret{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“应用管理”->“应用”->“自建”，点进“用户画像”应用，即获取查看Secret。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item pdleft180">
+                        <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}"/>
+                        <input class="layui-btn tty_sub" id="customerConfig" type="submit" value="提交"/>&nbsp;&nbsp;
+                        <input class="layui-btn tty_cz" type="reset" value="重置"/>
+                    </div>
+                </form>
+            </div>
+            <div class="hiddendiv" style="display: none;">
+                <form name="myform1" target="supportiframe" action="index.php?m=admin_workwx_config" method="post" class="layui-form list_border">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用AgentId：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_qy_agentid" size="30" maxlength="255" value="{yun:}$config.wx_qy_agentid{/yun}" />
+                        </div>
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“应用管理”->“应用”->“自建”，点进“消息推送”应用，即可看到agentId。</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用Secret：</label>
+                        <div class="layui-input-inline t_w480">
+                            <input class="layui-input" type="text" name="wx_qy_secret" size="30" maxlength="255" value="{yun:}$config.wx_qy_secret{/yun}" />
+                        </div>
+
+                        <div style="overflow: hidden;clear: both;margin-left: 200px;">
+                            <span class="admin_web_tip">在<a target="_blank" href='https://work.weixin.qq.com' style="color:#2778f8">企业微信管理端</a>->“应用管理”->“应用”->“自建”，点进“消息推送”应用，即获取查看Secret。</span>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item pdleft180">
+                        <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}"/>
+                        <input class="layui-btn tty_sub" id="msgConfig" type="submit" value="提交"/>&nbsp;&nbsp;
+                        <input class="layui-btn tty_cz" type="reset" value="重置"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['layer', 'form'], function () {
+            var layer = layui.layer
+                , form = layui.form
+                , $ = layui.$;
+        });
+
+    </script>
+    <script>
+        layui.use(['layer', 'form'], function () {
+            var layer = layui.layer,
+                form = layui.form,
+                $ = layui.$;
+
+            form.on('radio(wxcom)', function (data) {
+
+                $('.wxcom').hide();
+                var typeid = data.value;
+                $('.' + typeid).show();
+
+            });
+            var $switchtag = $("div.main_tag ul li");
+            $switchtag.click(function () {
+                $(this).addClass("on").siblings().removeClass("on");
+                var index = $switchtag.index(this);
+                $("div.wxbd_box > div").eq(index).show().siblings().hide();
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

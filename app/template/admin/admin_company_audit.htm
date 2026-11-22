@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script language=javascript src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
+	<script language=javascript src='{yun:}$config.sy_weburl{/yun}/js/city.js?v={yun:}$config.cachecode{/yun}'></script>
+	<title>后台管理</title>
+</head>
+ <style>
+	 .layui-form-radio{padding-right:0px;}
+</style>
+<body class="admin_tc_bg" >
+	
+ <div class="chbox">
+	<div class="chbox_cominfo"  id="leftbox" >
+		<form class="layui-form" method="post" enctype="multipart/form-data" id="from_data">
+			<input type="hidden" name="uid" value="{yun:}$Info.uid{/yun}" />
+			<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}" />
+			
+			<div class="admin_popuppb">
+				
+				<div class="admin_com_info">
+				<div class="admin_popup_comname">
+					<span class="show_name">{yun:}$Info.name{/yun}</span>
+					<a href="###"onclick="editShow()" class="admin_popup_add">编辑</a>
+				</div>
+				<div><span style="padding: 0px 15px 0 0; display: inline-block;">	IP：{yun:}$Info.login_ip{/yun}</span>{yun:}if $Info.login_address{/yun} IP归属地：{yun:}$Info.login_address{/yun} {yun:}/if{/yun}</div>
+				{yun:}if $Info.shortname{/yun}
+					<div class="admin_popup_comifo"> 企业简称：<span class="show_shortname">{yun:}$Info.shortname{/yun}</span></div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.hy{/yun}
+					<div class="admin_popup_comifo"> 从事行业：<span class="show_hy">{yun:}$Info.hy_n{/yun}</span></div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.pr{/yun}
+					<div class="admin_popup_comifo"> 企业性质：<span class="show_pr">{yun:}$Info.pr_n{/yun}</span></div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.mun{/yun}
+					<div class="admin_popup_comifo"> 企业规模：<span class="show_mun">{yun:}$Info.mun_n{/yun}</span></div>
+				{yun:}/if{/yun}
+
+				{yun:}if $Info.money{/yun}
+					<div class="admin_popup_comifo"> 注册资金：<span class="show_money">{yun:}$Info.money{/yun} {yun:}$Info.moneytype_n{/yun}</span></div>
+				{yun:}/if{/yun}
+				</div>
+				<!--点击编辑这样-->
+				<div class="admin_popup_addbox" style="display: none">
+					<div class="admin_jobh1">编辑企业基本信息</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">企业名称：</span>
+						<input type="text" name="name" value="{yun:}$Info.name{/yun}" placeholder="请输入企业全称" class="tty_input">
+					</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">企业简称：</span>
+						<input type="text" name="shortname" value="{yun:}$Info.shortname{/yun}" placeholder="请输入企业简称" class="tty_input">
+					</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">从事行业：</span>
+						<div class="layui-input-block">
+							<div class="layui-input-inline  ">
+								<select name="hy" id="hy" lay-verify="">
+									<option value="" >请选择</option>
+									{yun:}foreach from=$cache.industry_index item=v{/yun}
+									<option value="{yun:}$v{/yun}" {yun:}if $Info.hy==$v{/yun}selected {yun:}/if{/yun}>{yun:}$cache.industry_name[$v]{/yun} </option>
+									{yun:}/foreach{/yun}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">企业性质：</span>
+						<div class="layui-input-block">
+							<div class="layui-input-inline  ">
+								<select name="pr" id="pr" lay-verify="">
+									<option value="">请选择</option>
+									{yun:}foreach from=$cache.comdata.job_pr item=v{/yun}
+									<option value="{yun:}$v{/yun}" {yun:}if $Info.pr==$v{/yun}selected {yun:}/if{/yun}>{yun:}$cache.comclass_name[$v]{/yun}</option>
+									{yun:}/foreach{/yun}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">企业规模：</span>
+						<div class="layui-input-block">
+							<div class="layui-input-inline  ">
+								<select name="mun" id="mun" lay-verify="">
+									<option>请选择</option>
+									{yun:}foreach from=$cache.comdata.job_mun item=v{/yun}
+									<option value="{yun:}$v{/yun}" {yun:}if $Info.mun==$v{/yun}selected {yun:}/if{/yun}>{yun:}$cache.comclass_name[$v]{/yun} </option>
+									{yun:}/foreach{/yun}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="admin_popup_addlist">
+						<span class="admin_popup_addname">注册资金：</span>
+						<div class="layui-input-block"  >
+							<div class="layui-input-inline">
+								<select name="moneytype" id="moneytype" lay-verify="">
+									<option value="0">请选择</option>
+									<option value="1" {yun:}if $Info.moneytype=='1' {/yun}selected{yun:}/if{/yun}>人民币 </option>
+									<option value="2" {yun:}if $Info.moneytype=='2' {/yun}selected{yun:}/if{/yun}>美元 </option>
+								</select>
+							</div>
+							<input type="text" name="money" size="10" class="tty_input" value="{yun:}if $Info.money==''{/yun}0{yun:}else{/yun}{yun:}$Info.money{/yun}{yun:}/if{/yun}" onKeyUp="this.value=this.value.replace(/[^0-9]/g,'')" style="width: 50px; margin-left: 10px;" />
+							<span class='moneyname'>{yun:}if $Info.moneytype=='2'{/yun}万美元{yun:}else{/yun}万元{yun:}/if{/yun}</span>
+						</div>
+					</div>
+					<!--<div class="admin_popup_addlist">
+						<input type="button" value="提交" class="admin_popup_addtj" onclick="saveComInfo()">
+					</div>-->
+				</div>
+				<!--点击编辑  end-->
+
+				<div class="admin_com_info">
+					{yun:}if $Info.welfare{/yun}
+						<div class="admin_popup_h1"> 福利待遇</div>
+						{yun:}if $Info.welfare_n{/yun}
+						<div class="admin_jobfl show_welfare">
+							{yun:}foreach from=$Info.welfare_n item=wlist{/yun}
+							<span class="admin_popup_fl">{yun:}$wlist{/yun}</span>
+							{yun:}/foreach{/yun}
+						</div>
+						{yun:}/if{/yun}
+					{yun:}/if{/yun}
+				</div>
+				<!--点击编辑这样-->
+				<div class="admin_popup_addbox" style="display: none">
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">福利待遇：</span>
+						<div class="layui-input-block" style="overflow: hidden;">
+						<span class="" id="addwelfarelist">
+							{yun:}foreach from=$Info.arraywelfare key=key item=tv{/yun}
+							<input name="welfare[]" value="{yun:}$tv{/yun}" {yun:}if in_array($tv,$Info.arraywelfare){/yun} checked="checked" {yun:}/if{/yun} type="checkbox" title="{yun:}$tv{/yun}" data-tag="{yun:}$tv{/yun}" class="changewelfare" lay-skin="primary">
+							{yun:}/foreach{/yun}
+						</span>
+							{yun:}foreach item=v from=$cache.comdata.job_welfare{/yun}
+							{yun:}if !in_array({yun:}$cache.comclass_name[$v]{/yun},$Info.arraywelfare){/yun}
+							<input name="welfare[]" value="{yun:}$cache.comclass_name[$v]{/yun}" {yun:}if in_array($cache.comclass_name[$v],$Info.arraywelfare){/yun} checked="checked" {yun:}/if{/yun} type="checkbox" title="{yun:}$cache.comclass_name[$v]{/yun}" data-tag="{yun:}$cache.comclass_name[$v]{/yun}" class="changewelfare" lay-skin="primary">
+							{yun:}/if{/yun}
+							{yun:}/foreach{/yun}
+						</div>
+					</div>
+<!--					<div class="admin_popup_addlist"> <input type="button" value="提交" class="admin_popup_addtj" onclick="saveComInfo()" ></div>-->
+				</div>
+				<!--点击编辑end-->
+
+				<div class="admin_com_info">
+				<div class="admin_popup_h1"> 联系方式</div>
+				{yun:}if $Info.linkman{/yun}
+				<div class="admin_popup_tel"> 联系人：
+					<span class="show_linkman">{yun:}$Info.linkman{/yun} {yun:}if $Info.linkjob{/yun}（{yun:}$Info.linkjob{/yun}）{yun:}/if{/yun}</span>
+				</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linktel{/yun}
+				<div class="admin_popup_tel"> 联系手机：
+					<span class="show_moblie">{yun:}$Info.linktel{/yun}</span>  {yun:}if $Info.infostatus == 1{/yun}（公开）{yun:}else{/yun}（不公开）{yun:}/if{/yun} {yun:}if $Info.moblie_address{/yun} 归属地：{yun:}$Info.moblie_address{/yun} {yun:}/if{/yun}
+				</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linkphone{/yun}
+					<div class="admin_popup_tel"> 固定电话：<span class="show_linkphone">{yun:}$Info.linkphone{/yun}</span></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linkmail{/yun}
+					<div class="admin_popup_tel"> 联系邮箱：<span class="show_linkmail">{yun:}$Info.linkmail{/yun}</span></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.linkqq{/yun}
+					<div class="admin_popup_tel"> 联系QQ：<span class="show_linkqq">{yun:}$Info.linkqq{/yun}</span></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.website{/yun}
+					<div class="admin_popup_tel"> 企业网址：<span class="show_website">{yun:}$Info.website{/yun}</span></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.provinceid{/yun}
+				<div class="admin_popup_tel"> 企业地址：
+					<span class="show_address">{yun:}$Info.job_city_one{/yun} {yun:}$Info.job_city_two{/yun} {yun:}$Info.job_city_three{/yun} {yun:}$Info.address{/yun}</span>
+				</div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.busstops{/yun}
+					<div class="admin_popup_tel"> 公交站点：<span class="show_busstops">{yun:}$Info.busstops{/yun}</span></div>
+				{yun:}/if{/yun}
+				{yun:}if $Info.comqcode{/yun}
+				<div class="admin_popup_tel"> 公司二维码：<img src="{yun:}$Info.comqcode{/yun}" width="150" height="150"/></div>
+				{yun:}/if{/yun}
+				</div>
+
+				<!--点击编辑这样-->
+				<div class="admin_popup_addbox" style="display: none">
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">联系人：</span>
+						<input type="text" name="linkman" value="{yun:}$Info.linkman{/yun}" class="tty_input  ">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">联系手机：</span>
+						<input type="text" name="moblie" value="{yun:}$Info.linktel{/yun}" class="tty_input  ">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">固定电话：</span>
+						<input type="text" name="linkphone" value="{yun:}$Info.linkphone{/yun}" class="tty_input" onKeyUp="this.value=this.value.replace(/[^0-9-]/g,'')" placeholder="请输入固定电话" >
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">联系邮箱：</span>
+						<input type="text" name="email" value="{yun:}$Info.linkmail{/yun}" class="tty_input  ">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">联系QQ：</span>
+						<input type="text" name="linkqq" value="{yun:}$Info.linkqq{/yun}" class="tty_input  ">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">企业网址：</span>
+						<input type="text" name="website" value="{yun:}$Info.website{/yun}" class="tty_input  ">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">企业地址：</span>
+						<div class="layui-input-inline" style="width: 140px;">
+							<select name="provinceid" id="provinceid" lay-filter="citys">
+								<option value="">请选择</option>
+								{yun:}foreach from=$cache.city_index key=j item=v{/yun}
+								<option value="{yun:}$v{/yun}" {yun:}if $Info.provinceid==$v{/yun} selected{yun:}/if{/yun}>{yun:}$cache.city_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>
+						<div class="layui-input-inline" style="width: 140px;">
+							<select name="cityid" lay-filter="citys" id="cityid">
+								<option value="">请选择</option>
+								{yun:}foreach from=$cache.city_type[$Info.provinceid] key=j item=v{/yun}
+								<option value="{yun:}$v{/yun}" {yun:}if $Info.cityid==$v{/yun}selected{yun:}/if{/yun}>{yun:}$cache.city_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>
+						<div class="layui-input-inline" style="width: 140px;">
+							<select name="three_cityid" lay-filter="three_cityid" id="three_cityid">
+								<option value="">请选择</option>
+								{yun:}foreach from=$cache.city_type[$Info.cityid] key=j item=v{/yun}
+								<option value="{yun:}$v{/yun}" {yun:}if $Info.three_cityid==$v{/yun}selected{yun:}/if{/yun}>{yun:}$cache.city_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>	</div>
+							<div class="admin_popup_addlist"><span class="admin_popup_addname">详细地址：</span>
+							
+						<input type="text" value="{yun:}$Info.address{/yun}" name="address" class="tty_input" placeholder="请输入详细地址">
+					</div>
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">公交站点：</span>
+						<input type="text" name="busstops" value="{yun:}$Info.busstops{/yun}" class="tty_input  ">
+					</div>
+<!--					<div class="admin_popup_addlist"> <input type="button" value="提交" class="admin_popup_addtj"  ></div>-->
+				</div>
+				<!--点击编辑end-->
+				{yun:}if $Info.content{/yun}
+				<div class="admin_com_info">
+					<div class="admin_popup_h1"> 企业简介</div>
+					<div class="admin_popup_comabout show_content">
+						{yun:}$Info.content{/yun}
+					</div>
+				</div>
+				{yun:}/if{/yun}
+				<!--点击编辑这样-->
+				<div class="admin_popup_addbox" style="display: none">
+					<div class="admin_popup_addlist"><span class="admin_popup_addname">企业简介：</span>
+						<script id="myEditor" name="content" type="text/plain" style="width:450px;height:200px;">
+							{yun:}$Info.content{/yun}
+						</script>
+					</div>
+
+					<div class="admin_popup_addlist">
+						<input type="button" value="提交" class="admin_popup_addtj" onclick="saveComInfo()">
+						<input class="admin_popup_addtj" type="button" value="取消 " onclick="editShow('cancel')" style="background-color: #f60">
+					</div>
+				</div>
+				<!--点击编辑end-->
+			</div>
+		</form>
+	</div>
+
+	<div class="ch_cz">
+		<form class="layui-form">
+			<div class="admin_jobh1">企业用户审核</div>
+			{yun:}if $Info.member_status == 2{/yun}
+			<div class="ch_czlist" style="width:260px">
+				<div class="ch_czname">锁定操作：</div>
+				<div class="layui-form-item" style="margin-bottom:10px;">
+					<div class="layui-input-block">
+						<input name="lock_status" value="1" title="正常" type="radio" {yun:}if $Info.member_status == 1{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+						<input name="lock_status" value="2" title="锁定" type="radio" {yun:}if $Info.member_status == 2{/yun}checked="checked"{yun:}/if{/yun} lay-filter="lock_status" />
+					</div>
+				</div>
+				<div class="admin_jobshtip">锁定原因：{yun:}$Info.statusbody{/yun}</div>
+			</div>
+			{yun:}/if{/yun}
+			<div id="audit-div" {yun:}if $Info.member_status == 2{/yun} style="display:none;" {yun:}/if{/yun}>
+			<div class="ch_czlist">
+				<div class="ch_czname">审核状态：</div>
+				<div class="layui-form-item" style="margin-bottom: 0px;;">
+					<div class="layui-input-block">
+						<input name="status" value="0" title="未审核" type="radio" {yun:}if !$Info.r_status{/yun}checked="checked"{yun:}/if{/yun} />
+						<input name="status" value="1" title="已审核" type="radio" {yun:}if $Info.r_status == 1{/yun}checked="checked"{yun:}/if{/yun} />
+						<input name="status" value="3" title="未通过" type="radio" {yun:}if $Info.r_status == 3{/yun}checked="checked"{yun:}/if{/yun} />
+					</div>
+				</div>
+			</div>
+			<div class="ch_czlist">
+				<div class="ch_czname">审核说明：</div>
+				<div class="ch_cztextarea">
+					<textarea id="statusbody" name="statusbody" class="ch_cztextareaall">{yun:}$Info.statusbody{/yun}</textarea></div>
+			</div>
+			<div class="ch_cz_bth   ">
+				<input type="hidden" name="uid" value="{yun:}$Info.uid{/yun}" />
+				<input type="hidden" id="pytoken" name="pytoken" value="{yun:}$pytoken{/yun}" />
+				<input type="button" value="提交" class="admin_popup_bth" onclick="audit(1)">
+				{yun:}if $snum{/yun}
+				<div>
+				<input type="button" value="提交，并审核下一个" class="admin_popup_bth2" onclick="audit(2)">
+				{yun:}/if{/yun}
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	layui.use(['layer', 'form',], function() {
+		var layer = layui.layer,
+				form = layui.form,
+				$ = layui.$;
+	$("#leftbox").css({'height':$(window).height() - 0 + 'px', 'overflow': 'auto'});
+		form.render('select');
+		form.render('radio');
+		form.render('checkbox');
+
+		form.on('radio(lock_status)', function (obj) {
+			if (obj.value == 1) {
+				$('#audit-div').show();
+			} else {
+				$('#audit-div').hide();
+			}
+		});
+	});
+	
+ 
+	
+	function audit(atype){
+		var status = $("input[name='status']:checked").val();
+		if(typeof status ==='undefined'){
+			parent.layer.msg("请选择审核状态！", 2, 8);
+			return false;
+		}
+		var params = {
+			single: 1,
+			status: status,
+			uid: $("input[name='uid']").val(),
+			statusbody: $("#statusbody").val(),
+			atype: atype,
+			pytoken: $("#pytoken").val()
+		};
+		var lock_status = $("input[name='lock_status']:checked").val();
+		if(typeof lock_status !== 'undefined'){
+			if (lock_status == 1) { // 解锁才能正常提交
+				params.lock_status = lock_status;
+			} else {
+				parent.layer.msg("锁定操作异常！", 2, 8);
+				return false;
+			}
+		}
+		var url = 'index.php?m=admin_company&c=status';
+		loadlayer();
+		$.ajax({
+			data: params,
+			type: 'post',
+			dataType: 'json',
+			url: url,
+			success: function (res) {
+				parent.layer.closeAll('loading');
+				if(res.st == 9){
+					parent.layer.msg(res.msg, 2, 9, function(){
+						if(res.url){
+							parent.needLoad = true;
+							window.location.href = res.url;
+						}else{
+							parent.window.location.reload();
+						}
+					});
+				}else{
+					parent.layer.msg(res.msg, 2, 8);
+				}
+			}
+		})
+	}
+	var editor=UE.getEditor('myEditor', {
+		toolbars: [
+			['Bold', 'italic', 'underline', 'removeformat',
+				'|', 'justifyleft', 'justifycenter', 'justifyright',
+				'insertorderedlist', 'insertunorderedlist'
+			]
+		],
+		wordCount: false,
+		elementPathEnabled: false,
+		initialFrameHeight: 200
+	});
+
+	function editShow(type = ''){
+		if (type == 'cancel'){
+			$(".admin_popup_addbox").hide();
+			$(".admin_com_info").show();
+		} else {
+			$(".admin_popup_addbox").show();
+			$(".admin_com_info").hide();
+		}
+	}
+
+	function saveComInfo(){
+		var param = new FormData(document.getElementById("from_data"));
+		var pytoken = $.trim($("input[name='pytoken']").val());
+		param.append('pytoken', pytoken);
+		param.append('is_ajax', 'true');
+
+		var name = $.trim($("input[name='name']").val());
+		var hy = $.trim($("select[name='hy']").val());
+		var pr = $.trim($("select[name='pr']").val());
+		var three_cityid = $.trim($("select[name='three_cityid']").val());
+		var cityid = $.trim($("select[name='cityid']").val());
+		var provinceid = $.trim($("select[name='provinceid']").val());
+		var address = $.trim($("input[name='address']").val());
+		var content = editor.getContent();
+		var moblie = $.trim($("input[name='moblie']").val());
+		var linkphone = $.trim($("input[name='linkphone']").val());
+
+		if (name == '') {
+			parent.layer.msg("企业名称不能为空！", 2, 8);
+			return false;
+		}
+		if (hy == '') {
+			parent.layer.msg("请选择从事行业", 2, 8);
+			return false;
+		}
+		if (pr == '') {
+			parent.layer.msg("请选择企业性质", 2, 8);
+			return false;
+		}
+		if (moblie == '' && linkphone == ''){
+			parent.layer.msg("联系手机和固话不能同时为空！", 2, 8);
+			return false;
+		}
+		if (!provinceid || !cityid){
+			parent.layer.msg("请选择企业地址", 2, 8);
+			return false;
+		}
+		if (address == ''){
+			parent.layer.msg("企业详细地址不能为空！", 2, 8);
+			return false;
+		}
+		if (content == ''){
+			parent.layer.msg("企业简介不能为空！", 2, 8);
+			return false;
+		}
+
+
+
+
+		loadlayer();
+		$.ajax({
+			url:"index.php?m=admin_company&c=comeditsave",
+			type:'POST',
+			data:param,
+			dataType: "json",
+			processData:false,
+			contentType:false,
+			success: function( res ){
+				parent.layer.closeAll('loading');
+				if (res.error == 9) {
+					parent.layer.msg("企业会员资料修改成功", 2, 9, function(){
+						window.location.reload();
+					});
+					return ;
+				} else {
+					return parent.layer.msg(res.msg, 2, 8);
+				}
+			}
+		})
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,613 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+
+<body>
+    <div id="yunvue" style="display: none;">
+        <section class="innerPageTop">
+            <div class="subjectNav claimInput layerDemo">
+                <a href="javascript:goBack()"><img src="img/fh.png" alt=""></a>
+                <p class="followTitle">编辑企业资料</p>
+            </div>
+        </section>
+        <section class="meanseData">
+            <form action="" id="subForm" onsubmit="return false;" class="layui-form">
+                <div class="meanseDataAlls">
+                    <div class="meansOne">
+                        <h3>企业全称</h3>
+                        <div class="meanInput">
+                            <input type="text" name="name" v-model="row.name" placeholder="请输入企业全称">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业简称</h3>
+                        <div class="meanInput">
+                            <input type="text" name="shortname" v-model="row.shortname" placeholder="请输入企业简称">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>从事行业</h3>
+                        <div class="meanTents" @click="hyShow=true">
+                            <p>{{hy.name[hyIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="hyShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="hyIndex" @cancel="hyShow = false" :columns="hy.name" @confirm="bindhyChange"/></van-popup>
+                        <input hidden="true" name="hy" :value="row.hy?row.hy:0"/>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业性质</h3>
+                        <div class="meanTents" @click="prShow=true">
+                            <p>{{pr.name[prIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="prShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="prIndex" @cancel="prShow = false" :columns="pr.name" @confirm="bindprChange"/></van-popup>
+                        <input hidden="true" name="pr" :value="row.pr?row.pr:0"/>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业规模</h3>
+                        <div class="meanTents" @click="munShow=true">
+                            <p>{{mun.name[munIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                        <van-popup v-model="munShow" position="bottom"/>
+                        <van-picker show-toolbar :default-index="munIndex" @cancel="munShow = false" :columns="mun.name" @confirm="bindmunChange"/></van-popup>
+                        <input hidden="true" name="mun" :value="row.mun?row.mun:0"/>
+                    </div>
+                    <div class="meansOne">
+                        <h3>联系人</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linkman" v-model="row.linkman" placeholder="请输入联系人">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>所属职位</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linkjob" v-model="row.linkjob" placeholder="请输入所属职位">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>联系手机</h3>
+                        <div class="meanInput">
+                            <input type="text" name="moblie" v-model="row.linktel" placeholder="请输入联系手机">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>固定电话</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linkphone" v-model="row.linkphone" placeholder="请输入固定电话">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>联系邮箱</h3>
+                        <div class="meanInput">
+                            <input type="text" name="email" v-model="row.linkmail" placeholder="请输入联系邮箱">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业地址</h3>
+                        <div class="meanTents" @click="areaShow=true">
+                            <p>{{city}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                            <input hidden="true" name="provinceid" :value="provinceid"/>
+                            <input hidden="true" name="cityid" :value="cityid"/>
+                            <input hidden="true" name="three_cityid" :value="threecityid"/>
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <!--<h3>详细地址</h3>-->
+                        <div class="meanInput">
+                            <input type="text" name="address" v-model="row.address" placeholder="请输入详细地址">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>注册资金</h3>
+                        <div class="meanTents">
+                            <div class="meanTentsMoney tsMoneyDole">
+                                
+                                
+                                <div class="zhucezj">
+                                    <input hidden="true" name="moneytype" :value="row.moneytype" />
+                                    <input type="number" name="money" placeholder="请输入注册资金" v-model="row.money" oninput="value=value.replace(/^0|[\^d]/g,'')" />
+                                </div>
+
+                                <span>万</span>
+                                <!--<span v-if="moneytypeIndex == 1">万美元</span>-->
+                                <!--<span v-else>万元</span>-->
+                                <span class="ndbiure" style="padding:0 0.2rem; display: block;" @click="moneyShow=true">{{moneytype.name[moneytypeIndex]}}</span>
+                            </div>
+                            
+                            <!-- <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a> -->
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>联系QQ</h3>
+                        <div class="meanInput">
+                            <input type="text" name="linkqq" v-model="row.linkqq" placeholder="请输入联系QQ">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业网址</h3>
+                        <div class="meanInput">
+                            <input type="text" name="website" v-model="row.website" placeholder="请输入企业网址">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>企业简介</h3>
+                        <div class="meanTents" @click="openDec=true">
+                            <p>{{row.content_t ? row.content_t : '请对企业进行介绍~'}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>福利待遇</h3>
+                        <div class="meanTents" @click="gsflShow=true">
+                            <p>{{welfareval ? welfareval : '请选择公司福利'}}</p>
+                            <input name="welfare" :value="welfareval?welfareval:''" hidden="true"/>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>公司二维码</h3>
+                        <div class="meanTents">
+                            <span style="display: block;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;font-size: 0.48rem;">请上传二维码</span>
+                            <input type="file" id="pic" name="file" onchange="previewImage(this,'comqcode')" accept="image/*" value="" style="opacity:0;position: relative;left: -2.9rem;"/>
+                            <input type='hidden' value='' id='comqcode'>
+                            <a href="javascript:;" @click="upComqcode" class="comqcodeBackg">
+                                <img id="comqcodeimg" :src="row.comqcode" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>公交站点</h3>
+                        <div class="meanInput">
+                            <input type="text" name="busstops" v-model="row.busstops" placeholder="请输入公交站点">
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>联系方式</h3>
+                        <div class="meanTents" @click="infostatusShow=true">
+                            <p>{{infostatus.name[infostatusIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                            <input hidden="true" name="infostatus" :value="row.infostatus"/>
+                        </div>
+                    </div>
+                    <div class="meansOne">
+                        <h3>状态</h3>
+                        <div class="meanTents" @click="rStatusShow=true">
+                            <p>{{rStatus.name[rStatusIndex]}}</p>
+                            <a href="javascript:;"> <img src="img/arrow.png" alt=""> </a>
+                            <input hidden="true" name="r_status" :value="row.r_status"/>
+                        </div>
+                    </div>
+                </div>
+                <div @click="subForm" class="meansButtom">
+                    <input hidden="true" name="uid" value="{yun:}$smarty.get.id{/yun}"/>
+                    <button>提交</button>
+                </div>
+            </form>
+        </section>
+
+        <!--城市选择-->
+        <van-popup v-model="areaShow" round position="bottom">
+            <van-cascader v-model="areaValue" title="请选择企业地址" :options="areaOptions" @close="areaShow = false"
+                          @finish="onAreaFinish"/>
+        </van-popup>
+        <!--注册资金-->
+        <van-popup v-model="moneyShow" position="bottom">
+            <van-picker show-toolbar :default-index="moneytypeIndex" @cancel="moneyShow = false" :columns="moneytype.name" @confirm="bindmoneytypeChange"/>
+        </van-popup>
+        <!--联系方式-->
+        <van-popup v-model="infostatusShow" position="bottom">
+            <van-picker show-toolbar :default-index="infostatusIndex" @cancel="infostatusShow = false" :columns="infostatus.name" @confirm="bindinfostatusChange"/>
+        </van-popup>
+        <!--状态-->
+        <van-popup v-model="rStatusShow" position="bottom">
+            <van-picker show-toolbar :default-index="rStatusIndex" @cancel="rStatusShow = false" :columns="rStatus.name" @confirm="bindrStatusChange"/>
+        </van-popup>
+        <!--企业简介-->
+        <van-popup v-model="openDec" position="right" @open="opendDec" :style="{ height: '100%',width:'100%',backgroundColor:'#f3f3f3'}">
+            <section class="innerPageTop">
+                <div class="subjectNav claimInput layerDemo">
+                    <a href="javascript:;" @click="openDec = false"><i class="fa fa-angle-left"></i></a>
+                    <p class="followTitle">企业简介</p>
+                </div>
+            </section>
+
+            <div class="issue_post_body companyPro">
+                <div class="issue_post_body_card">
+                <textarea id="content" placeholder="请对企业进行介绍~" maxlength="-1"
+                          style="width:100%;height: 400px;" name="description" :value="row.content"></textarea>
+                </div>
+                <div class="meansButtom">
+                    <button type="submit" @click="upDesc">保 存</button>
+                </div>
+            </div>
+        </van-popup>
+        <!--福利待遇-->
+        <van-popup v-model="gsflShow" position="bottom" :closeable="true" @close="gsflShow=false" round>
+            <div class="yun_jobadd_touch yunJobaddTouche">
+                <div class="jstextarea_tck_c_between">
+                    <div class="xztextarea_tck_tit">福利待遇</div>
+                </div>
+                <div class="xztextareaListAll">
+                    <div class="xztextareaList" v-for="(item, welfarekey) in welfareall" :key="welfarekey">
+                        <span :class="item.ischecked==1 ? 'flbutton_tab':''" class="flbutton_tabh" @click="bindwelfareChang" :data-index="welfarekey" :id="'w' + (welfarekey + 1)">{{item.name}}</span>
+                    </div>
+                </div>
+                <div class="fl_textbox welfare_box">
+                    <div class="fl_text welfare_laft">
+                        <input type="text" v-model="welfareAdd" name="addwelfare" placeholder="输入福利名称" />
+                    </div>
+                    <div class="fl_but welfare_right">
+                        <input type="button" value="添加" @click="bindwelfareAdd" />
+                    </div>
+                </div>
+                <div class="lag_text_qd">
+                    <div class="lag_text_qd_bth" @click="gsflShow = false">确认</div>
+                </div>
+            </div>
+        </van-popup>
+    </div>
+    <script src="{yun:}$plusstyle{/yun}/city.cache.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$plusstyle{/yun}/industry.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$plusstyle{/yun}/com.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wapadmin_style{/yun}/js/comPicker.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wapadmin_style{/yun}/js/category.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link rel="stylesheet" href="{yun:}$wapadmin_style{/yun}/js/umeditor/themes/default/css/umeditor.min.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+    <script src="{yun:}$wapadmin_style{/yun}/js/umeditor/umeditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wapadmin_style{/yun}/js/umeditor/umeditor.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wap_style{/yun}/js/compress.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$wap_style{/yun}/js/exif.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script>
+        let id = '{yun:}$smarty.get.id{/yun}';
+
+        var umeditor = {};
+        var cityParam = {
+            one_all: false,
+            two_all: false,
+        };
+        var cityData = cityCategory(cityParam);
+        var yunvue = new Vue({
+            el: '#yunvue',
+            data() {
+                return {
+                    com_info: {},
+                    row: {},
+                    // 从事行业
+                    hyShow: false,
+                    hy: {
+                        id: [],
+                        name: []
+                    },
+                    hyIndex: 0,
+                    // 企业性质
+                    prShow: false,
+                    pr: {
+                        id: [],
+                        name: []
+                    },
+                    prIndex: 0,
+                    // 企业规模
+                    munShow: false,
+                    mun: {
+                        id: [],
+                        name: []
+                    },
+                    munIndex: 0,
+                    // 企业地址
+                    areaShow: false,
+                    areaValue: 0,
+                    areaName: '',
+                    areaOptions: cityData,
+                    city: '请选择企业地址',
+                    provinceid: 0,
+                    cityid: 0,
+                    threecityid: 0,
+                    // 注册资金
+                    moneyShow: false,
+                    moneytype: {
+                        id: [1, 2],
+                        name: ['人民币', '美元']
+                    },
+                    moneytypeIndex: 0,
+                    // 联系方式
+                    infostatusShow: false,
+                    infostatus: {
+                        id: [1, 2],
+                        name: ['公开', '不公开']
+                    },
+                    infostatusIndex: 0,
+                    // 状态
+                    rStatusShow: false,
+                    rStatus: {
+                        id: [0, 1, 2],
+                        name: ['未审核', '正常', '锁定']
+                    },
+                    rStatusIndex: 0,
+                    // 企业简介
+                    openDec: false,
+                    // 福利待遇
+                    gsflShow: false,
+                    welfare: [],
+                    welfareval: '',
+                    welfareall: [],
+                    welfareAdd: '',
+                };
+            },
+            created() {
+                this.hy = getHy('请选择从事行业');
+                this.pr = getPr(); // 企业性质
+                this.pr.id.unshift(0)
+                this.pr.name.unshift('请选择企业性质')
+                this.mun = getMun();// 企业规模
+                this.mun.id.unshift(0)
+                this.mun.name.unshift('请选择企业规模')
+
+                this.getInfo();
+            },
+            methods: {
+                getInfo: function () {
+                    let that = this;
+                    var params = {
+                        id: id
+                    };
+                    showLoading();
+                    $.post('index.php?c=admin_company&a=edit', params, function (res) {
+                        hideLoading();
+
+                        if (res.error === 0) {
+                            data = res.data;
+                            that.com_info = data.com_info;
+                            that.row = data.row;
+
+                            let row = data.row;
+                            // 索引赋值
+                            let hyIndex = that.hy.id.indexOf(row.hy ? parseInt(row.hy) : 0);
+                            that.hyIndex = hyIndex < 0 ? 0 : hyIndex; // 从事行业
+                            let prIndex = that.pr.id.indexOf(row.pr ? parseInt(row.pr) : 0);
+                            that.prIndex = prIndex < 0 ? 0 : prIndex; // 企业性质
+                            let munIndex = that.mun.id.indexOf(row.mun ? parseInt(row.mun) : 0);
+                            that.munIndex = munIndex < 0 ? 0 : munIndex; // 企业规模
+
+                            // 企业地址
+                            that.city = row.provinceid ? row.job_city_one + ' ' + row.job_city_two + ' ' + (row.job_city_three ? row.job_city_three : '') : that.city
+                            that.provinceid = row.provinceid ? parseInt(row.provinceid) : 0;
+                            that.cityid = row.cityid ? parseInt(row.cityid) : 0;
+                            that.threecityid = row.three_cityid ? parseInt(row.three_cityid) : 0;
+
+                            // 注册资金类型
+                            if (row.moneytype) {
+                                if (row.moneytype == 1) {
+                                    that.moneytypeIndex = 0;
+                                } else if (row.moneytype == 2) {
+                                    that.moneytypeIndex = 1;
+                                }
+                            }
+
+                            // 联系方式
+                            that.infostatusIndex = parseInt(row.infostatus) - 1;
+                            // 状态
+                            that.rStatusIndex = parseInt(row.r_status);
+
+                            // 福利待遇
+                            that.welfareall = row['welfareAll'] ? row['welfareAll'] : [];
+                            if (row['arraywelfare'] && row['arraywelfare'].length > 0) {
+                                that.welfare = row['arraywelfare'];
+                                that.welfareval = row['welfare'];
+                            }
+
+                            $("#yunvue").show();
+                        } else {
+                            showToast(res.msg);
+                        }
+                    }, 'json')
+                },
+
+                // 从事行业
+                bindhyChange: function (value, index) {
+                    this.hyIndex = index;
+                    this.row.hy = this.hy.id[index];
+                    this.hyShow = false;
+                },
+
+                // 企业性质
+                bindprChange: function (value, index) {
+                    this.prIndex = index;
+                    this.row.pr = this.pr.id[index];
+                    this.prShow = false;
+                },
+
+                // 企业规模
+                bindmunChange: function (value, index) {
+                    this.munIndex = index;
+                    this.row.mun = this.mun.id[index];
+                    this.munShow = false;
+                },
+
+                // 企业地址
+                onAreaFinish({selectedOptions}) {
+                    this.provinceid = 0;
+                    this.cityid = 0;
+                    this.threecityid = 0;
+
+                    let cityStr = '';
+
+                    if (selectedOptions[0] && selectedOptions[0].value > 0) {
+                        if (selectedOptions[0]) {
+                            this.provinceid = selectedOptions[0].value;
+                            cityStr += selectedOptions[0].text;
+                            this.areaName = selectedOptions[0].text;
+                        }
+                    }
+                    if (selectedOptions[1] && selectedOptions[1].value > 0) {
+                        if (selectedOptions[1]) {
+                            this.cityid = selectedOptions[1].value;
+                            cityStr += ' ' + selectedOptions[1].text;
+                            this.areaName = selectedOptions[0].text;
+                        }
+                    }
+                    if (selectedOptions[2] && selectedOptions[2].value > 0) {
+                        if (selectedOptions[1]) {
+                            this.threecityid = selectedOptions[2].value;
+                            cityStr += ' ' + selectedOptions[2].text;
+                        }
+                    }
+                    this.city = cityStr ? cityStr : citydefault;
+                    this.areaShow = false;
+                },
+
+                // 注册资金
+                bindmoneytypeChange: function (value, index) {
+                    this.moneytypeIndex = index;
+                    this.row.moneytype = this.moneytype.id[index];
+                    this.moneyShow = false;
+                },
+
+                // 联系方式
+                bindinfostatusChange: function (value, index) {
+                    this.infostatusIndex = index;
+                    this.row.infostatus = this.infostatus.id[index];
+                    this.infostatusShow = false;
+                },
+
+                // 状态
+                bindrStatusChange: function (value, index) {
+                    this.rStatusIndex = index;
+                    this.rStatusShow = false;
+                },
+                // 企业简介
+                opendDec: function () {
+                    umeditor = UM.getEditor('content', {
+                        toolbar: false,
+                        elementPathEnabled: false,
+                        wordCount: false,
+                        autoHeightEnabled: false
+                    });
+
+                    let that = this;
+                    umeditor.addListener('ready', function () {
+                        umeditor.setContent(that.row.content)
+                    })
+                },
+                upDesc: function () {
+                    var that = this;
+
+                    var content = umeditor.getContent();
+                    if (content != "") {
+                        that.row.content = content;
+                        that.row.content_t = content.replace(/<\/?.+?>/g, "").replace(/ /g, "");
+                    } else {
+                        that.row.content = '';
+                        that.row.content_t = '';
+                    }
+                    that.openDec = false;
+                },
+                // 福利待遇
+                bindwelfareChang: function (e) {
+                    let that = this,
+                        windex = '',
+                        index = e.currentTarget.dataset.index,
+                        welfareall = that.welfareall,
+                        welfare = that.welfare;
+                    if (welfareall[index]['ischecked'] != 1) {
+                        welfareall[index]['ischecked'] = 1;
+                        welfare.push(welfareall[index]['name']);
+                    } else {
+                        welfareall[index]['ischecked'] = 0;
+                        windex = welfare.indexOf(welfareall[index]['name']);
+
+                        if (windex > -1) {
+                            welfare.splice(windex, 1);
+                        }
+                    }
+
+                    that.welfare = welfare;
+                    that.welfareval = welfare.join(',');
+                    that.welfareall = welfareall;
+                },
+                bindwelfareAdd: function (e) {
+                    let that = this,
+                        welfareAdd = that.welfareAdd,
+                        welfareall = that.welfareall,
+                        welfareval = that.welfareval ? that.welfareval.split(',') : [],
+                        welnameall = [];
+
+                    for (let i in welfareall) {
+                        welnameall.push(welfareall[i]['name']);
+                    }
+
+                    if ($.trim(welfareAdd)!= '' && welfareAdd.length >= 2 && welfareAdd.length <= 8) {
+                        //判断信息是否已经存在
+                        if (welnameall.indexOf(welfareAdd) > -1) {
+                            showModal('相同福利信息已存在，请重新填写');
+                            return;
+                        }
+
+                        welfareall.push({
+                            'name': welfareAdd,
+                            'ischecked': 1
+                        });
+
+                        welfareval.push(welfareAdd);
+
+                        that.welfareall = welfareall;
+                        that.welfareval = welfareval.join(',');
+                        that.welfareAdd = '';
+                        that.welid = 'w' + welfareall.length;
+                    } else {
+                        showModal('请输入2-8个福利字符！');
+                    }
+                },
+
+                upComqcode: function() {
+                    $("#pic").click();
+                },
+
+                subForm: function(){
+                    var formData = new FormData(document.getElementById("subForm"));
+                    formData.append('content', this.row.content);
+
+                    var moblie = $.trim(this.row.linktel);
+                    if (moblie && isjsMobile(moblie) == false) {
+                        showToast('手机格式错误！');
+                        return false;
+                    }
+                    var phone = $.trim(this.row.linkphone);
+                    if (phone && isjsTell(phone) == false) {
+                        showToast('固话格式错误！');
+                        return false;
+                    }
+                    var email = $.trim(this.row.linkmail);
+                    if (email && check_email(email) == false) {
+                        showToast('邮箱格式错误！');
+                        return false;
+                    }
+
+                    showLoading('提交中');
+                    $.ajax({
+                        url:"index.php?c=admin_company&a=comeditsave",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        dataType: 'json',
+                        success: function(res){
+                            hideLoading();
+                            if (res.error === 0) {
+                                showToast(res.msg, 2, function(){
+                                    // navigateTo('index.php?c=admin_company&a=show&com_id=' + id + '&go=3');
+                                    goBack();
+                                });
+                            } else {
+                                showToast(res.msg);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

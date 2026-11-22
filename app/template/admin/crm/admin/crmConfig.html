@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="crmSetApp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="基础配置" name="first">
+                <base_config></base_config>
+            </el-tab-pane>
+            <el-tab-pane label="规则配置" name="second">
+                <rule_config></rule_config>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+    const crmSetApp = new Vue({
+        el: '#crmSetApp',
+        data: function () {
+            return {
+                activeName: 'first'
+            }
+        },
+        components: {
+            'base_config': httpVueLoader('./component/baseConfig.vue'),
+            'rule_config': httpVueLoader('./component/ruleConfig.vue')
+        },
+        methods: {
+            handleClick(tab, event) {
+            }
+        }
+    });
+</script>
+</body>
+</html>

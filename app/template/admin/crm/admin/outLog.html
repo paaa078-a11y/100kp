@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+
+    <script src="../../../../../data/plus/city.cache.js"></script>
+    <script src="../../../../../data/plus/cityparent.cache.js"></script>
+    <script src="../../../../../data/plus/job.cache.js"></script>
+    <script src="../../../../../data/plus/jobparent.cache.js"></script>
+</head>
+<body>
+<div id="allOutLogApp">
+    <div class="allOutLogWaibu">
+        <out_log v-bind:log_tab="logTab"></out_log>
+    </div>
+    
+</div>
+<script>
+    const allOutLogApp = new Vue({
+        el: '#allOutLogApp',
+        data: function () {
+            return {
+                activeName: 'first',
+                logTab: 0
+            }
+        },
+        components: {
+            'out_log': httpVueLoader('../component/outLog.vue'),
+        }
+    })
+</script>
+</body>
+<style>
+    .allOutLogWaibu .admin_datatip{
+        margin-bottom: 0;
+    }
+</style>
+</html>

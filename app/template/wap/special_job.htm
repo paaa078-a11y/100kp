@@ -1,0 +1,174 @@
+{yun:}include file="$wapstyle/header.htm"{/yun}
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/special_job.css?v={yun:}$config.cachecode{/yun}">
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/yunwap.css?v={yun:}$config.cachecode{/yun}">
+{yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
+<div id="yunvue" class="none">
+    <section class="specialPhoto">
+        <div class="specialDirec">
+            <a href="javascript:void(0)" onclick="goBack()">
+                <img src="{yun:}$wap_style{/yun}/images/header_back.png" alt="">
+            </a>
+        </div>
+        <img src="{yun:}$info.sjlist_pic_n{/yun}" alt="">
+    </section>
+    <section class="specialSubject">
+        <ul v-if="!noCom">
+            <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                <van-list v-model:loading="loading" :finished="finished" @load="getList">
+                    <li v-for="(item, comkey) in list" :key="comkey">
+                <a :href="'{yun:}url m=wap{/yun}index.php?c=job&a=comapply&id='+item.jobid">
+					<div class="ztjob_top"> {{item.name}}<img src="{yun:}$wap_style{/yun}/images/icon_recommend.png" alt="" v-if="item.rec_n">
+                                    <img src="{yun:}$wap_style{/yun}/images/jp.png" alt="" v-if="item.urgent_n"></div>
+					<div class="ztjob_xz">{{item.job_salary}}</div>
+					<div class="ztjob_info">
+					    <span class="" v-if="item.citystr">{{item.citystr}}</span>
+					    <i class="newjob_info_line" v-if="item.citystr"></i>
+                        <span class="">{{item.job_exp}}经验</span>
+					    <i class="newjob_info_line"></i>
+                        <span class="">{{item.job_edu}}学历</span>
+					</div>
+					<div class="ztjob_com">{{item.com_name}}</div>
+              <div class="ztjob_fl" v-if="item.welfareArr">
+                  <span v-for="(welitem,wk3) in item.welfareArr" :key="wk3">{{welitem}}</span>
+              </div>
+                </a>
+            </li>
+			</van-list>
+            </van-pull-refresh>
+        </ul>
+        <div v-if="noCom" class="yd_zc" style="height:200px;">
+			   <div class="wap_member_no">暂无职位信息</div>
+             
+        </div>
+        <div class="yd_zc" v-if="(finished && !uid )|| noCom">
+            <div class="yd_zc_tit">找不到工作着急？</div>
+            <div class="yd_zc_p">30秒写个简历, 变身最强打工人</div>
+            <div class="yd_zc_bthbox"><div class="yd_zc_bth" @click="topage('{yun:}url m=wap{/yun}index.php?c=login')" >注册简历</div></div>
+
+        </div>
+
+        <div class="jobzt_gzj" v-if="(finished || noCom) && hotjobclass.length>0" style="margin-top: 10px;;">
+            <div class="yd_zc_tit">热门好职位</div>
+            <div class="index_jobtagbox">
+                <div class="index_jobtaglist" v-for="(item,key) in hotjobclass" :key="key">
+                    <div class="index_jobtag_n" @click="topage('{yun:}url m=wap{/yun}index.php?c=job&job1='+item.job1+'&job1son='+item.job1_son+'&jobpost='+item.job_post)"  >{{item.name}}</div>
+                </div>
+            </div>
+             <div class="yd_zc_bthbox"> <div class="yd_zc_bth" @click="topage('{yun:}url m=wap{/yun}index.php?c=job')"> 搜索更多好职位  </div> </div>
+        </div>
+
+       
+    </section>
+   <div class="jobzt_cz">
+	{yun:}if $usertype == 1{/yun}
+	<a href="{yun:}url m=wap{/yun}member/index.php?c=addresume" class="jobzt_cz_a">写简历</a> 
+	{yun:}elseif $usertype == 2{/yun}
+	<a href="{yun:}url m=resume{/yun}" class="jobzt_cz_a">我要招人</a>
+	{yun:}else{/yun}
+	<a href="{yun:}url m=wap c=login{/yun}" class="jobzt_cz_a">写简历</a> 
+	<a href="{yun:}url m=wap c=login{/yun}" class="jobzt_cz_a">我要招人</a>
+	{yun:}/if{/yun}
+   </div>
+<!-- 新增底部固定漂浮按钮 -->
+   <div class="jobzt_bottom_btn">
+       <a href="{yun:}url m=wap{/yun}c_job-a_applyjobuid-jobid_275067.html" class="jobzt_bottom_btn_a">10秒,快速创建简历</a>
+   </div> 
+    
+</div>
+</body>
+<script type="text/javascript">
+    var id = '{yun:}$smarty.get.id{/yun}';
+    var uid = '{yun:}$uid{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                list: [],
+                loading: false,
+                hotjobclass:[],
+                page: 1,
+   
+                limit: 20,
+                refreshing: false,
+                finished: false,
+                noCom: false,
+                footershow:false,
+                uid:uid
+            }
+        },
+        created() {
+            this.gethotjobclass();
+            this.getList();
+        },
+        methods: {
+            onRefresh:function(){
+                var that = this;
+                that.page = 1;
+                that.getList('new');
+
+            },
+            getList: function (type) {
+                var that = this;
+                if (type == 'refresh') {
+                    that.page = 1;
+                    that.list = [];
+                }
+                var param = {
+                    id:id,
+                    limit: that.limit,
+                    page: that.page,
+                };                
+                $.post('{yun:}url m=wap c=special a=joblist{/yun}', param, function (res) {
+                    $("#yunvue").css('display', 'block');
+                    that.loading = false;
+              
+                    if (res.list.length > 0) {
+                        res.list.forEach(item => {
+                            that.list.push(item);
+                        });
+                        that.noCom = false;
+                     
+                        if (res.list.length < that.limit) {
+                            that.finished = true;
+                        } else {
+                            that.page = that.page + 1;
+
+                        }
+                    } else if (that.page == 1) {
+                        that.noCom = true;
+                        that.finished = true;
+                    }else{
+						that.finished = true;
+					}
+                }, 'json');
+            },
+            gethotjobclass: function () {
+                var that = this;
+                $.post('{yun:}url m=wap c=special a=hotjobclass{/yun}', {id:''}, function (res) {
+                   that.hotjobclass = res?res : [];
+                }, 'json');
+            },
+            topage:function(url){
+                window.location.href = url;
+            }
+        }
+    });
+	var wapurl = "{yun:}url m=wap{/yun}";
+	function goBack(){
+		if (navigator.userAgent.indexOf('Firefox') >= 0 ||
+			navigator.userAgent.indexOf('Opera') >= 0 ||
+			navigator.userAgent.indexOf('Safari') >= 0 ||
+			navigator.userAgent.indexOf('Chrome') >= 0 ||
+			navigator.userAgent.indexOf('WebKit') >= 0){
+
+			if(window.history.length > 1){
+				window.history.go( -1 );
+			}else{
+				location.href = wapurl;
+			}
+		}else{ //未知的浏览器
+			window.history.go( -1 );
+		}
+	}
+</script>
+</html>

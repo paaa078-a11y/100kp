@@ -1,0 +1,1096 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/swiper/swiper-bundle.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/echarts.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/js/swiper/swiper-bundle.min.css?v={yun:}$config.cachecode{/yun}">
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script>var weburl = '{yun:}$config.sy_weburl{/yun}';</script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <link href="images/mylive.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <title>后台管理</title>
+</head>
+<style>
+	#backbox{
+			font-size: 16px;
+			margin: 24px;
+			text-align: center;
+		}
+		#backbox input{
+			padding: 4px;
+		}
+		.back_tit{
+			color: #000;
+			font-size: 20px;
+			font-weight: bolder;
+			margin-bottom: 16px;
+		}
+		.back_tip{
+			background: #fff1e9;
+			padding: 8px;
+			color: #fd6d31;
+		}
+		.back_stime{
+			margin: 16px 0;
+			background: #f5f5f5;
+			padding: 8px;
+		}
+		.back_etime{
+			margin-bottom: 16px;
+			background: #f5f5f5;
+			padding: 8px;
+		}
+	
+		.back_btn{
+			width: 100%;
+			background: #3830e5;
+			color: #fff;
+			padding: 8px;
+			border-radius: 4px;
+		}
+</style>
+<body>
+	<div id="xjh" style="display: none;">
+		<section class="liveBroaAll">
+		    <div class="liveBroaUps">
+		        <div class="liveBroaUpsLeft">
+					<template v-if="livestatus != 2">
+						<div class="roaUpsLeftVide" id="livebody">
+							<video v-if="livestatus == 3" id="live_video" preload="auto" playsinline webkit-playsinline></video>
+							<div v-if="livestatus == 1" class="countTimeFlex">
+								<div id="countnotice">直播开始倒计时，点击“开始本场直播”后将正式开启本场直播</div>
+								<div id="countdown"></div>
+							</div>
+						    <div class="psLeftVideClck" v-if="livestatus == 1" @click="startLive">
+						        <a href="javascript:void(0);">开始本场直播</a>
+						    </div>
+							<div class="psLeftVideClck" v-if="livestatus == 3" @click="stopLive">
+							    <a href="javascript:void(0);">结束本场直播</a>
+							</div>
+						</div>
+					</template>
+					<template v-else>
+						<div class="roaUpsLeftVide" id="playered" v-if="recordurl">
+							<div class="psLeftVideClck" @click="backShow">
+							    <a href="javascript:void(0);">重新生成回放</a>
+							</div>
+							<!--回放-->
+						</div>
+						<div class="roaUpsLeftVide" v-else>
+							<div class="psLeftVideClck" @click="backShow">
+							    <a href="javascript:void(0);">生成回放</a>
+							</div>
+							<div class="roaUpsLefEnds">
+								<p>直播已结束</p>
+								<!-- <span>直播时长&nbsp;00:00:28</span> -->
+							</div>
+						</div>
+					</template>
+		            <div class="roaUpsLeftComp" v-if="explain.comname">
+		                <div class="upsLeftCompName" @click="companClek('explain')">
+		                    <span>{{explain.comname}}</span>
+		                    <i></i>
+		                    <a href="javascript:void(0);">查看详情</a>
+		                </div>
+		                <div class="upsLeftCompPost">
+		                    <div class="swiper mySwiper">
+		                        <div class="swiper-wrapper">
+		                            <div class="swiper-slide" v-for="(item,jkey) in explain.joblist" :key="jkey">
+		                                <a @click="shareJob(jkey, 'explain')">
+		                                    <span>{{item.name}}</span>
+		                                    <span>{{item.salary}}</span>
+		                                </a>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="liveBroaDwonLeft">
+		            <div class="roaDwonLeftTitle">
+		                <span>招聘企业</span>
+		                <div class="closeSearch" style="width: 7rem; height: 0.8rem; cursor: pointer;"></div>
+		                <div class="roaDwonSearch">
+		                    <img src="images/live/Group-6.png" alt="">
+		                </div>
+		                <div class="roaDwonInputs">
+							<div class="formInputs">
+								<div class="searchInputs">
+									<input type="text" placeholder="输入关键词" id="comkeyword">
+								</div>
+								<div class="searchButtons" @click.stop="comSearch">
+									<button><img src="images/live/Group-6.png" alt=""></button>
+								</div>
+								<div class="qingchus" @click.stop="clearSearch">清除</div>
+							</div>
+		                </div>
+		            </div>
+		            <div class="roaDwonLeftData">
+		                <div class="swiper comSwiper">
+		                    <div class="swiper-wrapper">
+		                        <div class="swiper-slide" v-for="(item,ckey) in comlist" :key="ckey">
+		                            <div class="wonLeftCompay">
+		                                <div class="eftCompOne" @click="companClek(ckey)">
+		                                    <img :src="item.logo" alt="">
+		                                </div>
+		                                <div class="eftCompTwo" @click="companClek(ckey)">
+		                                    <h4>{{item.comname}}</h4>
+		                                    <!--p>广东·深圳·宝安区</p>
+		                                    <span>计算机软件/硬件·500-999人·私营</span-->
+		                                </div>
+		                                <div class="eftCompThre">
+		                                    <div class="eftCompThreNub">
+		                                        <p>{{item.jobcount}}</p>
+		                                        <span>在招职位</span>
+		                                    </div>
+		                                    <i></i>
+		                                    <div class="eftCompThreNub">
+		                                        <p>{{item.ltime}}分钟</p>
+		                                        <span>讲解时长</span>
+		                                    </div>
+		                                </div>
+		                                <div class="eftCompFive" @click="setExplain(ckey)">
+		                                    <span :style="item.status == 1 || item.status == 3 ? 'cursor:not-allowed' : ''">开始讲解</span>
+		                                </div>
+		                                <div class="eftCompDai eftCompDaiZhon" v-if="item.status == 1">
+		                                    <span>讲解中</span>
+		                                </div>
+										<div class="eftCompDai" v-if="item.status == 2">
+										    <span>待讲解</span>
+										</div>
+										<div class="eftCompDai eftCompDaiYijan" v-if="item.status == 3">
+										    <span>已讲解</span>
+										</div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="swiper-button-next"></div>
+      						<div class="swiper-button-prev"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <div class="liveBroaDwon">
+		        <div class="liveBroaUpsRight">
+		            <div class="roaUpsRightNavs">
+		                <ul>
+		                    <li :class="boxtab == 'chat' ? 'aUpsRightCur' : ''" @click="boxtabClick('chat')">聊天互动</li>
+		                    <li :class="boxtab == 'jy' ? 'aUpsRightCur' : ''" @click="boxtabClick('jy')">被禁言</li>
+		                </ul>
+		            </div>
+		            <div class="roaUpsRightContAll">
+		                <div class="roaUpsRightcList" :class="boxtab == 'chat' ? 'upGhtcList' : ''">
+		                    <div class="roaUpsRigAllChat">
+		                        <div class="roaUpsRigChat" id="chat_content">
+		                        	<div class="loadingMore" @click="loadingMore" v-if="ismore">
+		                        		<span>加载更多</span>
+		                        	</div>
+									<template v-for="(item,lkey) in chatlist">
+										<template v-if="item.msgtype == 'char'">
+											<!-- 时间线 -->
+											<div class="timelineAlls" v-if="item.time">
+												<span>{{item.time}}</span>
+											</div>
+											<!--管理员发言start-->
+											<div class="psRigChatOPPOffic" v-if="item.usertype == 9">
+											    <div class="gChatTexts">
+											        <div class="gChatTextsName">
+											            <div class="extsNameFangx">
+											                <i>官方</i>
+											                <span>{{item.username}}</span>
+											            </div>
+											        </div>
+											        <div class="gChatTextsCont">
+											            <div class="extsContSpoa">
+											                <span v-html="item.content"></span>
+											            </div>
+											        </div>
+											    </div>
+											    <div class="gChatphoto">
+											        <img :src="item.avatar" alt="">
+											    </div>
+											</div>
+											<!--管理员发言end-->
+											<!--用户发言-->
+											<div class="psRigChatNeir" v-else>
+											    <div class="ChatNeirClick" :class="item.jy == 1 ? 'hatGovecur' : ''" @mouseenter="jyshow(lkey)" @mouseleave="jyhide(lkey)">
+											        <div class="gChatphoto">
+											            <img :src="item.avatar" alt="">
+											        </div>
+											        <div class="gChatGovers">
+											            <div class="hatGoverOne">
+											                <div class="hatGoverOneToux">
+											                    <img :src="item.avatar" alt="">
+											                </div>
+											                <div class="hatGoverOneindo">
+											                    <h4>{{item.username}}</h4>
+											                </div>
+											            </div>
+											            <div class="hatGoverTwo" @click="setjy(lkey)">
+											                <span>禁言</span>
+											            </div>
+											        </div>
+											    </div>
+											    <div class="gChatTexts">
+											        <div class="gChatTextsName">
+											            <span>{{item.username}}</span>
+											        </div>
+											        <div class="gChatTextsCont">
+											            <div class="extsContSpoa">
+											                <span v-html="item.content"></span>
+											            </div>
+											        </div>
+											    </div>
+											</div>
+											<!--用户发言end-->
+										</template>
+										<!--职位消息-->
+										<template v-else-if="item.msgtype == 'job' && item.job">
+											<div class="sharePositions">
+												<div class="sharePosiAll">
+													<div class="sharePosiAllInfo">
+														<h4>{{item.job.com_name}}</h4>
+														<div class="spanPdiv">
+															<p>{{item.job.name}}</p>
+															<span>{{item.job.salary}}</span>
+														</div>
+														
+														<b>{{item.job.citystr}}·{{item.job.job_exp}}经验·{{item.job.job_edu}}学历</b>
+													</div>
+													<div class="sharePosiAllToudi">
+														<a :href="item.job.url" target="_blank">查看</a>
+													</div>
+												</div>
+											</div>
+										</template>
+									</template>
+									<!-- 预留空格 -->
+									<div style="overflow: hidden;clear: both;height: 1rem;"></div>
+		                        </div>
+		                        <div class="roaUpsRigInput">
+		                            <div class="psRigInputAlls">
+		                                <div class="psRigInputIcon">
+		                                    <img id="face" src="images/live/Frame.png" alt="" class="sendbq_i">
+											<div id="commonly" class="showbq none"></div>
+		                                </div>
+										<div class="psRigInputSwitc" style="margin-left: auto; margin-right: 0.25rem;">
+										    <span>游客禁言</span>
+										    <div class="nputSwitcPuou" :class="vistor_nochat == '1' ? 'witcPuocur' : ''" @click.stop="vistorNochatClick">
+										        <i></i>
+										    </div>
+										</div>
+		                                <div class="psRigInputSwitc">
+		                                    <span>全部禁言</span>
+		                                    <div class="nputSwitcPuou" :class="nochat == '1' ? 'witcPuocur' : ''" @click.stop="nochatClick">
+		                                        <i></i>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="psRigInputShuru">
+		                                <div class="nputShuruKuang">
+		                                    <textarea id="send_content" placeholder="请输入内容"></textarea>
+		                                </div>
+		                                <div class="nputShuruAnniu" id="send">
+		                                    <span>发送</span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <div class="roaUpsRightcList" :class="boxtab == 'jy' ? 'upGhtcList' : ''">
+							<!-- 有禁言数据的样式 -->
+		                    <div class="upContTaboo" v-if="jylist.length > 0">
+		                        <ul>
+		                            <li v-for="(item,jykey) in jylist" :key="jykey">
+		                                <div class="ontTaboOne">
+		                                    <div class="ontTaboOneImg">
+		                                        <img :src="item.photo" alt="">
+		                                    </div>
+		                                    <div class="ontTaboOneData">
+		                                        <p>{{item.name}}</p>
+		                                    </div>
+		                                </div>
+		                                <div class="ontTaboTwo" @click="removejy(jykey)">
+		                                    <span>取消禁言</span>
+		                                </div>
+		                            </li>
+		                        </ul>
+		                    </div>
+							 <!-- 没有数据样式 -->
+							<div class="upContTaboZanwu" v-else>
+								<div class="oidsu">
+									<img src="images/live/Group162.png" alt="">
+									<span>暂无数据</span>
+								</div>
+							</div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="liveBroaDwonRight">
+		            <div class="wonRighNavcd">
+		                <ul>
+		                    <li :class="tjtab == 'zhibo' ? 'wonRightCur' : ''" @click="tjClick('zhibo')">直播统计</li>
+		                    <li :class="tjtab == 'ruchang' ? 'wonRightCur' : ''" @click="tjClick('ruchang')">入场记录</li>
+		                    <li :class="tjtab == 'qushi' ? 'wonRightCur' : ''" @click="tjClick('qushi')">入场趋势</li>
+		                </ul>
+		                <div class="wonRighShrink">
+		                    <img class="shouqi" src="images/live/shou1.png" alt="收起">
+		                    <img class="zhankai" src="images/live/suo21.png" alt="展开">
+		                </div>
+		            </div>
+		            <div class="roaDwonRightCone">
+		                <div class="wonRightConList" :class="tjtab == 'zhibo' ? 'ghtConListOn' : ''">
+		                    <div class="wonRightInfos">
+		                        <div class="wonRightInfosZuob" style="width: 100%;">
+		                            <ul>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-30.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.pv}}</p>
+		                                        <span>访问次数（PV）</span>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-32.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.uv}}</p>
+		                                        <span>直播访客（UV）</span>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-31.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.onlinenum}}</p>
+		                                        <span>同时最高在线人数（人）</span>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-33.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.duration}}</p>
+		                                        <span>视频直播时长（分钟）</span>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-35.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.regnum}}</p>
+		                                        <span>新注册用户数（个）</span>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosZuobImg">
+		                                        <img src="images/live/Group-36.png" alt="">
+		                                    </div>
+		                                    <div class="nfosZuobNumber">
+		                                        <p>{{tj.sqnum}}</p>
+		                                        <span>简历投递数（次）</span>
+		                                    </div>
+		                                </li>
+		                            </ul>
+		                        </div>
+		                        <!-- 暂时隐藏 -->
+		                        <!-- <div class="wonRightInfosYoub">
+		                            <ul>
+		                                <li>
+		                                    <div class="nfosYoubImgs">
+		                                        <img src="images/live/Group-34.png" alt="">
+		                                        <span>公众号关注人数</span>
+		                                    </div>
+		                                    <div class="nfosYoubLinke">
+		                                        <a href="">点击查看</a>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosYoubImgs">
+		                                        <img src="images/live/Group-35.png" alt="">
+		                                        <span>新注册用户数</span>
+		                                    </div>
+		                                    <div class="nfosYoubLinke">
+		                                        <a href="">点击查看</a>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <div class="nfosYoubImgs">
+		                                        <img src="images/live/Group-36.png" alt="">
+		                                        <span>简历投递数</span>
+		                                    </div>
+		                                    <div class="nfosYoubLinke">
+		                                        <a href="">点击查看</a>
+		                                    </div>
+		                                </li>
+		                            </ul>
+		                        </div> -->
+		                    </div>
+		                </div>
+						<!--入场记录-->
+		                <div class="wonRightConList" :class="tjtab == 'ruchang' ? 'ghtConListOn' : ''">
+		                    <div class="wonRightConEcord">
+		                        <div class="ghtConEcordName">
+		                            <span style="width: 35%;">名称</span>
+		                            <span>IP</span>
+		                            <span>进入时间</span>
+		                            <span style="width: 15%;">类型</span>
+		                        </div>
+		                        <div class="ghtConEcordLists">
+		                            <div class="cordListsData" v-for="(item,logkey) in tj.log">
+		                                <span style="width: 35%;">{{item.name}}</span>
+		                                <span>{{item.ip}}</span>
+		                                <span>{{item.ctime_n}}</span>
+		                                <span style="width: 15%;">{{item.utype}}</span>
+		                            </div>
+
+									<div style="width:100%; text-align: center; padding-top: 20px;" v-if="tj.uv > 10">
+										<a href="javascript:void(0);" onclick="iframfunct('index.php?m=admin_xjhlive&c=userlog&xid={yun:}$smarty.get.id{/yun}','90%')" class=" "
+										style="background: #2778F8; border-radius: 20px ;color:#fff;padding:5px 30px; display: inline-block;">查看更多入场记录</a>
+									</div>
+
+		                        </div>
+
+		                    </div>
+
+		                </div>
+		                <div class="wonRightConList" :class="tjtab == 'qushi' ? 'ghtConListOn' : ''">
+		                    <div class="wonRightConEcharts" id="mians"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</section>
+		<!-- 公司详情弹窗 -->
+		<section class="companyPopup" v-if="combox">
+		    <div class="comPopupCont">
+		        <div class="comPopuInfo">
+		            <div class="companInfoImg">
+		                <img :src="com.logo" alt="">
+		            </div>
+		            <div class="companInfoData">
+		                <h4>{{com.comname}}</h4>
+		                <!--p>广东·深圳·宝安区</p>
+		                <span>计算机软件/硬件·500-999人·私营</span-->
+		            </div>
+		            <div class="companInfoClose" @click="combox = false">
+		                <img src="images/closeimg.png" alt="">
+		            </div>
+		        </div>
+		        <div class="comPopuPosit">
+		            <ul>
+		                <li v-for="(item,cjkey) in com.joblist" :key="cjkey">
+		                    <div class="comPositData">
+		                        <div class="comPositDataNam">
+		                            <p>{{item.name}}</p>
+		                            <span>{{item.salary}}</span>
+		                        </div>
+		                        <div class="comPositDataMap">
+		                            <span>{{item.citystr}}·{{item.job_exp}}经验·{{item.job_edu}}学历</span>
+		                        </div>
+		                    </div>
+		                    <div class="comPopuPositFenx">
+		                        <a @click="shareJob(cjkey)">分享到聊天</a>
+		                    </div>
+		                </li>
+		            </ul>
+		        </div>
+		    </div>
+		</section>
+		<div id="backbox" style="display: none;">
+			<div class="back_tit">生成直播回放</div>
+			<div class="back_tip">只有60天内有直播记录的才支持生成回放</div>
+		    <div class="back_stime">
+				开始时间：
+		        <input id="playstime" value="{yun:}$info.stime_m{/yun}" />
+		    </div>
+			<div class="back_etime">
+				结束时间：
+				<input id="playetime" value="{yun:}$info.etime_m{/yun}" />
+			</div>
+			<button class="back_btn" @click="playback"> 生成</button>
+		</div>
+		
+	</div>
+	<input type="hidden" id="live_hls" value="{yun:}$info.hls{/yun}" />
+	<input type="hidden" id="live_stime" value="{yun:}$info.stime{/yun}" />
+	<input type="hidden" id="live_poster" value="{yun:}$style{/yun}/images/livewating.jpg" />
+	<input type="hidden" id="playurl" value="{yun:}$info.recordurl{/yun}" />
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/custom/xjhlive.js?v={yun:}$config.cachecode{/yun}"></script>
+	{yun:}if $info.livestatus == 2{/yun}
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/qiniu-web-player-1.2.3.js"></script>
+	{yun:}else{/yun}
+	<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.min.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/hls.min.1.1.5.js"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/live/tcplayer/tcplayer.v4.6.0.min.js"></script>
+	{yun:}/if{/yun}
+    <!-- jquery -->
+    <script>
+		var comSwiper = null;
+		var mySwiper = null;
+		var pytoken = '{yun:}$pytoken{/yun}';
+		var socketUrl = "{yun:}$config.sy_chat_weburl{/yun}";
+		var mbstyle = '{yun:}$style{/yun}';
+		var xjhsyncid = '{yun:}$info.syncid{/yun}';
+		var xjhid = '{yun:}$info.id{/yun}';
+		var mine = {
+			id: 'gly',
+			avatar: '{yun:}$config.sy_ossurl{/yun}/{yun:}$config.sy_chat_logo{/yun}',
+			username: '{yun:}$config.sy_webname{/yun}',
+			usertype: 9
+		};
+		var pastSend = 0;
+		var chatpage = 1;
+		var chatload = false;
+		var app = new Vue({
+			el: '#xjh',
+			data: {
+				comlist: [],
+				explain: {
+					comname: '',
+					joblist: []
+				},
+				chatlist: [],
+				ismore: false,
+				com: {
+					comname: '',
+					joblist: []
+				},
+				nochat: '{yun:}$info.nochat{/yun}',
+				vistor_nochat: '{yun:}$info.vistor_nochat{/yun}',
+				jylist: [],
+				boxtab: 'chat',
+				tjtab: 'zhibo',
+				tj: {},
+				combox: false,
+				livestatus: '{yun:}$info.livestatus{/yun}',
+				recordurl: '{yun:}$info.recordurl{/yun}'
+			},
+			created: function() {
+				document.getElementById('xjh').style.display = 'block';
+				this.getControlData();
+				this.getChat();
+				this.getTj();
+				
+				let self = this;
+				setInterval(function(){
+					self.getTj();
+				},30000);
+			},
+			mounted(){
+				if(this.livestatus == 3){
+					// 直播
+					livePlay();
+				}else if(this.livestatus == 2){
+					// 回放
+					playered();
+				}
+			},
+			methods: {
+				getControlData: function(){
+					var self = this;
+					$.post('index.php?m=admin_xjhlive&c=getControlData', {xid: xjhid, pytoken: pytoken}, function(res){
+						if(res){
+							self.comlist = res.comlist;
+							self.jylist = res.jylist;
+							self.explain = res.explain;
+							// 左下企业列表滚动
+							if(comSwiper){
+								comSwiper.destroy();
+							}
+							setTimeout(function(){
+								comSwiper = new Swiper(".comSwiper", {
+								    slidesPerView: 3,
+								    spaceBetween: 20,
+								    navigation: {
+							          nextEl: ".swiper-button-next",
+							          prevEl: ".swiper-button-prev",
+							        },
+								})
+							},100);
+							// 正在讲解中滚动
+							if(res.explain.id){
+								jjSwiper();
+							}
+						}
+					},'json');
+				},
+				setExplain: function(key){
+					var com = this.comlist[key];
+					if(com.status == 2){
+						var self = this;
+						loadlayer();
+						$.post('index.php?m=admin_xjhlive&c=setExplain', {id: com.id, xid: xjhid, pytoken: pytoken}, function(res){
+							parent.layer.closeAll('loading');
+							if(res.st == 9){
+								self.getControlData();
+								if(socket && socket.readyState == 1){
+									var message = {
+										type: 'xjhNowcom',
+										data: {
+											to: {xjhid: xjhsyncid, uid: com.id}
+										}
+									};
+									socket.send(JSON.stringify(message));
+								}else{
+									layer.msg('通知直播关闭功能加载中', 2, 8, function(){
+										window.location.reload();
+									});
+								}
+							}else{
+								layer.msg(res.msg, res.tm, res.st);
+							}
+						},'json');
+					}
+				},
+				loadingMore: function(){
+					if(chatload){
+						chatload = false;
+						chatpage++;
+						this.getChat();
+					}
+				},
+				getChat: function(){
+					var self = this;
+					$.post('index.php?m=admin_xjhlive&c=getXjhChatPage', {xid: xjhid, page: chatpage, pytoken: pytoken}, function(res){
+						chatload = true;
+						if(res){
+							self.ismore = res.ismore;
+							var scroll = null;
+							var logs = res.list;
+							for (var i = 0; i < logs.length; i++) {
+								logs[i].content = rexContent(logs[i].content);
+								var time = parseInt(logs[i].sendTime);
+								if (pastSend ==0 || (pastSend - time > 1800 * 1000)) {
+									logs[i].time = timeFormat(time);
+									pastSend = time;
+								}
+							}
+							logs.reverse();
+							self.chatlist = logs.concat(self.chatlist);
+							
+							setTimeout(function() {
+								if(chatpage == 1){
+									// 第一次加载需要自动滚动
+									var scroll = document.getElementById('chat_content').scrollHeight;
+									chatScrollTo(scroll);
+								}
+							}, 100);
+						}
+					},'json');
+				},
+				companClek: function(e){
+					if(e == 'explain'){
+						this.com = this.explain;
+					}else{
+						this.com = this.comlist[e];
+					}
+					this.combox = true;
+				},
+				setjy: function(k){
+					var log = this.chatlist[k];
+					var self = this;
+					loadlayer();
+					$.post('index.php?m=admin_xjhlive&c=setjy', {pytoken: pytoken, chatid: log.chatid}, function(res){
+						parent.layer.closeAll('loading');
+						if(res.st == 9){
+							var jy = {
+								uid: log.id,
+								usertype: log.usertype,
+								name: log.username,
+								photo: log.avatar,
+								xid: log.xid
+							};
+							self.jylist.unshift(jy);
+						}
+						layer.msg(res.msg, res.tm, res.st);
+					},'json');
+				},
+				removejy: function(k){
+					var jy = this.jylist[k];
+					var self = this;
+					$.post('index.php?m=admin_xjhlive&c=removejy', {pytoken: pytoken, uid: jy.uid, usertype: jy.usertype, xid: jy.xid}, function(res){
+						self.jylist.splice(k, 1);
+					},'json');
+				},
+				// 聊天互动，被禁言tab
+				boxtabClick: function(e){
+					this.boxtab = e;
+				},
+				getTj: function(){
+					var self = this;
+					$.post('index.php?m=admin_xjhlive&c=getTj', {pytoken: pytoken, xid: xjhid}, function(res){
+						self.tj = res;
+					},'json');
+				},
+				tjClick: function(e){
+					if(e == 'qushi' && this.tjtab != 'qushi'){
+						var self = this;
+						$.post('index.php?m=admin_xjhlive&c=tendency', {pytoken: pytoken, xid: xjhid}, function(res){
+							var xdata = [], ydata = [];
+							for (var i in res) {
+								xdata.push(res[i].tjtime);
+								ydata.push(res[i].count);
+							}
+							tjt(xdata, ydata);
+						},'json');
+					}
+					this.tjtab = e;
+				},
+				shareJob: function(k, type =''){
+					if(type == 'explain'){
+						var job = this.explain.joblist[k];
+					}else{
+						var job = this.com.joblist[k];
+					}
+					sendMessage('jobid=' + job.id, 'job', job);
+				},
+				comSearch: function(){
+					var keyword = $('#comkeyword').val();
+					if(keyword == ''){
+						return layer.msg('请输入关键词', 2, 8);
+					}
+					var self = this;
+					$.post('index.php?m=admin_xjhlive&c=getControlCom', {xid: xjhid, keyword: keyword,pytoken: pytoken}, function(res){
+						if(res){
+							self.comlist = res;
+							// 左下企业列表滚动
+							if(comSwiper){
+								comSwiper.destroy();
+							}
+							setTimeout(function(){
+								comSwiper = new Swiper(".comSwiper", {
+								    slidesPerView: 3,
+								    spaceBetween: 20,
+								    navigation: {
+							          nextEl: ".swiper-button-next",
+							          prevEl: ".swiper-button-prev",
+							        },
+								})
+							},100);
+						}
+					},'json');
+				},
+				clearSearch: function(){
+					$('#comkeyword').val('');
+					this.getControlData();
+				},
+				jyshow: function(k){
+					this.$set(this.chatlist[k],'jy',1);
+					//this.chatlist[k].jy = 1;
+				},
+				jyhide: function(k){
+					this.chatlist[k].jy = 0;
+				},
+				startLive: function(){
+					var pwcf = parent.layer.confirm("确定要开始本场直播吗？",function(){
+						parent.layer.close(pwcf);
+						loadlayer();
+						$.post('index.php?m=admin_xjhlive&c=startlive', {id: xjhid, pytoken: pytoken}, function(res){
+							parent.layer.closeAll('loading');
+							layer.msg(res.msg, res.tm, res.st);
+							if(res.st == 9){
+								self.livestatus = 3;
+								
+								if(socket && socket.readyState == 1){
+									var message = {
+										type: 'startLive',
+										data: {
+											to: {xjhid: xjhsyncid}
+										}
+									};
+									socket.send(JSON.stringify(message));
+								}else{
+									layer.msg('通知直播开始功能加载中', 2, 8, function(){
+										window.location.reload();
+									});
+								}
+								setTimeout(function(){
+									livePlay();
+								},100);
+							}else{
+								layer.msg(res.msg, 2, 8, function(){
+									window.location.reload();
+								});
+							}
+						},'json');
+					});
+				},
+				stopLive: function(){
+					var self = this;
+					var pwcf = parent.layer.confirm("确定要结束本场直播吗？",function(){
+						parent.layer.close(pwcf);
+						loadlayer();
+						$.post('index.php?m=admin_xjhlive&c=liveEnd', {id: xjhid, pytoken: pytoken}, function(res){
+							parent.layer.closeAll('loading');
+							layer.msg(res.msg, res.tm, res.st);
+							if(res.st == 9){
+								self.livestatus = 2;
+								if (player) {
+									player.dispose();
+									player = null;
+								}
+								if(socket && socket.readyState == 1){
+									var message = {
+										type: 'stopLive',
+										data: {
+											to: {xjhid: xjhsyncid}
+										}
+									};
+									socket.send(JSON.stringify(message));
+								}else{
+									layer.msg('通知直播关闭功能加载中', 2, 8, function(){
+										window.location.reload();
+									});
+								}
+							}else{
+								layer.msg(res.msg, 2, 8, function(){
+									window.location.reload();
+								});
+							}
+						},'json');
+					});
+				},
+				// 游客禁言
+				vistorNochatClick: function(){
+					if(this.vistor_nochat == 1){
+						this.vistor_nochat = 0;
+					}else{
+						this.vistor_nochat = 1;
+					}
+					$.post('index.php?m=admin_xjhlive&c=setNochat', {xid: xjhid, pytoken: pytoken, vistor_nochat: this.vistor_nochat}, function(res){
+						
+					},'json');
+				},
+				// 全部禁言
+				nochatClick: function(){
+					if(this.nochat == 1){
+						this.nochat = 0;
+					}else{
+						this.nochat = 1;
+					}
+					var message = {
+							type: 'xjhChatting',
+							data: {
+								to: {xjhid: xjhsyncid, chatting: this.nochat}
+							}
+						};
+					$.post('index.php?m=admin_xjhlive&c=setNochat', {xid: xjhid, pytoken: pytoken, nochat: this.nochat}, function(res){
+						if(socket && socket.readyState == 1){
+							socket.send(JSON.stringify(message));
+						}else{
+							layer.msg('通知禁言功能加载中', 2, 8, function(){
+								window.location.reload();
+							});
+						}
+					},'json');
+				},
+				backShow: function(){
+					layui.use('layer', function() {
+						var layer = layui.layer,
+							$ = layui.$;
+						layer.open({
+							type: 1,
+							title: '',
+							area : ['400px','auto'],
+							content : $('#backbox')
+						});   
+					})
+					setTimeout(function(){
+						layui.use('laydate', function() {
+							var laydate = layui.laydate;
+							laydate.render({
+								elem: '#playstime',
+								type: 'datetime',
+								ready: function () {}
+							});
+							laydate.render({
+								elem: '#playetime',
+								type: 'datetime',
+								ready: function () {}
+							});
+						});
+					},100);
+				},
+				playback: function(){
+					var stime = $('#playstime').val(),
+						etime = $('#playetime').val();
+					if(stime == ''){
+						return layer.msg('请选择开始时间', 2, 8);
+					}else if(etime == ''){
+						return layer.msg('请选择结束时间', 2, 8);
+					}
+					loadlayer();
+					$.post('index.php?m=admin_xjhlive&c=playback', {id: xjhid, stime: stime, etime: etime, pytoken: pytoken}, function(res){
+						parent.layer.closeAll('loading');
+						layer.msg(res.msg, res.tm, res.st, function(){
+							window.location.reload();
+						});
+					},'json');
+				}
+				
+			}
+		});
+
+	// 收起、展开
+    $(".wonRighShrink").click(function() {
+        $(this).toggleClass("liveghShrincur1");
+        $(".liveBroaDwonRight").toggleClass("liveBroaDwoncur1");
+        $(".liveBroaUpsRight").toggleClass("liveBroaUpscurink");
+    });
+	// 显示搜索框
+    $(".roaDwonSearch").click(function() {
+        $(".roaDwonInputs").toggleClass("wonInpucury");
+        $(this).toggleClass("roaDwonSearcurimg");
+    });
+    // 关闭搜索框
+    $(".closeSearch").click(function() {
+        $(".roaDwonInputs").removeClass("wonInpucury");
+        $(".roaDwonSearch").removeClass("roaDwonSearcurimg");
+    });
+
+	function jjSwiper(){
+		if(mySwiper){
+			mySwiper.destroy();
+		}
+		setTimeout(function(){
+			mySwiper = new Swiper(".mySwiper", {
+			    slidesPerView: 3,
+			    spaceBetween: 20,
+			    autoplay: {
+			        delay: 2500,
+			        disableOnInteraction: false,
+			    },
+			})
+		},100);
+	}
+	// 加载趋势统计图
+	function tjt(xdata, ydata){
+		var myChart = echarts.init(document.getElementById('mians'));
+		var option = {
+		    tooltip: {
+		        trigger: 'axis'
+		    },
+		    color: ['#0062ff', '#30c3ce'],
+		    grid: {
+		        top: '10%',
+		        left: '1%',
+		        right: '2%',
+		        bottom: '1%',
+		        containLabel: true
+		    },
+		    xAxis: {
+		        type: 'category',
+		        boundaryGap: false,
+		        axisLabel: {
+		            show: true,
+		            textStyle: {
+		                color: '#AEB0C4',
+		                fontSize: 12
+		            }
+		        },
+		        axisLine: {
+		            show: true,
+		            lineStyle: {
+		                color: "#AEB0C4",
+		                width: 1,
+		                type: "solid"
+		            },
+		        },
+		        data: xdata
+		    },
+		    yAxis: {
+		        type: 'value',
+		        axisLine: { show: false },
+		        axisTick: { show: false },
+		        axisLabel: {
+		            show: true,
+		            textStyle: {
+		                color: '#AEB0C4',
+		                fontSize: 12
+		            }
+		        },
+		        splitLine: {
+		            show: true,
+		            lineStyle: {
+		                type: 'dashed',
+		                color: '#2F3A5B'
+		            }
+		        }
+		    },
+		    series: [{
+		            name: '新入场人数',
+		            data: ydata,
+		            type: 'line',
+		            stack: '总量',
+		            smooth: true,
+		            areaStyle: {
+		                normal: {
+		                    //右，下，左，上
+		                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+		                            offset: 0,
+		                            color: '#156EFD'
+		                        },
+		                        {
+		                            offset: 0.9,
+		                            color: '#2F3A5B'
+		                        }
+		                    ], false),
+		                }
+		            },
+		        },
+		
+		    ]
+		};
+		
+		myChart.setOption(option);
+		setTimeout(function() {
+		    window.addEventListener("resize", () => {
+		        myChart.resize();
+		    });
+		}, 200);
+	}
+	layui.use('util', function() {
+	    var util = layui.util;
+	    var stime = $("#live_stime").val();
+	    var endTime = parseInt(stime) * 1000;
+		var serverTime = new Date().getTime();
+		
+	    if (serverTime < endTime) {
+	        util.countdown(endTime, serverTime, function(date, serverTime, timer) {
+	            djsTimer = timer;
+	            var str = "<span>" + date[0] + "</span ><b>天</b> <span>" + date[1] +
+	                "</span> <b>时</b> <span>" + date[2] + "</span> <b>分</b> <span>" + date[3] + "</span> <b>秒</b>";
+	            layui.$('#countdown').html(str);
+	            if (date[0] == 0 && date[1] == 0 && date[2] == 0 && date[3] == 0) {
+					//倒计时结束
+					$('#countnotice').text('点击“开始本场直播”后将正式开启本场直播');
+					$('#countdown').hide();
+	            }
+	        });
+	    } else {
+	        //倒计时结束
+			$('#countnotice').text('点击“开始本场直播”后将正式开启本场直播');
+			$('#countdown').hide();
+	    }
+	});
+    </script>
+</body>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

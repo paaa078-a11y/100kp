@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>后台管理 - CRM - 业务员 - 工作台 - 职位推广</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" /> 
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+	<script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script> 
+	<script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script> 
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+		<div class="admin_new_search_box">
+			<div class="searchBoxStr">
+				<div class="searchBoxStrOne">
+					<span>职位推广</span>
+				</div>
+				<div class="searchBoxStrTwo">
+					<div class="searchBoxStrTwoRight">
+						<a href="javascript:;" onclick="iframfunct('index.php?m=crm_index&c=job', '80%');">新增推广</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_searctime crmFormanTabs">
+			<ul>
+				<li {yun:}if $smarty.get.time==''{/yun}class='curr'{yun:}/if{/yun}><a href="index.php?m=crm_index&c=recJob">全部</a></li>
+				<li {yun:}if $smarty.get.time==1{/yun}class='curr'{yun:}/if{/yun}><a href="index.php?m=crm_index&c=recJob&time=1">今天</a></li>
+				<li {yun:}if $smarty.get.time==2{/yun}class='curr'{yun:}/if{/yun}><a href="index.php?m=crm_index&c=recJob&time=2">昨天</a></li>
+				<li {yun:}if $smarty.get.time==3{/yun}class='curr'{yun:}/if{/yun}><a href="index.php?m=crm_index&c=recJob&time=3">本周</a></li>
+				<li {yun:}if $smarty.get.time==4{/yun}class='curr'{yun:}/if{/yun}><a href="index.php?m=crm_index&c=recJob&time=4">本月</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<iframe id="supportiframe"  name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+	<div class="tty_table-bom">
+		<div class="table-list" >
+			<div class="admin_table_border">
+				<table width="100%">
+					<thead>
+						<tr class="admin_table_top" align="left">
+							<th width="200">推送日期</th>
+							<th width="350">推送连接</th>
+							<th width="100">关联职位数</th>
+							<th width="100">职位匹配方式</th>
+							<th>链接点击数</th>
+							<th align="center" width="80">操作</th>
+						</tr>
+					</thead>
+					<tbody class="tableBackColorTwo">
+						{yun:}foreach item=v key=key from=$rows{/yun}
+						<tr align="center" {yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+							<td align="left">{yun:}$v.time_n{/yun}</td>
+							<!--<td align="left"><a href="javasrcipt:;" onclick="iframfunct('{yun:}$v.url{/yun}', '30%');" style="display: block;font-size: 14px;color: #2778F8;">{yun:}$v.url{/yun}</a></td>-->
+							<td align="left"><a href="{yun:}$v.url{/yun}" target="_blank" style="display: block;font-size: 14px;color: #2778F8;">{yun:}$v.url{/yun}</a></td>
+							<td align="left">{yun:}$v.jnum{/yun}</td>
+							<td align="left">{yun:}$v.auto_n{/yun}</td>
+							<td align="left">{yun:}$v.hits{/yun}</td>
+							<td>
+								<div class="operationSeries">
+									<a href="javascript:;" onclick="openTsInfo('{yun:}$v.id{/yun}','{yun:}$v.url{/yun}');">详细</a>
+									<a href="javascript:;" onclick="iframfunct('index.php?m=crm_index&c=job&id={yun:}$v.id{/yun}', '80%');">修改</a>
+									<a href="javascript:;" onClick="layer_del('确定要删除？', 'index.php?m=crm_index&c=delRecJob&del={yun:}$v.id{/yun}');">删除</a>
+								</div>
+							</td>
+						</tr>
+						{yun:}foreachelse{/yun}
+						<tr align="center">
+							<td class="ud" colspan="6"><div class="admin_notip">暂无推送职位记录~</div></td>
+						</tr>
+						{yun:}/foreach{/yun}
+
+						{yun:}if $total > $config.sy_listnum {/yun}
+							<tr>
+								{yun:}if $pagenum==1{/yun}
+									<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+								{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+									<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+								{yun:}else if $pagenum == $pages{/yun}
+									<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+								{yun:}/if{/yun}
+								<td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+							</tr>
+						{yun:}/if{/yun}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="infoVue">
+		<div class="againCandid ">
+			<div class="againCandidCont">
+				<div class="againMatcVitae">
+					<div class="againcandidClose">
+						<img src="images/closeimg.png" alt="" @click="closeTsInfo">
+					</div>
+					<div class="againMaVitSubst layui-form">
+						<div class="againVitSubOne">
+							<div class="againVitSubTitle"><span>推送详情</span></div>
+						</div>
+						<div class="againCandidTipsa">
+							<div class="againCandidTuis">
+								<span>推送时间：{{recInfo.time_n}}，职位 {{recInfo.jnum}} 个，合计点击 {{recInfo.hits}} 次</span>
+							</div>
+							<div class="againCandidButon">
+								<a href="javascript:;" @click="getCode">分享到朋友圈</a>
+							</div>
+						</div>
+						<div class="againVitSubFourt layui-form-item">
+							<div class="admints_joblist" v-for="(item, k) in recJobs" :key="k">
+								<div class="admints_job">
+									<div class="admints_jobleft">
+										<div class="admints_jobname">
+											<a href="javascript:;" @click="newIFrame('index.php?m=admin_resume&c=resumePreview&id='+item.id, '61%')">{{item.uname}} {{item.name}} </a>
+										</div>
+										<div class="admints_jobinfo">
+											<span>{{item.city_n}}</span>
+											<span>{{item.exp_n}}经验</span>
+											<span>{{item.edu_n}}学历</span>
+										</div>
+									</div>
+									<div class="admints_jobcontent">
+										<div class="admints_jobxz">{{item.salary_n}}</div>
+										<div class="admints_comname">{{item.com_name}}</div>
+									</div>
+									<span class="admints_jobtime">{{item.lastupdate_n}}</span>
+								</div>
+								<div class="admints_jobfl">
+									<span v-for="(wel, wk) in item.welfare_n" :key="wk">{{wel}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="weChatsTanc" :class="QrCodeShow ? 'weChatsTancCur' : ''">
+			<div class="weChatsConts">
+				<div class="weChatClose" @click="QrCodeShow = false;">
+					<img src="images/closeimg.png" alt="">
+				</div>
+				<div class="weChatsContinfo">
+					<img :src="shareCode" alt="">
+					<span>二维码分享</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var weburl="{yun:}$config.sy_weburl{/yun}",pytoken = '{yun:}$pytoken{/yun}';
+	layui.use(['form'], function(){
+		var form = layui.form
+			,$ = layui.$;
+	});
+	function openTsInfo(id, url) {
+
+		infoVue.$data.id = id;
+		infoVue.$data.tsUrl = url;
+
+		infoVue.getInfo();
+
+		$(".againCandid").addClass("againCandidCuer");
+		$(".againCandidCont").addClass("againCandidContuer");
+	}
+	var infoVue = new Vue({
+		el: '#infoVue',
+		data: {
+
+			id: '',
+			tsUrl: '',
+			recInfo: [],
+			recJobs: [],
+
+			QrCodeShow: false,
+			shareCode: ''
+		},
+		methods:{
+			getInfo: function () {
+
+				var self = this;
+				var url = "index.php?m=crm_index&c=getRecInfo";
+				var param = {};
+				param.id = self.id;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+
+						self.recInfo = data.recInfo;
+						self.recJobs = data.recJobs;
+					}
+				}, 'json');
+
+			},
+			closeTsInfo: function () {
+				$(".againCandid").removeClass("againCandidCuer");
+				$(".againCandidCont").removeClass("againCandidContuer");
+			},
+			getCode: function() {
+				var self = this;
+				self.QrCodeShow =   true;
+				self.shareCode = 'index.php?m=crm_index&c=getShareCode&ids='+self.recInfo.ids+'&pytoken='+pytoken;
+			}
+		}
+	});
+</script>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</body>
+</html>

@@ -1,0 +1,36 @@
+<head>
+	<title>微海报</title>
+	<link rel="stylesheet" href="{yun:}$config.sy_weburl{/yun}/app/template/wap/hb/reset.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script>
+		window.onerror = function() {return true;}
+	</script>
+	<style>
+		.important{
+			width:100% !important;
+			height:100% !important;
+		}
+	</style>
+	{yun:}if $smarty.get.uu || $smarty.get.w{/yun}
+	<script type="text/javascript">
+		var userAgent = navigator.userAgent;
+		var isApp = false;
+		if (userAgent.indexOf('AlipayClient') > -1) {
+			// 支付宝小程序的 JS-SDK 防止 404 需要动态加载，如果不需要兼容支付宝小程序，则无需引用此 JS 文件。
+			document.writeln('<script src="https://appx/web-view.min.js"' + '>' + '<' + '/' + 'script>');
+		} else if (/miniProgram/i.test(userAgent) || /MicroMessenger/i.test(userAgent)) {
+			// 微信小程序 JS-SDK 如果不需要兼容微信小程序，则无需引用此 JS 文件。
+			document.write('<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"><\/script>');
+		} else if (/swan/i.test(userAgent)) {
+			// 百度小程序 JS-SDK 如果不需要兼容百度小程序，则无需引用此 JS 文件。
+			document.write('<script type="text/javascript" src="https://b.bdstatic.com/searchbox/icms/searchbox/js/swan-2.0.18.js"><\/script>');
+		} else if (/toutiaomicroapp/i.test(userAgent)) {
+			// 头条小程序 JS-SDK 如果不需要兼容头条小程序，则无需引用此 JS 文件。
+			document.write('<script type="text/javascript" src="https://s3.pstatp.com/toutiao/tmajssdk/jssdk-1.0.1.js"><\/script>');
+		} else {
+			isApp = true;
+		}
+	</script>
+	<!-- uni 的 SDK -->
+	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+	{yun:}/if{/yun}
+</head>

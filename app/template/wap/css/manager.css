@@ -1,0 +1,368 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #F7F8FA;
+}
+
+
+.manager{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.manager_content{
+    flex: 1;
+    overflow-x: hidden !important;
+    overflow: auto;
+}
+
+.top_return{
+    background:  #4178F4;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    justify-content: center;
+    position: fixed;
+    text-align: center;
+    padding: 0.4rem 0;
+    color: #fff;
+    font-size:0.4533rem;
+}
+
+.return_img{
+    position: absolute;
+    left: 0.32rem;
+    width: 0.24rem;
+    height: 0.4533rem;
+}
+
+.card-wrap {
+    width: 100%;
+    height: 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card-wrap:after {
+    width: 140%;
+    height: 3.7333rem;
+    position: absolute;
+    left: -20%;
+    top: 0;
+    z-index: -1;
+    content: '';
+    border-radius: 0 0 50% 50%;
+    background:  #4178F4;
+}
+
+.card-box {
+    position: absolute;
+    bottom: -0.133rem;
+    width: 100%;
+}
+
+.card-info {
+    margin:-2.4rem  0.32rem;
+    background: linear-gradient(360deg, #E8EFFF 0%, #FFFFFF 100%);
+    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.08);
+    border-radius: 0.16rem;
+}
+
+.headpic{
+    width: 1.8133rem;
+    height: 1.8133rem;
+    display: block;
+    border-radius: 50%;
+}
+
+.info_top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4266rem;
+}
+.top_left{
+    display: flex;
+}
+
+.peo_info{
+    margin-left: 0.32rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info_name{
+    font-size: 0.48rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.info_gw{
+    margin-top: 0.2066rem;
+    font-size: 0.3733rem;
+    font-weight: 400;
+    color: #999999;
+}
+
+.top_right{
+    padding: 0.16rem 0.4266rem;
+    font-size: 0.3733rem;
+    font-weight: 400;
+    color: #145DFF;
+    border-radius: 0.4266rem;
+    border: 0.0266rem solid #145DFF;
+    cursor: pointer;
+}
+.info_bottom{
+    padding:0 0  0.32rem 0;
+    display: flex;
+}
+.bottom_item{
+    flex: 1;
+    text-align: center;
+}
+
+.bottom_num{
+    font-size: 0.48rem;
+    font-weight: bold;
+    color: #333333;
+}
+.bottom_info{
+    margin-top: 0.1533rem;
+    font-size: 0.3466rem;
+    font-weight: 400;
+    color: #999999;	
+}
+
+.content_sec{
+    padding: 0 0.32rem;
+    display: flex;
+    margin-top: 2.3rem;
+}
+
+.sec_item{
+    background: #fff;
+    padding: 0.32rem;
+    border-radius: 0.16rem;
+    box-shadow: 0px 2px 4px 1px rgba(228,230,232,0.75);
+}
+
+.sec_img{
+    width: 0.533rem;
+    height: 0.533rem;
+    margin-right: 0.2133rem;
+}
+
+.sec_top{
+    font-size: 0.3733rem;
+    font-weight: 400;
+    color: #999999;
+    display: flex;
+    align-items: center;
+}
+
+.sec_bottom{
+    margin-top: 0.2133rem;
+    font-size: 0.3733rem;
+    font-weight: 400;
+    color: #333333;
+}
+
+.manager_adv{
+    height: 1.76rem;
+    margin-top: 0.42rem;
+    padding: 0 0.32rem;
+}
+.manager_adv img{
+    width: 100%;
+    height: 100%;
+}
+.adv_img{
+    width: 100%;
+    height: 100%;
+}
+
+
+.tjzw{
+    margin-top: 0.44rem;
+    padding: 0 0.32rem;
+	   margin-bottom: 0.44rem;
+}
+
+.tj_more{
+    margin-top: 0.0533rem;
+    width: 0.32rem;
+    height: 0.32rem;
+}
+
+.tj_title{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title_left{
+    font-size: 0.48rem;
+    font-weight: 800;
+    color: #333333;
+}
+
+.title_right{
+    display: flex;
+    align-items: center;
+    font-size: 0.3733rem;
+    font-weight: 400;
+    color: #999999;
+}
+
+.tj_item{
+    margin: 0.4133rem 0 0 0;
+    padding: 0.32rem 0.32rem;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 4px 1px rgba(228,230,232,0.75);
+    border-radius:0.16rem;
+}
+ 
+.tj_name{
+    flex: 1;
+    margin-right: 0.48rem;
+    font-size: 0.48rem;
+    font-weight: bold;
+    color: #333333;  
+}
+
+.tj_price{
+    font-size: 0.48rem;
+    font-weight: bold;
+    color: #F0093A; margin: 0.2066rem 0;
+
+}
+
+.tj_yq{
+    font-size: 0.3466rem;
+    font-weight: 400;
+    color: #999999;
+}
+.tj_tag{
+    display: flex;
+    flex-wrap: wrap;
+}
+.tj_tag div{
+    padding: 0.1066rem 0.2133rem;
+    margin-right: 0.2133rem;
+    font-size: 0.3466rem;
+    font-weight: 400;
+    color: #2555F4;
+    background: #F4F8FF;
+    border-radius: 0.16rem; margin-top: 0.2066rem   ;
+}
+
+.manager_foot{
+    padding: 0.2133rem 0.32rem 1.066rem 0.32rem;
+    background: #FFFFFF;
+    box-shadow: 0px -2px 6px 1px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+}
+
+.foot_share{
+    width: 0.5866rem;
+    height: 0.5866rem;
+    margin-right: 0.2133rem;
+}
+
+.foot_left{
+    display: flex;
+    align-items: center;
+    font-size: 0.3733rem;
+    font-weight: 400;
+}
+
+.foot_right{
+    width: 2.9333rem;
+    height: 1.0666rem;
+    background: linear-gradient(253deg, #2150F4 0%, #427AF4 100%);
+    border-radius: 0.5333rem;
+    color: #fff;
+    font-size: 0.3733rem;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.0666rem;
+}
+
+/* 弹窗样式 */
+.detail_mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 9;
+    background: rgba(0, 0, 0, .5);
+}
+
+.mask_box{
+    text-align: center;
+    border-radius: 8px;
+    width: 7.2266rem;
+    height: 8.2666rem;
+    background: #fff;
+    border-radius: 0.1066rem;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.close{
+    position: absolute;
+    top: 0.4533rem;
+    right: 0.5333rem;
+}
+.close img{
+    width: 0.32rem;
+    height: 0.32rem;
+}
+
+.mask_title{  
+    margin-top: 0.4266rem;
+    font-size: 0.42rem;
+    font-weight: bold;
+    color: #333333;
+}
+.mask_imgbox{
+    margin:0.2133rem auto;
+    width: 4.2666rem;
+    height: 4.2666rem;
+}
+.mask_imgbox img{
+    width: 100%;
+    height: 100%;
+}
+.mask_tip{
+    font-size: 0.3466rem;
+    font-weight: 400;
+    color: #666666;
+}
+.vx_num{
+    font-size: 0.3466rem;
+    font-weight: 400;
+    color: #999999;
+}
+.mask_btn{
+    margin: 0.2133em auto;
+    width: 3.1933rem;
+    height: 0.8533rem;
+    background: linear-gradient(253deg, #2150F4 0%, #427AF4 100%);
+    border-radius:0.5333rem;
+    border: 0.0266rem solid rgba(0,0,0,0);
+    color: #fff;
+    text-align: center;
+    line-height: 0.8533rem;
+}

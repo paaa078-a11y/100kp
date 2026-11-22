@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>信息授权</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+
+    <link href="{yun:}$wap_style{/yun}/css/base.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+    <link type="text/css" href="{yun:}$wap_style{/yun}/work/css/work.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+
+    <script src="{yun:}$wap_style{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <link href="{yun:}$config_wapdomain{/yun}/js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+
+    <script src="{yun:}$wap_style{/yun}/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config_wapdomain{/yun}/js/vant/lib/vant.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config_wapdomain{/yun}/js/vant/phpyun_vant.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$wap_style{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+
+<body>
+    <div id="authVue" class="none workScorllbar">
+        <div class="workscolTop">
+
+            <div class="workscoltitle">
+                <span>信息授权</span>
+            </div>
+        </div>
+        <div class="workscolStart" v-if="authShow">
+            <div class="workStartInfo">
+                <div class="workStartInfoFlex">
+                	<div class="workStartInfoImgs">
+                		<img src="{yun:}$wap_style{/yun}/images/qiyewex.png?v={yun:}$config.cachecode{/yun}" alt="">
+                	</div>
+                    <span>企业微信</span>
+                </div>
+            </div>
+            <div class="workStartButton">
+            	<div class="workStartBuText">
+            		<span>企业微信正在通过“用户画像”申请使用个人信息</span>
+            	</div>
+            	<div class="workStartButXinx">
+            		<a :href="authUrl">信息授权</a>
+            	</div>
+            </div>
+        </div>
+        <div class="workscolStart workscolEnds" v-else>
+            <div class="workStartInfo">
+                <div class="workStartInfoFlex">
+                	<div class="workStartInfoImgs">
+                		<img src="{yun:}$wap_style{/yun}/images/seccsdd.png?v={yun:}$config.cachecode{/yun}" alt="">
+                	</div>
+                    <span>{{tips}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var weburl = "{yun:}$config.sy_weburl{/yun}";
+
+    var userid = "{yun:}$userid{/yun}",
+        authUrl = "{yun:}$authUrl{/yun}";
+
+    var code = "{yun:}$code{/yun}";
+    var num = "{yun:}$num{/yun}";
+
+    var formData = new FormData();
+
+    var authVue = new Vue({
+        el: '#authVue',
+        data: {
+            authUrl: authUrl ? authUrl : '',
+            code: code ? code : '',
+            authShow: num == 1 ? true : false,
+            tips: '',
+            user_ticket: '',
+            num: num
+        },
+        created() {
+            var self = this;
+
+            if (self.num == 2) {
+                self.getUserInfo();
+            }
+            $("#authVue").css('display', 'block');
+        },
+        methods: {
+            getUserInfo: function() {
+                showLoading();
+                var self = this;
+                formData.append('code', self.code);
+                $.ajax({
+                    url: weburl + '/wap/index.php?c=work&a=getAuthUserInfo',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res) {
+
+                        hideLoading();
+                        var res = JSON.stringify(res);
+                        var data = JSON.parse(res);
+
+                        if (data.errcode == 0) {
+
+                            if(data.user_ticket){
+
+                                self.user_ticket = data.user_ticket;
+                                self.getDetailInfo();
+                            }else{
+                                self.tips = '当前账号不在“用户画像”可见范围内';
+                            }
+                        } else {
+
+                            self.tips = '用户身份查询失败；'.data.errmsg;
+                        }
+                    },
+                    fail: function(res) {
+
+                    },
+                    error: function(msg) {
+                        // alert(JSON.stringify(msg));
+                    }
+                });
+            },
+            getDetailInfo: function() {
+                showLoading();
+                var self = this;
+                formData.append('user_ticket', self.user_ticket);
+                $.ajax({
+                    url: weburl + '/wap/index.php?c=work&a=getAuthDetailInfo',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res) {
+
+                        hideLoading();
+                        var res = JSON.stringify(res);
+                        var data = JSON.parse(res);
+
+                        if (data.errcode == 0) {
+
+                            self.tips = '授权成功!';
+                        } else {
+
+                            self.tips = '授权失败!'.data.errmsg;
+                        }
+                    },
+                    fail: function(res) {
+
+                    },
+                    error: function(msg) {
+                        // alert(JSON.stringify(msg));
+                    }
+                });
+            }
+        }
+    })
+    </script>
+</body>
+
+</html>

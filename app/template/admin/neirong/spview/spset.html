@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="yemanapp" class="moduleDome">
+    <div class="tableDome">
+        <table class="tableVue">
+            <thead>
+            <tr align="left">
+                <th width="200">名称</th>
+                <th width="400">状态</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="TableTite">视频请求等待时长(秒)</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" type="number" v-model="sy_spview_wait"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span><i class="el-icon-warning"></i>视频面试发出请求，等待对方接通的等待时长。单位：秒。建议设60秒以上，时间太短对方可能来不及接通。（类似打电话，响铃时间）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">单次视频面试时长(分)</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" type="number" v-model="sy_spview_time"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span><i class="el-icon-warning"></i>双方一次可以视频面试时长。单位：分</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">停止预约时限(时)</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="sy_spview_yytime"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span><i class="el-icon-warning"></i>视频面试开始前X小时停止预约。提前一段时间停止预约，有利于企业的面试准备工作。单位：小时</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Key</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="sy_spview_appkey"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <el-link type="info" icon="el-icon-warning" href="https://u.phpyun.com" target="_blank">前往申请直播服务秘钥</el-link>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Secret</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="sy_spview_appsecret"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">视频聊天剩余数量</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" disabled v-model="num">
+                            <template slot="append">分钟</template>
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="setBasicButn" style="border: none;">
+            <el-button type="primary" size="medium" @click="save" :disabled="saveLoading">提交</el-button>
+        </div>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#yemanapp',
+        data: function () {
+            return {
+                saveLoading: false,
+
+                sy_spview_wait: '',
+                sy_spview_time: '',
+                sy_spview_yytime: '',
+                sy_spview_appkey: '',
+                sy_spview_appsecret: '',
+                num: '0',
+            }
+        },
+        components: {
+            // 'jibenset': httpVueLoader('./component/jibenset.vue'),
+        },
+        created: function () {
+            this.getinfo();
+        },
+        methods: {
+            getinfo(){
+                var that = this
+                httpPost('m=neirong&c=spviewset&a=index', {}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.sy_spview_wait = res.data.sy_spview_wait
+                        that.sy_spview_time = res.data.sy_spview_time
+                        that.sy_spview_yytime = res.data.sy_spview_yytime
+                        that.sy_spview_appkey = res.data.sy_spview_appkey
+                        that.sy_spview_appsecret = res.data.sy_spview_appsecret
+                        if (res.data.num) {
+                            that.num = res.data.num
+                        }
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            async save() {
+                let that = this;
+                let params = {
+                    sy_spview_wait:that.sy_spview_wait,
+                    sy_spview_time:that.sy_spview_time,
+                    sy_spview_yytime:that.sy_spview_yytime,
+                    sy_spview_appkey:that.sy_spview_appkey,
+                    sy_spview_appsecret:that.sy_spview_appsecret,
+                    set_config: 1
+                };
+
+                if (that.saveLoading) {
+                    return false;
+                }
+                that.saveLoading = true;
+
+                httpPost('m=neirong&c=spviewset&a=save', params).then(function (response) {
+                    that.saveLoading = false;
+                    if (response.data.error == 0) {
+                        message.success(response.data.msg);
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="https://wwcdn.weixin.qq.com/node/wework/wwopen/js/wwLogin-1.2.5.js"></script>
+    <style>
+        ::-webkit-scrollbar{display:none}
+        .bindWorkSucc{overflow:hidden;position:relative;width:100%}
+        .bindWorkSucc .el-result{overflow:hidden;position:relative;text-align:center;padding-top:50px}
+        .bindWorkSucc .el-result__icon{overflow:hidden;position:relative;width:100px;margin:auto}
+        .bindWorkSucc .el-result .icon-success{fill:#67c23a}
+        #bindWorkApp{overflow:hidden;position:relative;width:100%}
+    </style>
+</head>
+<body>
+<div id="bindWorkApp">
+    <template>
+        <div id="qyQrCode" class="code_img"></div>
+        <div v-show="codeResult" class="bindWorkSucc">
+            <el-result icon="success" title="绑定成功"></el-result>
+        </div>
+    </template>
+</div>
+<script src="../app/template/admin/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="../app/template/admin/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="../app/template/admin/js/element.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="../app/template/admin/js/axios.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="../app/template/admin/js/api.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    var weburl = "{yun:}$config.sy_weburl{/yun}",
+        qy_app_id = "{yun:}$qy_app_id{/yun}",
+        agent_id = "{yun:}$agent_id{/yun}",
+        redirect_uri = "{yun:}$redirect_uri{/yun}",
+        state = "{yun:}$state{/yun}",
+        errmsg = "{yun:}$errmsg{/yun}",
+        errcode = "{yun:}$errcode{/yun}";
+    const bindWorkApp = new Vue({
+        el: '#bindWorkApp',
+        data: function () {
+            return {
+                user: {
+                    qy_app_id: qy_app_id,
+                    agent_id: agent_id,
+                    redirect_uri: redirect_uri,
+                    state: state,
+                },
+                errcode: errcode ? errcode : 0,
+                ermsg: errmsg ? errmsg : '',
+                codeResult: false
+            }
+        },
+        created() {
+            if (errcode == 0) {
+                this.$nextTick(function () {
+                    this.getWorkCode();
+                })
+            } else {
+                this.codeResult = true;
+            }
+        },
+        methods: {
+            async getWorkCode() {
+                var that = this;
+                this.$nextTick(function () {
+                    var wwLogin = new WwLogin({
+                        "id": "qyQrCode",
+                        "appid": that.user.qy_app_id,
+                        "agentid": that.user.agent_id,
+                        "redirect_uri": that.user.redirect_uri,
+                        "state": that.user.state,
+                        "lang": "zh",
+                    });
+                })
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

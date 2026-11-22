@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <title>后台管理</title>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tabs_info">
+        <ul>
+            <li class="curr"><a href="index.php?m=admin_workwx_group" class="report_uaer_list_on">客户群</a></li>
+        </ul>
+    </div>
+    <div class="tty-tishi_top">
+
+        <div class="admin_new_tip">
+            <a href="javascript:;" class="admin_new_tip_close"></a>
+            <a href="javascript:;" class="admin_new_tip_open" style="display:none;"></a>
+            <div class="admin_new_tit"><i class="admin_new_tit_icon"></i>信息提示</div>
+            <div class="admin_new_tip_list_cont">
+                <div class="admin_new_tip_list">该页面同步企业微信中，客户群列表信息</div>
+                <div class="admin_new_tip_list">首次打开客户群页面，或者查询最新数据，需要您手动同步员工的客户群</div>
+                <div class="admin_new_tip_list">同步客户群信息，需要先同步配置了企业客户联系的员工信息 <a href="index.php?m=admin_workwx_list" style="color: blue;">员工信息>></a></div>
+            </div>
+        </div>
+
+        <div class="tty-tishi_top">
+            <div class="admin_new_search_box">
+                <form action="index.php" name="myform" method="get">
+                    <input name="m" value="admin_workwx_group" type="hidden" />
+                    <div class="admin_new_search_name">搜索类型：</div>
+                    <div class="admin_Filter_text formselect" did='dtype'>
+                        <input type="button" value="{yun:}if $smarty.get.type=='1'||$smarty.get.type==''{/yun}群聊名称{yun:}elseif $smarty.get.type=='2'{/yun}群主昵称{yun:}elseif $smarty.get.type=='3'{/yun}群主姓名{yun:}/if{/yun}" class="admin_Filter_but" id="btype">
+                        <input type="hidden" id='type' value="{yun:}if $smarty.get.type{/yun}{yun:}$smarty.get.type{/yun}{yun:}else{/yun}1{yun:}/if{/yun}" name='type'>
+                        <div class="admin_Filter_text_box" style="display:none" id='dtype'>
+                            <ul>
+                                <li><a href="javascript:void(0)" onClick="formselect('1','type','群聊名称')">群聊名称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('2','type','群主昵称')">群主昵称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('3','type','群主姓名')">群主姓名</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input class="admin_Filter_search" type="text" name="keyword" maxlength="25" placeholder="请输入您要搜索的关键字">
+                    <input class="admin_Filter_bth" type="submit" name="work_search" value="搜索" />
+                    <a href="javascript:;" onclick="syncGroupChat('', 1);" class="admin_new_cz_tj" style="width:120px">同步企微客户群</a>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top">
+                            <th width="5%">
+                                <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label>
+                            </th>
+                            <th align="left">群聊名称</th>
+                            <th align="left">群主昵称</th>
+                            <th align="left">群主名称</th>
+                            <th align="center">群人数</th>
+                            <th align="center">今日新增</th>
+                            <th align="center">注册用户</th>
+                            <th align="left">创建时间</th>
+                            <th class="admin_table_th_bg">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {yun:}foreach item=v key=key from=$list{/yun}
+                        <tr align="center" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                        <td class="od" align="left">{yun:}$v.name{/yun}</td>
+                        <td class="od" align="left">{yun:}$v.owner{/yun}</td>
+                        <td class="od" align="left">{yun:}$v.owner_name{/yun}</td>
+                        <td class="od" align="center">{yun:}$v.number{/yun}</td>
+                        <td class="od" align="center">{yun:}$v.new_num{/yun}</td>
+                        <td class="od" align="center">{yun:}$v.reg_num{/yun}</td>
+                        <td class="od" align="left">{yun:}$v.time_n{/yun}</td>
+                        <td>
+                            <a href="index.php?m=admin_workwx_customer&chat_id={yun:}$v.chat_id{/yun}" class="admin_new_c_bth admin_n_sc">详情</a>
+                            <a href="javascript:;" onclick="syncGroupChatInfo('{yun:}$v.chat_id{/yun}');" class="admin_new_c_bth admin_n_sc">同步</a>
+                        </td>
+
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="center"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/>
+                            </td>
+                            <td colspan="8"><label for="chkAll2">全选</label>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="6" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function syncGroupChat(cursor, limit) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('信息同步中，请稍候。。。', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_group&c=sync", {
+            pytoken: pytoken,
+            cursor: cursor,
+            limit: limit
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+
+            if (data.cursor) {
+
+                syncGroupChat(data.cursor, limit)
+            } else {
+
+                parent.layer.close(ii);
+                parent.layer.alert('客户群列表信息同步成功', 9);
+                location.reload();
+            }
+        })
+    }
+    function syncGroupChatInfo(chatId) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('信息同步中，请稍候。。。', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_group&c=syncInfo", {
+            pytoken: pytoken,
+            chat_id: chatId
+        }, function (data) {
+
+            parent.layer.close(ii);
+            var data = eval('(' + data + ')');
+            parent.layer.close(ii);
+            parent.layer.alert('客户群列表信息同步成功', 9);
+            location.reload();
+        })
+    }
+</script>
+
+</body>
+</html>

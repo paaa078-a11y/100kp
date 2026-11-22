@@ -1,0 +1,926 @@
+<style>
+	#crmNewConcern .layui-form-select .layui-input{
+		width: 315px;
+	}
+
+	.lxry .layui-form-select .layui-input{
+		width: 198px !important;
+	}
+</style>
+<div id="crmNewConcern"  style="display:none;">
+	<form class="layui-form" lay-filter='formConcern'>
+		<div style="display: flex;">
+			<div>
+				<div class="crm_record_list" >
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 客户名称：</div>
+					<div class="crm_record_textbox" style='width:180px;'>
+						<div>
+							  <div class="layui-input-inline" >
+								<input type="text" class="layui-input"  name="crm_keyword" id="fcomname" style='width:315px;' placeholder='输入企业名称，搜索选择'>
+							  </div>
+						</div>
+						<div  class="layui-anim_al">
+							<dl name="word" class="layui-anim_all" >
+							</dl>
+						</div>
+					</div>
+				</div>
+				<div class="crm_record_list" >
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 客户等级：</div>
+					<div class="crm_record_textbox" >
+						<div class="layui-input-inline" >
+							<select name="public_crm_type" id="public_crm_type" lay-filter="public_crm_type">
+								<option value="" title="请选择">请选择</option>
+								{yun:}foreach from = $cache.crmdata.client_type key=key item=v{/yun}
+								<option value='{yun:}$v{/yun}' title='{yun:}$cache.crmclass_name[$v]{/yun}'>{yun:}$cache.crmclass_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="crm_record_list" >
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 客户状态：</div>
+					<div class="crm_record_textbox" style="width: 315px;">
+						<div class="layui-input-inline" >
+							<select name="public_crm_status" id="public_crm_status" lay-filter="public_crm_status" >
+								<option value="" style='width:315px;' title="请选择">请选择</option>
+								{yun:}foreach from = $cache.crmdata.client_status key=key item=v{/yun}
+								<option value='{yun:}$v{/yun}' title='{yun:}$cache.crmclass_name[$v]{/yun}'>{yun:}$cache.crmclass_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="crm_record_list">
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 跟进内容：</div>
+					<div class="crm_record_textbox crmEcordTboxs">
+						<div class="layui-input-inline">
+							<textarea id="public_follow_content" class="layui-textarea" style="width:315px;"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="crm_record_list" >
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 跟进时间：</div>
+					<div class="crm_record_textbox" >
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" id="public_ftime" style="width: 315px;">
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div class="crm_record_list" >
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 跟进方式：</div>
+					<div class="crm_record_textbox" >
+						<div class="layui-input-inline" >
+							<select name="public_follow_way" id="public_follow_way" lay-filter="public_follow_way">
+								{yun:}foreach from = $cache.crmdata.follow_way key=key item=v{/yun}
+								<option value='{yun:}$v{/yun}' title='{yun:}$cache.crmclass_name[$v]{/yun}'>{yun:}$cache.crmclass_name[$v]{/yun}</option>
+								{yun:}/foreach{/yun}
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="crm_record_list lxry" id="public_deflink">
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 联系人员：</div>
+					<div class="crm_record_textbox" >
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<select name="public_link" id="public_link" lay-filter="public_link"></select>
+							</div>
+							<a href="javascript:;" onclick="showNewLink();" style="background: #2778F8;color: #fff;padding: 8px;border-radius: 4px;margin-left: 68px;" id="newLinkA"> 新增</a>
+						</div>
+					</div>
+				</div>
+				<div class="crm_record_list lxry" style="display: none;" id="public_newlink">
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 联系人员：</div>
+					<div class="crm_record_textbox">
+						<div class="layui-inline">
+							<div class="layui-input-inline" style="display: flex;">
+								<input type="input" class="layui-input" id="public_link_man" value="" placeholder="联系人" style="width: 65px;"/>
+								<input type="input" class="layui-input" id="public_link_tel" value="" placeholder="联系电话" style="margin-left: 5px; width: 127px;"/>
+								<a href="javascript:;" onclick="addNewLink();" style="background: #2778F8;color: #fff;padding: 8px;border-radius: 4px;margin-left: 14px;"> 保存</a>
+								<a href="javascript:;" onclick="closeNewLink();" style="background: #2778F8;color: #fff;padding: 8px;border-radius: 4px;margin-left: 14px;"> 取消</a>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+		
+				<div class="crm_record_list" style="display: flex;align-items: center;height: 39px;">
+					<div class="crm_record_name"><span class="admin_required_icon"></span> 下次跟进：</div>
+					<div class="crm_record_textbox">
+						<div class="layui-input-inline" style="width:20px;">
+							<input type="checkbox" lay-skin="primary" id="public_next_check" lay-filter="public_next_check"/>
+						</div>
+						<div class="layui-input-inline ftime_div" style="display: none;">
+							<input type="text" class="layui-input" id='public_next_time' placeholder='请选择跟进时间'/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<span class="crm_record_name">&nbsp;</span>
+			<div class="crm_record_textbox"  style='width:315px;' >
+				<input type="hidden" id="call_log_id" value="" />
+				<input type="hidden" id="lasturl" value="" />
+				<input type="button" value='确认' class="admin_examine_bth" onclick="addFollowByPublic();" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmDeal"  style="display:none;">
+	<form class="layui-form" lay-filter="crmFormDeal">
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 客户名称：</div>
+			<div class="crm_record_textbox" style='width:180px;'>
+				<div>
+				  <div class="layui-input-inline" >
+						<input type="text" class="layui-input"  name="crm_keyword" id="comname" style='width:315px;' >
+				  </div>
+				</div>
+				<div  class="layui-anim_al">
+					<dl name="word" class="layui-anim_all" >
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 支付方式：</div>
+			<div class="crm_record_textbox" >
+				<div>
+					<div class="layui-input-inline" >
+						<select name="order_type" id="order_type" lay-filter="order_type">
+						    <option value=''>请选择</option>
+ 							{yun:}foreach from=$canpay key=key item=cop{/yun}
+							<option value="{yun:}$key{/yun}">{yun:}$cop{/yun}</option>
+							{yun:}/foreach{/yun}
+ 						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 订单类型：</div>
+			<div class="crm_record_textbox" >
+				<div class="layui-input-inline" style="display: flex; align-items: center; ">
+					<select name="orderType" id="orderType" lay-filter="orderType">
+						<option value="">请选择</option>
+						{yun:}foreach from = $orderTypeArr key=key item=v{/yun}
+						<option value="{yun:}$key{/yun}">{yun:}$v{/yun}</option>
+						{yun:}/foreach{/yun}
+					</select>
+					<span class="orderTips orderTipsFlex"></span>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list newRatingDiv" style="display: none;">
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 会员套餐：</div>
+			<div class="crm_record_textbox" >
+				<div class="layui-input-inline" >
+					<select name="rid" id="rid_val" lay-filter="rid">
+						<option value="">请选择</option>
+						{yun:}foreach from = $ratinglist key=key item=v{/yun}
+						<option value="{yun:}$v.id{/yun}">{yun:}$v.name{/yun}</option>
+						{yun:}/foreach{/yun}
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list newRatingDiv" style="display:none;">
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 业务模式：</div>
+			<div class="crm_record_textbox" >
+				<div class="layui-input-inline" >
+					<input type="radio" name="deal_model" value="1" title="开通" checked />
+					<input type="radio" name="deal_model" value="2" title="不开通" />
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 付款金额：</div>
+			<div class="crm_record_textbox" >
+				<div >
+					<div class="layui-input-inline" >
+						 <input type="text" name="order_price" id="order_price" size="15"  value="" class="layui-input"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 合同图片：</div>
+			<div class="crm_record_textbox" >
+				<div >
+					<button type="button" class="yun_bth_pic noupload" lay-data="{parentid: 'img_container',uploadmulti:'1', url: 'index.php?m=company_order&c=multiupload'}" style="vertical-align:top">选择图片</button>
+					<input type="hidden" id="uploadmulti" value="1"/>
+					<div class="clear"></div>
+					<div id="img_container" class="none"></div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 备注信息：</div>
+			<div class="crm_record_textbox" style='width:80px;'>
+				<div >
+				  <div class="layui-input-inline" >
+					<textarea id="order_remark" name="order_remark"  class="layui-textarea" style="width:315px;"></textarea>
+				  </div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<span class="crm_record_name">&nbsp;</span>
+			<div class="crm_record_textbox"  style='width:315px;' >
+				<input type="hidden" id='dealInfo' value='' />
+				<input type="hidden" id="orderId" name="orderId" value='' />
+				<input type="button" id="newOrder" value='确认' class="admin_examine_bth">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmNewTask" style="display:none; width:450px; ">
+	<form class="layui-form" lay-filter='formCrmTask'>
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 客户名称：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-input-inline" style="width:315px">
+						<input type="text" class="layui-input" name="crm_keyword" id="tcomname" placeholder='填写名称，搜索选择'/>
+					</div>
+				</div>
+				<div class="layui-anim_al">
+					<dl name="word" class="layui-anim_all"></dl>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 任务类型：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-input-inline">
+						<select name="taskType" id="taskType" lay-filter="taskType">
+							<option value="">请选择</option>
+							{yun:}foreach from = $cache.crmdata.task_type item=v{/yun}
+							<option value="{yun:}$v{/yun}">{yun:}$cache.crmclass_name[$v]{/yun}</option>
+							{yun:}/foreach{/yun}
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" id="handle">
+			<div class="crm_record_name"><span class="admin_required_icon"></span> 执行人员：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-input-inline">
+						<select name="taskHuid" id="taskHuid" lay-filter="taskHuid">
+							<option value="">请选择</option>
+							{yun:}foreach from = $adminUserList key=key item=v{/yun}
+							<option value="{yun:}$v.uid{/yun}">{yun:}$v.name{/yun}</option>
+							{yun:}/foreach{/yun}
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" id="taskTimeshow" style="display:none;">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>任务时间：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id='taskTime' name='taskTime' placeholder="yyyy-MM-dd HH:mm:ss" style='width:315px;'>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>任务描述：</div>
+			<div class="crm_record_textbox">
+				<textarea id="taskRemark" name="taskRemark" cols="100" rows="4" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<span class="crm_record_name">&nbsp;</span>
+			<div class="crm_record_textbox">
+				<input type="button" value='确认' class="admin_examine_bth" id="crmTask">
+			</div>
+		</div>
+		<input type="hidden" id="info" value=""/>
+		<input type="hidden" id="task_type_id" value=""/>
+	</form>
+</div>
+
+<div id="crmworklog"  style="display:none; width:450px; ">
+	<form class="layui-form" action="index.php?m=crm_worklog&c=add" target="supportiframe" method="post" lay-filter="formCrmWorklog" onsubmit="return crmworklog()" autocomplete='off'>
+		<div class="crm_record_list">
+			<div class="crm_record_name" style="width: 200px;"><span class="admin_required_icon" >注意：提交后将不能修改！</span></div>
+	 	</div>
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>日志标题：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id='logtitle' name='logtitle'  style='width:315px;'>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>日志内容：</div>
+			<div class="crm_record_textbox" >
+				<textarea id="logcontent" name="logcontent"  class="layui-textarea" style="width:500px;height:200px;"></textarea>
+			</div>
+		</div>
+		<div class="crm_record_list">
+			<span class="crm_record_name">&nbsp;</span>
+			<div class="crm_record_textbox">
+				<input type="submit"  value='确认' class="admin_examine_bth">
+				<input type="button"  onClick="layer.closeAll();" class="admin_examine_bth_qx" value='取消' style="margin-left:10px;">
+			</div>
+		</div>
+		<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+	</form>
+</div>
+
+<div id="comLinkInfo"  style="display:none; width:450px; ">
+	<form class="layui-form">
+
+		<div class="crm_record_list" >
+			<div>
+		    	<div class="layui-inline">
+		      		<label class="layui-form-label">客户名称：</label>
+		      		<div class="layui-input-inline" style="width: 310px;">
+		        		<input type="text" id="comLink_name" autocomplete="off" class="layui-input">
+		      		</div>
+		    	</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list" >
+			<div>
+		    	<div class="layui-inline">
+		      		<label class="layui-form-label">会员套餐：</label>
+		      		<div class="layui-input-inline" style="width: 100px;">
+		        		<input type="text" id="comLink_ratingname"   autocomplete="off" class="layui-input">
+		      		</div>
+		      		<div class="layui-input-inline" style="width: 100px;">
+		        		<input type="text" id="comLink_vipetime"   autocomplete="off" class="layui-input">
+		      		</div>
+		    	</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list" >
+			<div>
+		    	<div class="layui-inline">
+		      		<label class="layui-form-label">所在城市：</label>
+		      		<div class="layui-input-inline" style="width: 210px;">
+		        		<input type="text" id="comLink_city" autocomplete="off" class="layui-input">
+		      		</div>
+		    	</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list" >
+			<div>
+		    	<div class="layui-inline">
+		      		<label class="layui-form-label">联系方式：</label>
+		      		<div class="layui-input-inline" style="width: 100px;">
+		        		<input type="text" id="comLink_linkman"   autocomplete="off" class="layui-input">
+		      		</div>
+		      		<div class="layui-input-inline" style="width: 180px;">
+		        		<input type="text" id="comLink_linktel"   autocomplete="off" class="layui-input">
+		      		</div>
+		    	</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmDeliver" style="display:none;">
+	<form class="layui-form" lay-filter="formCrmDeliver">
+		<div class="crm_record_tip" >
+			<font color='red'>重要提示：客户被转交后将不能拥有客户操作权限</font>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_textbox" style="margin-left: 70px;">
+				<div class="layui-input-inline" >
+					<select name="crmuser" id="crmuser" lay-filter="">
+						<option value="">客户经理</option>
+						{yun:}foreach from = $crmUser item=v{/yun}
+						<option value="{yun:}$v.uid{/yun}-{yun:}$v.name{/yun}">{yun:}$v.name{/yun}</option>
+						{yun:}/foreach{/yun}
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_textbox" style='margin-left: 70px;width:80px;'>
+			  <div class="layui-input-inline" >
+					<textarea id="deliverRemark" placeholder="请阐述转交说明" class="layui-textarea" style="width:315px;"></textarea>
+			  </div>
+			</div>
+		</div>
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<div class="crm_record_textbox"  style='margin-left: 70px;width:315px;' >
+				<input type="button" value='确认转交' class="admin_examine_bth" onclick="crmDeliver()">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmGiveup"  style="display:none;">
+	<form class="layui-form" lay-filter="formCrmGiveup">
+		<div class="crm_record_tip" >
+			<font color='red'>重要提示：客户被放弃后将不能拥有客户操作权限</font>
+		</div>
+		<div class="crm_record_list" >
+			<div class="crm_record_name"></div>
+			<div class="crm_record_textbox" style='margin-left:70px;width:80px;'>
+			  <div class="layui-input-inline" >
+					<textarea id="giveupRemark" placeholder="请阐述放弃原因" class="layui-textarea" style="width:315px;"></textarea>
+			  </div>
+			</div>
+		</div>
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<div class="crm_record_textbox"  style='margin-left:70px;width:315px;' >
+				<input type="button" value='确认放弃' class="admin_examine_bth" onclick="crmGiveup()">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmStatusType" style="display:none;">
+	<form class="layui-form" lay-filter="formCrmStatusType">
+		<div class="crm_record_list">
+			<div class="crm_record_textbox" id="select_CrmStatus" style="width: 420px; margin-left: 40px; display:none;">
+				<span style="font-size: 14px;color: #999">客户状态设置为：</span>
+				<div class="layui-input-block">
+					{yun:}foreach from = $crmStatus item=status{/yun}
+					<input type="radio" name="status" value="{yun:}$status{/yun}-{yun:}$crmClassName[$status]{/yun}" title="{yun:}$crmClassName[$status]{/yun}">
+					{yun:}/foreach{/yun}
+				</div>
+			</div>
+			<div class="crm_record_textbox" id="select_CrmType" style="width: 420px; margin-left: 40px; display:none;">
+				<span style="font-size: 14px;color: #999">客户等级设置为：</span>
+				<div class="layui-input-block">
+					{yun:}foreach from = $crmType item=type{/yun}
+					<input type="radio" name="level" value="{yun:}$type{/yun}-{yun:}$crmClassName[$type]{/yun}" title="{yun:}$crmClassName[$type]{/yun}">
+					{yun:}/foreach{/yun}
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list">
+			<div class="crm_record_textbox" style='margin-left: 40px;'>
+				<span style="font-size: 14px;color: #999;">备注修改原因：</span>
+				<div class="layui-input-inline">
+					<textarea id="st_Remark" placeholder="请简述调整原因" class="layui-textarea" style="width:365px;"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="crm_record_list" style="padding-bottom:20px;">
+			<div class="crm_record_textbox" style='margin-left: 40px; width:420px;'>
+				<input type="hidden" id='isSt' value="">
+				<input type="button" value='确认' class="admin_examine_bth" onclick="crmStatusType();">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="crmOut"  style="display:none; width:450px; ">
+
+	<form class="layui-form" lay-filter="formCrmOut">
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>客户名称：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							 <input type="text" class="layui-input" id='outComName' name="crm_keyword"  style='width:197px;'>
+						</div>
+					</div>
+				</div>
+				<div  class="layui-anim_al">
+					<dl name="word" class="layui-anim_all" >
+					</dl>
+				</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>外出原因：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<select name="reason" id="reason" lay-filter="">
+	                            <option value="">请选择</option>
+	                            {yun:}foreach from = $outClass item=out{/yun}
+								<option value="{yun:}$out{/yun}">{yun:}$crmClassName[$out]{/yun}</option>
+	                            {yun:}/foreach{/yun}
+	                        </select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>外出时间：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id='outStime' name='outStime'  style='width:197px;'>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>返回时间：</div>
+			<div class="crm_record_textbox">
+				<div>
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id='outEtime' name='outEtime'  style='width:197px;'>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="crm_record_list">
+			<div class="crm_record_name"><span class="admin_required_icon"></span>备注：</div>
+			<div class="crm_record_textbox" >
+				<textarea id="outRemark" name="outRemark"  class="layui-textarea" style="width:300px;"></textarea>
+			</div>
+		</div>
+		<div class="crm_record_list">
+			<span class="crm_record_name">&nbsp;</span>
+			<div class="crm_record_textbox">
+ 				<input type="button"  value='确认' class="admin_examine_bth" onclick='crmOut();'>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div>
+	<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+	<input type='hidden' id="com_uid" name="com_uid" value="" />
+	<input type='hidden' id="auid" name="auid" value="{yun:}$auid{/yun}" />
+	<input type='hidden' id="crm_uid" name="crm_uid" value="" />
+	<input type='hidden' id="newwindow" value="" />
+</div>
+<style>
+	.crmEcordTboxs .layui-textarea{
+		overflow-y: hidden;
+		max-height: 173px !important;
+	}
+	.layui-anim_al {
+	    position: absolute;
+	    z-index: 2147483647;
+	    min-width: 315px;
+	    max-height: 300px;
+	    overflow-y: auto;
+	    background-color: white;
+	    border-radius: 2px;
+	    box-shadow: 0 2px 4px hsla(0, 0%, 0%, .12);
+	    box-sizing: border-box;
+	}
+	.layui-anim_al dl dd, .layui-anim_al dl dt {
+	    padding: 0 10px;
+	    line-height: 36px;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+	.click_work {
+	    padding-bottom: 8px;
+	    font-weight: lighter;
+	    font-size: 13px;
+	    cursor: pointer;
+	}
+	.view{
+		padding-bottom: 10px;
+	}
+</style>
+
+<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+
+<script>
+	var weburl = "{yun:}$config.sy_weburl{/yun}";
+	var publicFollowContent = UE.getEditor('public_follow_content', {
+		toolbars: [['simpleupload']],
+		wordCount: false,
+		elementPathEnabled: false,
+		initialFrameHeight: 200,
+		scaleEnabled:true
+	});
+	var d = new Date(),
+			str = '';
+	str += d.getHours() + ':';
+	str += d.getMinutes() + ':';
+	str += d.getSeconds();
+
+	var pytoken = $('#pytoken').val();
+	var auid = $('#auid').val();
+	var form = null
+	layui.use([ 'form', 'laydate', 'upload', 'layer'], function() {
+
+		var layer = layui.layer,
+			upload = layui.upload,
+			laydate = layui.laydate,
+			$ = layui.$;
+
+		form = layui.form;
+
+		form.render('select');
+		form.render('radio');
+		form.render('checkbox');
+
+		form.on('select(public_link)', function(data) {
+ 			var linkArr = data.value.split('-');
+ 			$('#public_link_man').val(linkArr[0]);
+			$('#public_link_tel').val(linkArr[1]);
+			form.render('select');
+		});
+
+		form.on('select(taskType)', function(data) {
+
+			if(data.value=='22'){
+
+				$("#taskHuid").attr("disabled","disabled");
+				$("#taskHuid").val(auid);
+				$("#handle").hide();
+				$("#taskTimeshow").attr("style","display:block;");
+			}else{
+				$("#handle").show();
+				$("#taskHuid").attr("disabled",false);
+				$("#taskTimeshow").attr("style","display:none;");
+			}
+
+			form.render('select');
+		});
+		form.on('select(orderType)', function(data) {
+			if (data.value == 1){
+
+				$('.newRatingDiv').attr("style","display:block;");
+ 			}else{
+				$('.newRatingDiv').attr("style","display:none;");
+				$('#order_price').val('');
+			}
+			form.render('select');
+		});
+		form.on('select(rid)', function(data) {
+			$.post("index.php?m=crm_index&c=orderprice", {id : data.value, pytoken : pytoken}, function(data) {
+				if (data) {
+					var dataJson = eval("(" + data + ")");
+					$('#order_price').val(dataJson.service_price);
+				}
+				form.render('select');
+			});
+		});
+
+		/*跟进时间*/
+		laydate.render({
+			elem : '#public_ftime',
+			type : 'datetime',
+			min	 : -7,
+			max	 : str,
+            value: new Date()
+		});
+		form.on('checkbox(public_next_check)', function(data){
+			if(data.elem.checked){
+				$(".ftime_div").show();
+			}else{
+				$(".ftime_div").hide();
+			}
+		});
+		/*下次跟进时间（计划任务时间）*/
+		laydate.render({
+			elem : '#public_next_time',
+			type : 'datetime',
+			min  : str
+		});
+		laydate.render({
+			elem : '#taskTime',
+			type : 'datetime',
+			value: new Date()
+		});
+		laydate.render({
+			elem : '#outStime',
+			type : 'datetime',
+			value: new Date()
+		});
+		laydate.render({
+			elem : '#outEtime',
+			type : 'datetime'
+		});
+	});
+
+	$('input[name="crm_keyword"]').keyup(function() {
+
+		var pytoken = $('#pytoken').val();
+		var comname = $.trim($(this).val());
+
+		if (comname == '') {
+			$('.layui-anim_al').hide();
+			$('input[name="com_uid"]').val('');
+		}
+		$.ajax({
+			url	 : 'index.php?m=crm_index&c=searchcom',
+			data : {keyword : comname, pytoken : pytoken},
+			type : 'post',
+			dataType : 'JSON',
+			async : false,
+			success : function(data) {
+				var html = "";
+				if (data) {
+					for (var i = 0; i < data.length; i++) {
+						html += '<dd lay-value="" class="layui-select-tips"><div class="click_work" data-uid="'+data[i].uid+'" data-crm_uid="'+data[i].crm_uid+'" data-crm_status="'+data[i].crm_status+'" data-crm_type="'+data[i].crm_type+'">' + data[i].name + '</div></dd>';
+					}
+					$('.layui-anim_all').html(html);
+					$('.layui-anim_al').show();
+				} else {
+					if (comname) {
+						html = '<dd lay-value="" class="layui-select-tips"><div>无相关客户</div></dd>';
+						$('.layui-anim_all').html(html);
+						$('.layui-anim_al').show();
+					} else {
+						$('.layui-anim_al').hide();
+					}
+					$('input[name="com_uid"]').val('');
+					$('input[name="crm_uid"]').val('');
+					checkCrmTs('', '');
+					form.render('select');
+				}
+			}
+		})
+	})
+
+	$(document).on('click', '.click_work', function() {
+		var comuid = $(this).attr('data-uid');
+		var crmuid = $(this).attr('data-crm_uid');
+		var crmstatus = $(this).attr('data-crm_status');
+		var crmtype = $(this).attr('data-crm_type');
+		$('input[name="crm_keyword"]').val($(this).text());
+		$('.layui-anim_al').hide();
+		$('input[name="com_uid"]').val(comuid);
+		$('input[name="crm_uid"]').val(crmuid);
+		checkCrmTs(crmstatus, crmtype);
+
+		if (parseInt(comuid) > 0) {
+			var param = {};
+			param.uid = comuid;
+			param.pytoken = $('#pytoken').val();
+			$.post('index.php?m=crm_index&c=getCrmLink', param, function (data) {
+				var crmLink = eval('(' + data + ')');
+				if (crmLink.length > 0) {
+					$("#public_link").empty(); // 清空选项
+					crmLink.forEach((item, index) => {
+						$('#public_link').append(new Option(item.link_man+" - "+item.link_mobile, item.link_man+"-"+item.link_mobile, index == 0));
+					});
+				}
+				$('#newLinkA').show();
+				form.render('select');
+			});
+		} else {
+			form.render('select');
+		}
+	});
+
+	$(document).ready(function () {
+		$(".orderTips").hover(function(){
+			var msg = '当业务员录入“会员充值“类型的订单，并且选择择开通业务的模式，管理员在审批订单时，会充值会员到企业账号；其他情况的录入，则不会涉及业务逻辑处理';
+			if (msg != '') {
+				layer.tips("<div style='overflow: hidden;'> " +
+							"<div style='font-size:16px;font-weight: bold;color:#333;line-height:40px;background:#f9f9f9;padding-left:10px;'>录入</div>" +
+							"<div> " +
+								"<div style='overflow: hidden;padding-left:10px;line-height:32px;font-size:14px;display: flex;align-items: center; margin:5px 0;'> " +
+									"<p style='color:#666;'></p> " +
+									"<span style='color:#666; background: rgba(120, 186, 50, 0.2); color:#78BA32;border-radius: 5px;display: block;margin-left:15px;padding:0 10px;'>  </span> " +
+								"</div>  " +
+								"<div style='overflow: hidden;color:#666;padding-left:10px;line-height:32px;font-size:14px;'>"+msg+"</div>  " +
+							"</div> " +
+							"</div>", this, {
+					guide: 1,
+					area: ['360px', 'auto'],
+					time: 0,
+					tips: [2, '#fff']
+				});
+
+				$(".xubox_layer").addClass("xubox_tips_border");
+			}
+		},function(){
+
+			layer.closeAll('tips');
+		});
+	});
+	function showNewLink() {
+		$('#public_deflink').hide();
+		$('#public_newlink').show();
+	}
+	function addNewLink() {
+
+		var uid = $('input[name="com_uid"]').val();
+		if (uid == ''){
+			layer.msg('客户信息错误', 2, 8);
+			return false;
+		}
+		var link_man = $('#public_link_man').val();
+		if (link_man == ''){
+			layer.msg('请填写联系人', 2, 8);
+			return false;
+		}
+		var link_mobile = $('#public_link_tel').val();
+		if (link_mobile == ''){
+			layer.msg('请填写联系人手机号码', 2, 8);
+			return false;
+		}else if (!isjsMobile(link_mobile)){
+			layer.msg('请填写正确的手机号码', 2, 8);
+			return false;
+		}
+		var param = {};
+		param.uid = uid;
+		param.link_man = link_man;
+		param.link_mobile = link_mobile;
+		param.pytoken = $('#pytoken').val();
+		loadlayer();
+		$.post('index.php?m=crm_my_customer&c=addCrmLink', param, function (data) {
+			parent.layer.closeAll('loading');
+			var res = eval('(' + data + ')');
+			if (res.errcode == 9) {
+				layer.msg(res.msg, 2, 9, function () {
+					$('#public_link').append(new Option(link_man + " - " + link_mobile, link_man + "-" + link_mobile));
+					var value = link_man + '-' + link_mobile;
+					$('#public_link').find("option[value=" + value + "]").attr("selected", true);
+					closeNewLink();
+				});
+			}else if (res.errcode == 8){
+
+				layer.msg(res.msg, 2, 8);
+				return false;
+			}else if (res.errcode == 7){
+				layer.confirm(res.msg, {
+					btn: ['继续添加', '更换号码']
+				}, function (index) {
+					saveNewLink(uid, link_man, link_mobile);
+					layer.close(index);
+				}, function () {
+
+					$('#public_link_tel').val('');
+				});
+			}
+			form.render('select');
+		});
+
+	}
+	function saveNewLink(uid, man, mobile) {
+		var param = {};
+		param.uid = uid;
+		param.link_man = man;
+		param.link_mobile = mobile;
+		param.add = 1;
+		param.pytoken = $('#pytoken').val();
+		loadlayer();
+		$.post('index.php?m=crm_my_customer&c=addCrmLink', param, function (data) {
+			parent.layer.closeAll('loading');
+			var res = eval('(' + data + ')');
+			if (res.errcode == 9) {
+				layer.msg(res.msg, 2, 9, function () {
+					$('#public_link').append(new Option(man+" - "+mobile, man+"-"+mobile));
+					var value = man+'-'+mobile;
+					$('#public_link').find("option[value="+value+"]").attr("selected", true);
+					closeNewLink();
+				});
+			}else if (res.errcode == 8){
+
+				layer.msg(res.msg, 2, 8);
+				return false;
+			}
+			form.render('select');
+		});
+	}
+	function closeNewLink() {
+		$('#public_deflink').show();
+		$('#public_newlink').hide();
+	}
+</script>

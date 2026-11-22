@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <title>后台管理</title>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tty-tishi_top">
+            <div class="admin_new_search_box">
+                <form action="index.php" name="myform" method="get">
+                    <div>
+                        <input name="m" value="admin_workwx_department" type="hidden" />
+                        <input class="admin_Filter_search" type="text" name="keyword" maxlength="25" placeholder="请输入部门名称关键字">
+                        <input class="admin_new_bth" type="submit" name="search" value="查询" />
+                    </div>
+                    <div class="adminNewEarch">
+                        <div class="admin_statistics">
+                            <div>同步操作：获取企业部门信息以及员工信息</div>
+                            <div class="addEnterp" style="width: 96px;">
+                                <a href="javascript:;" onclick="syncDepartment();">同步企微</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" target="supportiframe" id='myform'>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th width="50">
+                                <label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label>
+                            </th>
+                            <th>部门ID</th>
+                            <th>部门名称</th>
+                            <th width="200" align="center">员工数量</th>
+                            <th>导入时间</th>
+                            <th>最近同步</th>
+                            <th width="120" align="center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tableBackColorTwo">
+
+                        {yun:}foreach item=v key=key from=$list{/yun}
+                        <tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+                        <td><input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk"/></td>
+                        <td>{yun:}$v.depart_id{/yun}</td>
+                        <td>{yun:}$v.depart_name{/yun}</td>
+                        <td align="center">
+                            {yun:}$v.user_num{/yun}
+                            <a href="index.php?m=admin_workwx_list&depart_id={yun:}$v.depart_id{/yun}">
+                               <p style="color: #2778f8;">查看</p> 
+                            </a>
+                        </td>
+                        <td>{yun:}$v.create_time_n{/yun}</td>
+                        <td>{yun:}$v.up_time_n{/yun}</td>
+                        <td align="center">
+                            <div class="operationSeries">
+                                <a href="javascript:;" onclick="syncDepartment('{yun:}$v.depart_id{/yun}');">同步</a>
+                            </div>
+                        </td>
+
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/>
+                            </td>
+                            <td colspan="7"><label for="chkAll2">全选</label>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['form'], function() {
+        var form = layui.form;
+    });
+
+    function syncDepartment(departId) {
+
+        var pytoken = $("input[name='pytoken']").val();
+        var ii = parent.layer.msg('信息同步中，请稍候。。。', 5000, {
+            icon: 16, shade: 0.01
+        })
+        $.post("index.php?m=admin_workwx_department&c=sync", {
+            depart_id: departId,
+            pytoken: pytoken
+        }, function (data) {
+            var data = eval('(' + data + ')');
+            parent.layer.closeAll('loading');
+            if (data.errcode == 9) {
+                parent.layer.msg(data.errmsg, 2, 9, function() {
+                    location.reload();
+                });
+            }else{
+                parent.layer.msg(data.errmsg, 2, 8);
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,906 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<style>
+    body, html {
+        padding: 0;
+        margin: 0;
+        overflow: auto;
+    }
+</style>
+<body>
+
+<div id="yunvue" style="display: none;">
+    <div class="new_combgcor">
+        <div class="new_comheader">
+            <a href="javascript:history.go(-1)" class="new_header_fh"></a>
+        </div>
+        <div class="new_cominfo">
+            <div class="new_comlogo"><img :src="info.logo" alt=""></div>
+            <div class="new_comname">{{info.name}}
+                <span v-if="info.r_status == '1'" class="ysh"><i class="wshicon" style="top:5px;"></i>已审核</span>
+                <span v-else-if="info.r_status == '3'" class="wsh"><i class="wshicon" style="top:5px;"></i>未通过</span>
+                <span v-else-if="info.r_status == '2'" class="wsh"><i class="wshicon" style="top:5px;"></i>已锁定</span>
+                <span v-else-if="info.r_status == '4'" class="wsh"><i class="wshicon" style="top:5px;"></i>已暂停</span>
+                <span v-else class="wsh"><i class="wshicon" style="top:5px;"></i>未审核</span>
+            </div>
+            <div class="new_com_bj">会员名称：{{info.username}} ；UID：{{info.uid}}</div>
+        </div>
+        <div class="new_comvipbox">
+            <div class="new_comvip">
+                <span class="new_comvip_jb">{{info.rating_name}}</span>
+                <span class="new_comvip_time">{{info.vipetime_n !== '不限' ? info.vipetime_n + ' 到期' : info.vipetime_n}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="new_job_box">
+        <div class="new_job_infobox" style="overflow: hidden;padding: 0.3rem 0.4rem;">
+            <div class="newJobContent">
+                <div>联系人：{{info.linkman}}</div>
+                <div>联系电话：{{info.linktel}} {{info.linkphone}}</div>
+                <div>联系邮箱：{{info.linkmail}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="new_job_box">
+        <div class="new_job_infobox">
+            <div class="new_comshow">
+                <div class="new_comtit">
+                    <ul>
+                        <li @click="changeTab('info')" :class="tab == 'info' ? 'new_comtit_cur' : ''">基本资料</li>
+                        <li @click="changeTab('manage')" :class="tab == 'manage' ? 'new_comtit_cur' : ''">客户管理</li>
+                        <li @click="changeTab('tongji')" :class="tab == 'tongji' ? 'new_comtit_cur' : ''">数据统计</li>
+                    </ul>
+                </div>
+                <!--基本信息-->
+                <div class="" :class="tab == 'info' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+
+                    <div class="wapadmin_cominfo_p">
+                        <ul>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业全称</span> <span>{{info.name}}</span>
+                            </li>
+                            <li v-if="info.shortname">
+                                <span class="wapadmin_cominfo_n">企业简称</span><span>{{info.shortname}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">从事行业</span> <span>{{info.hy_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业性质</span> <span>{{info.pr_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">企业规模</span> <span>{{info.mun_n}}</span>
+                            </li>
+                            <li v-if="info.sdate">
+                                <span class="wapadmin_cominfo_n">创办时间</span> <span>{{info.sdate}}</span>
+                            </li>
+                            <li v-if="info.money">
+                                <span class="wapadmin_cominfo_n">注册资金</span><span>{{info.money}} {{info.moneytype_n}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">所在地区</span> <span>{{info.job_city_one}} {{info.job_city_two}} {{info.job_city_three}}</span>
+                            </li>
+                            <li>
+                                <span class="wapadmin_cominfo_n">详细地址</span><span>{{info.address}}</span>
+                            </li>
+                            <li v-if="info.busstops">
+                                <span class="wapadmin_cominfo_n">交通站点</span> <span>{{info.busstops}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--客户管理-->
+                <div :class="tab == 'manage' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_cominfo_p">
+                            <ul class="wapadmin_cominfo_gl">
+                                <li>
+                                    <div class="wapadmin_kh_cz">
+                                        <span class="wapadmin_cominfo_n">企业顾问</span>
+                                        <span>{{info.crm_name}}</span>
+                                        <a :href="'index.php?m=crm&c=crm_my_customer&a=concern&uid=' + info.uid" class="gj_jl">查看跟进记录</a>
+                                        <a href="javascript:;" v-if="auid == info.crm_uid" @click="crmConcernShow = true" class="gj_jlbth">跟进</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_kh_cz">
+                                        <span class="wapadmin_cominfo_n">客户等级</span>
+                                        <span>{{info.crm_type_n}}</span>
+                                        <a href="javascript:;" @click="crmstOpen('type')" class="gj_jlbth">标记</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_kh_cz">
+                                        <span class="wapadmin_cominfo_n">客户标签</span>
+                                        <span>{{info.crm_status_n}}</span>
+                                    </div>
+                                    <a href="javascript:;" @click="crmstOpen('status')" class="gj_jlbth">修改</a>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_kh_cz">
+                                        <span class="wapadmin_cominfo_n">备注信息</span>
+                                        <span>{{info.crm_remark}}</span>
+                                        <a href="javascript:;" v-if="auid == info.crm_uid" @click="crmRemarkShow = true" class="gj_jlbth">备注</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_kh_cz">
+                                        <span class="wapadmin_cominfo_n">职位管理</span>
+                                        <span>{{info.job_name}}<span v-if="job_num>1">等<span style="color: blue;"> {{job_num}} </span>份职位</span></span>
+                                        <a :href="'index.php?m=user&c=company_job&uid=' + info.uid" class="gj_jlbth">查看</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!--数据统计-->
+                <div :class="tab == 'tongji' ? 'detaTabContentItem layuiTabShow' : 'detaTabContentItem'">
+                    <div class="wapadmin_paragraph">
+                        <div class="wapadmin_tctj">
+                            <ul>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">收到简历</span>
+                                        <div class="wapadmin_tc_n">{{sqnum}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">邀请面试</span>
+                                        <div class="wapadmin_tc_n">{{invite_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">被浏览量</span>
+                                        <div class="wapadmin_tc_n">{{info.hits_s}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">被关注量</span>
+                                        <div class="wapadmin_tc_n">{{info.ant_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">下载简历</span>
+                                        <div class="wapadmin_tc_n">{{downresume_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">子账号</span>
+                                        <div class="wapadmin_tc_n">{{child_account_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">总职位数</span>
+                                        <div class="wapadmin_tc_n">{{job_num}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">在招职位数</span>
+                                        <div class="wapadmin_tc_n">{{info.inJobNum}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="wapadmin_tctjlist">
+                                        <span class="wapadmin_tc_name">登录次数</span>
+                                        <div class="wapadmin_tc_n">{{info.login_hits}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end-->
+        </div>
+    </div>
+
+    <div class="job_footer">
+        <div class="job_footer_fix" style="overflow: hidden;padding:0.266666rem 0;">
+            <div class="job_footer_box" style="overflow: hidden;display: flex;align-items: center; justify-content: center;">
+                <div class="job_footer_box_r" style="overflow: hidden;display: flex;align-items: center; justify-content: center;">
+                    <a v-if="is_outcall" class="bodTel job_tel" style="margin-left: 0;" href="javascript:;" @click="contactMobile">拨打电话</a>
+                    <a v-else class="bodTel job_tel" style="margin-left: 0;" href="javascript:;" @click="callTel">拨打电话</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--拨打电话（多个的情况下）-->
+    <div class="tellOpty">
+        <van-action-sheet v-model:show="callShow" :actions="callActions" @select="onSelectCall">
+            <div class="tellOptyClose">
+                <button @click="callShow = false">取消</button>
+            </div>
+        </van-action-sheet>
+    </div>
+
+    <!--跟进-->
+    <van-popup v-model="crmConcernShow" round position="bottom">
+        <section class="positePopup positePopupModi">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="crmConcernShow = false">
+                <div class="positeForms positeModi">
+                    <h3>跟进</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="enterSuberen flexsubjectren">
+                            <p>跟进内容：</p>
+                            <div class="followCont">
+                                <div style="border: 1px solid #eee; overflow: hidden;border-radius: 0.1rem;">
+                                    <textarea v-model="fRemark" class="follotextarea" placeholder="简要说明跟进内容，与客户的交流情况。"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="enterSuberen flexsubjectren">
+                            <p>上传图片：</p>
+                            <van-uploader v-model="followList" multiple :max-count="5" :after-read="afterRead" >
+                                <van-button icon="plus" type="primary">上传文件</van-button>
+                            </van-uploader>
+                        </div>
+                        <!--<div class="positeSubesfdf">-->
+                        <!--    <p>跟进方式：</p>-->
+                        <!--    <div class="layui-input-inline" @click="followWayShow = true">-->
+                        <!--        <div class="xuanzhegenj">-->
+                        <!--            <p>{{followWay ? crmClassName[followWay] : '请选择跟进方式'}}</p>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        <div class="positeSubes iteSubesEide">
+                            <p>跟进方式：</p>
+                            <div class="layui-input-inline" @click="followWayShow = true">
+                                <p style="width: 4.5rem;" @click="followWayShow = true">{{followWay ? crmClassName[followWay] : '请选择跟进方式'}}</p>
+                            </div>
+                        </div>
+                        <div class="positeSubes iteSubesEide">
+                            <p>跟进时间：</p>
+                            <div class="layui-input-inline" @click="ftimeShow = true">
+                                <p style="width: 4.5rem;" @click="ftimeShow = true">{{ftimeStr ? ftimeStr : '请选择跟进时间'}}</p>
+                            </div>
+                        </div>
+                        <div class="positeSubes iteSubesEide">
+                            <p>联系人员：</p>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="flinkman"/>
+                            </div>
+                        </div>
+                        <div class="positeSubes iteSubesEide">
+                            <p>联系方式：</p>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="flinktel"/>
+                            </div>
+                        </div>
+                        <div class="positeSubes iteSubesEide">
+                            <p>客户等级：</p>
+                            <div class="layui-input-inline" @click="crmTypeShow = true">
+                                <p style="width: 4.5rem;" @click="crmTypeShow = true">{{crmTypeChecked ? crmClassName[crmTypeChecked] : '请选择客户等级'}}</p>
+                            </div>
+                        </div>
+                        <div class="positeSubes iteSubesEide">
+                            <p>客户标签：</p>
+                            <div class="layui-input-inline" @click="crmStatusShow = true">
+                                <p style="width: 4.5rem;" @click="crmStatusShow = true">{{crmStatusChecked ? crmClassName[crmStatusChecked] : '请选择客户标签'}}</p>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="layui-input-inline">
+                                <label><input type="checkbox" value="1" v-model="follow">下次跟进</label>
+                                <p style="width: 4.5rem; padding: 0.1rem 0.1rem 0.1rem 0.3rem; background: #eee; margin-left: 0.2rem;border-radius: 0.1rem;" v-if="follow" @click="ptimeShow = true">{{ptimeStr ? ptimeStr : '请选择下次跟进时间'}}</p>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button v-if="info.followInfo" @click="crmConcernSub('up')">更新</button>
+                                <button @click="crmConcernSub('add')">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <van-popup v-model="ftimeShow" round position="bottom">
+            <van-datetime-picker v-model="ftime" type="datetime" title="选择年月日" @confirm="confirmFtime"
+                                 @cancel="ftimeShow = false"/>
+        </van-popup>
+        <van-popup v-model="ptimeShow" round position="bottom">
+            <van-datetime-picker v-model="ptime" type="datetime" title="选择年月日" @confirm="confirmPtime"
+                                 @cancel="ptimeShow = false"/>
+        </van-popup>
+        <van-popup v-model:show="followWayShow" round position="bottom">
+            <van-picker title="跟进方式" :columns="followWayColumns" show-toolbar @confirm="onFollowWayConfirm"
+                        @cancel="followWayShow = false"/>
+        </van-popup>
+        <van-popup v-model:show="crmTypeShow" round position="bottom">
+            <van-picker title="客户等级" :columns="crmTypeColumns" show-toolbar @confirm="onCrmTypeConfirm" @cancel="crmTypeShow = false"/>
+        </van-popup>
+        <van-popup v-model:show="crmStatusShow" round position="bottom">
+            <van-picker title="客户标签" :columns="crmStatusColumns" show-toolbar @confirm="onCrmStatusConfirm" @cancel="crmStatusShow = false"/>
+        </van-popup>
+    </van-popup>
+    <!--标记客户等级/修改客户标签-->
+    <van-popup v-model="crmstShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="crmstShow = false">
+                <div class="positeForms">
+                    <h3 v-if="crmst == 'status'">客户标签</h3>
+                    <h3 v-else>客户等级</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="positeSubes positeSubesryu">
+                            <!-- <p>客户设置为：</p> -->
+                            <div v-if="crmst == 'status'" class="layui-input-inline">
+                                <div v-for="(csitem,cskey) in crmStatus" :key="cskey" class="layuiInputy">
+                                    <label>
+                                        <input type="radio" :value="csitem" v-model="crmStatusChecked">
+                                        <p>{{crmClassName[csitem]}}</p>
+                                    </label>
+                                </div>
+                            </div>
+                            <div v-else class="layui-input-inline">
+                                <div v-for="(ctitem,ctkey) in crmType" :key="ctkey" class="layuiInputy">
+                                    <label>
+                                        <input type="radio" :value="ctitem" v-model="crmTypeChecked">
+                                        <p>{{crmClassName[ctitem]}}</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="enterSuberen flexsubjectren">
+                            <p>备注信息：</p>
+                            <div class="followCont" style="border: 1px solid #eee; border-radius: 0.1rem;">
+                                <textarea v-model="crmstRemark" class="follotextarea" placeholder="备注信息"></textarea>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button @click="crmstSub">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+    <!--备注信息-->
+    <van-popup v-model="crmRemarkShow" round position="bottom">
+        <section class="positePopup">
+            <div class="positeShen">
+                <img class="positeClose" src="img/close.png" alt="" @click="crmRemarkShow = false">
+                <div class="positeForms">
+                    <h3>备注</h3>
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="enterSuberen flexsubjectren">
+                            <div class="followCont" style="border: 1px solid #eee; border-radius: 0.1rem;">
+                                <textarea v-model="crmRemark" class="follotextarea" placeholder="方便每次打开都能了解企业的一些个性情况，长期有效，可修改。"></textarea>
+                            </div>
+                        </div>
+                        <div class="positeSubes">
+                            <div class="positeCont">
+                                <button @click="crmRemarkSub">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </van-popup>
+</div>
+<script>
+    let com_id = '{yun:}$smarty.get.com_id{/yun}'
+        , sy_chat_name = '{yun:}$config.sy_chat_name{/yun}'
+        , go = '{yun:}$smarty.get.go{/yun}'
+        , is_outcall = '{yun:}$is_outcall{/yun}';
+    var yunvue = new Vue({
+        el: '#yunvue',
+        data() {
+            return {
+                auid: '',
+                // 基本信息
+                job_num: 0,
+                invite_num: 0,
+                sqnum: 1,
+                downresume_num: 0,
+                child_account_num: 0,
+                info: {},
+                tab: 'info',
+                source: [],
+
+                // 套餐信息
+                rating: {},
+
+                // 拨打电话
+                callShow: false,
+                callActions: [],
+
+                status: 0,
+
+                // CRM
+                crmstShow: false, // 修改等级或状态
+                crmType: [],
+                crmTypeChecked: '',
+                crmStatus: [],
+                crmStatusChecked: '',
+                crmClassName: [],
+                crmst: '',
+                crmstRemark: '',
+                crmRemarkShow: false, // 备注
+                crmRemark: '',
+                crmConcernShow: false, // 跟进
+                ftimeShow: false,
+                ftime: new Date(),
+                ftimeStr: '',
+                ptimeShow: false,
+                ptime: new Date(),
+                ptimeStr: '',
+                fRemark: '',
+                followWayShow: false,
+                followWayColumns: [],
+                followWay: '',
+                flinkman: '',
+                flinktel: '',
+                follow: false,
+
+                followList: [],
+                followAdd: [],
+
+                // 客户等级
+                crmTypeShow: false,
+                crmTypeColumns: [],
+                // 客户标签
+                crmStatusShow: false,
+                crmStatusColumns: [],
+
+                // 外呼记录id
+                callLogId: 0,
+                is_outcall: is_outcall
+            }
+        },
+        created() {
+            this.getInfo();
+        },
+        methods: {
+            getInfo: function () {
+                let _this = this;
+                var params = {
+                    com_id: com_id
+                };
+                showLoading();
+                $.post('index.php?m=crm&c=crm_my_customer&a=com', params, function (res) {
+                    hideLoading();
+
+                    if (res.error === 0) {
+                        data = res.data;
+                        info = data.info;
+                        _this.auid = data.auid;
+                        _this.job_num = data.job_num;
+                        _this.invite_num = data.invite_num;
+                        _this.sqnum = data.sqnum;
+                        _this.downresume_num = data.downresume_num;
+                        _this.child_account_num = data.child_account_num;
+                        _this.info = info;
+                        _this.source = data.source;
+                        _this.status = data.info.r_status;
+                        _this.ratingSelected = data.info.rating;
+                        _this.ratingValue = data.info.rating_name;
+                        _this.crmType = data.crmType;
+                        _this.crmStatus = data.crmStatus;
+                        _this.crmClassName = data.crmClassName;
+
+                        followWayColumns = [];
+                        data.followWay.forEach(function (item) {
+                            followWayColumns.push({value: item, text: data.crmClassName[item]});
+                        });
+                        _this.followWayColumns = followWayColumns;
+
+                        let crmTypeColumns = [],
+                            crmStatusColumns = [];
+                        data.crmType.forEach(function (item) {
+                            crmTypeColumns.push({value: item, text: data.crmClassName[item]});
+                        });
+                        _this.crmTypeColumns = crmTypeColumns;
+                        data.crmStatus.forEach(function (item) {
+                            crmStatusColumns.push({value: item, text: data.crmClassName[item]});
+                        });
+                        _this.crmStatusColumns = crmStatusColumns;
+
+                        let crm_status = info.crm_status,
+                            crm_type = info.crm_type,
+                            crm_remark = info.crm_remark;
+                        _this.crmStatusChecked = crm_status && crm_type != '0' ? crm_status : '';
+                        _this.crmTypeChecked = crm_type && crm_type != '0' ? crm_type : '';
+                        _this.crmRemark = crm_remark ? crm_remark : '';
+                        _this.flinkman = info.linkman;
+                        _this.flinktel = info.linktel;
+                        if (typeof (info.followInfo) != 'undefined') {
+                            _this.fRemark = info.followInfo.content;
+                            _this.followWay = info.followInfo.type;
+                            _this.follow = info.followInfo.time > 0 ? true : false;
+                            if (info.followInfo.imgArr.length > 0){
+                                info.followInfo.imgArr.forEach(item=>{
+                                    _this.followList.push({url: item});
+                                })
+                            }
+                        }
+                        $("#yunvue").show();
+                    } else {
+
+                        if (res.error == 2) {
+                            $("#yunvue").show();
+                            showModal(res.msg, function f() {
+                                window.location.href = "index.php?m=crm&c=crm_my_customer";
+                            })
+                        }else{
+                            showToast(res.msg);
+                        }
+                    }
+                }, 'json')
+            },
+
+            changeTab: function (key) {
+                this.tab = key;
+            },
+            pageTo: function (url) {
+                window.location.href = url;
+            },
+            // 没开外呼，直接手机拨号
+            callTel: function () {
+                let linktel = this.info.linktel;
+                let linkphone = this.info.linkphone;
+                if (linktel && linkphone) {
+                    this.callActions = [
+                        {name: linktel},
+                        {name: linkphone}
+                    ]
+                    this.callShow = true;
+                    return;
+                }
+                if (linktel || linkphone) {
+                    window.location.href = "tel:" + (linktel ? linktel : linkphone)
+                    return;
+                }
+                showToast('无可用联系方式');
+            },
+            // 外呼联系客户
+            contactMobile: function () {
+                var that = this
+                let linktel = this.info.linktel;
+                let linkphone = this.info.linkphone;
+                let uid = this.info.uid;
+                let mobile = linktel ? linktel : linkphone;
+                if (!mobile) {
+                    showToast('无可用联系方式');
+                    return false;
+                }
+                showConfirm('确定要联系客户吗？', function () {
+                    $.post('index.php?m=crm&c=crm_my_customer&a=contactCustomer', {uid, mobile}, function (res) {
+                        if (res.code == 200) {
+                            that.callLogId = res.data
+                            showToast(res.msg)
+                            setTimeout(function () {
+                                that.showFollow(uid, this.info.name)
+                            }, 1000)
+                        } else {
+                            return showToast(res.msg);
+                        }
+                    }, 'json');
+                })
+            },
+            onSelectCall: function (item) {
+                this.callShow = false;
+                window.location.href = "tel:" + item.name;
+            },
+
+            goBack: function () {
+                if (go) {
+                    navigateTo("index.php?m=user&c=company");
+                } else {
+                    history.go(-1);
+                }
+            },
+
+            crmstOpen: function (st) {
+                this.crmst = st;
+                if (st == 'status') {
+                    this.crmstRemark = this.info.crm_status_remark;
+                } else {
+                    this.crmstRemark = this.info.crm_type_remark;
+                }
+                this.crmstShow = true;
+            },
+
+            crmstSub: function () {
+                var uid = com_id;
+                let _this = this,
+                    crmst = _this.crmst,
+                    crmTypeChecked = _this.crmTypeChecked,
+                    crmStatusChecked = _this.crmStatusChecked,
+                    crmClassName = _this.crmClassName;
+
+                if (crmst == 'status') {
+                    if (crmStatusChecked == '') {
+                        showToast('请选择需要客户标签！');
+                        return false;
+                    } else {
+                        var crm_st = crmStatusChecked;
+                        var crm_st_n = crmClassName[crmStatusChecked];
+                    }
+                } else if (crmst == 'type') {
+                    if (crmTypeChecked == '') {
+                        showToast('请选择需要客户等级！');
+                        return false;
+                    } else {
+                        var crm_st = crmTypeChecked;
+                        var crm_st_n = crmClassName[crmTypeChecked];
+                    }
+                }
+
+                var params = {
+                    uid: com_id,
+                    st: crm_st,
+                    st_n: crm_st_n,
+                    isSt: crmst,
+                    remark: _this.crmstRemark
+                };
+
+                showLoading();
+                $.post('index.php?m=crm&c=crm_my_customer&a=upStatusType', params, function (res) {
+                    hideLoading();
+
+                    if (res.errcode == '9') {
+                        showToast(res.msg, 2, function () {
+                            _this.crmstShow = false;
+                            if (crmst == 'status') {
+                                _this.info.crm_status = crm_st;
+                                _this.info.crm_status_n = crm_st_n;
+                                _this.info.crm_status_remark = _this.crmstRemark;
+                            } else if (crmst == 'type') {
+                                _this.info.crm_type = crm_st;
+                                _this.info.crm_type_n = crm_st_n;
+                                _this.info.crm_type_remark = _this.crmstRemark;
+                            }
+                            // window.location.reload();
+                        });
+                    } else if (res.errcode == '8') {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            crmRemarkSub: function () {
+                let _this = this,
+                    remark = _this.crmRemark;
+
+                if (remark == '') {
+                    showToast('请填写备注信息！');
+                    return false;
+                }
+
+                var params = {
+                    uid: com_id,
+                    crm_remark: remark
+                };
+
+                showLoading();
+                $.post('index.php?m=crm&c=crm_my_customer&a=remarkCom', params, function (res) {
+                    hideLoading();
+
+                    if (res.errcode == '9') {
+                        showToast(res.msg, 2, function () {
+                            _this.crmRemarkShow = false;
+                            _this.info.crm_remark = remark;
+                        });
+                    } else if (res.errcode == '8') {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            },
+
+            confirmFtime: function (item) {
+                this.ftimeShow = false;
+                this.ftime = item;
+                let year = item.getFullYear();
+                let month = item.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = item.getDate();
+                day = day < 10 ? '0' + day : day;
+                let hours = item.getHours();
+                hours = hours < 10 ? '0' + hours : hours;
+                let minutes = item.getMinutes();
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                this.ftimeStr = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+            },
+
+            confirmPtime: function (item) {
+                this.ptimeShow = false;
+                this.ptime = item;
+                let year = item.getFullYear();
+                let month = item.getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let day = item.getDate();
+                day = day < 10 ? '0' + day : day;
+                let hours = item.getHours();
+                hours = hours < 10 ? '0' + hours : hours;
+                let minutes = item.getMinutes();
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                this.ptimeStr = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+            },
+
+            onFollowWayConfirm: function (obj, index) {
+                this.followWayShow = false;
+                this.followWay = obj.value;
+            },
+            onCrmTypeConfirm: function (obj, index) {
+                this.crmTypeShow = false;
+                this.crmTypeChecked = obj.value;
+            },
+            onCrmStatusConfirm: function (obj, index) {
+                this.crmStatusShow = false;
+                this.crmStatusChecked = obj.value;
+            },
+
+            beforeRead(file) {
+                 return new Promise((resolve) => {
+                    // compressorjs 默认开启 checkOrientation 选项
+                    // 会将图片修正为正确方向
+                    // 图片压缩
+                    new Compressor(file, {
+                        quality: 0.6,
+                        success: resolve,
+                        error(err) {}
+                    });
+                });
+            },
+            afterRead(file) {
+                if (file.length > 1){
+                    var index = 0;
+                    file.forEach(item=>{
+                        let obj = {
+                            error: true,
+                            url: item.content,
+                            index: index
+                        };
+                        index++;
+                        this.followAdd.push(obj);
+                    });
+                }else{
+                    let obj = {
+                        error: true,
+                        url: file.content,
+                        index: 0
+                    };
+                    this.followAdd.push(obj);
+                }
+            },
+            crmConcernSub: function (key) {
+                let _this = this,
+                    info = _this.info,
+                    remark = _this.fRemark,
+                    type = _this.followWay,
+                    ftime = _this.ftimeStr,
+                    linkman = _this.flinkman,
+                    linktel = _this.flinktel,
+                    follow = _this.follow,
+                    ptime = _this.ptimeStr;
+
+                if (!type) {
+                    showToast('请选择跟进方式！');
+                    return false;
+                }
+
+                if (!ftime) {
+                    showToast('请填写跟进时间！');
+                    return false;
+                }
+
+                if (follow) {
+                    var now = Date.parse(new Date()) / 1000;
+                    if (ptime) {
+                        stime = Date.parse(new Date(ptime)) / 1000;
+                        if (stime < now) {
+                            showToast('任务时间需在当前时间之后，请重新填写');
+                            return false;
+                        }
+                    }
+                }
+
+                var taskid = typeof (info.followInfo) != 'undefined' ? info.followInfo.taskid : '';
+                let id = '';
+                if (key == 'up') {
+                    id = typeof (info.followInfo) != 'undefined' ? info.followInfo.id : '';
+                }
+
+                var params = {
+                    id: id,
+                    comid: '',
+                    uid: com_id,
+                    crm_type: _this.crmTypeChecked,
+                    crm_status: _this.crmStatusChecked,
+                    type: type,
+                    ftime: ftime,
+                    remark: remark,
+                    linkman: linkman,
+                    linktel: linktel,
+                    follow: follow,
+                    ptime: ptime,
+                    taskid: taskid,
+                    crmtid: '',
+                };
+                if (_this.callLogId) {
+                    params.call_log_id = _this.callLogId
+                }
+                if(_this.followAdd.length > 0){
+                    var uimage = [];
+                    _this.followAdd.forEach(item=>{
+
+                        uimage.push(item.url)
+                    });
+                    params.uimage = uimage;
+                }
+                if(_this.followList.length>0){
+                    _this.followList.forEach(item=>{
+                        params.remark +=   '<img src='+item.url+'/>';
+                    })
+                }
+                showLoading();
+                $.post('index.php?m=crm&c=crm_my_customer&a=addFollow', params, function (res) {
+                    hideLoading();
+                    if (res.errcode == '9') {
+                        showToast(res.msg, 2, function () {
+                            _this.crmConcernShow = false;
+                        });
+                    } else if (res.errcode == '8') {
+                        showToast(res.msg);
+                    }
+                }, 'json')
+            }
+        }
+    });
+</script>
+<style type="text/css">
+    .positePopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .positePopup .positeShen {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+
+    .enterPopup {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important
+    }
+
+    .enterPopup .enterren {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+
+    .positePopup .positeExtseo {
+        position: relative !important;
+        bottom: auto !important;
+        display: block !important;
+        height: auto !important;
+    }
+</style>
+</body>
+
+</html>

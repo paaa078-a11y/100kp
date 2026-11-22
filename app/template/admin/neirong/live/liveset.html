@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="yemanapp" class="moduleDome" style="padding-top:15px; height: calc(100% - 20px);" v-if="islook">
+    <div class="moduleTable">
+        <table class="tableVue">
+            <thead>
+            <tr align="left">
+                <th width="200">名称</th>
+                <th width="400">状态</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="TableTite">直播提醒时间</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入直播提醒时间" v-model="subtime" @input="inputIntNumber($event, 'subtime')">
+                            <template slot="append">分钟</template>
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span><i class="el-icon-warning"></i>直播开播前X分钟向预约用户发送微信通知，需结合计划任务处理</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">详情页外观</div>
+                </td>
+                <td>
+                    <div class="TableButn">
+                        <el-radio v-model="ext" label="1">浅色</el-radio>
+                        <el-radio v-model="ext" label="2">深色</el-radio>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">公告内容</div>
+                </td>
+                <td>
+                    <div class="TableButn">
+                        <el-input type="textarea" placeholder="请输入公告内容" v-model="notice"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Key</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入App Key" v-model="appkey"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <el-link type="info" icon="el-icon-warning" href="https://u.phpyun.com" target="_blank">前往申请直播服务秘钥</el-link>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Secret</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入App Secret" v-model="appsecret">
+
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">{{type}}</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="rest" disabled></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="setBasicButn" style="border: none;">
+        <el-button type="primary" size="medium" @click="save" :loading="saveLoading">提交</el-button>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#yemanapp',
+        data: function () {
+            return {
+                subtime: '',
+                ext: '',
+                notice: '',
+                appkey: '',
+                appsecret: '',
+                type: '服务秘钥有效期',
+                rest: '0',
+                islook: false,
+                saveLoading: false
+            }
+        },
+        components: {
+            // 'jibenset': httpVueLoader('./component/jibenset.vue'),
+        },
+        created: function () {
+            this.getinfo()
+        },
+        methods: {
+            inputIntNumber(val, form, key) {
+                this.$data[form] = val.replace(/[^0-9]/g,'');
+            },
+            getinfo(){
+                var that = this
+                httpPost('m=neirong&c=xjhlive_set&a=index', {}).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.subtime = response.data.data.sy_xjh_subtime
+                        that.ext = response.data.data.sy_xjhlive_ext
+                        that.notice = response.data.data.sy_xjh_notice
+                        that.appkey = response.data.data.sy_xjhlive_appkey
+                        that.appsecret = response.data.data.sy_xjhlive_appsecret
+                        if (response.data.data.num && response.data.data.num.flow) {
+                            that.type = '剩余流量（单位：G）'
+                            that.rest = response.data.data.num.flow
+                        } else if(response.data.data.num && response.data.data.num.num) {
+                            that.rest = response.data.data.num.num
+                        }
+                        that.islook = true
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            async save() {
+                var that = this
+                let params = {config: 1,}
+                params.sy_xjh_subtime = that.subtime
+                params.sy_xjh_notice = that.notice
+                params.sy_xjhlive_ext = that.ext
+                params.sy_xjhlive_appkey = that.appkey
+                params.sy_xjhlive_appsecret = that.appsecret
+                that.saveLoading = true;
+                httpPost('m=neirong&c=xjhlive_set&a=save', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        message.success(response.data.msg);
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                }).finally(function () {
+                    setTimeout(function () {
+                        that.saveLoading = false;
+                    }, 2000);
+                });
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

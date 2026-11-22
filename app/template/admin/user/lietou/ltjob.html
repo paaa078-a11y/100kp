@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="全部职位" name="first" :lazy="true">
+                    <ltzhiwei :status="status"></ltzhiwei>
+                </el-tab-pane>
+                <el-tab-pane label="悬赏职位" name="second" :lazy="true">
+                    <xszhiwei ></xszhiwei>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    status: '',
+                }
+            },
+            components: {
+                'ltzhiwei': httpVueLoader('./component/ltzhiwei.vue'),
+                'xszhiwei': httpVueLoader('./component/xszhiwei.vue'),
+            },
+            created: function () {
+                var that = this
+                let query = window.parent.homeapp.$route.query;
+                if (query.status) {
+                    that.status = query.status;
+                }
+                if (query.tabs) {
+                    that.activeName = query.tabs;
+                }
+            },
+            methods: {
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

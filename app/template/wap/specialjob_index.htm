@@ -1,0 +1,30 @@
+{yun:}include file="$wapstyle/header_cont.htm"{/yun}
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/special_job.css?v={yun:}$config.cachecode{/yun}">
+<div class="job_spc_box">
+<!--list-->
+{yun:}specialjob limit=10 item=row{/yun}
+<div class="job_spc_list">
+	<div class="job_spc_pic">
+		<a href="{yun:}$row.url{/yun}">
+			<img  src="{yun:}$row.sjlist_pic_n{/yun}">
+		</a>
+	</div>
+	<div class="job_spc_list_name">
+		<a href="{yun:}$row.url{/yun}">{yun:}$row.title{/yun}</a>
+	</div>
+	<div class="job_spc_list_p">
+		<a href="{yun:}$row.url{/yun}">{yun:}$row.sub_title{/yun}</a>
+	</div>
+	{yun:}if $row.job_num{/yun}
+	<div class="job_spc_list_com"> </div>
+	{yun:}/if{/yun}
+	<div class="job_spc_list_time">{yun:}$row.ctime|date_format:'%Y-%m-%d'{/yun}</div>
+</div>
+{yun:}specialjobelse{/yun}
+<div class="wap_member_no">抱歉，还没有职位专题的相关信息</div>
+{yun:}/specialjob{/yun}
+<!--list-->
+</div>
+{yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
+</body>
+</html>

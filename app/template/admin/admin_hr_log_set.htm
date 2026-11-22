@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<!--[if IE 6]>
+	<script src="./js/png.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script>
+		DD_belatedPNG.fix('.png,.admin_infoboxp_tj,');
+	</script>
+	<![endif]-->
+	<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script type="text/javascript" src="js/admin_public.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<title>后台管理</title>
+</head>
+
+<body class="body_ifm" style="background: #fff;">
+   	<div class="infoboxp">
+   		
+   		<div class="adminNewListAlls">
+            <div class="adminNewListSpan">
+                <div style="display: flex; flex-direction: column;">
+                    <span><em style="font-weight: bold;">温馨提示：</em>开关开启后才能展示, 您也可以自定义添加海报。</span>
+                    <span style="line-height: 12px;"><em style="font-weight: bold;">海报参数：</em>海报大小（1080 * 1920）；二维码区域：高度380</span>
+                </div>
+            </div>
+           
+        </div>
+
+		<div>
+			<form class="layui-form" action="index.php?m=admin_hr_log&c=set" target="supportiframe" method="post" autocomplete="off" encType="multipart/form-data">
+				<table class="table_form contentWrap" width="100%" style="background: #fff;">
+					<tr>
+						<th align="right">是否开启：</th>
+						<td>
+							<input type="checkbox" id="wopen" name="wopen" {yun:}if $config.sy_yearreport_isopen{/yun}checked{yun:}/if{/yun} lay-skin="switch" lay-text="开启|关闭"/>
+						</td>
+					</tr>
+					<tr >
+						<th width="right">企业二维码形式：</th>
+						<td>
+							<div class="layui-input-block">
+								<div class="layui-input-inline fl">
+									<input name="sy_yearreport_ewmtype" value="wap" title="默认" {yun:}if $config.sy_yearreport_ewmtype=="wap" {/yun} checked
+									 {yun:}/if{/yun} type="radio" />
+									<input name="sy_yearreport_ewmtype" value="weixin" title="场景码（公众号图文）" {yun:}if $config.sy_yearreport_ewmtype=="weixin" {/yun} checked
+									 {yun:}/if{/yun} type="radio" />
+
+									<input name="sy_yearreport_ewmtype" value="xcx" title="场景码（公众号小程序）" {yun:}if $config.sy_yearreport_ewmtype=="xcx" {/yun} checked
+									 {yun:}/if{/yun} type="radio" />
+									<input name="sy_yearreport_ewmtype" value="xcxQrcode" title="小程序码" {yun:}if $config.sy_yearreport_ewmtype=="xcxQrcode" {/yun} checked
+									 {yun:}/if{/yun} type="radio" />
+								</div>
+								
+							</div>	</td>
+					</tr>
+					<tr >
+						<th width="right"> </th><td>
+						<div style="font-size: 12px;color:#999; margin-top: -20px;">
+							<div class=" "><span class="admin_web_tip">默认：扫码打开WAP链接 场景码</span></div>
+							<div class=" "><span class="admin_web_tip">公众号图文 ：关注公众号自动回复图文 场景码</span></div>
+							<div class=" "><span class="admin_web_tip">公众号小程序：关注公众号自动推荐小程序（30天有效期，公众号必须关联小程序）</span>  </div>
+							<div class=" "><span class="admin_web_tip">小程序码：直接打开小程序</span></div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th align="right">海报背景图片：</th>
+						<td>
+							<div class="admin_uppicbox" style="width: 100px;height: 100px;">
+			                    <img id="imgicon" src="{yun:}$sy_yearreport_pic{/yun}" width="100" height="100" {yun:}if !$config.sy_yearreport_pic{/yun}class="none"{yun:}/if{/yun} />
+			                    
+			                    <span>
+			                        <button type="button" class="noupload adminupbtn" lay-data="{imgid: 'imgicon'}">重新上传</button>
+			                    </span>
+			                </div>
+			                <span class="admin_web_tip">说明：海报的尺寸为1080*1920</span>
+						</td>
+						
+					</tr>
+					<tr>
+						<th align="right">会员中心提示图片：</th>
+						<td>
+							<div class="admin_uppicbox" style="width: 100px;height: 100px;">
+			                    <img id="imgicon1" src="{yun:}$sy_yearreport_tip{/yun}" width="100" height="100" {yun:}if !$config.sy_yearreport_tip{/yun}class="none"{yun:}/if{/yun} />
+			                    
+			                    <span>
+			                        <button type="button" class="noupload1 adminupbtn" lay-data="{imgid: 'imgicon1'}">重新上传</button>
+			                    </span>
+			                </div>
+							    <span class="admin_web_tip">说明：提示图片的尺寸为900*1100</span>
+			            </td>
+						
+					</tr>
+					<tr>
+						<th align="center" colspan="4" style="text-align: left; border-right: 0px;padding-left: 160px;">
+							<input type="submit" name="submit" value='确认' class="admin_examine_bth" />
+							<input type="button" class="admin_examine_bth_qx closebutton" onclick="logClose()" value='取消' />
+						</th>
+					</tr>
+				</table>
+				<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+				
+			</form>
+		</div>
+	</div>
+	<script>
+		layui.use(['form','upload'], function() {
+			var $ = layui.$,
+				form = layui.form,
+				upload = layui.upload;
+			form.render();
+
+
+			var layaccept = 'images',
+				layexts = 'jpg|png|gif|bmp|jpeg';
+			
+			upload.render({
+				elem: '.noupload',
+				auto: false,
+				bindAction: '#test9' //触发上传的对象，暂未用到
+					,
+				accept: layaccept,
+				exts: layexts,
+				field: 'yearreport_pic',
+				choose: function(obj) {
+					if (this.imgid) {
+						//预读本地文件示例，不支持ie8/9
+						var imgid = null;
+						if (this.imgid) {
+							imgid = this.imgid;
+						}
+						
+						obj.preview(function(index, file, result) {
+							if (imgid && $('#' + imgid).length > 0) {
+								$('#' + imgid).removeClass('none');
+								$('#' + imgid).attr('src', result); //图片链接（base64）
+							}
+
+						});
+					}
+				}
+			});
+			upload.render({
+				elem: '.noupload1',
+				auto: false,
+				bindAction: '#test9' //触发上传的对象，暂未用到
+					,
+				accept: layaccept,
+				exts: layexts,
+				field: 'yearreport_tip',
+				choose: function(obj) {
+					if (this.imgid) {
+						//预读本地文件示例，不支持ie8/9
+						var imgid = null;
+						if (this.imgid) {
+							imgid = this.imgid;
+						}
+						
+						obj.preview(function(index, file, result) {
+							if (imgid && $('#' + imgid).length > 0) {
+								$('#' + imgid).removeClass('none');
+								$('#' + imgid).attr('src', result); //图片链接（base64）
+							}
+
+						});
+					}
+				}
+			});
+			
+		});
+		
+		function logClose(){
+			parent.iframCloe();
+		}
+	</script>
+
+</body>
+</html>

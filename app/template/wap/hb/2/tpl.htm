@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	{yun:}include file="$wapstyle/hb/hb_header.htm"{/yun}
+
+	<body>
+		<div class="hb_jobbox2 noSHow" id="backurl">
+			{yun:}if $smarty.session.auid{/yun}
+			<img id="bgt" src="{yun:}$config.sy_weburl{/yun}/wap/?c=company&a=getHbBase&hb={yun:}$smarty.get.hb{/yun}" width="640" height="1088" />
+			{yun:}else{/yun}
+			<img id="bgt" src="{yun:}url m=wap c=company a=getHbBase hb=$smarty.get.hb{/yun}" width="640" height="1088" />
+			{yun:}/if{/yun}
+			<div class="hb_jobbox2cont" id="hb_joblist">
+				{yun:}foreach item=v from=$jobs key=key{/yun}
+				{yun:}if $key < 5{/yun} 
+				<div class="hb_jobbox2list">
+					<div class="hb_jobbox2list_jobname"> {yun:}$v.name{/yun}</div>
+
+					<div class="hb_jobbox2list_p">薪资待遇：{yun:}$v.job_salary{/yun}</div>
+					<div class="hb_jobbox2list_p">岗位要求：年龄{yun:}if $comclass_name[$v.age]{/yun}{yun:}$comclass_name[$v.age]{/yun}{yun:}else{/yun}不限{yun:}/if{/yun}，
+						{yun:}if $comclass_name[$v.edu]{/yun}{yun:}$comclass_name[$v.edu]{/yun}{yun:}else{/yun}不限{yun:}/if{/yun}学历，
+						{yun:}if $comclass_name[$v.exp]{/yun}{yun:}$comclass_name[$v.exp]{/yun}{yun:}else{/yun}不限{yun:}/if{/yun}经验
+					</div>
+				</div>
+				{yun:}/if{/yun}
+				{yun:}/foreach{/yun}
+			</div>
+
+			<div class="hb_jobbox2comname">
+				{yun:}$row.name{/yun}
+				<div class="hb_jobbox2comname_p">长按识别二维码，详细了解招聘信息 ></div>
+			</div>
+			<div class="hb2_webname">{yun:}$config.sy_webname{/yun} ({yun:}$config.sy_weburl{/yun})</div>
+
+			<div class="hb2_ewm">
+				{yun:}if $smarty.session.auid{/yun}
+				<img id="comQrcode" src="{yun:}url m=ajax c=pubqrcode toc=company toa=show toid=$smarty.get.id{/yun}" width="150" height="150" />
+				{yun:}else{/yun}
+				<img id="comQrcode" src="{yun:}url m=wap c=ajax a=pubqrcode toc=company toa=show toid=$smarty.get.id{/yun}" width="150" height="150" />
+				{yun:}/if{/yun}
+			</div>
+		</div>
+
+		<div class="hb_generate noSHow" id="hb_a">
+			<a href='javascript:void(0);' onclick="getHbJob({yun:}$smarty.get.id{/yun});" class='hb_generate_bth'>选择职位生成海报</a>
+		</div>
+		<div id="hbtip" class="hb_show_tip" style="display: none"></div>
+		<!-- 职位弹出样式 -->
+
+		<div class="hb_jobchosebox" style='display:none;' id='jobList'>
+			<div class="hb_jobchosebox_h1">
+				请选择需要在海报上展示的职位<span class="hb_jobchosebox_close" onclick='closeJob();'></span>
+			</div>
+
+			<div class="hb_jobchoselist_b">
+				{yun:}foreach item=v from=$jobs key=key{/yun}
+				<div class="hb_jobchoselist">
+					<span class="hb_jobchose_input" id='jobid_{yun:}$v.id{/yun}' onclick="ck('{yun:}$v.id{/yun}');">
+						<input type="checkbox" id='job{yun:}$v.id{/yun}' name='jobname[]' value='{yun:}$v.id{/yun}' style='display:none;' />
+					</span>
+					{yun:}$v.name{/yun}
+				</div>
+				{yun:}/foreach{/yun}
+			</div>
+
+			<div class="hb_jobchosebox_bth">
+				<a href='javascript:void(0);' onclick="checkJob('jobname[]');" class="hb_jobchosebox_bth_a"> 生成海报</a>
+			</div>
+		</div>
+
+		<div style="display:none; background:#000; opacity:0.6;width:100%;height:100%; position:fixed;left:0px;top:0px; z-index:1000000" id='bg'></div>
+
+		{yun:}include file="$wapstyle/hb/hb_foot.htm"{/yun}
+	</body>
+</html>

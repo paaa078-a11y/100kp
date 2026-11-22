@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script type="text/javascript" src="js/admin_public.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script type="text/javascript" src="js/crm.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script type="text/javascript" src="js/show_pub.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <title>后台管理 - 权益提醒</title>
+</head>
+
+<style>
+    input{
+        font-size: 13px !important;
+    }
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tabs_info">
+            <ul>
+                <li class="curr"><a href="index.php?m=crm_my_customer&c=notice">权益提醒</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+
+        <div class="layuiFormKellsd">
+            <div class="ormKellsdAood">
+                <div style="overflow: hidden;float: right;padding: 0 20px;font-size: 12px;height: 60px;display: flex;align-items: center;">
+                    <span>总数：<a href="index.php?m=crm_my_customer&c=notice" class="ajaxAll">0</a></span>
+                    <span style="padding: 0 10px;">未跟进：<a href="index.php?m=crm_my_customer&c=notice&status=1" class="ajaxStatus">0</a></span>
+                    <span>搜索结果：{yun:}$total{/yun}</span>
+                </div>
+            </div>
+        </div>
+        <form action="index.php" name="myform" method="get" class='layui-form layui-form-pane'>
+            <div class="layuiFormPanesd">
+                <input type="hidden" name="m" value="crm_my_customer"/>
+                <input type="hidden" name="c" value="notice"/>
+                <div class="layuiFormAllser">
+                    <div class="layuiFormOmers">
+                        <div class="dataTimeList">
+                            <div class="layui-inline t_w200">
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" autocomplete="off" name="send_time" id="send_time" class="layui-input t_w200" placeholder="请选择发送日期范围" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="crm_search_box layui-inline" style="margin-left: 10px;">
+
+                                <div class="crm_search_box_search formselect" did="crm_type_n">
+                                    <span id='crm_type_name'>
+                                        {yun:}if $smarty.get.crm_type==1 || $smarty.get.crm_type==''{/yun}公司名{yun:}else if $smarty.get.crm_type == 2{/yun}UID{yun:}/if{/yun}
+                                    </span>
+                                    <div class="crm_search_list" style="display:none;" id="crm_type_n">
+                                        <a href="javascript:void(0);" onclick="keySelect('1', 'crm_type', '公司名');">公司名</a>
+                                        <a href="javascript:void(0);" onclick="keySelect('2', 'crm_type', 'UID');">UID</a>
+                                    </div>
+                                </div>
+                                <div class="crm_search_text" style="width:250px;"><input name="keyword" type="text" value=""></div>
+                                <input type="hidden" id="crm_type" name="crm_type" value="{yun:}if $smarty.get.crm_type{/yun}{yun:}$smarty.get.crm_type{/yun}{yun:}else{/yun}1{yun:}/if{/yun}">
+                                <input type="submit" value="搜索" class="crm_search_bth">
+                                <button type="reset" class="crm_search_bth crm_search_bth_cz" onclick="location.href='index.php?m=crm_my_customer&c=notice'">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tty_table-bom">
+        <div class="table-list" style="color:#898989; margin-top:10px;">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" name="myform" method="get" id='myform' target="supportiframe">
+
+                    <input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+                    <input name="m" value="crm_my_customer" type="hidden"/>
+                    <input name="c" value="delNotice" type="hidden"/>
+
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th>
+                                <label for="chkall">
+                                    <input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/>
+                                </label>
+                            </th>
+                            <th>
+                                {yun:}if $smarty.get.t=="uid" && $smarty.get.order=="asc"{/yun}
+                                <a href="{yun:}searchurl m=crm_my_customer c=notice t=uid order=desc untype='order,t'{/yun}">客户ID</a>
+                                {yun:}else{/yun}
+                                <a href="{yun:}searchurl m=crm_my_customer c=notice t=uid order=asc untype='order,t'{/yun}">客户ID</a>
+                                {yun:}/if{/yun}
+                            </th>
+
+                            <th>客户名称</th>
+                            <th>消息类型</th>
+                            <th>
+                                {yun:}if $smarty.get.t=="send_time" && $smarty.get.order=="asc"{/yun}
+                                <a href="{yun:}searchurl m=crm_my_customer c=notice t=send_time order=desc untype='order,t'{/yun}">发送时间</a>
+                                {yun:}else{/yun}
+                                <a href="{yun:}searchurl m=crm_my_customer c=notice t=send_time order=asc untype='order,t'{/yun}">发送时间</a>
+                                {yun:}/if{/yun}
+                            </th>
+
+                            <th>跟进状态</th>
+                            <th>上次跟进</th>
+
+                            <th align="center" width="180">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="tableBackColorTwo">
+
+                        {yun:}foreach item=v key=key from=$rows{/yun}
+
+                        <tr align="left" {yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.uid{/yun}">
+
+                            <td>
+                                <input type="checkbox" value="{yun:}$v.id{/yun}" class="check_all" name='del[]' onclick='unselectall()' rel="del_chk" style="margin-left:5px;"/>
+                            </td>
+
+                            <td><span>{yun:}$v.uid{/yun}</span></td>
+
+                            <td>
+                                <div>{yun:}$v.username{/yun}</div>
+                                <div>
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer&c=com&id={yun:}$v.uid{/yun}', '80%');">{yun:}$v.com_name{/yun}</a>
+                                </div>
+                            </td>
+                            <td>{yun:}$v.type_n{/yun}</td>
+                            <td>{yun:}$v.send_time_n{/yun}</td>
+
+                            <td>
+                                {yun:}if $v.status=='1'{/yun}
+                                <span> <img src="images/state1.png" alt=""> 未跟进</span>
+                                {yun:}else{/yun}
+                                <span> <img src="images/state2.png" alt=""> 已跟进</span>
+                                {yun:}/if{/yun}
+                            </td>
+                            <td>
+                                <div data-content="{yun:}$v.c_desc{/yun}" data-type="{yun:}$v.c_type{/yun}" data-time="{yun:}$v.follow_time{/yun}" data-name="{yun:}$v.c_name{/yun}" class="mt_c_desc">{yun:}$v.follow_time{/yun}</div>
+                            </td>
+                            <td align="center">
+                                <div class="operationSeries">
+                                    <a href='javascript:void(0);' class="CrmnewFollow" data-uid="{yun:}$v.uid{/yun}" data-name="{yun:}$v.com_name{/yun}" data-lasturl="{yun:}$lasturl{/yun}"
+                                       data-crm_status="{yun:}$v.crm_status{/yun}" data-crm_type="{yun:}$v.crm_type{/yun}">写跟进</a>
+                                    <a href="javascript:;" onclick="iframfunct('index.php?m=crm_my_customer&c=com&id={yun:}$v.uid{/yun}', '80%');" >管理</a>
+                                    <a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=crm_my_customer&c=delNotice&del={yun:}$v.id{/yun}');">删除</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}foreachelse{/yun}
+                        <tr align="left">
+                            <td class="ud" colspan="8">
+                                <div class="admin_notip">暂无提醒记录~</div>
+                            </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td align="left">
+                                <label for="chkall2"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' class="checkbox_stars"/></label>
+                            </td>
+                            <td colspan="7">
+                                <label for="chkAll2">全选</label>
+                                <input class="admin_button" type="button" name="delsub" value="删除所选" onClick="return really('del[]')" />
+                            </td>
+                        </tr>
+
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    var needLoad = false;
+    layui.use(['layer', 'form', 'laydate'], function () {
+        var form = layui.form,
+            laydate = layui.laydate,
+            $ = layui.$;
+
+        laydate.render({
+            elem: '#send_time'
+            , max: 0
+            , range: '~'
+            , format: 'yyyy-MM-dd'
+        });
+    });
+
+    $(document).ready(function () {
+        $.get("index.php?m=crm_my_customer&c=getNoticeNum", function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.ajaxAll) {
+                $('.ajaxAll').html(datas.ajaxAll);
+            }
+            if (datas.ajaxStatus) {
+                $('.ajaxStatus').html(datas.ajaxStatus);
+            }
+        });
+
+        $(".mt_c_desc").hover(function(){
+            var msg = $(this).attr('data-content'),
+                type= $(this).attr('data-type'),
+                time= $(this).attr('data-time'),
+                name= $(this).attr('data-name');
+
+            if (msg != '') {
+                var html = "<div style='overflow: hidden;'> " +
+                    "<div style='font-size:16px;font-weight: bold;color:#333;line-height:40px;background:#f9f9f9;padding-left:10px;'>最近跟进记录</div>" +
+                    "<div>" +
+                    "<div style='overflow: hidden;padding-left:10px;line-height:32px;font-size:14px;display: flex;align-items: center; margin:5px 0;'>" +
+                    "<p style='color:#666;'>"+name+"</p>" +
+                    "<span style='color:#666; background: rgba(120, 186, 50, 0.2); color:#78BA32;border-radius: 5px;display: block;margin-left:15px;padding:0 10px;'> "+type+" </span>" +
+                    "</div>  " +
+                    "<div style='overflow: hidden;color:#666;padding-left:10px;line-height:32px;font-size:14px;'>跟进时间："+time+"</div>" +
+                    "<div style='overflow: hidden;color:#666;padding-left:10px;line-height:32px;font-size:14px;'>跟进内容："+msg+"</div>";
+                html += "</div> " + "</div>";
+
+                layer.tips(html, this, {
+                    guide: 1,
+                    area: ['360px', 'auto'],
+                    time: 5000,
+                    tips: [3, '#fff']
+                });
+
+                $(".xubox_layer").addClass("xubox_tips_border");
+            }
+        },function(){
+
+            layer.closeAll('tips');
+        });
+    });
+</script>
+{yun:}include file="$adminstyle/crm_public.htm"{/yun}
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

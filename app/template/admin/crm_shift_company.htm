@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>后台管理 - CRM - 管理员 - 业务员管理 - 转移客户</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <style>
+        .shiTopAllTips span{overflow: hidden;display: block;font-size: 13px;color: #61687c;padding-bottom: 5px;}
+    </style>
+</head>
+
+<body class="body_ifm">
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="admin_new_search_box">
+            <form action="index.php" name="myform" method="get">
+                <div>
+                    <input name="m" value="crm_salesman_list" type="hidden"/>
+                    <input name="c" value="shift_company" type="hidden"/>
+                    <input name="uid" value="{yun:}$smarty.get.uid{/yun}" type="hidden"/>
+
+                    <div class="admin_Filter_text formselect" did='dkeytype'>
+                        <input type="button" {yun:}if $get_type.keytype==''||$get_type.keytype=='1'{/yun} value="企业名称"  {yun:}elseif $get_type.keytype=='2'{/yun} value="企业ID"{yun:}/if{/yun} class="admin_Filter_but" id="bkeytype">
+                        <input type="hidden" name="type" id="keytype" {yun:}if $get_type.keytype==''||$get_type.keytype=='1'{/yun} value="1"  {yun:}elseif $get_type.keytype=='2'{/yun} value="2" {yun:}/if{/yun}/>
+                        <div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+                            <ul>
+                                <li><a href="javascript:void(0)" onClick="formselect('1','keytype','企业名称')">企业名称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('2','keytype','企业ID')">企业ID</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword'class="admin_new_text">
+                    <input type="submit" value="查询" name='search'  class="admin_new_bth" style="margin-left: 10px;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="tty-tishi_top">
+        <div style="margin-top: 10px;overflow: hidden;padding: 20px 0 20px 20px;">
+            <div class="shiTopAllTips">
+                <span><em style="font-weight: bold">转移操作：</em> 将业务员 “<em style="font-weight: bold">{yun:}$crm_name{/yun}</em>” 的客户转移到其他业务员名下</span>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="tty-tishi_top" style="margin-top: 10px;">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" target="supportiframe" name="myform" method="get" id='myform'>
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top">
+                            <th style="width: 5%;" align="center"><label for="chkall"><input type="checkbox" id='chkAll' onclick='CheckAll(this.form)'/></label></th>
+                            <th style="width: 10%;" align="left">
+                                {yun:}if $smarty.get.t=="uid" && $smarty.get.order=="asc"{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&uid={yun:}$smarty.get.uid{/yun}&order=desc&t=uid">企业ID <img src="images/sanj.jpg"/></a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&uid={yun:}$smarty.get.uid{/yun}&order=asc&t=uid">企业ID <img src="images/sanj2.jpg"/></a>
+                                {yun:}/if{/yun}
+                            </th>
+                            <th align="left" width="200">企业名称</th>
+                            <th align="left" width="180">
+                                {yun:}if $smarty.get.t=="login_date" && $smarty.get.order=="asc"{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&login_date={yun:}$smarty.get.login_date{/yun}&order=desc&t=login_date">登录时间 <img src="images/sanj.jpg"/></a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&login_date={yun:}$smarty.get.login_date{/yun}&order=asc&t=login_date">登录时间 <img src="images/sanj2.jpg"/></a>
+                                {yun:}/if{/yun}
+                            </th>
+                            <th align="left">
+                                {yun:}if $smarty.get.t=="f_time" && $smarty.get.order=="asc"{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&f_time={yun:}$smarty.get.f_time{/yun}&order=desc&t=f_time">最近跟进 <img src="images/sanj.jpg"/></a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_salesman_list&c=assign_company&f_time={yun:}$smarty.get.f_time{/yun}&order=asc&t=f_time">最近跟进 <img src="images/sanj2.jpg"/></a>
+                                {yun:}/if{/yun}
+                            </th>
+                            <th align="center" width="80">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {yun:}foreach item=v key=key from=$company{/yun}
+                        <tr {yun:}if ($key+1)%2=='0'{/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.uid{/yun}">
+                            <td style="width: 5%;" align="center">
+                                <input type="checkbox" value="{yun:}$v.uid{/yun}" class="check_all" name='comids[]' onclick='unselectall()' rel="del_chk" email="{yun:}$v.email{/yun}" moblie="{yun:}$v.telphone{/yun}"/>
+                            </td>
+                            <td style="width: 10%;" align="left">{yun:}$v.uid{/yun}</td>
+                            <td>{yun:}if $v.name{/yun}{yun:}$v.name{/yun}{yun:}else{/yun}<span style="color: #ff2b00;">信息未完善</span>{yun:}/if{/yun}</td>
+                            <td>{yun:}if $v.login_date{/yun}{yun:}$v.login_date|date_format:"%Y-%m-%d %H:%M"{/yun}{yun:}else{/yun} -- {yun:}/if{/yun}</td>
+                            <td>{yun:}if $v.f_time{/yun}{yun:}$v.f_time|date_format:"%Y-%m-%d %H:%M"{/yun}{yun:}else{/yun} -- {yun:}/if{/yun}</td>
+                            <td>
+                                <div class="operationSeries">
+                                    <a href="javascript:void(0);"  pid="{yun:}$v.uid{/yun}" onclick="shift('{yun:}$v.uid{/yun}');">转移</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {yun:}/foreach{/yun}
+                        <tr>
+                            <td style="width: 5%;" align="center">
+                                <input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)'/>
+                            </td>
+                            <td colspan="4">
+                                <label for="chkAll2">全选</label>
+                                <input class="admin_button" type="button" name="delsub" value="批量转移" onClick="shiftMulti();" style="margin-left: 5px;"/>
+                            </td>
+                        </tr>
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="2"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="2"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="4" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="zhuanjiaoPopup" style="display: none;">
+        <div class="zhuanjiaoConts layui-form">
+            <div class="kehudetConTops">
+                <span>转移客户</span>
+                <img src="images/closeimg.png" class="zhuanjclose" onClick="$('.zhuanjiaoPopup').hide();">
+            </div>
+            <div class="zhuanjiaoTips">
+                <img src="images/lingdan.png" alt="">
+                <span>重要提示：客户被转交后，原客户经理将不能拥有客户操作权限</span>
+            </div>
+            <div class="zhuanjiaoInput">
+                <div class="zhuanjiaoInpTite">
+                    <span>客户经理：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="new_uid" lay-filter="new_uid" id="new_uid">
+                            <option value="">请选择接收转移的客户经理</option>
+                            {yun:}foreach from=$new_uid item=v{/yun}
+                            <option value="{yun:}$v.uid{/yun}">{yun:}$v.name{/yun}</option>
+                            {yun:}/foreach{/yun}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="zhuanjiaoInput zhuanjiaFlex">
+                <div class="zhuanjiaoInpTite">
+                    <span>备注信息：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="deliverRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <input type="hidden" id="comid" value="" />
+                <span onclick="shiftCom();">确认</span>
+                <span class="butnLink" onClick="$('.zhuanjiaoPopup').hide();">取消</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.$;
+
+        form.on('checkbox(chkall)', function (data) {
+            $(".check_all").prop("checked", this.checked);
+            form.render();
+        });
+    });
+
+    function shift(comid) {
+        deliverBoxShow(comid);
+    }
+    function shiftMulti() {
+        var chk_value = [];
+        $('.check_all:checked').each(function () {
+            chk_value.push($(this).val());
+        });
+        if (chk_value.length == 0) {
+            layer.msg('还未选择需要转移的客户', 2, 8);
+            return false;
+        }
+        var comid = chk_value.join(',');
+        shift(comid);
+    }
+
+    function deliverBoxShow(comid) {
+        $('#comid').val(comid);
+        $('.zhuanjiaoPopup').show();
+    }
+
+    var salesmanId = '{yun:}$smarty.get.uid{/yun}';
+    function shiftCom() {
+
+        var comid  = $("#comid").val();
+        var new_uid  = $("#new_uid").val();
+        var remark  = $("#deliverRemark").val();
+        var pytoken = $("#pytoken").val();
+        if (new_uid == '' || new_uid == undefined) {
+            layer.msg('请选择接收转移的客户经理', 2, 8);
+            return false;
+        }
+        loadlayer();
+        $.post('index.php?m=crm_salesman_list&c=ajax_shift', {
+            uid: salesmanId,
+            comid: comid,
+            new_uid: new_uid,
+            remark: remark,
+            pytoken: pytoken
+        }, function (data) {
+            parent.layer.closeAll('loading');
+            if (data == 1) {
+                layer.msg('转移成功', 2, 9, function () {
+                    parent.layer.closeAll();
+                    window.location = window.location;
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>

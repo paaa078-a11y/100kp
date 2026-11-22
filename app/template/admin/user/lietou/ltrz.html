@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="猎头认证审核" name="first" :lazy="true">
+                    <ltrzshenhe :status="status.first"></ltrzshenhe>
+                </el-tab-pane>
+                <el-tab-pane label="图片审核" name="second" :lazy="true">
+                    <ltimage :status="status.second"></ltimage>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'first',
+                    status: {
+                        first: '',
+                        second: '',
+                    },
+                }
+            },
+            components: {
+                'ltrzshenhe': httpVueLoader('./component/ltrzshenhe.vue'),
+                'ltimage': httpVueLoader('./component/ltimage.vue'),
+            },
+            created: function () {
+                var that = this
+                let query = window.parent.homeapp.$route.query;
+                if (query.tabs) {
+                    that.activeName = query.tabs;
+                }
+                if (query.status) {
+                    that.status[that.activeName] = query.status;
+                }
+            },
+            methods: {
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

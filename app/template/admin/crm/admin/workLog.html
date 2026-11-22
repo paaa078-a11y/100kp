@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="allWorkLogApp">
+    <work_log v-bind:log_tab="logTab"></work_log>
+</div>
+<script>
+    const allWorkLogApp = new Vue({
+        el: '#allWorkLogApp',
+        data: function () {
+            return {
+                activeName: 'first',
+                logTab: 0
+            }
+        },
+        components: {
+            'work_log': httpVueLoader('../component/workLog.vue'),
+        }
+    })
+</script>
+</body>
+</html>

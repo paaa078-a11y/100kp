@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/echarts.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<title>后台管理</title>
+</head>
+<style>
+	.admin_tj_sjd{
+		border-radius: 4px;
+    border: 1px solid #ddd;
+    height: 30px;
+    line-height: 20px;
+    padding-left: 5px;
+    margin-right: 10px;
+    color: #666;
+	}
+	.admin_tj_newlist{
+		background: #fff;
+    	height: 60px;
+    	display: flex;
+    	padding: 0 15px;
+    	margin-left: 0px;
+    	align-items: center;
+	}
+	.admin_tj_newlist a{
+		text-align: center;
+    	border-radius: 4px;
+    	display: inline-block;
+    	width: 80px;
+    	margin-right: 15px;
+    	color: #666;
+    	border: 1px solid #ccc;
+    	height: 30px;
+    	line-height: 30px;
+	}
+	.admin_tj_newlist .admin_tj_cur{
+		border: 1px solid #2778f8;
+    	color: #2778F8;
+    	font-weight: bold;
+	}
+</style>
+<body class="body_ifm">
+<div class="infoboxp">
+	<div class="tty-tishi_top">
+	<div class="tabs_info">
+		<ul>
+			<li class="curr" data-id="zhtj"><a href="javascript:void(0)">综合展示</a></li>
+			<li class="" data-id="fltj"><a href="javascript:void(0)">分类展示</a></li>
+		</ul>
+	</div>
+		</div>
+	<div id="zhtj" class="tjdiv" >
+		<form action="index.php" name="myform" method="get" onSubmit="return cktimesave()" >
+			<div class="admin_tj_newlist">
+				<!-- <span class="admin_tj_newname">统计时间：</span> -->
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=-1&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">昨天</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=1&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">今天</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=7&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a admin_tj_cur">一周内</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=30&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">一月内</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=90&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">三月内</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=180&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">半年</a>
+				<a href="javascript:;" onclick="tongjiChange(this, 'index.php?m=admin_tongji&c=chart&days=360&did={yun:}$smarty.get.did{/yun}')" class="admin_tj_a">一年</a>
+				<input name="m" value="admin_tongji" type="hidden"/>
+				{yun:}if $smarty.get.c{/yun}
+				<input name="c" value="{yun:}$smarty.get.c{/yun}" type="hidden"/>
+				{yun:}/if{/yun}
+				{yun:}if $smarty.get.did{/yun}
+				<input name="did" value="{yun:}$smarty.get.did{/yun}" type="hidden"/>
+				{yun:}/if{/yun}
+				<input class="admin_tj_sjd" type="text" id="date" name="date" readonly value="{yun:}$smarty.get.date{/yun}" placeholder="选择时间段"/>
+
+				<!-- <input  class="admin_tj_sjd1d"  type="submit" name="" value="查询"/> -->
+				<input type="submit" value="查询" name='search' class="admin_new_bth">
+			</div>
+		</form>
+
+		<div>
+			<iframe name="right" id="tbrightMain" src="index.php?m=admin_tongji&c=chart&days=7" frameborder="false" scrolling="no" style="border:none;" width="100%" height="1700px" allowtransparency="true"></iframe>
+		</div>
+	</div>
+
+<div class="tty_table-bom tjdiv" id="fltj" style="display:none; margin-top: 0px;border-radius:0px 0 6px 6px;;">
+<table class="admin_tj_table">
+<tr>
+<td><a href="index.php?m=admin_tongji&c=reg&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg"><i class="admin_tj_icon admin_tj_icon_zc"></i></div><div class="admin_tj_p">会员注册统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=login&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_e2"><i class="admin_tj_icon admin_tj_icon_zc22"></i></div><div class="admin_tj_p">会员登陆统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=lookjob&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_b"><i class="admin_tj_icon admin_tj_icon_l"></i></div><div class="admin_tj_p">职位浏览统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=lookresume&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_c"><i class="admin_tj_icon admin_tj_icon_jianli"></i></div><div class="admin_tj_p">简历浏览统计</div></div></a></td>
+
+</tr>
+<tr>
+<td><a href="index.php?m=admin_tongji&c=downresume&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_c"><i class="admin_tj_icon admin_tj_icon_xz"></i></div><div class="admin_tj_p">简历下载统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=useridjob&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_d"><i class="admin_tj_icon admin_tj_icon_td"></i></div><div class="admin_tj_p">简历投递统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=order&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_e"><i class="admin_tj_icon admin_tj_icon_cz"></i></div><div class="admin_tj_p">财务统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=ad&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_a"><i class="admin_tj_icon admin_tj_icon_xf"></i></div><div class="admin_tj_p">广告统计</div></div></a></td>
+
+</tr>
+
+<tr>
+
+
+<td><a href="index.php?m=admin_tongji&c=company&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_b"><i class="admin_tj_icon admin_tj_icon_bl"></i></div><div class="admin_tj_p">企业统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=job&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg"><i class="admin_tj_icon admin_tj_icon_sj"></i></div><div class="admin_tj_p">职位数据统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=resume&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_c"><i class="admin_tj_icon admin_tj_icon_sjtj"></i></div><div class="admin_tj_p">简历数据统计</div></div></a></td>
+
+<td><a href="index.php?m=admin_tongji&c=useridmsg&days=7" class="admin_tj_list_box"><div class="admin_tj_list"><div class="admin_tj_icon_bg admin_tj_icon_bg_d"><i class="admin_tj_icon admin_tj_icon_ms"></i></div><div class="admin_tj_p">邀请面试统计</div></div></a></td>
+
+</tr>
+</table>
+
+
+
+</div>
+
+<script type="text/javascript">
+	layui.use(['laydate'], function(){
+		var laydate = layui.laydate
+			,$ = layui.$;
+
+		laydate.render({
+			elem: '#date',range:'~'
+		});
+		$('.tabs_info li').on('click', function(){
+			var fl = $(this).attr('data-id');
+			if(!$(this).hasClass('curr')){
+				$('.tjdiv').hide();
+				$('#' + fl).show();
+				$('.tabs_info li').removeClass('curr');
+				$(this).addClass('curr');
+			}
+		})
+	});
+	function tongjiChange(_this, url){
+		$(".admin_tj_a").removeClass('admin_tj_cur');
+		$(_this).addClass('admin_tj_cur');
+		$("#tbrightMain").attr("src", url);
+	}
+
+	function cktimesave() {
+		var date = $("#date").val();
+		if(!date || date == '') {
+			layer.msg("请选择时间段！", 2, 8);
+			return false;
+		}
+
+		$(".admin_tj_a").removeClass('admin_tj_cur');
+		$("#tbrightMain").attr("src", "index.php?m=admin_tongji&c=chart&date=" + date);
+		return false;
+	}
+</script>
+
+
+</body>
+</html>

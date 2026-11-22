@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>后台管理 - CRM - 客勤 - 面试邀请</title>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+</head>
+<style>
+    .admin_table_border tr:nth-child(2n) {background-color: #f8f9fd}
+    .kq_bz {color: #ff6600;}
+</style>
+<body class="body_ifm">
+<div id="label_div" style="display:none;">
+    <div style="margin-top: 10px;">
+        <form class="layui-form" action="index.php?m=crm_chat&c=setStatus" target="supportiframe" method="post" id="formlabel">
+            <table cellspacing='1' cellpadding='1' class="admin_examine_table" align="center">
+                <tr>
+                    <th>个人姓名：</th>
+                    <td align="left">
+                        <div id="ms_name" style="font-weight:bold;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>面试结果：</th>
+                    <td align="left">
+                        <div class="layui-input-block t_w250">
+                            <select name="status" lay-filter="" id="status">
+                                <option value="">请选择结果</option>
+                                <option value="1">已入职</option>
+                                <option value="2">未面试</option>
+                                <option value="3">面试失败</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="t_fr">面试说明：</th>
+                    <td align="left">
+                        <textarea id="ms_content" name="content" class="admin_explain_textarea" style="width:238px;height:100px;"></textarea>
+                    </td>
+                </tr>
+                <tr height="50px">
+                    <td colspan='2' align="center">
+                        <input type="submit" onclick="loadlayer();" value='确认' class="admin_examine_bth">
+                        <input type="button" onClick="layer.closeAll();" class="admin_examine_bth_qx" value='取消'>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+            <input name="id" id="ms_id" value="0" type="hidden">
+        </form>
+    </div>
+</div>
+
+<div class="infoboxp">
+    <div class="tty-tishi_top">
+        <div class="tabs_info">
+            <ul>
+                <li><a href="index.php?m=crm_chat">拥有简历</a></li>
+                <li><a href="index.php?m=crm_chat&c=noresume">没有简历</a></li>
+                <li><a href="index.php?m=crm_chat&c=phoneAuthList">手机号授权</a></li>
+                <li class='curr'><a href="index.php?m=crm_chat&c=inviteList">面试回访</a></li>
+                <li><a href="index.php?m=crm_chat&c=follow">跟进记录</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="admin_new_search_box">
+
+            <form id="resumeFormSearch" action="index.php" name="myform" method="get">
+                <div>
+                    <input name="m" value="crm_chat" type="hidden"/>
+                    <input name="c" value="inviteList" type="hidden"/>
+
+                    <div class="admin_Filter_text formselect" did='dkeytype'>
+                        <input type="button" {yun:}if $smarty.get.keytype=='' || $smarty.get.keytype=='1' {/yun} value="个人姓名" {yun:}elseif $smarty.get.keytype=='2' {/yun} value="企业名称" {yun:}elseif $smarty.get.keytype=='3' {/yun} value="职位名称" {yun:}/if{/yun} class="admin_Filter_but" id="bkeytype" />
+                        <input type="hidden" name="keytype" id="keytype" {yun:}if $smarty.get.keytype==''{/yun} value="1" {yun:}else{/yun} value="{yun:}$smarty.get.keytype{/yun}" {yun:}/if{/yun}/>
+                        <div class="admin_Filter_text_box" style="display:none" id="dkeytype">
+                            <ul>
+                                <li><a href="javascript:void(0)" onClick="formselect('1','keytype','个人姓名')">个人姓名</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('2','keytype','企业名称')">企业名称</a></li>
+                                <li><a href="javascript:void(0)" onClick="formselect('3','keytype','职位名称')">职位名称</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="text" value="" placeholder="请输入你要搜索的关键字" name='keyword' class="admin_new_text" />
+                    <input type="submit" value="搜索" class="admin_new_bth" />
+                    <a href="javascript:;" onclick="$('.admin_screenlist_box').toggle();" class="admin_new_search_gj">筛选</a>
+                </div>
+
+                <div class="adminNewEarch">
+                    <div class="admin_statistics">
+                        <em class="admin_statistics_s">总数：<a href="index.php?m=crm_chat&c=inviteList" class="ajaxNum">0</a></em>
+                        <em class="admin_statistics_s">未标记：<a href="index.php?m=crm_chat&c=inviteList&status=0" class="ajaxNum0">0</a></em>
+                        <em class="admin_statistics_s">已入职：<a href="index.php?m=crm_chat&c=inviteList&status=1" class="ajaxNum1">0</a></em>
+                        <em class="admin_statistics_s">未面试：<a href="index.php?m=crm_chat&c=inviteList&status=2" class="ajaxNum2">0</a></em>
+                        <em class="admin_statistics_s">面试失败：<a href="index.php?m=crm_chat&c=inviteList&status=3" class="ajaxNum3">0</a></em>
+                        搜索结果：<span>{yun:}$total{/yun}</span>
+                    </div>
+                </div>
+            </form>
+            {yun:}include file="admin/admin_search.htm"{/yun}
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="tty_table-bom">
+        <div class="table-list">
+            <div class="admin_table_border">
+                <iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+                <form action="index.php" target="supportiframe" name="myform" method="get" id='myform'>
+                    <input name="m" value="crm_chat" type="hidden"/>
+                    <input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+                    <table width="100%">
+                        <thead>
+                        <tr class="admin_table_top" align="left">
+                            <th width="60">
+                                {yun:}if $smarty.get.t=="id" && $smarty.get.order=="asc"{/yun}
+                                <a href="index.php?m=crm_chat&c=inviteList&order=desc&t=id">编号</a>
+                                {yun:}else{/yun}
+                                <a href="index.php?m=crm_chatc=inviteList&order=asc&t=id">编号</a>
+                                {yun:}/if{/yun}
+                            </th>
+                            <th width="100" align="left">个人姓名</th>
+                            <th align="left">企业名称</th>
+                            <th width="">面试职位</th>
+                            <th width="150">邀请时间</th>
+                            <th width="150">面试时间</th>
+                            <th width="">状态</th>
+                            {yun:}if $is_outcall{/yun}
+                            <th width="" align="center" class="admin_table_th_bg">电话回访</th>
+                            {yun:}/if{/yun}
+                            <th width="">面试结果</th>
+                         </tr>
+                        </thead>
+
+                        <tbody>
+                        {yun:}foreach item=v key=key from=$list{/yun}
+                        <tr {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg" {yun:}/if{/yun}>
+                        <td align="left" class="td1"><span>{yun:}$v.id{/yun}</span></td>
+                        <td class="gd" align="left"><a class="admin_cz_sc resume-preview" href="javascript:void(0);" uid="{yun:}$v.uid{/yun}">{yun:}$v.r_name{/yun}</a></td>
+                        <td class="od" align="left"><a class="admin_cz_sc" href="{yun:}url m=company c=show id=$v.fid{/yun}" target="_blank">{yun:}$v.fname{/yun}</a></td>
+                        <td align="left"><a class="admin_cz_sc" href="{yun:}url m=job c=comapply id=$v.jobid{/yun}" target="_blank">{yun:}$v.jobname{/yun}</a></td>
+                        <td>{yun:}$v.time_n{/yun}</td>
+                        <td>{yun:}$v.intertime{/yun}</td>
+                        <td align="left">
+                            {yun:}if $v.is_browse==1{/yun}
+                            <span style="color:#f00;">未查看</span>
+                            {yun:}else if $v.is_browse == 2{/yun}
+                            <span style="color:#000;">已查看</span>
+                            {yun:}else if $v.is_browse == 3{/yun}
+                            <span style="color:#0ab389;">已同意</span>
+                            {yun:}else if $v.is_browse == 4{/yun}
+                            <span style="color: #f60;">已拒绝</span>
+                            {yun:}/if{/yun}
+                        </td>
+
+                        {yun:}if $is_outcall{/yun}
+                        <td align="center">
+                            {yun:}if $v.tel_phone{/yun}
+                            <a href='javascript:void(0);' class="contact_customer crm_submit_ddh" msg="点击图标，可使用虚拟号联系求职者" data-phone="{yun:}$v.tel_phone{/yun}" data-uid="{yun:}$v.uid{/yun}">打电话</a>
+                            {yun:}/if{/yun}
+                        </td>
+                        {yun:}/if{/yun}
+                        <td align="left">
+                            {yun:}if $v.status==1{/yun}
+                            <span style="color:#1aa86b;">已入职{yun:}if $v.status_remark{/yun}<div class="beizhu">注：{yun:}$v.status_remark{/yun}</div>{yun:}/if{/yun}</span>
+                            {yun:}else if $v.status == 2{/yun}
+                            <span style="color:#ff2b00;">未面试{yun:}if $v.status_remark{/yun}<div class="beizhu">注：{yun:}$v.status_remark{/yun}</div>{yun:}/if{/yun}</span>
+                            {yun:}else if $v.status == 3{/yun}
+                            <span style="color:#ff2b00;">面试失败{yun:}if $v.status_remark{/yun}<div class="beizhu">注：{yun:}$v.status_remark{/yun}</div>{yun:}/if{/yun}</span>
+                            {yun:}else{/yun}
+                            <a class="admin_cz_sc" href="javascript:void(0);" onClick="crmSetStatus('{yun:}$v.id{/yun}','{yun:}$v.r_name{/yun}');"> +标记</a>
+                            {yun:}/if{/yun}
+                        </td>
+
+                        </tr>
+                        {yun:}/foreach{/yun}
+
+                        {yun:}if $total > $config.sy_listnum {/yun}
+                        <tr>
+                            {yun:}if $pagenum==1{/yun}
+                            <td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}else if $pagenum == $pages{/yun}
+                            <td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+                            {yun:}/if{/yun}
+                            <td colspan="8" class="digg">{yun:}$pagenav{/yun}</td>
+                        </tr>
+                        {yun:}/if{/yun}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="show_more" style="display:none;margin:20px;"></div>
+<script>
+    var pytoken = $('#pytoken').val();
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer,
+            form = layui.form,
+            element = layui.element,
+            $ = layui.$;
+    });
+    $(document).ready(function () {
+        $.get("index.php?m=crm_chat&c=inviteNum", function (data) {
+            var datas = eval('(' + data + ')');
+            if (datas.allNum) {
+                $('.ajaxNum').html(datas.allNum);
+            }
+            if (datas.authNum0) {
+                $('.ajaxNum0').html(datas.authNum0);
+            }
+            if (datas.authNum1) {
+                $('.ajaxNum1').html(datas.authNum1);
+            }
+            if (datas.authNum2) {
+                $('.ajaxNum2').html(datas.authNum2);
+            }
+            if (datas.authNum3) {
+                $('.ajaxNum3').html(datas.authNum3);
+            }
+        });
+    });
+    $(".resume-preview").click(function() {
+        var uid = $(this).attr("uid");
+        $('body').css('overflow-y', 'hidden');
+        $.layer({
+            type: 2,
+            shadeClose: true,
+            title: '简历预览',
+            area: ['755px', ($(window).height() - 30) +'px'],
+            iframe: {src: 'index.php?m=crm_chat&c=previewResume&uid='+uid},
+            close: function(){
+                $('body').css('overflow-y', '');
+            }
+        });
+    });
+    $(".contact_customer").hover(function () {
+        var msg = $(this).attr('msg');
+        if (msg != '') {
+            layer.tips(msg, this, {
+                guide: 1,
+                style: ['background-color:#5EA7DC; color:#fff;top:-7px', '#5EA7DC'],
+                area: ['200px', 'auto'],
+                time: 5000
+            });
+            $(".xubox_layer").addClass("xubox_tips_border");
+        }
+    }, function () {
+        layer.closeAll('tips');
+    });
+
+
+    // 虚拟号联系客户
+    $('.contact_customer').click(function () {
+        var phone = $(this).attr('data-phone')
+        var uid = $(this).attr('data-uid')
+        layer.confirm('确定联系客户吗？', function () {
+            layer.load('连接中，请稍候...', 4);
+            layer.closeAll();
+            var url = 'index.php?m=crm_chat&c=contactCustomer'
+            $.post(url, {
+                mobile: phone,
+                uid: uid,
+                pytoken: $("#pytoken").val()
+            }, function (data) {
+                layer.closeAll();
+                var datas = JSON.parse(data)
+                if (datas.code == 200) {
+                    layer.msg(datas.msg, 2, 9);
+                } else {
+                    layer.msg(datas.msg, 2, 8);
+                }
+            });
+        });
+    });
+
+    function crmSetStatus(id, name) {
+
+        $('#ms_id').val(id);
+        $('#ms_name').html(name);
+        layui.use(['form'], function() {
+            var form = layui.form;
+            form.render();
+        });
+        $.layer({
+            type: 1,
+            title: '面试标记',
+            closeBtn: [0, true],
+            border: [10, 0.3, '#000', true],
+            area: ['380px', 'auto'],
+            page: {
+                dom: "#label_div"
+            }
+        });
+    }
+</script>
+</body>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</html>

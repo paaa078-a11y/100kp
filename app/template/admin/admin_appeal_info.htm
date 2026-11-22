@@ -1,0 +1,110 @@
+<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+<style>
+  /* ::-webkit-scrollbar {
+        	width: 0px;
+    	} */
+</style>
+<div class="opupContAll">
+  <div class="opupContList">
+    <ul>
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">用户名：</span>
+          <span class="spanTwo" style="color: #000;font-size: 16px;">{yun:}$info.username{/yun}</span>
+        </div>
+      </li>
+      {yun:}if $info.usertype=='2'{/yun}  
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">企业名称：</span>
+          <span class="spanTwo" style="color: #000;font-size: 16px;">{yun:}$user.name{/yun}</span>
+        </div>
+      </li>
+      {yun:}else{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">姓名：</span>
+          <span class="spanTwo">{yun:}$user.name{/yun}</span>
+        </div>
+      </li>
+      {yun:}/if{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">电话：</span>
+          <span class="spanTwo">{yun:}$info.moblie{/yun}{yun:}if $user.moblie_status=='1'{/yun} &nbsp;&nbsp;&nbsp;<span class="spanThree">已认证</span>{yun:}/if{/yun}</span>
+          
+        </div>
+      </li>
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">邮箱：</span>
+          <span class="spanTwo">{yun:}$info.email{/yun}{yun:}if $user.email_status=='1'{/yun}  &nbsp;&nbsp;&nbsp;<span class="spanThree">已认证</span>{yun:}/if{/yun}</span>
+          
+        </div>
+      </li>
+      {yun:}if $info.usertype=='1'{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">身份证：</span>
+          {yun:}if $user.idcard_status=='1'{/yun}<span class="spanThree">已认证</span>{yun:}/if{/yun}
+        </div>
+      </li>
+      {yun:}else{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">执照：</span>
+          <span class="spanTwo">{yun:}if $user.yyzz_status=='1'{/yun}<span class="spanThree">已认证</span>{yun:}/if{/yun}</span>
+          
+        </div>
+      </li>
+      {yun:}/if{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">注册时间：</span>
+          <span class="spanTwo">{yun:}$info.reg_date|date_format:"%Y-%m-%d"{/yun}</span>
+        </div>
+      </li>
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">登录次数：</span>
+          <span class="spanTwo">{yun:}$info.login_hits{/yun}</span>
+        </div>
+      </li>
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">最近登录时间：</span>
+          <span class="spanTwo">{yun:}$info.login_date|date_format:"%Y-%m-%d"{/yun}</span>
+        </div>
+      </li>
+      {yun:}if $info.usertype=='1'{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">现居住地：</span>
+          <span class="spanTwo">{yun:}$user.address{/yun}</span>
+        </div>
+      </li>
+      {yun:}elseif $info.usertype=='2'{/yun}
+      <li>
+        <div class="textSpan">
+          <span class="spanOne">公司地址：</span>
+          <span class="spanTwo">{yun:}$user.address{/yun}</span>
+        </div>
+      </li>
+      {yun:}/if{/yun}
+    </ul>
+  </div>
+  <div class="opupContClick">
+    <div class="clickLis">
+      {yun:}if $info.appealstate==1{/yun}
+      <a href="javascript:void(0)" onClick="layer_del('确定申诉已完成？', 'index.php?m=admin_appeal&c=success&id={yun:}$info.uid{/yun}');" class="confirm">确认</a>
+      <a href="javascript:void(0);" onClick="resetpw('{yun:}$info.username{/yun}','{yun:}$info.uid{/yun}');">重置密码</a>
+      {yun:}/if{/yun}
+      <a href="javascript:void(0);" onClick="layer_del('确定要删除？', 'index.php?m=admin_appeal&c=del&id={yun:}$info.uid{/yun}');">删除</a>
+    </div>
+  </div>
+</div>

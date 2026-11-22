@@ -1,0 +1,417 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+    margin: 0;
+    padding: 0
+}
+
+html {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0 !important;
+}
+
+::-webkit-scrollbar {
+    display: none !important; /*隐藏滚轮*/
+}
+
+
+li, ul {
+    list-style: none
+}
+
+a {
+    text-decoration: none;
+    color: #fff
+}
+
+.clear {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+    clear: both
+}
+
+em, i {
+    font-style: normal
+}
+
+.workScorllbar {
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+
+.user_portray {
+    padding: 30px 15px 15px 15px;
+    color: #fff;
+    background-image: -webkit-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -moz-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -ms-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -o-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8)
+}
+
+.user_portraypd {
+    padding: 0px 10px
+}
+
+.user_portray_box {
+    background-color: #fff;
+    border-radius: 8px;
+    margin-top: -20px;
+    padding: 10px;
+    line-height: 35px;
+    font-size: 14px;;
+}
+
+.user_portray_info {
+    display: flex;
+}
+
+.user_portray_tx {
+    width: 45px;
+    height: 45px;
+}
+
+.user_portray_tx img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.user_portray_p {
+    padding-left: 10px;
+}
+
+.user_portray_info_name {
+    font-size: 16px;
+    padding-bottom: 5px;
+}
+
+.user_portray_info_wx {
+    color: #4ae90b
+}
+
+.user_portray_time {
+    padding: 20px 0
+}
+
+.user_portray_bs {
+    display: inline-block;;
+    margin-left: 0.6rem;
+}
+
+.user_portray_bs_bg {
+    display: inline-block;
+    background-color: #f60;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+
+.user_portray_list {
+    display: inline-block;
+    width: 45%;
+}
+
+.user_portray_list_s {
+    color: #999
+}
+
+.user_portray_list_sm {
+    display: inline-block;
+    margin-left: 28px;
+}
+
+.user_portray_lc {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+.user_portray_cz {
+    width: 100%;
+    display: flex;
+    padding: 10px 0
+}
+
+.user_portray_cz_a {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    font-size: 14px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding-left: 60px;
+}
+
+.user_portray_cz_a_r {
+    margin-right: 10px;
+}
+
+.user_portray_lc_tit ul {
+    width: 100%;
+    display: flex;
+    font-size: 14px;
+}
+
+.user_portray_lc_tit ul li {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.user_portray_lc_tit ul .user_portray_lc_cur {
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+}
+
+.user_portray_lc_tit ul .user_portray_lc_cur:after {
+    width: 20px;
+    height: 3px;
+    background: #2778f8;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    border-radius: 2px;
+    content: '';
+    margin-left: -10px;;
+}
+
+.user_portray_listtime {
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 7px 0;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.user_portray_show {
+    padding: 10px 0;
+}
+
+.user_portray_dzlist li {
+    padding: 10px 0px 0px 20px;
+    line-height: 25px;
+    position: relative;
+    border-left: 1px solid #eee;
+    margin-left: 50px;
+    margin-top: 10px;
+    color: #666;
+}
+
+.user_portray_dzt {
+    position: absolute;
+    left: -50px;
+    top: 15px;
+    color: #999
+}
+
+.user_portray_dzlist li:after {
+    width: 6px;
+    height: 6px;
+    background: #2778f8;
+    content: '';
+    display: inline-block;
+    position: absolute;
+    left: -4px;
+    top: 20px;
+    border-radius: 50%;
+}
+
+.user_portray_zd {
+    color: #2778f8;
+}
+
+/*修改*/
+.notYetWork {
+    overflow: hidden;
+    text-align: center;
+    padding: 0.8rem 0;
+}
+
+.notYetWork img {
+    width: 6rem;
+}
+
+.notYetWork span {
+    font-size: 0.40rem;
+    color: #888;
+}
+
+.conserveWork {
+    overflow: hidden;
+    margin: 10px 16px;
+    width: 1.6rem;
+    line-height: 0.7rem;
+    background: #2778f8;
+    text-align: center;
+    border-radius: 0.2rem;
+    color: #fff;
+    float: right;
+}
+
+.ortrayTimeFlex {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.work_wstip{ background:#fff;border-radius:0.213333rem;padding:0.533333rem; margin-top: 0.266666rem; margin-bottom: 0.266666rem;text-aglin:center; }
+.work_wsbthtip{ padding-bottom: 0.533333rem; text-align: center;color:#999}
+.work_wsbth{width:4rem;height:1.2rem; line-height:1.2rem;color:#fff; background-color: #2778f8;border-radius:1.066666rem; margin:0 auto; text-align: center;}
+.comjoblist{border-bottom:1px solid #eee;padding:20px 0; position: relative;}
+.comjobname{ font-size:16px; font-weight:bold;position: relative; padding-right: 100px;;}
+.comjobxz{color:#f00;font-size:16px; font-weight:bold; display: inline-block; position: absolute;right:0px;top:0px;}
+.comjobtime{color:#999; font-size:12px;}
+.comjobts{width:60px;height:30px; line-height: 30px; text-align: center;border-radius:20px; display: inline-block;color:#fff; background-color: #2778f8; position: absolute;right:0px;bottom:20px;}
+.comcomname{padding:10px 0;color: #666;}
+.comjobsearch{height:42px; line-height: 42px;border:1px solid #eee;border-radius:20px;  padding-right:100px;padding-left:20px;position: relative; overflow: hidden;}
+.comjobsearch_bth{width:60px;height:31px; line-height: 31px; text-align: center;border-radius:20px; display: inline-block;color:#fff;     background-image: -webkit-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -moz-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -ms-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+    background-image: -o-linear-gradient(170deg, #19b7ff, #2778f8, #2778f8);
+ position: absolute;right:4px;top:4px;}
+.comjobsearch_text{width:100%;height:30px;}
+
+/*新增*/
+.workscolTop{
+    overflow: hidden;
+    position: relative;
+    height: 1.28rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.workscolTop .workscolGoblk{
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 2;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.workscolTop .workscolGoblk a{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.workscolTop .workscolGoblk a img{
+    width: 0.34rem;
+    height: auto;
+}
+.workscolTop .workscoltitle{
+    overflow: hidden;
+    position: relative;
+    font-size: 0.42rem;
+    color: #07022C;
+}
+
+.workscolStart{
+    overflow: hidden;
+    position: relative;
+    height: calc(100% - 1.28rem);
+}
+.workStartInfo{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 10rem);
+}
+.workStartInfoFlex{
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+.workStartInfoImgs{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 0.32rem;
+    border: 1px solid #ddd;
+    margin: auto;
+}
+.workStartInfoImgs img{
+    width: 1.6rem;
+    height: auto;
+}
+.workStartInfoFlex span{
+    display: block;
+    overflow: hidden;
+    padding-top: 0.24rem;
+    font-size: 0.42rem;
+    color: #333;
+    font-weight: bold;
+}
+.workStartButton{
+    overflow: hidden;
+    position: relative;
+    padding: 0 0.32rem;
+    text-align: center;
+}
+.workStartBuText{
+    overflow: hidden;
+    font-size: 0.34rem;
+    color: #999;
+}
+.workStartButXinx{
+    overflow: hidden;
+    width: 100%;
+    height: 1.3rem;
+    background: #2778F8;
+    border-radius: 0.15rem;
+    margin-top: 0.36rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.42rem;
+    color: #fff;
+}
+
+.workscolEndsButXinx{
+    overflow: hidden;
+    width: 100%;
+    height: 1.3rem;
+    background: #2778F8;
+    border-radius: 0.15rem;
+    margin-top: 0.36rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.42rem;
+    color: #fff;
+}
+
+.workscolEnds .workStartInfoImgs{
+    border: none;
+}

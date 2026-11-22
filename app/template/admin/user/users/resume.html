@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte" style="height: initial;">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="全部简历" name="all" lazy>
+                    <resumeall ref="all" :status="status.all"></resumeall>
+                </el-tab-pane>
+                <el-tab-pane label="委托简历" name="trust" lazy>
+                    <trust ref="trust" :status="status.trust"></trust>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script src="../../js/base64ToFile.js"></script>
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'all',
+                    status: {
+                        all: '',
+                        trust: '',
+                    },
+                }
+            },
+            components: {
+                'resumeall': httpVueLoader('./component/resumeall.vue'),
+                'trust': httpVueLoader('./component/resume_trust.vue'),
+            },
+            created: function () {
+                var that = this
+                let query = window.parent.homeapp.$route.query;
+                if (query.tabs) {
+                    that.activeName = query.tabs;
+                }
+                if (query.status) {
+                    that.status[that.activeName] = query.status;
+                }
+				
+            },
+            methods: {
+                handleClick(tab, event) {
+                    // this.$refs[tab.name].init();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

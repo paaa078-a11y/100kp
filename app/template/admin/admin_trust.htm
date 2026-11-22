@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<title>后台管理</title>
+	</head>
+
+	<body class="body_ifm">
+		<div id="status_div" style="display:none;">
+			<div class="">
+				<form class="layui-form" action="index.php?m=admin_trust&c=status" target="supportiframe" method="post" id="formstatus">
+					<table cellspacing='1' cellpadding='1' class="admin_examine_table">
+						<tr>
+							<th width="100">审核操作：</th>
+							<td align="left">
+								<div class="layui-input-block">
+									<input name="status" id="status1" value="1" title="接受" type="radio" />
+									<input name="status" id="status2" value="2" title="不接受" type="radio" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>审核说明：</th>
+							<td align="left">
+								<div class="admin_examine_trust"> 设定“未接受”时，将会退还金额。</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan='2' align="center">
+								<input type="submit" value='确认' class="admin_examine_bth">
+								<input type="button" id="zxxCancelBtn" onClick="layer.closeAll();" class="admin_examine_bth_qx" value='取消'>
+							</td>
+						</tr>
+					</table>
+					<input name="pid" value="0" type="hidden">
+					<input type="hidden" name="pytoken" id="pytoken" value="{yun:}$pytoken{/yun}">
+				</form>
+			</div>
+		</div>
+
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+
+
+			<div class="clear"></div>
+
+			<div class="admin_new_search_box">
+				<form action="index.php" name="myform" method="get">
+					<div>
+						<input name="m" value="admin_trust" type="hidden" />
+						<div class="admin_Filter_text formselect" did='dtype'>
+							<input type="button" value="{yun:}if $smarty.get.type=='2'{/yun}简历名{yun:}else{/yun}姓名{yun:}/if{/yun}" class="admin_Filter_but"
+							 id="btype">
+							<input type="hidden" name="type" id="type" value="{yun:}if $smarty.get.type{/yun}{yun:}$smarty.get.type{/yun}{yun:}else{/yun}1{yun:}/if{/yun}" />
+							<div class="admin_Filter_text_box" style="display:none" id='dtype'>
+								<ul>
+									<li><a href="javascript:void(0)" onClick="formselect('1','type','姓名')">姓名</a></li>
+									<li><a href="javascript:void(0)" onClick="formselect('2','type','简历名')">简历名</a></li>
+								</ul>
+							</div>
+						</div>
+						<input type="text" placeholder="输入你要搜索的关键字" value="{yun:}$smarty.get.keyword{/yun}" name='keyword' class="admin_new_text">
+						<input type="submit" name='search' value="查询" class="admin_new_bth">
+						<a href="javascript:void(0)" onclick="$('.admin_screenlist_box').toggle();" class="admin_new_search_gj">筛选</a>
+					</div>
+					<div class="adminNewEarch">
+		                <div class="admin_statistics">
+		                	 
+							总数：<a href="index.php?m=admin_trust" class="ajaxresumeall">0</a> &nbsp;&nbsp;&nbsp;
+							未审核：<a href="index.php?m=admin_trust&status=3" class="ajaxresumestatus1">0</a>&nbsp;&nbsp;&nbsp;
+							未接受：<a href="index.php?m=admin_trust&status=2" class="ajaxresumestatus2">0</a>&nbsp;&nbsp;&nbsp;
+							搜索结果：<span>{yun:}$total{/yun}</span>
+						</div>
+		            </div>
+					
+				</form>
+				{yun:}include file="admin/admin_search.htm"{/yun}
+			</div>
+
+			<div class="clear"></div>
+			</div>
+			
+			
+			<div class="tty_table-bom">
+
+			<div class="table-list">
+				<div class="admin_table_border">
+					<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+					<form action="index.php?m=admin_trust&c=del" name="myform" id='myform' method="post" target="supportiframe">
+						<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+
+						<table width="100%">
+							<thead>
+								<tr class="admin_table_top" align="left">
+									<th align="50">
+										<label for="chkall">
+											<input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' />
+										</label>
+									</th>
+									<th>
+										{yun:}if $smarty.get.t=='uid' && $smarty.get.order=='asc'{/yun}
+										<a href="index.php?m=admin_trust&t=uid&order=desc" class="admin_px">UID</a>
+										{yun:}else if $smarty.get.t=='uid' && $smarty.get.order=='desc'{/yun}
+										<a href="index.php?m=admin_trust&t=uid&order=asc" class="admin_px2">UID</a>
+										{yun:}else{/yun}
+										<a href="index.php?m=admin_trust&t=uid&order=desc" class="admin_px0">UID</a>
+										{yun:}/if{/yun}
+									</th>
+									<th>姓名</th>
+									<th>简历名</th>
+									<th>价格(元)</th>
+									<th>
+										{yun:}if $smarty.get.t=='add_time' && $smarty.get.order=='asc'{/yun}
+										<a href="index.php?m=admin_trust&t=add_time&order=desc"class="admin_px">申请时间</a>
+										{yun:}else if $smarty.get.t=='add_time' && $smarty.get.order=='desc'{/yun}
+										<a href="index.php?m=admin_trust&t=add_time&order=asc"class="admin_px2">申请时间</a>
+										{yun:}else{/yun}
+										<a href="index.php?m=admin_trust&t=add_time&order=desc"class="admin_px0">申请时间</a>
+										{yun:}/if{/yun}
+									</th>
+									<th>状态</th>
+									<th width="180" align="center">操作</th>
+								</tr>
+							</thead>
+							<tbody class="tableBackColorTwo">
+								{yun:}foreach item=v key=key from=$rows{/yun}
+								<tr align="left" {yun:}if ($key+1)%2=='0' {/yun}class="admin_com_td_bg"{yun:}/if{/yun} id="list{yun:}$v.id{/yun}">
+									<td><input type="checkbox" value="{yun:}$v.id{/yun}" name='del[]' onclick='unselectall()' rel="del_chk" /></td>
+									<td><span>{yun:}$v.uid{/yun}</span></td>
+									<td>{yun:}$v.uname{/yun}</td>
+									<td>
+										{yun:}if $v.name{/yun}{yun:}$v.name{/yun}{yun:}else{/yun}<font color="#FF0000">简历已删除</font>{yun:}/if{/yun}
+									</td>
+									<td><span class="amount-pay-out">{yun:}$v.price{/yun}</span></td>
+									<td>{yun:}$v.add_time|date_format:"%Y-%m-%d %H:%M"{/yun}</td>
+									<td>
+										{yun:}if $v.status==1{/yun}
+										<span class="admin_ysh">  已接受</span>
+										{yun:}elseif $v.status==0{/yun}
+										<span class="admin_wsh">未审核</span>
+										{yun:}elseif $v.status==2{/yun}
+										<span class="admin_wtg">不接受</span>
+										{yun:}/if{/yun}
+									</td>
+									<td align="center">
+										<div class="operationSeries">
+											{yun:}if $v.name{/yun}
+												<a class="resume-preview" href="javascript:void(0);" pid="{yun:}$v.eid{/yun}">预览</a>
+												{yun:}if $v.status==1{/yun}
+												<a href="index.php?m=admin_trust&c=recom&eid={yun:}$v.eid{/yun}&id={yun:}$v.id{/yun}">推荐</a>
+												{yun:}/if{/yun}
+												{yun:}if $v.status==0{/yun}
+												<a href="javascript:void(0);" class="status" status="{yun:}$v.status{/yun}" pid="{yun:}$v.id{/yun}">审核</a>
+												{yun:}/if{/yun}
+											{yun:}/if{/yun}
+
+											{yun:}if $v.status!=0{/yun}
+											<a href="javascript:void(0)" onclick="layer_del('确定要删除？', 'index.php?m=admin_trust&c=del&id={yun:}$v.id{/yun}');">删除</a>
+											{yun:}/if{/yun}
+										</div>
+										
+									</td>
+								</tr>
+								{yun:}/foreach{/yun}
+								<tr>
+									<td align="left"><input type="checkbox" id='chkAll2' onclick='CheckAll2(this.form)' /></td>
+									<td colspan="7">
+										<label for="chkAll2">全选</label>&nbsp;
+										<input class="admin_button" type="button" name="delsub" value="删除所选" onClick="return really('del[]')" />
+									</td>
+								</tr>
+								{yun:}if $total > $config.sy_listnum {/yun}
+									<tr>
+										{yun:}if $pagenum==1{/yun}
+											<td colspan="3"> 从 1 到 {yun:}$config.sy_listnum {/yun} ，总共 {yun:}$total{/yun} 条</td>
+										{yun:}else if $pagenum > 1 && $pagenum < $pages{/yun}
+											<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$pagenum * $config.sy_listnum{/yun} ，总共 {yun:}$total{/yun} 条</td>
+										{yun:}else if $pagenum == $pages{/yun}
+											<td colspan="3"> 从 {yun:}($pagenum-1) * $config.sy_listnum + 1{/yun} 到 {yun:}$total{/yun} ，总共 {yun:}$total{/yun} 条</td>
+										{yun:}/if{/yun}
+										<td colspan="5" class="digg">{yun:}$pagenav{/yun}</td>
+									</tr>
+								{yun:}/if{/yun}
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+		<script type="text/javascript">
+			layui.use(['layer', 'form'], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					$ = layui.$;
+			});
+
+			$(function() {
+				$(".status").click(function() {
+					$("input[name=pid]").val($(this).attr("pid"));
+					var pid = $(this).attr("pid");
+					var status = $(this).attr("status");
+					$("#status" + status).attr("checked", true);
+					layui.use(['form'], function() {
+						var form = layui.form;
+						form.render();
+					});
+					$("input[name=pid]").val(pid);
+					status_div('委托简历管理', '390', '230');
+				});
+				$.get("index.php?m=admin_trust&c=trustNum", function(data) {
+					var datas = eval('(' + data + ')');
+					if (datas.resumeAllNum) {
+						$('.ajaxresumeall').html(datas.resumeAllNum);
+					}
+					if (datas.resumeStatusNum1) {
+						$('.ajaxresumestatus1').html(datas.resumeStatusNum1);
+					}
+					if (datas.resumeStatusNum2) {
+						$('.ajaxresumestatus2').html(datas.resumeStatusNum2);
+					}
+				});
+
+				$(".resume-preview").click(function() {
+					var id = $(this).attr("pid");
+					$('body').css('overflow-y', 'hidden');
+					$.layer({
+						type: 2,
+						shadeClose: true,
+						title: '简历预览',
+						area: ['755px', ($(window).height() - 30) +'px'],
+						iframe: {src: 'index.php?m=admin_resume&c=resumePreview&id='+id},
+						close: function(){
+							$('body').css('overflow-y', '');
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+</html>

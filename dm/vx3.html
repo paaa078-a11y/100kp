@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>移动端H5页面 - 小程序入口</title>
+
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            height: 2500px;
+        }
+        
+        /* 悬浮按钮样式 */
+        .float-btn {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-vx {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e53935, #e74c3c);
+            color: white;
+            border: none;
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-vx:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+        }
+        
+        .btn-vx:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-vx::before {
+            content: "微信";
+            font-size: 16px;
+        }
+        
+        .btn-vx::after {
+            content: "小程序";
+            font-size: 12px;
+            opacity: 0.95;
+        }
+        
+        .btn-tip {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(255,255,255,0.9);
+            padding: 3px 8px;
+            border: 1px solid red;
+            border-radius: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+    </div>
+    
+    <!-- 悬浮按钮容器 -->
+    <div class="float-btn">
+        <button class="btn-vx" id="vxBtn"></button>
+        <div class="btn-tip">点击打开</div>
+    </div>
+    
+    <script>
+        document.getElementById('vxBtn').addEventListener('click', function() {
+            // 正式使用需要替换为实际的URL Scheme
+            const scheme = 'weixin://dl/business/?appid=wx533eca4ff0bfe89b&path=pages/index/index';
+            
+            // 尝试跳转到微信小程序
+            window.location.href = scheme;
+            
+            // 跳转失败处理：检测是否跳转成功
+            setTimeout(function() {
+                if (!document.hidden) {
+                    // 显示引导提示
+                    const tip = document.querySelector('.btn-tip');
+                    tip.innerHTML = "请稍候..";
+                    tip.style.color = "#e74c3c";
+                    
+                    // 引导用户安装微信
+                    setTimeout(function() {
+                        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                        tip.innerHTML = "点击打开";
+                        
+                        // 点击下载区域也可以跳转
+                        tip.addEventListener('click', function() {
+                            const downloadURL = isIOS ? 
+                                'https://itunes.apple.com/cn/app/weixin/id414478124?mt=8' :
+                                'https://weixin.qq.com/download';
+                            window.location.href = downloadURL;
+                        });
+                    }, 1500);
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>

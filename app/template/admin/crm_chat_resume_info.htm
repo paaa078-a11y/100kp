@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge"/>
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/job.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/jobparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <script src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/cityparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/newclass.public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+    <title>后台管理 - CRM - 客勤 - 用户管理中心</title>
+    <style type="text/css">
+		.chat_addresume{width:100%;font-family:"microsoft yahei"}
+		.crm_chat{width:100%;height:40px;background-color:#f8f8f8}
+		.crm_chat_a{display:inline-block;margin-left:10px;margin-top:5px;width:80px;height:35px;border-radius:6px 6px 0 0;text-align:center;line-height:35px}
+		.crm_chat_a_cur{background-color:#fff;color:#2d8cf0;font-weight:700}
+		.chat_resumetit{width:100%;position:relative;margin-top:20px;padding-bottom:20px}
+		.chat_resumetit_n{font-weight:700;font-size:16px;color:#333}
+		.chat_resumetit_tj{height:auto;background:#f9fbfd;text-align:center;line-height:22px;padding:10px 0;margin-top:20px}
+		.chat_resumetit_tj .chat_resumetit_tjbth{width:120px;height:32px;line-height:32px;background-color:#fff;color:#2778f8;border-radius:30px;border:1px solid #2778f8}
+		.chat_resume_listbox{padding:20px 20px;background:#f9fbfd;border-radius:8px}
+		.chat_resume_list{padding-left:80px;position:relative;min-height:36px;margin-top:10px}
+		.chat_resume_list_name{width:80px;position:absolute;left:0;top:0;line-height:38px}
+		.chat_resume_name{width:80px;position:absolute;left:0;top:0;line-height:38px}
+		.chat_resume_list .layui-form-item{margin-bottom:0}
+		.chat_user_hy{color:#999;padding:10px 0}
+		.chat_user_xz{color:#2d8cf0;font-size:16px}
+		.chat_user_info{font-size:14px;padding-top:10px;color:#666;font-family:"microsoft yahei"}
+		.chat_user_p{color:#999;line-height:25px}
+		.admin_yunnew_user_name_c{position:relative}
+		.admin_saversume_tit{color:#333}
+		.kefu_chatleft::-webkit-scrollbar{width:6px;height:1px}
+		.kefu_chatleft::-webkit-scrollbar-thumb{border-radius:10px;background:#ccc9c7}
+		.kefu_chatleft::-webkit-scrollbar-track{border-radius:10px;background:#fff}
+		.chat_addresume::-webkit-scrollbar{width:6px;height:1px}
+		.chat_addresume::-webkit-scrollbar-thumb{border-radius:10px;background:#ccc9c7}
+		.chat_addresume::-webkit-scrollbar-track{border-radius:10px;background:#fff}
+		.infoboxp{display:flex;padding:10px 15px 0 15px}
+		.admin_jobleft{flex:1}
+		.crm_chat_nav{width:100%;height:50px;line-height:50px;background-color:#f8f8f8;margin-bottom:20px;font-size:16px;color:#000}
+		.crm_chat_nav ul{display:flex}
+		.crm_chat_nav ul li{padding:0 20px;cursor:pointer}
+		.crm_chat_nav_cur{font-weight:700;position:relative}
+		.crm_chat_nav_cur:after{width:30px;height:3px;background-color:#2778f8;display:inline-block;position:absolute;left:35px;bottom:0;content:''}
+		.ydy{ margin-top: 10px;padding:3px 5px;color:#f56c6c; background-color:#fef0f0;display:inline-block;border-radius:3px;font-size: 12px; margin-left: 10px;;}
+		.yxrz{   padding:3px 8px;color:#1890ff; background-color: #e8f4ff;display:inline-block;border-radius:3px;font-size: 12px; margin-left: 10px; font-weight:normal;}
+		.wxrz{   padding:3px 8px;color:#67c23a;background: #f0f9eb; display:inline-block;border-radius:3px;font-size: 12px; margin-left: 10px; font-weight:normal;}
+	</style>
+</head>
+
+<body class="admin_tc_bg">
+<div id="resumeApp" style="display: none;">
+    <div class="chbox_cominfo" id="leftbox">
+        <div class="chat_addresume">
+            <div class="addresume_box" style="border:none;padding:0px 20px 0px 0px">
+                <div id="info" class="admin_yunnew_user_show">
+                    <div class="admin_yunnew_user_img"><img src="{yun:}$resumeinfo.photo{/yun}"></div>
+                    <div class="admin_yunnew_user_name_c">
+                        <div class="admin_yunnew_user_name">{{Info.name}}  <span v-if="Info.email_status=='1'" class="  yxrz" > 邮箱已认证</span>
+                   <span v-if="Info.wxid"  class="  wxrz">  微信公众号已绑定</span> <a href="javascript:;" @click="openBoxShow('Info');" style="font-size: 14px;color: #2778f8; font-weight: normal; margin-left: 15px;">编辑资料</a></div>
+                    </div>
+                    <div style="padding-top: 10px;">{{Info.sex_n}} · {{Info.age}}岁 · {{Info.exp_n}}经验 · {{Info.edu_n}}学历</div>
+                    <div class="admin_yunnew_user_ah" v-if="Expect.add_ip"><span style="padding-top: 10px; display: inline-block;">  IP：{{Expect.add_ip}}</span>  IP归属地：{{Expect.ip_address}}</div>
+                    <div class="admin_yunnew_user_ah" style="padding-top: 10px;">{{Info.description}}</div>
+               
+					<div style="margin-top: 10px;">
+                        职位订阅：<a href="javascript:void(0);" @click="openBoxShow('subscribe');"  style="color: #2778f8;">订阅</a>
+                        <div v-if="issubscribe==1 && subscribe.jobname_n!=''" class="ydy">已订阅类别：{{subscribe.jobname_n}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crmCompanTabs">
+                <div lay-filter="crmComTab" class="layui-tab layui-tab-card">
+                    <ul class="layui-tab-title">
+                        <li @click="changeTab(1)" :class="tab == 1 ? 'layui-this' : ''">简历详情</li>
+                        <li @click="changeTab(2)" :class="tab == 2 ? 'layui-this' : ''">跟进记录</li>
+                        <li @click="changeTab(3)" :class="tab == 3 ? 'layui-this' : ''">投递记录</li>
+                    </ul>
+
+                    <div class="layui-tab-item" :class="tab==1 ? 'layui-show': ''">
+                        <div class="layui-tab-content">
+                            <div class="chbox" style="margin-left: 20px; margin-top: 20px;">
+                                <div class="chbox1" style="background-color: #fff; padding-right: 20px;">
+                                    <div class="chat_resumetit" style="padding-bottom:5px; margin-top:0px;;">
+                                        <span class="chat_resumetit_n">求职意向</span>
+                                        <a href="javascript:;" @click="openBoxShow('Expect');" class="admin_yunnew_user_name_cbj">编辑</a>
+                                    </div>
+                                    <div>
+                                        <div class="chat_user_info">
+                                            <span>{{Expect.name}} </span> ·
+                                            <span>{{Expect.city_classname}}</span> ·
+                                            <span>{{Expect.report_n}} </span> ·
+                                            <span> {{Expect.type_n}}</span> ·
+                                            <span> {{Expect.jobstatus_n}}</span>
+                                        </div>
+                                        <div class="chat_user_hy"> {{Expect.hy_n}}</div>
+                                        <span class="chat_user_xz">{{Expect.salary}}</span>
+                                    </div>
+                                    <div>
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">工作经历</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, wk) in Info.user_work" :key="wk">
+                                                <div class="admin_saversume_pd">
+                                                    <i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                        <template v-if="item.title">担任职位：<span class="admin_saversume_tit_b">{{item.title}}</span></template>
+                                                    </div>
+                                                    <div>{{item.sdate_n}} ~ {{item.edate_n}}</div>
+                                                    <div class="chat_user_p">{{item.content}}</div>
+                                                    <div class="admin_saversume_cz">
+                                                        <a href="javascript:;" @click="openBoxShowInfo('work', item);" class="admin_yunnew_xg"> </a>
+                                                        <a href="javascript:;" @click="delResume('work', item.id, wk);" class="admin_yunnew_sc"> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value="+  添加工作经历" @click="openBoxShow('work');">
+                                        </div>
+                                    </div>
+                                    <div >
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">教育经历</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, ek) in Info.user_edu" :key="ek">
+                                                <div class="admin_saversume_pd">
+                                                    <i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                    </div>
+                                                    <div>{{item.sdate_n}} ~ {{item.edate_n}}</div>
+                                                    <div class="chat_user_p">
+                                                        最高学历：{{item.education_n}}
+                                                        &nbsp;
+                                                        <template v-if="item.specialty">所学专业：{{item.specialty}}</template>
+                                                    </div>
+                                                </div>
+                                                <div class="admin_saversume_cz">
+                                                    <a href="javascript:;" @click="openBoxShowInfo('edu', item);" class="admin_yunnew_xg"> </a>
+                                                    <a href="javascript:;" @click="delResume('edu', item.id, ek);" class="admin_yunnew_sc"> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value="+ 添加教育经历" @click="openBoxShow('edu');" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">培训经历</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, tk) in Info.user_tra" :key="tk">
+                                                <div class="admin_saversume_pd">
+                                                    <i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                        <template v-if="item.title">
+                                                        培训方向： <span class="admin_saversume_tit_b">{{item.title}}</span>
+                                                        </template>
+                                                    </div>
+                                                    <div>{{item.sdate_n}} ~ {{item.edate_n}}</div>
+                                                    <div class="chat_user_p">{{item.content}}</div>
+                                                    <div class="admin_saversume_cz">
+                                                        <a href="javascript:;" @click="openBoxShowInfo('train', item);" class="admin_yunnew_xg"> </a>
+                                                        <a href="javascript:;" @click="delResume('training', item.id, tk);" class="admin_yunnew_sc"> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value=" +  添加培训经历"  @click="openBoxShow('train');" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">职业技能</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, sk) in Info.user_skill" :key="sk">
+                                                <div class="admin_saversume_pd"><i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                        <template v-if="item.longtime">
+                                                        掌握时间：<span class="admin_saversume_tit_b">{{item.longtime}}年</span>
+                                                        </template>
+                                                    </div>
+                                                    <div>
+                                                        熟练程度：{{item.ing_n}}
+                                                        &nbsp;
+                                                    </div>
+                                                    <div v-if="item.pic">  技能证书：<img :src="item.pic" width="95" height="70"></div>
+                                                    <div class="admin_saversume_cz">
+                                                        <a href="javascript:;" @click="openBoxShowInfo('skill', item);" class="admin_yunnew_xg"> </a>
+                                                        <a href="javascript:;" @click="delResume('skill', item.id, tk);" class="admin_yunnew_sc"> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value="+  添加技能" @click="openBoxShow('skill');" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">项目经历</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, xk) in Info.user_xm" :key="xk">
+                                                <div class="admin_saversume_pd">
+                                                    <i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                        <span class="admin_saversume_tit_b" v-if="item.title">{{item.title}}</span>
+                                                    </div>
+                                                    <div>{{item.sdate_n}} ~ {{item.edate_n}}</div>
+                                                    <div class="chat_user_p">{{item.content}}</div>
+                                                    <div class="admin_saversume_cz">
+                                                        <a href="javascript:;" @click="openBoxShowInfo('project', item);" class="admin_yunnew_xg"> </a>
+                                                        <a href="javascript:;" @click="delResume('project', item.id, xk);" class="admin_yunnew_sc"> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value=" + 添加项目经历" @click="openBoxShow('project');" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="chat_resumetit"><span class="chat_resumetit_n">其他描述</span></div>
+                                        <div>
+                                            <div class="admin_saversume_list" v-for="(item, ok) in Info.user_other" :key="ok">
+                                                <div class="admin_saversume_pd">
+                                                    <i class="admin_saversume_pd_icon"></i>
+                                                    <div class="admin_saversume_tit">
+                                                        <span class="admin_saversume_tit_b">{{item.name}}</span>
+                                                    </div>
+                                                    <div class="chat_user_p">{{item.content}}</div>
+                                                    <div class="admin_saversume_cz">
+                                                        <a href="javascript:;" @click="openBoxShowInfo('other', item);" class="admin_yunnew_xg"> </a>
+                                                        <a href="javascript:;" @click="delResume('other', item.id, ok);" class="admin_yunnew_sc"> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat_resumetit_tj">
+                                            <input class="chat_resumetit_tjbth" type="button" value="添加其他" @click="openBoxShow('other');" />
+                                        </div>
+                                    </div>
+                                    <div class="ch_cz">
+                                        <form class="layui-form">
+                                            <div class="admin_jobh1">简历审核操作</div>
+                                            <div v-if="Info.r_status == 2" class="ch_czlist" style="width:260px">
+                                                <div class="ch_czname">锁定操作：</div>
+                                                <div class="layui-form-item" style="margin-bottom:0px;">
+                                                    <div class="layui-input-block">
+                                                        <input name="lock_status" value="1" title="正常" type="radio" :checked="Info.r_status==1" lay-filter="lock_status" />
+                                                        <input name="lock_status" value="2" title="锁定" type="radio" :checked="Info.r_status==2" lay-filter="lock_status" />
+                                                    </div>
+                                                </div>
+                                                <div class="admin_jobshtip" v-if="Info.statusbody">锁定原因：{{Info.statusbody}}</div>
+                                            </div>
+
+                                            <div id="audit-div" v-show="Info.r_status!=2">
+                                                <div class="ch_czlist">
+                                                    <div class="ch_czname">简历审核：</div>
+                                                    <div class=" ">
+                                                        <div class="layui-input-block">
+                                                            <input name="status" value="1" title="正常" type="radio" :checked="Info.state !=3" lay-filter="userstatus" />
+                                                            <input name="status" value="3" title="未通过" type="radio" :checked="Info.state==3" lay-filter="userstatus" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ch_czlist">
+                                                    <div class="ch_czname">审核说明模板：</div>
+                                                    <div class="" style="margin-top: 5px; margin-bottom:5px;;">
+                                                        <div class="layui-input-block">
+                                                            <select lay-filter="tpl">
+                                                                <option value="" title="请选择">请选择</option>
+                                                                <option v-for="(item, auK) in userAudit" :value="item.name" :title="item.name" :key="auK" >{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ch_czlist">
+                                                    <div class="ch_czname">审核说明：</div>
+                                                    <div class="ch_cztextarea">
+                                                        <textarea id="statusbody" name="statusbody" class="ch_cztextareaall">{{Info.statusbody}}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="ch_cz_bth">
+                                                    <input type="button" value="保存" class="admin_popup_bth" @click="auditResume">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item" :class="tab==2 ? 'layui-show': ''">
+                        <div class="crmComTabsCont" style="">
+                            <div class="comTabsConGenInp" style="">
+                                <form lay-filter="test1" id="followForm" class="layui-form" style="">
+                                    <div class="layuIormTem">
+                                        <div class="layuIormext">人才姓名：</div>
+                                        <div class="layuInputLock"><input type="text" :value="Info.name" disabled="disabled" class="layui-input"></div>
+                                    </div>
+                                    <div class="layuIormTem" style="overflow: visible;">
+                                        <div class="layuIormext">简历标签：</div>
+                                        <div class="layuInputLock" style="overflow: visible;">
+
+                                            <select name="user_label" id="user_label" lay-filter="user_label">
+                                                <option value="" title="请选择简历标签">请选择简历标签</option>
+                                                <option v-for="(item, ulk) in userLabel" :value="item.id" :key="ulk" :selected="Info.label_id == item.id">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layuIormTem layuInpuTare" style="">
+                                        <div class="layuIormext">客服评价：</div>
+                                        <div class="layuInputLock" style="">
+                                            <textarea placeholder="请输入内容" class="layui-textarea" id="content">{{Info.content}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="layuIormTem">
+                                        <div class="layuIormext">跟进时间：</div>
+                                        <div class="layuInputLock layuInpuTime">
+                                            <input type="text" name="f_time" id="f_time" lay-verify="f_time" autocomplete="off" placeholder="请输入跟进时间" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layuIormTem">
+                                        <div class="layuIormext" style="opacity: 0.001;">提交按钮：</div>
+                                        <div class="layuInputLock layuButto"><a href="javascript:;" @click="addFollow">保存</a></div>
+                                    </div>
+                                </form>
+                                <div id="followTips" class="absConGenAgain" style="display: none;">
+                                    <div><img src="images/yun_xink.png" alt=""> <span>真是辛苦您啦~</span> <a href="javascript:;" @click="againFollow">再次填写</a></div>
+                                </div>
+                            </div>
+
+                            <div class="comTabsConGenRec">
+                                <div class="layui-tab">
+                                    <ul class="layui-tab-title">
+                                        <li @click="changeFollowTab(1)" :class="followTab == 1 ? 'layui-this' : ''">我的跟进记录</li>
+                                        <li @click="changeFollowTab(2)" :class="followTab == 2 ? 'layui-this' : ''">历史跟进记录</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div class="layui-tab-item layui-show">
+                                            <div id="layer-pic" class="onGenRecAlls" v-show="followNum > 0">
+                                                <div class="onGenRecAllFlext">
+                                                    <div class="onGenRecList" v-for="(item, fk) in FollowList"  :key="fk">
+                                                        <!--<div class="genRecListTop">
+                                                            <div class="genRecListTool"><span>电话</span></div>
+                                                            <div class="genRecLisTouc"><span>小马</span><span class="redsu">17552755935</span></div>
+                                                            <div class="genReopsdiz"><a href="javascript:;"><i></i><span>修改</span></a></div>
+                                                        </div>-->
+                                                        <div class="genRecListConts">
+                                                            <div class="genRecListConText">
+                                                                <div><span>{{item.content}}</span></div>
+                                                                <div class="genRecListConImgs"></div>
+                                                            </div>
+                                                            <div class="genRecListConTime">
+                                                                <span>{{item.time_n}}</span>
+                                                                <span>{{item.c_name}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="genRecListPagesd" v-if="followPageTotal > 1" >
+                                                    <span style="margin-left: 5px; margin-right: 40px;">从 {{followStart}} 到 {{followEnd}}，共 {{followPageTotal}} 页，{{followTotal}} 条 </span>
+                                                    <span @click="preFollowPage" class="zt_box_s other_page" v-if="followPage > 1"><上一页</span>
+                                                    <span class="zt_box_s" v-for="(pageV, pageK) in followPageArr" @click="followPageJump(pageV+1)" :class="followPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+                                                    <span @click="nextFollowPage" class="zt_box_s other_page" v-if="followPage < followPageTotal">下一页></span>
+                                                </div>
+                                            </div>
+                                            <div class="layuiNoEcords" style="width: 65%;" v-show="followNum == 0">
+                                                <div><img src="images/zwtip.png" alt=""> <span>暂无跟进记录</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item" :class="tab==3 ? 'layui-show': ''">
+                        <div class="layuiAppoiDatas">
+                            <table border="0" width="100%" class="layuiAppTable" >
+                                <thead class="layuiAppThead">
+                                <tr>
+                                    <th width="200">投递时间</th>
+                                    <th width=" ">投递岗位</th>
+                                    <th width=" ">企业名称</th>
+                                </tr>
+                                </thead>
+                                <tbody class="layuiAppTbody">
+                                <tr v-for="(item, ak) in applyList" :key="ak">
+                                    <td><span>{{item.time_n}}</span></td>
+                                    <td><span>{{item.job_name}}</span></td>
+                                    <td><span>{{item.com_name}}</span></td>
+                                </tr>
+                                
+                                </tbody>
+                            </table>
+                            <div class="genRecListPagesd" v-if="applyPageTotal > 1" >
+                                    <span style="margin-left: 5px; margin-right: 40px;">从 {{applyStart}} 到 {{applyEnd}}，共 {{applyPageTotal}} 页，{{applyTotal}} 条 </span>
+                                    <span @click="preApplyPage" class="zt_box_s other_page" v-if="applyPage > 1"><上一页</span>
+                                    <span class="zt_box_s" v-for="(pageV, pageK) in applyPageArr" @click="applyPageJump(pageV+1)" :class="applyPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+                                    <span @click="nextApplyPage" class="zt_box_s other_page" v-if="applyPage < applyPageTotal">下一页></span>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 客户详情弹窗--基本信息 -->
+    <div class="resumeInfoPopup" v-show="InfoBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>修改基本信息</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('Info');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>姓名：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name" class="layui-input" :value="Info.name" placeholder="请填写个人姓名">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>性别：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input id="sex_1" type="radio" value="1" title="男" name="sex" :checked="Info.sex == 1" />
+                        <input id="sex_2" type="radio" value="2" title="女" name="sex" :checked="Info.sex == 2" />
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>出生年月：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="birthday" id="birthday" class="layui-input" :value="Info.birthday">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>教育程度：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="user_edu" id="user_edu" lay-filter="user_edu">
+                            <option value=""></option>
+                            <option v-for="(item, eduK) in userEdu" :value="item.id" :title="item.name" :key="eduK" :selected="Info.edu == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>工作经验：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="user_word" id="user_word" lay-filter="user_word">
+                            <option value=""></option>
+                            <option v-for="(item, wordK) in userWord" :value="item.id" :title="item.name" :key="wordK" :selected="Info.exp == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>自我介绍：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="description" placeholder="请填写自我介绍" class="layui-textarea">{{Info.description}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('Info')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('Info');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--求职意向 -->
+    <div class="resumeInfoPopup" v-show="ExpectBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>修改求职意向</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('Expect');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>期望职位：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="customJob" id="customJob" class="layui-input" :value="Expect.name" placeholder="请填写期望职位" />
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>工作职能：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select id="resume_jobclass_search" class="expect_text" name="resume_jobclass_search" xm-select-type="jobclass" xm-select="resume_jobclass_search" xm-select-search="" xm-select-max="5" xm-select-skin="default" xm-select-direction="down">
+                            <option value="">输入搜索，最多选5项</option>
+                        </select>
+                        <div onclick="index_job_new(5,'#workadds_job','#resume_job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="选择职位类别"></div>
+                        <input id="resume_job_class" type="hidden" :value="Expect.job_classid" name="resume_job_class">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>工作地点：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select id="resume_cityclass_search" class="expect_text" name="resume_cityclass_search" xm-select-type="cityclass" xm-select="resume_cityclass_search" xm-select-search="" xm-select-max="5" xm-select-skin="default" xm-select-direction="down">
+                            <option value="">输入搜索，最多选5项</option>
+                        </select>
+                        <div onclick="index_city_new(5,'#workadds_city','#resume_city_class','left:100px;top:100px; position:absolute;')" class="news_expect_text_newcity_nth" title="选择城市"></div>
+                        <input type="hidden" name="resume_city_class" id="resume_city_class" :value="Expect.city_classid"/>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>期望薪资：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" id="minsalary" name="minsalary" size="6" :value="Expect.minsalary" class="admin_text_w70">
+                        -
+                        <input type="text" id="maxsalary" name="maxsalary" size="6" :value="Expect.maxsalary" class="admin_text_w70">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>从事行业：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="hy" id="hy" lay-filter="hy">
+                            <option value="" title="请选择从事行业">请选择从事行业</option>
+                            <option v-for="(item, hyK) in industryArr" :value="item.id" :title="item.name" :key="hyK" :selected="Expect.hy == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>到岗时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="user_report" id="user_report" lay-filter="user_report">
+                            <option value=""></option>
+                            <option v-for="(item, reportK) in userReport" :value="item.id" :title="item.name" :key="reportK" :selected="Expect.report == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>工作性质：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="user_type" id="user_type" lay-filter="user_type">
+                            <option value=""></option>
+                            <option v-for="(item, typeK) in userType" :value="item.id" :title="item.name" :key="typeK" :selected="Expect.type == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>求职状态：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="user_jobstatus" id="user_jobstatus" lay-filter="user_jobstatus">
+                            <option value=""></option>
+                            <option v-for="(item, jsK) in userJobStatus" :value="item.id" :title="item.name" :key="jsK" :selected="Expect.jobstatus == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('Expect')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('Expect');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--工作经历 -->
+    <div class="resumeInfoPopup" v-show="workBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{workBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('work');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>单位名称：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="work_name" id="work_name" class="layui-input" :value="workInfo.name" placeholder="请填写单位名称">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>工作时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="work_sdate" id="work_sdate" :value="workInfo.sdate_n" class="layui-input" style="width: 120px;" />
+                        <input type="text" name="work_edate" id="work_edate" :value="workInfo.edate_n" class="layui-input" style="width: 120px; margin-left: 10px;" />
+                        <div style="margin-left: 10px;"><input type="checkbox" lay-skin="primary" title="至今" id="workToDay" lay-filter="workToDay"  :checked="workInfo.edate==0" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>担任职位：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="work_title" id="work_title" :value="workInfo.title" class="layui-input"  placeholder="请填写担任职位">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>工作内容：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="work_content" placeholder="请填写工作内容" class="layui-textarea">{{workInfo.content}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('work')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('work');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--教育经历 -->
+    <div class="resumeInfoPopup" v-show="eduBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{eduBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('edu');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>学校名称：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="edu_name" id="edu_name" class="layui-input" :value="eduInfo.name" placeholder="请填写学校名称">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>在校时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="edu_sdate" id="edu_sdate" :value="eduInfo.sdate_n" class="layui-input" style="width: 120px;" />
+                        <input type="text" name="edu_edate" id="edu_edate" :value="eduInfo.edate_n" class="layui-input" style="width: 120px; margin-left: 10px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>最高学历：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="education" id="education" lay-filter="education">
+                            <option value=""></option>
+                            <option v-for="(item, eduK) in userEdu" :value="item.id" :title="item.name" :key="eduK" :selected="eduInfo.education == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>所学专业：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="edu_specialty" id="edu_specialty" :value="eduInfo.specialty" class="layui-input"  placeholder="请填写担任职位">
+                    </div>
+                </div>
+            </div>
+
+            <div class="kehudetCoButn">
+                <span @click="saveResume('edu')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('edu');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--培训经历 -->
+    <div class="resumeInfoPopup" v-show="trainBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{trainBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('train');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>培训中心：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="train_name" id="train_name" class="layui-input" :value="trainInfo.name" placeholder="请填写培训中心名称">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>培训时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="train_sdate" id="train_sdate" :value="trainInfo.sdate_n" class="layui-input" style="width: 120px;" />
+                        <input type="text" name="train_edate" id="train_edate" :value="trainInfo.edate_n" class="layui-input" style="width: 120px; margin-left: 10px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>培训方向：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="train_title" id="train_title" :value="trainInfo.title" class="layui-input"  placeholder="请填写培训方向">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>培训描述：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="train_content" placeholder="请简单描述培训内容" class="layui-textarea">{{trainInfo.content}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('train')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('train');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--职业技能 -->
+    <div class="resumeInfoPopup" v-show="skillBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{skillBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('skill');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>技能名称：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="skill_name" id="skill_name" class="layui-input" :value="skillInfo.name" placeholder="请填写技能名称">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>掌握时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="skill_longtime" id="skill_longtime" :value="skillInfo.longtime" class="layui-input" style="width: 120px;" />
+                        <span>年</span>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput">
+                <div class="resumeInfoInpTite">
+                    <span>掌握程度：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select name="skill_ing" id="skill_ing" lay-filter="skill_ing">
+                            <option value=""></option>
+                            <option v-for="(item, ingK) in userIng" :value="item.id" :title="item.name" :key="ingK" :selected="skillInfo.ing == item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>技能证书：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="yun_bth_pic adminupload" lay-data="{imgid: 'imgskill', name: 'pic', path: 'user', source: 'back'}"></button>
+                        <input type="hidden" id="layupload_type" value="2" />
+                        <input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}" />
+                        <input type="hidden" id="skill_pic" name="pic" value="{yun:}$config.sy_unit_icon{/yun}" />
+                        <img id="imgskill" :src="skillInfo.pic" width="60" height="60" class="none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="kehudetCoButn">
+                <span @click="saveResume('skill')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('skill');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--项目经验 -->
+    <div class="resumeInfoPopup" v-show="projectBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{projectBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('project');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>项目名称：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="project_name" id="project_name" class="layui-input" :value="projectInfo.name" placeholder="请填写项目名称">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>项目时间：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="project_sdate" id="project_sdate" :value="projectInfo.sdate_n" class="layui-input" style="width: 120px;" />
+                        <input type="text" name="project_edate" id="project_edate" :value="projectInfo.edate_n" class="layui-input" style="width: 120px; margin-left: 10px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>担任职位：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="project_title" id="project_title" :value="projectInfo.title" class="layui-input"  placeholder="请填写担任职位">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>项目内容：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="project_content" placeholder="请简单描述项目内容" class="layui-textarea">{{projectInfo.content}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('project')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('project');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--其他描述 -->
+    <div class="resumeInfoPopup" v-show="otherBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>{{otherBoxTitle}}</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('other');">
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>标题信息：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="other_name" id="other_name" class="layui-input" :value="otherInfo.name" placeholder="请填写标题信息">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>描述内容：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <textarea id="other_content" placeholder="请简单描述内容" class="layui-textarea">{{otherInfo.content}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <span @click="saveResume('other')">确认</span>
+                <span class="butnLink" @click="closeBoxShow('other');">取消</span>
+            </div>
+        </div>
+    </div>
+    <!-- 客户详情弹窗--求职意向 -->
+    <div class="resumeInfoPopup" v-show="subscribeBoxShow">
+        <div class="resumeInfoConts layui-form">
+            <div class="kehudetConTops" style="margin-bottom: 20px;">
+                <span>职位订阅</span>
+                <img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('subscribe');">
+            </div>
+            
+            <div class="resumeInfoInput zhuanjiaFlex">
+                <div class="resumeInfoInpTite">
+                    <span>工作职能：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <select id="subscribe_jobclass_search" class="expect_text" name="subscribe_jobclass_search" xm-select-type="jobclass" xm-select="subscribe_jobclass_search" xm-select-search="" xm-select-max="5" xm-select-skin="default" xm-select-direction="down">
+                            <option value="">输入搜索，最多选5项</option>
+                        </select>
+                        <div onclick="index_job_new(5,'#workadds_job','#subscribe_job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="选择职位类别"></div>
+                        <input id="subscribe_job_class" type="hidden" value="" name="subscribe_job_class">
+                    </div>
+                </div>
+            </div>
+            <div class="resumeInfoInput" style="overflow: hidden; padding-top: 35px;">
+                <div class="resumeInfoInpTite">
+                    <span>发送周期：</span>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="radio" id="subtime1" name="subtime" value="1" title="每天">
+                        <input type="radio" id="subtime3" name="subtime" value="3" title="三天">
+                        <input type="radio" id="subtime7" name="subtime" value="7" title="七天">
+                    </div>
+                </div>
+            </div>
+            <div class="kehudetCoButn">
+                <input id="subscribe_id" type="hidden" value="" name="subscribe_id">
+                <span @click="saveSub()">确认</span>
+                <span class="butnLink" @click="closeBoxShow('subscribe');">取消</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var weburl = '{yun:}$config.sy_weburl{/yun}',
+        resumeId = '{yun:}$smarty.get.id{/yun}',
+        auid = '{yun:}$auid{/yun}',
+        pytoken = '{yun:}$pytoken{/yun}';
+
+    var d = new Date(),
+        str = '';
+    str += d.getHours() + ':';
+    str += d.getMinutes() + ':';
+    str += d.getSeconds();
+
+    var maxY = d.getFullYear() - 16;
+    var maxM = d.getMonth() + 1;
+    var maxD = d.getDate();
+    var maxAge = maxY + '-' + maxM + '-' + maxD;
+
+    var form = null,
+        formSelects = null,
+        weburl = '{yun:}$config.sy_weburl{/yun}';
+
+    layui.use(['layer', 'form', 'laydate'], function () {
+
+        var layer = layui.layer,
+            laydate = layui.laydate,
+            $ = layui.$;
+
+        form = layui.form;
+        formSelects = layui.formSelects;
+
+        laydate.render({
+            elem: '#birthday',
+            max: maxAge,
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#work_sdate',
+            max: str,
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#work_edate',
+            max: str,
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#edu_sdate',
+            max: str,
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#edu_edate',
+            type: 'month',
+            value: ''
+        });
+
+        laydate.render({
+            elem: '#train_sdate',
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#train_edate',
+            type: 'month',
+            value: ''
+        });
+
+        laydate.render({
+            elem: '#project_sdate',
+            max: str,
+            type: 'month',
+            value: ''
+        });
+        laydate.render({
+            elem: '#project_edate',
+            type: 'month',
+            value: ''
+        });
+
+
+        form.on('checkbox(workToDay)', function (data) {
+            $('#work_edate').val('');
+             if (data.elem.checked){
+                 $('#work_edate').attr('disabled', true)
+             }else{
+                 $('#work_edate').attr('disabled', false)
+             }
+        });
+
+        laydate.render({
+            elem : '#f_time',
+            type : 'datetime',
+            min	 : -7,
+            max	 : str,
+            value: ''
+        });
+
+
+        $("#leftbox").css({
+            'height': $(window).height() - 50 + 'px',
+            'overflow': 'auto'
+        });
+
+        form.on('radio(lock_status)', function (obj) {
+            if (obj.value == 1) {
+                $('#audit-div').show();
+            } else {
+                $('#audit-div').hide();
+            }
+        });
+        form.on('select(tpl)', function (data) {
+            $('#statusbody').val(data.value);
+            form.render('select');
+        });
+
+        formSelects.btns('resume_jobclass_search', []);
+        //实时获取选中值
+        formSelects.on('resume_jobclass_search', function(id, vals, val, isAdd, isDisabled){
+            var jobvalue = [];
+            vals.forEach(function(item,index){
+              jobvalue.push(item.value);
+            })
+            $('#resume_job_class').val(jobvalue.join(','));
+        }, true);
+        formSelects.maxTips('resume_jobclass_search', function(id, vals, val, max){
+            layer.msg('最多只能选择5个！', 2, 8);
+        });
+
+        formSelects.btns('subscribe_jobclass_search', []);
+        //实时获取选中值
+        formSelects.on('subscribe_jobclass_search', function(id, vals, val, isAdd, isDisabled){
+            var jobvalue = [];
+            vals.forEach(function(item,index){
+              jobvalue.push(item.value);
+            })
+            $('#subscribe_job_class').val(jobvalue.join(','));
+        }, true);
+        formSelects.maxTips('subscribe_jobclass_search', function(id, vals, val, max){
+            layer.msg('最多只能选择5个！', 2, 8);
+        });
+    });
+
+
+    var resumeApp = new Vue({
+        el: '#resumeApp',
+        data: {
+            tab: 1,
+            resumeId: resumeId ? resumeId: 0,
+            Info: [],
+            Expect: [],
+
+            userAudit: [],
+            userEdu: [],
+            userWord: [],
+            userLabel: [],
+            userReport: [],
+            userType: [],
+            userJobStatus: [],
+            userIng: [],
+            industryArr: [],
+
+            InfoBoxShow: false,
+            ExpectBoxShow: false,
+
+            workBoxShow: false,
+            workBoxTitle: '添加工作经历',
+            workInfo:[],
+
+            eduBoxShow: false,
+            eduBoxTitle: '添加教育经历',
+            eduInfo:[],
+
+            trainBoxShow: false,
+            trainBoxTitle: '添加培训经历',
+            trainInfo:[],
+
+            projectBoxShow: false,
+            projectBoxTitle: '添加项目经验',
+            projectInfo:[],
+
+            skillBoxShow: false,
+            skillBoxTitle: '添加职业技能',
+            skillInfo:[],
+
+            otherBoxShow: false,
+            otherBoxTitle: '添加其他描述',
+            otherInfo:[],
+
+            //	跟进记录
+            followTab: 1,
+            FollowList: [],
+            followStart: '',
+            followEnd: '',
+            followNum: 0,
+            followTotal: 0,
+            followPageArr: [],
+            followPage: 1,
+            followPageTotal: 0,
+
+            //	投递记录
+            applyList: [],
+            applyStart: '',
+            applyEnd: '',
+            applyNum: 0,
+            applyTotal: 0,
+            applyPageArr: [],
+            applyPage: 1,
+            applyPageTotal: 0,
+
+            subscribeBoxShow:false,
+            subscribe:{},
+            issubscribe:0,
+        },
+        created: function () {
+
+            $("#resumeApp").css('display', 'block');
+            this.getData();
+        },
+        methods: {
+            getData:function(){
+                var self = this;
+                var url = "index.php?m=crm_chat&c=getResumeInfo";
+                $.post(url, {
+                    id: self.resumeId,
+                    pytoken: pytoken
+                }, function(res) {
+
+                    var data = res.data;
+
+                    if (res.error == 0){
+
+                        self.Info = data.Info;
+                        self.Expect = data.Info.user_expect;
+                        self.userEdu = data.userEdu;
+                        self.userWord = data.userWord;
+                        self.userReport = data.userReport;
+                        self.userType = data.userType;
+                        self.userJobStatus = data.userJobStatus;
+                        self.userLabel = data.userLabel;
+                        self.userIng = data.userIng;
+                        self.userAudit = data.userAudit;
+                        self.industryArr = data.industryArr;
+                        self.subscribe = data.subscribe;
+                        self.issubscribe = data.issubscribe;
+                        if(self.subscribe){
+                            if(typeof self.subscribe.jobclass_id!='undefined'){
+                                $('#subscribe_job_class').val(self.subscribe.jobclass_id);
+                            }
+                            if(typeof self.subscribe.time!='undefined'){
+                                $(`input[name=subtime][value=${self.subscribe.time}]`).prop("checked","true");
+                            }
+                            if(typeof self.subscribe.id!='undefined'){
+                                $('#subscribe_id').val(self.subscribe.id);
+                            }
+                        }
+                        
+                        layuiForm();
+                    }
+                }, 'json');
+            },
+            changeTab: function (e) {
+                this.tab = e;
+                if (this.tab == 2){
+
+                    this.getFollowList();
+                }else if (this.tab == 3){
+
+                    this.getApplyList();
+                }
+            },
+            openBoxShow: function(e){
+                var self = this;
+                if (e == 'Info'){
+                    self.InfoBoxShow = true;
+                } else if (e == 'Expect'){
+
+                    jobSearchReset();
+                    citySearchReset();
+                    self.ExpectBoxShow = true;
+                } else if (e == 'work'){
+
+                    self.workBoxShow = true;
+                    self.workBoxTitle = '添加工作经历';
+                    self.workInfo = [];
+                    self.workInfo.eid = self.resumeId;
+                    self.workInfo.uid = self.Info.uid;
+                    $('#workToDay').attr('checked', false);
+                    $('#wrok_edate').attr('disabled', false);
+                    layuiForm();
+                } else if (e == 'edu'){
+
+                    self.eduBoxShow = true;
+                    self.eduBoxTitle = '添加教育经历';
+                    self.eduInfo = [];
+                    self.eduInfo.eid = self.resumeId;
+                    self.eduInfo.uid = self.Info.uid;
+                    layuiForm();
+                } else if (e == 'train'){
+
+                    self.trainBoxShow = true;
+                    self.trainBoxTitle = '添加培训经历';
+                    self.trainInfo = [];
+                    self.trainInfo.eid = self.resumeId;
+                    self.trainInfo.uid = self.Info.uid;
+                    layuiForm();
+                } else if (e == 'project'){
+
+                    self.projectBoxShow = true;
+                    self.projectBoxTitle = '添加项目经验';
+                    self.projectInfo = [];
+                    self.projectInfo.eid = self.resumeId;
+                    self.projectInfo.uid = self.Info.uid;
+                    layuiForm();
+                } else if (e == 'skill'){
+
+                    self.skillBoxShow = true;
+                    self.skillBoxTitle = '添加职业技能';
+                    self.skillInfo = [];
+                    self.skillInfo.eid = self.resumeId;
+                    self.skillInfo.uid = self.Info.uid;
+                    layuiForm();
+                } else if (e == 'other'){
+
+                    self.otherBoxShow = true;
+                    self.otherBoxTitle = '添加其他描述';
+                    self.otherInfo = [];
+                    self.otherInfo.eid = self.resumeId;
+                    self.otherInfo.uid = self.Info.uid;
+                    layuiForm();
+                } else if (e == 'subscribe'){
+                    self.subscribeBoxShow = true;
+                    jobSearchReset();
+                }
+                parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+                parent.$(".iframeLinks").addClass("iframeLinksacCur");
+            },
+            openBoxShowInfo:function(e, v){
+                var self = this;
+                if (e == 'work'){
+                    self.workInfo = v;
+                    if (self.workInfo.edate_n == '至今'){
+                        $('#workToDay').attr('checked', true);
+                        $('#wrok_edate').attr('disabled', true);
+                    }else{
+                        $('#workToDay').attr('checked', false);
+                        $('#wrok_edate').attr('disabled', false);
+                    }
+                    self.workBoxShow = true;
+                    self.workBoxTitle = '修改工作经历';
+                    layuiForm();
+                } else if (e == 'edu'){
+
+                    self.eduInfo = v;
+                    self.eduBoxShow = true;
+                    self.eduBoxTitle = '修改教育经历';
+                    $("#education option[value='" + v.education + "']").attr("selected", true);
+                    layuiForm();
+                } else if (e == 'train'){
+
+                    self.trainInfo = v;
+                    self.trainBoxShow = true;
+                    self.trainBoxTitle = '修改培训经历';
+                    layuiForm();
+                } else if (e == 'project'){
+
+                    self.projectInfo = v;
+                    self.projectBoxShow = true;
+                    self.projectBoxTitle = '修改项目经验';
+                    layuiForm();
+                } else if (e == 'skill'){
+
+                    self.skillInfo = v;
+                    self.skillBoxShow = true;
+                    self.skillBoxTitle = '修改职业技能';
+                    $("#skill_ing option[value='" + v.ing + "']").attr("selected", true);
+                    $("#imgskill").attr("src", v.pic);
+                    $('#imgskill').removeClass('none');
+                    layuiForm();
+                } else if (e == 'other'){
+
+                    self.otherInfo = v;
+                    self.otherBoxShow = true;
+                    self.otherBoxTitle = '修改其他描述';
+                    layuiForm();
+                }
+                parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+                parent.$(".iframeLinks").addClass("iframeLinksacCur");
+            },
+            closeBoxShow: function(e){
+                var self = this;
+                if (e == 'Info'){
+                    self.InfoBoxShow = false;
+                }else if (e == 'Expect'){
+                    self.ExpectBoxShow = false;
+                }else if (e == 'work'){
+                    self.workInfo = [];
+                    self.workBoxShow = false;
+                }else if (e == 'edu'){
+                    self.eduInfo = [];
+                    self.eduBoxShow = false;
+                }else if (e == 'train'){
+                    self.trainInfo = [];
+                    self.trainBoxShow = false;
+                }else if (e == 'project'){
+                    self.projectInfo = [];
+                    self.projectBoxShow = false;
+                }else if (e == 'skill'){
+                    self.skillInfo = [];
+                    self.skillBoxShow = false;
+                }else if (e == 'other'){
+                    self.otherInfo = [];
+                    self.otherBoxShow = false;
+                }else if (e == 'subscribe'){
+                    self.subscribeBoxShow = false;
+                }
+                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+            },
+            saveSub:function(){
+                var self = this;
+
+                var jobclass_id = $('#subscribe_job_class').val();
+                var time = $("input[name=subtime]:checked").val()
+                var sid = $('#subscribe_id').val();
+
+                if (jobclass_id == '') {
+                    parent.layer.msg("请选择工作职能！", 2, 8);
+                    return false;
+                }
+                if (time == '') {
+                    parent.layer.msg("请选择发送周期！", 2, 8);
+                    return false;
+                }
+                var param = {};
+                param.sid = sid;
+                param.jobclass_id = jobclass_id;
+                param.time = time;
+                param.uid = self.Info.uid;
+                param.pytoken = pytoken;
+                $.post("index.php?m=crm_chat&c=saveSub", param, function (res) {
+                    if (res.errcode == 9) {
+                        layer.msg(res.msg, 2, 9, function () {
+                            self.subscribeBoxShow = false;
+                            parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                            parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                        });
+                    }else{
+                        layer.msg(res.msg, 2, 8);
+                        return false;
+                    }
+                }, 'json');
+
+            },
+            saveResume: function(type){
+                var self = this;
+                if (type == 'Info'){
+
+                    var name = $.trim($("#name").val());
+                    var sex = $.trim($("input[name='sex']:checked").val());
+                    var birthday = $.trim($("#birthday").val());
+                    var description = $.trim($("#description").val());
+                    var edu = $.trim($("#user_edu").val());
+                    var exp = $.trim($("#user_word").val());
+
+                    if (self.name == '') {
+                        parent.layer.msg("个人姓名不能为空！", 2, 8);
+                        return false;
+                    }
+                    if (sex == '') {
+                        parent.layer.msg("性别不能为空！", 2, 8);
+                        return false;
+                    }
+                    if (birthday == '') {
+                        parent.layer.msg("出生年月不能为空！", 2, 8);
+                        return false;
+                    }
+                    if (edu == '') {
+                        parent.layer.msg("请选择教育程度！", 2, 8);
+                        return false;
+                    }
+                    if (exp == '') {
+                        parent.layer.msg("请选择工作经验！", 2, 8);
+                        return false;
+                    }
+
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.id = self.resumeId;
+                    param.uid = self.Info.uid;
+                    param.name = name;
+                    param.sex = sex;
+                    param.birthday = birthday;
+                    param.edu = edu;
+                    param.exp = exp;
+                    param.description = description;
+                    param.type = 'Info';
+                    param.pytoken = pytoken;
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.InfoBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'Expect'){
+
+                    var name = $.trim($("#customJob").val());
+                    var job_classid = $.trim($("#resume_job_class").val());
+                    var city_classid = $.trim($("#resume_city_class").val());
+                    var minsalary = $.trim($("#minsalary").val());
+                    var maxsalary = $.trim($("#maxsalary").val());
+                    var hy = $.trim($("#hy").val());
+                    var report = $.trim($("#user_report").val());
+                    var typeid = $.trim($("#user_type").val());
+                    var jobstatus = $.trim($("#user_jobstatus").val());
+                    if (name == "") {
+                        parent.layer.msg('请填写期望职位！', 2, 8);
+                        return false;
+                    }
+                    if (job_classid == "") {
+                        parent.layer.msg('请选择从事职位！', 2, 8);
+                        return false;
+                    }
+                    if (city_classid == '') {
+                        parent.layer.msg('请选择工作地点！', 2, 8);
+                        return false;
+                    }
+                    if (minsalary == "" || minsalary == "") {
+                        parent.layer.msg('请填写期望月薪！', 2, 8);
+                        return false;
+                    }
+                    if (maxsalary && parseInt(maxsalary) <= parseInt(minsalary)) {
+                        parent.layer.msg('最高薪资必须大于最低薪资！', 2, 8);
+                        return false;
+                    }
+                    if (report == "") {
+                        parent.layer.msg('请选择到岗时间！', 2, 8);
+                        return false;
+                    }
+                    if (typeid == "") {
+                        parent.layer.msg('请选择工作性质！', 2, 8);
+                        return false;
+                    }
+                    if (jobstatus == "") {
+                        parent.layer.msg('请选择求职状态！', 2, 8);
+                        return false;
+                    }
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.id = self.resumeId;
+                    param.uid = self.Info.uid;
+                    param.name = name;
+                    param.job_classid = job_classid;
+                    param.city_classid = city_classid;
+                    param.minsalary = minsalary;
+                    param.maxsalary = maxsalary;
+                    param.hy = hy;
+                    param.report = report;
+                    param.typeid = typeid;
+                    param.jobstatus = jobstatus;
+                    param.type = 'Expect';
+                    param.pytoken = pytoken;
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.Expect = res.Info.user_expect;
+                                self.ExpectBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'work'){
+                    var self = this;
+
+                    var name = $.trim($("#work_name").val());
+                    var sdate = $.trim($("#work_sdate").val());
+                    var edate = $.trim($("#work_edate").val());
+                    var title = $.trim($("#work_title").val());
+                    var content = $.trim($("#work_content").val());
+
+                    if (self.workInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写单位名称！', 2, 8);
+                        return false;
+                    }
+                    if (sdate == "") {
+                        parent.layer.msg('工作时间不能为空！', 2, 8);
+                        return false
+                    }
+                    if (edate != '') {
+                        sdate = sdate.replace(/-/g, "-");
+                        edate = edate.replace(/-/g, "-");
+
+                        var sd = new Date(Date.parse(sdate));
+                        var ed = new Date(Date.parse(edate));
+
+                        if (sd >= ed) {
+                            parent.layer.msg('结束日期必须大于开始日期！', 2, 8);
+                            return false;
+                        }
+                    }
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.workInfo.uid;
+                    param.eid = self.workInfo.eid;
+                    param.id = self.workInfo.id;
+                    param.name = name;
+                    param.title = title;
+                    param.sdate = sdate;
+                    param.edate = edate;
+                    param.content = content;
+                    param.type = 'work';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.workBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+
+                } else if (type == 'edu'){
+                    var self = this;
+
+                    var name = $.trim($("#edu_name").val());
+                    var sdate = $.trim($("#edu_sdate").val());
+                    var edate = $.trim($("#edu_edate").val());
+                    var education = $("#education").val();
+                    var specialty = $.trim($("#edu_specialty").val());
+
+                    if (self.eduInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写学校名称！', 2, 8);
+                        return false;
+                    }
+                    if (sdate == "") {
+                        parent.layer.msg('在校时间不能为空！', 2, 8);
+                        return false
+                    }
+                    if (edate != '') {
+                        sdate = sdate.replace(/-/g, "-");
+                        edate = edate.replace(/-/g, "-");
+
+                        var sd = new Date(Date.parse(sdate));
+                        var ed = new Date(Date.parse(edate));
+
+                        if (sd >= ed) {
+                            parent.layer.msg('结束日期必须大于开始日期！', 2, 8);
+                            return false;
+                        }
+                    }
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.eduInfo.uid;
+                    param.eid = self.eduInfo.eid;
+                    param.id = self.eduInfo.id;
+                    param.name = name;
+                    param.specialty = specialty;
+                    param.sdate = sdate;
+                    param.edate = edate;
+                    param.education = education;
+                    param.type = 'edu';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.eduBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'train'){
+                    var self = this;
+
+                    var name = $.trim($("#train_name").val());
+
+                    var sdate = $.trim($("#train_sdate").val());
+                    var edate = $.trim($("#train_edate").val());
+                    var title = $.trim($("#train_title").val());
+                    var content = $.trim($("#train_content").val());
+
+                    if (self.trainInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写培训中心名称！', 2, 8);
+                        return false;
+                    }
+                    if (sdate == "") {
+                        parent.layer.msg('培训时间不能为空！', 2, 8);
+                        return false
+                    }
+                    if (edate != '') {
+                        sdate = sdate.replace(/-/g, "-");
+                        edate = edate.replace(/-/g, "-");
+
+                        var sd = new Date(Date.parse(sdate));
+                        var ed = new Date(Date.parse(edate));
+
+                        if (sd >= ed) {
+                            parent.layer.msg('结束日期必须大于开始日期！', 2, 8);
+                            return false;
+                        }
+                    }
+
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.trainInfo.uid;
+                    param.eid = self.trainInfo.eid;
+                    param.id = self.trainInfo.id;
+                    param.name = name;
+                    param.title = title;
+                    param.sdate = sdate;
+                    param.edate = edate;
+                    param.content = content;
+                    param.type = 'train';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.trainBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'skill'){
+                    var self = this;
+
+                    var name = $.trim($("#skill_name").val());
+                    var longtime = $.trim($("#skill_longtime").val());
+                    var ing = $("#skill_ing").val();
+                    var pic = $("#skill_pic").val();
+
+                    if (self.skillInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写技能名称！', 2, 8);
+                        return false;
+                    }
+                    if (ing == "") {
+                        parent.layer.msg('请选择技能熟练度！', 2, 8);
+                        return false;
+                    }
+
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.skillInfo.uid;
+                    param.eid = self.skillInfo.eid;
+                    param.id = self.skillInfo.id;
+                    param.name = name;
+                    param.longtime = longtime;
+                    param.ing = ing;
+                    param.pic = pic;
+                    param.type = 'skill';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.skillBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'project'){
+                    var self = this;
+
+                    var name = $.trim($("#project_name").val());
+
+                    var sdate = $.trim($("#project_sdate").val());
+                    var edate = $.trim($("#project_edate").val());
+                    var title = $.trim($("#project_title").val());
+                    var content = $.trim($("#project_content").val());
+
+                    if (self.projectInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写项目名称！', 2, 8);
+                        return false;
+                    }
+                    if (sdate == "") {
+                        parent.layer.msg('项目时间不能为空！', 2, 8);
+                        return false
+                    }
+                    if (edate != '') {
+                        sdate = sdate.replace(/-/g, "-");
+                        edate = edate.replace(/-/g, "-");
+
+                        var sd = new Date(Date.parse(sdate));
+                        var ed = new Date(Date.parse(edate));
+
+                        if (sd >= ed) {
+                            parent.layer.msg('结束日期必须大于开始日期！', 2, 8);
+                            return false;
+                        }
+                    }
+
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.projectInfo.uid;
+                    param.eid = self.projectInfo.eid;
+                    param.id = self.projectInfo.id;
+                    param.name = name;
+                    param.title = title;
+                    param.sdate = sdate;
+                    param.edate = edate;
+                    param.content = content;
+                    param.type = 'project';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.projectBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                } else if (type == 'other'){
+                    var self = this;
+
+                    var name = $.trim($("#other_name").val());
+                    var content = $.trim($("#other_content").val());
+
+                    if (self.otherInfo.eid == "") {
+                        parent.layer.msg('请先完善求职意向！', 2, 8);
+                        return false;
+                    }
+                    if (name == "") {
+                        parent.layer.msg('请填写标题信息！', 2, 8);
+                        return false;
+                    }
+
+                    var url = "index.php?m=crm_chat&c=saveResumeType";
+                    var param = {};
+                    param.uid = self.otherInfo.uid;
+                    param.eid = self.otherInfo.eid;
+                    param.id = self.otherInfo.id;
+                    param.name = name;
+                    param.content = content;
+                    param.type = 'other';
+                    param.pytoken = pytoken;
+
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+
+                                self.Info = res.Info;
+                                self.otherBoxShow = false;
+                                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                }
+            },
+            delResume:function(e, v, key){
+                var self = this;
+                 parent.layer.confirm('确定要删除该项内容？', function () {
+                    var url = 'index.php?m=crm_chat&c=delResumeFb'
+                    var param = {};
+                    param.eid = self.resumeId;
+                    param.uid = self.Info.uid;
+                    param.id = v;
+                    param.table = e;
+                    param.pytoken = pytoken;
+                    $.post(url, param, function (res) {
+                        if (res.error == 1) {
+                            layer.msg(res.msg, 2, 9, function () {
+                                if (e == 'work'){
+
+                                    self.Info.user_work.splice(key, 1);
+                                } else if (e == 'edu'){
+
+                                    self.Info.user_edu.splice(key, 1);
+                                } else if (e == 'training'){
+
+                                    self.Info.user_tra.splice(key, 1);
+                                } else if (e == 'skill'){
+
+                                    self.Info.user_skill.splice(key, 1);
+                                } else if (e == 'project'){
+
+                                    self.Info.user_xm.splice(key, 1);
+                                } else if (e == 'other'){
+
+                                    self.Info.user_other.splice(key, 1);
+                                }
+                            });
+                        }else{
+                            layer.msg(res.msg, 2, 8);
+                            return false;
+                        }
+                    }, 'json');
+                });
+            },
+            auditResume: function(){
+                var self = this;
+                var param = {};
+
+                if (self.Info.r_status == 2){
+                    var lock_status = $("input[name='lock_status']:checked").val();
+                    if (typeof lock_status !== 'undefined') {
+                        if (lock_status == 1) {
+                            params.lock_status = lock_status;
+                        } else {
+                            parent.layer.msg("锁定操作异常！", 2, 8);
+                            return false;
+                        }
+                    }
+                }
+                var status = $("input[name='status']:checked").val();
+                if (typeof status === 'undefined') {
+                    parent.layer.msg("请选择审核状态！", 2, 8);
+                    return false;
+                }
+                var statusbody = $('#statusbody').val();
+                param.id = self.resumeId;
+                param.uid = self.Info.uid;
+                param.status = status;
+                param.statusbody = statusbody;
+                param.pytoken = pytoken;
+                var url = "index.php?m=crm_chat&c=statusResume";
+                $.post(url, param, function (res) {
+                    if (res.errcode == 9) {
+                        layer.msg("简历审核设置成功！", 2, 9, function () {
+
+                            self.Info.status = status;
+                            self.Info.statusbody = statusbody;
+                            self.Info.lock_status = 1;
+                        });
+                    }else{
+                        layer.msg(res.msg, 2, 8);
+                        return false;
+                    }
+                }, 'json');
+            },
+            changeFollowTab: function (e) {
+                this.followTab = e;
+                this.getFollowList();
+            },
+            preFollowPage: function(){
+
+                var self = this;
+                if(self.followPage > 1){
+
+                    self.followPage = self.followPage - 1;
+                    self.getFollowList();
+                }
+            },
+            nextFollowPage: function(){
+
+                var self = this;
+                if(self.followPage < self.followPageTotal){
+
+                    self.followPage = self.followPage + 1;
+                    self.getFollowList();
+                }
+            },
+            followPageJump:function(e){
+                var self = this;
+                self.followPage = e;
+                self.getFollowList();
+            },
+            getFollowList:function(){
+                var self = this;
+                var url = "index.php?m=crm_chat&c=getFollowList";
+                var param = {};
+                param.id = self.resumeId;
+                param.followTab = self.followTab;
+                param.page = self.followPage;
+                param.pytoken = pytoken;
+
+                $.post(url, param, function(res) {
+                    var data = res.data;
+                    if (res.error == 0){
+                        self.FollowList = data.followList;
+                        self.followStart = data.start;
+                        self.followEnd = data.end;
+                        self.followNum = data.followNum;
+                        self.followTotal = data.followTotal;
+                        self.followPageTotal = data.pageTotal;
+                        self.followPageArr = [];
+                        if (self.followPage <= 6 ){
+
+                            var maxPage = self.followPageTotal > 10 ? 10 : self.followPageTotal;
+
+                            for ($i = 0; $i < maxPage; $i++) {
+                                self.followPageArr.push($i);
+                            }
+                        }else {
+
+                            var maxPage = self.followPage + 4 < self.followPageTotal ? self.followPage + 4 : self.followPageTotal;
+                            var minPage = self.followPage + 4 < self.followPageTotal ? self.followPage - 6 : self.followPageTotal - 10;
+                            for ($i = minPage; $i < maxPage; $i++) {
+                                self.followPageArr.push($i);
+                            }
+                        }
+
+                        setTimeout(function () {
+                            layuiForm()
+                        }, 500);
+                    }
+                }, 'json');
+            },
+            addFollow: function(){
+                var self = this;
+                var url = "index.php?m=crm_chat&c=label";
+                var param = {};
+                param.id = self.resumeId;
+                param.uid = self.Info.uid;
+                param.label = $('#user_label').val();
+                param.content = $('#content').val();
+                param.f_time = $('#f_time').val();
+                param.from = 1;
+                param.pytoken = pytoken;
+                $.post(url, param, function(res) {
+                    if (res.errcode == 9){
+
+                        $('#followForm').hide();
+                        $('#followTips').show();
+                        $('#f_time').val('');
+                        self.getFollowList();
+                    }else{
+                        layer.msg(res.msg, 2, 8);
+                        return false;
+                    }
+                }, 'json');
+            },
+            againFollow: function(){
+
+                var self = this;
+                $('#followForm').show();
+                $('#followTips').hide();
+                layuiForm();
+            },
+            preApplyPage: function(){
+
+                var self = this;
+                if(self.applyPage > 1){
+
+                    self.applyPage = self.applyPage - 1;
+                    self.getApplyList();
+                }
+            },
+            nextApplyPage: function(){
+
+                var self = this;
+                if(self.applyPage < self.applyPageTotal){
+
+                    self.applyPage = self.applyPage + 1;
+                    self.getApplyList();
+                }
+            },
+            applyPageJump:function(e){
+                var self = this;
+                self.applyPage = e;
+                self.getApplyList();
+            },
+            getApplyList:function(){
+                var self = this;
+                var url = "index.php?m=crm_chat&c=getApplyList";
+                var param = {};
+                param.id = self.resumeId;
+                param.page = self.applyPage;
+                param.pytoken = pytoken;
+
+                $.post(url, param, function(res) {
+                    var data = res.data;
+                    if (res.error == 0){
+                        self.applyList = data.applyList;
+                        self.applyStart = data.start;
+                        self.applyEnd = data.end;
+                        self.applyNum = data.applyNum;
+                        self.applyTotal = data.applyTotal;
+                        self.applyPageTotal = data.pageTotal;
+                        self.applyPageArr = [];
+                        if (self.applyPage <= 6 ){
+
+                            var maxPage = self.applyPageTotal > 10 ? 10 : self.applyPageTotal;
+
+                            for ($i = 0; $i < maxPage; $i++) {
+                                self.applyPageArr.push($i);
+                            }
+                        }else {
+
+                            var maxPage = self.applyPage + 4 < self.applyPageTotal ? self.applyPage + 4 : self.applyPageTotal;
+                            var minPage = self.applyPage + 4 < self.applyPageTotal ? self.applyPage - 6 : self.applyPageTotal - 10;
+                            for ($i = minPage; $i < maxPage; $i++) {
+                                self.applyPageArr.push($i);
+                            }
+                        }
+
+                        setTimeout(function () {
+                            layuiForm()
+                        }, 500);
+                    }
+                }, 'json');
+            },
+        }
+    });
+    
+    function jobSearchReset() {
+        
+        var subscribeBoxShow = resumeApp.$data.subscribeBoxShow;
+
+        var formSelects = layui.formSelects,
+            jobclassArr = $("#resume_job_class").val() != '' ? $("#resume_job_class").val().split(",") : [],
+            formSelects_t = 'resume_jobclass_search',
+            jarr = [];
+
+        if(subscribeBoxShow){
+            formSelects_t = 'subscribe_jobclass_search'
+            jobclassArr = $("#subscribe_job_class").val() != '' ? $("#subscribe_job_class").val().split(",") : [];
+        }
+
+        for (var i = 0; i < jobclassArr.length; i++) {
+            jarr.push({
+                "name": jn[jobclassArr[i]],
+                "value": jobclassArr[i],
+                "selected": 'selected'
+            });
+        }
+        formSelects.data(formSelects_t, 'local', {
+            arr: jarr
+        });
+    }
+
+
+    function citySearchReset() {
+
+        var formSelects = layui.formSelects,
+            cityclassArr = $("#resume_city_class").val() != '' ? $("#resume_city_class").val().split(",") : [],
+            carr = [];
+
+        for (var i = 0; i < cityclassArr.length; i++) {
+            carr.push({
+                "name": cn[cityclassArr[i]],
+                "value": cityclassArr[i],
+                "selected": 'selected'
+            });
+        }
+        formSelects.data('resume_cityclass_search', 'local', {
+            arr: carr
+        });
+    }
+
+    function layuiForm() {
+        layui.use(['form', 'element', 'layer', 'laydate'], function () {
+            var form = layui.form
+                , layer = layui.layer
+                , element = layui.element
+                , laydate = layui.laydate
+                , $ = layui.$;
+            form.render();
+        });
+    }
+</script>
+<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/formSelects-v4.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui/formSelects-v4.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+</body>
+</html>

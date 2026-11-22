@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+<div id="daohaapp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachleft">
+
+            <div class="moduleInptList">
+                <el-input placeholder="输入你要搜索的关键字" size="small" v-model="search.keyword" class="input-with-select" clearable>
+                    <el-select v-model="search.typeca" slot="prepend" placeholder="请选择" >
+                        <el-option label="提现单号" value="1"></el-option>
+                        <el-option label="用户名称" value="2"></el-option>
+                    </el-select>
+                </el-input>
+            </div>
+
+            <div class=" tableSeachInptsmall newsinput">
+                <el-select v-model="search.order_state" size="small" slot="prepend" placeholder="提现状态" clearable
+                           @change="doUserQuery">
+                    <el-option label="等待审核" value="0"></el-option>
+                    <el-option label="提现成功" value="1"></el-option>
+                    <el-option label="提现失败" value="2"></el-option>
+                </el-select>
+            </div>
+            <div class=" tableSeachInptsmall newsinput">
+                <el-select v-model="search.time" size="small" slot="prepend" placeholder="提现时间" clearable
+                           @change="doUserQuery">
+                    <el-option v-for="item in time" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+            </div>
+            <div class="newsbtnbox">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="doUserQuery">查询</el-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%"
+                  @selection-change="selectChange"
+                  @sort-change="shortChange"
+                  ref="multipleTable"
+                  :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="100%" v-loading="loading" :empty-text="emptytext">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="id" label="编号" width="80" sortable="custom">
+            </el-table-column>
+            <el-table-column prop="username" label="用户名称" width="140">
+            </el-table-column>
+            <el-table-column prop="comname" label="公司名称（姓名）" min-width="200">
+            </el-table-column>
+            <el-table-column prop="order_id" label="提现单号" width="160">
+            </el-table-column>
+            <el-table-column prop="price" label="提现金额" width="120">
+            </el-table-column>
+            <el-table-column prop="order_price" label="实到金额" width="120">
+            </el-table-column>
+            <el-table-column prop="pound_price" label="手续费" width="100">
+            </el-table-column>
+            <el-table-column prop="time_ymd" label="提现时间" width="160">
+            </el-table-column>
+            <el-table-column prop="order_state_n" label="状态" width="100">
+            </el-table-column>
+            <el-table-column prop="order_remark" label="原因" min-width="200">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="130" align="center">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button size="small" v-if="scope.row.order_state == 0 || scope.row.order_state == 2"
+                                   type="primary" @click="withdrawal(scope.row)">提现
+                        </el-button>
+                        <el-button type="danger" size="small " @click="del(scope.row)">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+      <div class="modulecz modulePagButn">
+            <el-checkbox v-model="checkedAll" @change="selectAllBottom">全选</el-checkbox>
+            <el-button @click="batchDel" size="mini">批量删除</el-button>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination :total="total" @current-change="userPageChange" @size-change="userPageSizeChange"
+                           :page-size="pageSize" :current-page.sync="page"
+                           :page-sizes="pageSizes"
+                           layout="total, sizes, prev, pager, next, jumper">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function () {
+            return {
+                loading: false,
+                emptytext: '暂无数据',
+                checkedAll:false,
+                // search
+                search: {
+                    typeca: '1',
+                    keyword: '',
+                    order_state: '',
+                    time: ''
+                },
+                input3: '',
+                select: '',
+                value: true,
+                value1: '',
+                currentPage4: 4,
+                drawer: false,
+                drawer2: false,
+                tableData: [
+                    {
+                        bianh: '136',
+                        names: 'h627457796',
+                        comname: '沭阳文泰新传媒有限公司',
+                        tixdahao: '163037332992674',
+                        tixmoney: '111.00',
+                        shidmoney: '105.45',
+                        shouxuf: '5.55',
+                        txtime: '2021-11-30 14:03',
+                        zhuantai: '提现成功',
+                        yuanyin: '微信接口API调用错误',
+                    },
+                ],
+                time: [{
+                    value: 1,
+                    label: "今天"
+                }, {
+                    value: 3,
+                    label: "最近三天"
+                }, {
+                    value: 7,
+                    label: "最近七天"
+                }, {
+                    value: 15,
+                    label: "最近半月"
+                }, {
+                    value: 30,
+                    label: "最近一个月"
+                }],
+                total: 0,
+                page: 1,
+                idsArr: [],
+                pageSize: 0,
+                pageSizes:[],
+                uri: "m=yunying&c=",
+                prevPage:0
+            }
+        },
+        components: {
+            // 'navxiugai': httpVueLoader('./component/navxiugai.vue'),
+        },
+        created() {
+            var that = this
+            let query = window.parent.homeapp.$route.query;
+            if (query.order_state) {
+                that.search.order_state = query.order_state;
+            }
+            this.getList();
+        },
+        methods: {
+            withdrawal(row) {
+                let url = this.uri + 'finance_withdraw&a=setpay'
+
+                let _this = this;
+                _this.$confirm('确认给该用户提现？', '温馨提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let sendData = {
+                        id: row.id
+                    };
+                    httpPost(url, sendData).then(function (response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, _this.getList());
+                        } else {
+                            message.error(res.msg);
+                        }
+                    })
+                }).catch(() => {
+                });
+            },
+            doUserQuery() {
+                this.page = 1
+                this.getList()
+            },
+            userPageChange(val) {
+                this.page = val
+                this.getList()
+            },
+            userPageSizeChange(val) {
+                this.pageSize = val
+                this.getList()
+            },
+            selectChange: function (val) {
+                this.idsArr = [];
+                let _this = this;
+                if (val.length) {
+                    val.forEach(item => {
+                        _this.idsArr.push(item.id);
+                    });
+                }
+                if (_this.idsArr.length == 0) {
+                    _this.checkedAll = false;
+                } else {
+                    if (_this.idsArr.length == _this.tableData.length) {
+                        _this.checkedAll = true;
+                    } else {
+                        _this.checkedAll = false;
+                    }
+                }
+            },
+            getList() {
+                let _this = this;
+                let url = _this.uri + 'finance_withdraw&a=index';
+                this.search.page = this.page;
+                this.search.pageSize = this.pageSize;
+                _this.loading = true;
+                _this.emptytext = "数据加载中";
+                httpPost(url, _this.search, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        _this.tableData = res.data.data;
+                        _this.total = res.data.total;
+                        if(_this.prevPage != _this.page){
+                            _this.prevPage = _this.page;
+                            _this.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        _this.loading = false;
+                        _this.pageSizes =res.data.pageSizes;
+                        if (_this.tableData.length === 0){
+                            _this.emptytext = "暂无数据";
+                        }
+                    }
+                })
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            del: function ($row) {
+
+                let url = this.uri + 'finance_withdraw&a=del'
+                let _this = this;
+                delConfirm(this, {id: $row.id}, function (params) {
+                    httpPost(url, params).then(function(response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, _this.getList());
+                        } else {
+                            message.error(res.msg);
+                        }
+                    })
+                }, '删除将解冻相应提现冻结金额，确定删除？')
+            },
+            batchDel: function () {
+                let ids = this.idsArr;
+                if (!ids.length) {
+                    message.error('请选择需要删除的消费记录');
+                    return
+                }
+                let _this = this;
+                let url = this.uri + 'finance_withdraw&a=del'
+
+                delConfirm(this, {id: ids}, function (params) {
+                    httpPost(url, params).then(function(response) {
+                        let res = response.data;
+                        if (res.error == 0) {
+                            message.success(res.msg, _this.getList());
+                        } else {
+                            message.error(res.msg);
+                        }
+                    })
+                }, '你确定要删除选择的消费记录吗？')
+            },
+            selectAllBottom:function (value) {
+                value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+            },
+            shortChange(e) {
+                let orderMap = {ascending: 'asc', descending: 'desc'}
+                this.search.t = e.order ? e.prop : null;
+                this.search.order = orderMap[e.order];
+                this.page = 1;
+                this.getList();
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../header.js"></script>
+    <script src="../../httpVueLoader.js"></script>
+    <script src="../../../../../js/clipboard/clipboard.min.js"></script>
+</head>
+
+<body>
+<div id="dataViewApp" class="tableDome">
+    <div class="tableDome_tip">
+        <el-alert title="生成请确保目录有可写权限，否则无法生成，添加数量时，请勿填写太大数值" type="success" :closable="false"></el-alert>
+    </div>
+    <div class="moduleTable">
+        <table class="tableVue" style="width: 100%" height="100%">
+            <thead>
+            <tr align="left">
+                <th width="100">名称</th>
+                <th width="460">指向目录</th>
+                <th width=" ">说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="TableTite">大屏域名</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input v-model="dataVUrl" placeholder="http://www.yunjob.com/datav"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span>默认为网站域名用于生成预览连接 </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">预览地址</div>
+                </td>
+
+                <td>
+                    <div class="TableInpt">
+                        <el-input id="viewUrl" v-model="url" readonly
+                                  placeholder="http://www.yunjob.com/datav/index.php?token=t4US8W"></el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span>默认为网站域名用于生成预览连接 </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">预览操作</div>
+                </td>
+
+                <td>
+                    <el-button type="primary" icon="el-icon-paperclip" id="copyBtn" data-clipboard-action="copy"
+                               data-clipboard-target="#viewUrl" @click="handleCopyUrl">复制链接
+                    </el-button>
+                    <el-button type="primary" icon="el-icon-news" plain @click="handlePreview">预览大屏</el-button>
+                    <el-button type="success" icon="el-icon-document" plain @click="newUrl">生成地址</el-button>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span>默认为网站域名用于生成预览连接 </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">自定义数据大屏</div>
+                </td>
+                <td>
+                    <el-button type="primary" @click="diyShow = true" icon="el-icon-news">自定义数据大屏</el-button>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span>大屏数据=网站数据+自定义基数</span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--自定义基数-->
+    <el-drawer title="自定义基数" :append-to-body="true" :visible.sync="diyShow" size="600px">
+        <div class="uploadTable" style="padding:0px 20px;font-size:14px;color:#666">
+            <table class="tableVue">
+                <thead>
+                <tr align="left">
+                    <th width=" ">名称</th>
+                    <th width=" ">数据</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td> 大屏名称</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.datavtitle" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tjtit"><i class="el-icon-pie-chart"></i> 顶部数据总览</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 企业总数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.allcomnum" @input="inputIntNumber($event, 'diyData', 'allcomnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 今日新增企业</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.daycomnum" @input="inputIntNumber($event, 'diyData', 'daycomnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 求职总数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.allusernum" @input="inputIntNumber($event, 'diyData', 'allusernum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 今日新增求职</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.dayusernum" @input="inputIntNumber($event, 'diyData', 'dayusernum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 招聘总数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.alljobnum" @input="inputIntNumber($event, 'diyData', 'alljobnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 今日新增招聘</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.dayjobnum" @input="inputIntNumber($event, 'diyData', 'dayjobnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 招聘会总数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.allzphnum" @input="inputIntNumber($event, 'diyData', 'allzphnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 今日新增招聘会</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.dayzphnum" @input="inputIntNumber($event, 'diyData', 'dayzphnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tjtit"><i class="el-icon-data-line"></i> 最近一年求职动态</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 每月求职注册</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.yearuser_monthreg" @input="inputIntNumber($event, 'diyData', 'yearuser_monthreg')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 每月浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.yearuser_monthreg_rand" @input="inputIntNumber($event, 'diyData', 'yearuser_monthreg_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 近一个月注册</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.monthreg_user" @input="inputIntNumber($event, 'diyData', 'monthreg_user')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 今日新增注册</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.dayreg_user" @input="inputIntNumber($event, 'diyData', 'dayreg_user')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 投递简历</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.year_sqnum" @input="inputIntNumber($event, 'diyData', 'year_sqnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 面试邀请</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.year_yqnum" @input="inputIntNumber($event, 'diyData', 'year_yqnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 直聊沟通</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.year_chatnum" @input="inputIntNumber($event, 'diyData', 'year_chatnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 简历浏览</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.year_lrnum" @input="inputIntNumber($event, 'diyData', 'year_lrnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 岗位浏览</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.year_ljnum" @input="inputIntNumber($event, 'diyData', 'year_ljnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tjtit"><i class="el-icon-data-analysis"></i> 最近一年招聘企业数趋势</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 企业总数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.yearcom_regnum" @input="inputIntNumber($event, 'diyData', 'yearcom_regnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 每月基数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.yearcom_monthreg" @input="inputIntNumber($event, 'diyData', 'yearcom_monthreg')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.yearcom_monthreg_rand" @input="inputIntNumber($event, 'diyData', 'yearcom_monthreg_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tjtit"><i class="el-icon-data-analysis"></i> 最热门的行业</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 投递数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hothy_sqnum" @input="inputIntNumber($event, 'diyData', 'hothy_sqnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hothy_sqnum_rand" @input="inputIntNumber($event, 'diyData', 'hothy_sqnum_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 当前岗位数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hothy_jobs" @input="inputIntNumber($event, 'diyData', 'hothy_jobs')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hothy_jobs_rand" @input="inputIntNumber($event, 'diyData', 'hothy_jobs_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tjtit"><i class="el-icon-data-analysis"></i> 最热门的岗位</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 投递数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hotjob_sqnum" @input="inputIntNumber($event, 'diyData', 'hotjob_sqnum')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hotjob_sqnum_rand" @input="inputIntNumber($event, 'diyData', 'hotjob_sqnum_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 当前岗位数</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hotjob_jobs" @input="inputIntNumber($event, 'diyData', 'hotjob_jobs')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 浮动范围</td>
+                    <td>
+                        <div class="TableInpt">
+                            <el-input v-model="diyData.hotjob_jobs_rand" @input="inputIntNumber($event, 'diyData', 'hotjob_jobs_rand')" placeholder="请输入内容"></el-input>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="setBasicButn" style="border: none;">
+            <el-button type="primary" size="medium" @click="saveDiyData" :disabled="saveLoading">提交</el-button>
+        </div>
+    </el-drawer>
+</div>
+<script>
+    const dataViewApp = new Vue({
+        el: '#dataViewApp',
+        data: function () {
+            return {
+                dataVUrl: '',
+                url: '',
+                diyShow: false,
+                diyData: {},
+                saveLoading: false
+            }
+        },
+        created() {
+            this.getDataVConfig();
+        },
+        methods: {
+            inputIntNumber(val, form, key) {
+                this.$data[form][key] = val.replace(/[^0-9]/g,'');
+            },
+            async getDataVConfig() {
+                let res = await httpPost('m=tool&c=dataView');
+                if (res.data.error == 0) {
+
+                    var data = res.data.data;
+
+                    this.dataVUrl = data.dataVUrl;
+                    this.url = data.url;
+                    this.diyData = data.diyData.length == 0?{}:data.diyData;
+                }
+            },
+            handleCopyUrl: function () {
+                let clipboard = new ClipboardJS('#copyBtn'); // 获取点击按钮的元素
+                /* 注意此事件监听是异步的   */
+                clipboard.on('success', (e) => {
+                    e.clearSelection();
+                    // 释放内存
+                    clipboard.destroy();
+                    message.success('复制成功');
+                });
+                // 复制失败
+                clipboard.on('error', (e) => {
+                    // 释放内存
+                    clipboard.destroy();
+                    message.error('该浏览器不支持自动复制');
+                });
+            },
+            handlePreview: function(){
+                let that = this;
+                if (that.url == ''){
+
+                    that.newUrl('preview');
+                } else {
+
+                    window.open(that.url);
+                }
+            },
+            newUrl(model){
+                let _this = this;
+                let msg = "生成新地址将导致原地址失效，继续生成？";
+                let params = {
+                    url: _this.dataVUrl,
+                    model: model
+                };
+                delConfirm(this, params, this.openUrl, msg);
+            },
+            openUrl(params){
+                let _this = this;
+                httpPost('m=tool&c=dataView&a=setNewUrl', params).then(function (response) {
+                    let res = response.data;
+                    if (res.error == 0) {
+                        message.success(res.msg, function () {
+                            _this.url = res.data.url;
+                            if (params.model == 'preview'){
+                                window.open(res.data.url);
+                            }
+                        });
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            saveDiyData() {
+                let that = this;
+                let params = that.diyData;
+                that.saveLoading = true;
+                httpPost('m=tool&c=dataView&a=setDiyData', params).then(function (res) {
+                    if (res.data.error == 0) {
+                        message.success(res.data.msg);
+                        that.diyShow = false;
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                }).finally(function () {
+                    setTimeout(function () {
+                        that.saveLoading = false;
+                    }, 2000);
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

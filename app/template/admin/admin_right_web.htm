@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+{yun:}if $type=="tj"{/yun}
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"/>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<title>后台管理</title>
+		<style>
+			::-webkit-scrollbar {
+				width: 5px;
+				height: 1px;
+				/*display: none;*/
+			}
+			::-webkit-scrollbar-thumb {
+				border-radius: 10px;
+				 -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+				background: #D2D8E9;
+			}
+			::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+				border-radius: 10px;
+				background: #ECEFF8;
+			}
+		</style>
+	</head>
+	<body class="body_ifm">
+
+
+		<script type="text/javascript">
+			//获取完整的日期
+			var date=new Date;
+			var year=date.getFullYear();
+			var month=date.getMonth()+1;
+			month = month<10 ? "0"+month : month;
+
+			{yun:}if $smarty.get.sdate{/yun}
+			var tjTime = '{yun:}$smarty.get.sdate{/yun}';
+			{yun:}else{/yun}
+			var tjTime = (year.toString() + '-' + month.toString());
+			{yun:}/if{/yun}
+
+			layui.use(['form', 'laydate', 'element'], function () {
+				var form = layui.form
+					, element = layui.element
+					, laydate = layui.laydate
+					, $ = layui.$;
+
+				laydate.render({
+					elem: '#tjTime'
+					, type: 'month'
+					, value: tjTime
+					, done: function (value, date) {
+						tjTime = value;
+						let ym = new Date(date.year,date.month,0).getDate() // 月未最后一天
+							,edate = value + '-' + (ym<10 ? "0"+ym : ym);
+						let tbName = window.parent.tjTbName;
+						$(window.parent.document).find("#tbrightMain").attr("src","index.php?m=admin_right&c="+tbName+"&sdate="+value+"&edate="+edate);
+					}
+				});
+			});
+		</script>
+		<div class="admin_atatic_chart fl" id="main2" style="height:340px;"></div>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/echarts.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script type="text/javascript">
+			var myChart = echarts.init(document.getElementById('main2'));
+
+			var legendData = JSON.parse('{yun:}$name{/yun}');
+			var tjlist = JSON.parse('{yun:}$list{/yun}');
+
+			var xAxisData = [],
+				seriesList = [],
+				seriesObj = {},
+				seriesData = [],
+				seriesColor = [
+					'#2778F8',
+					'#F6B44C',
+					'#20EBDA',
+					'#F86138'
+				];
+			tjlist.forEach(function (item, key) {
+				$(".tj-name").eq(key).text(legendData[key]);
+				$(".tj-num").eq(key).text(item.count);
+				$(".tj-count").eq(key).show();
+				seriesData = [];
+				for (let sdkey in item.list) {
+					if (key == 0) {
+						xAxisData.push(item.list[sdkey].td);
+					}
+					seriesData.push(item.list[sdkey].cnt);
+				}
+
+				seriesObj = {
+					name: legendData[key],
+					type:'line',
+					symbol:'emptyCircle',
+					// smooth: true,
+					itemStyle: {
+						normal: {
+							areaStyle: {
+								width: 2,
+								color: seriesColor[key]
+							}
+						}
+					}, 
+					areaStyle: {
+						normal: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+								{
+									offset: 0,
+									color:seriesColor[key]
+								},
+								{
+									offset: 0.9,
+									color: '#fff'
+								}
+							], false),
+						}
+					},
+					data: seriesData
+				};
+				seriesList.push(seriesObj);
+			})
+
+			var option = {
+				tooltip: {trigger: 'axis'},
+				color: ['#2778F8', '#F6B44C', '#20EBDA', '#F86138'],
+				grid: {
+					top:'15%',
+					left: '1%',
+					right: '2%',
+					bottom: '1%',
+					containLabel: true
+				},
+				legend: {
+					data: legendData
+				},
+				calculable: false,
+				xAxis: [
+					{
+						type: 'category',
+						boundaryGap: false,
+						axisLine: {
+							show: true,
+							lineStyle: {
+								color: "#f90",
+								width: 1,
+								type: "solid"
+							}
+						},
+						data: xAxisData
+					}
+				],
+				yAxis: [
+					{
+						type: 'value', 
+						minInterval: 1,
+					}
+				],
+				series: seriesList
+			};
+			myChart.setOption(option); // 为echarts对象加载数据 
+			setTimeout(function () {
+				window.addEventListener("resize", () => {
+					myChart.resize();
+				});
+			}, 200);
+		</script>
+	</body>
+{yun:}elseif ($type=="dt"){/yun}
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+	<ul class="right_web_list rightWebListOne">
+	{yun:}foreach name=$name from=$list item=v{/yun}
+	<li>会员
+	<!--下载简历-->
+	{yun:}if $v.downtime{/yun}
+	{yun:}$v.comusername{/yun}
+	{yun:}/if{/yun}
+
+	{yun:}if $v.order_time{/yun}
+	{yun:}$v.username{/yun}
+	{yun:}/if{/yun}
+
+	{yun:}if $v.jobid || $v.job_id{/yun}
+	{yun:}$v.username{/yun}
+	{yun:}/if{/yun}
+
+	{yun:}if $v.resume_id{/yun}
+	{yun:}$v.comusername{/yun}
+	{yun:}/if{/yun}
+
+	在
+
+	{yun:}if $v.downtime{/yun}
+	{yun:}if $v.time<60{/yun} <span style="color:red;">{yun:}$v.time{/yun}</span> {yun:}else{/yun}{yun:}$v.time{/yun}{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}if $v.datetime{/yun}
+	{yun:}if $v.times<60{/yun} <span style="color:red;">{yun:}$v.times{/yun}</span> {yun:}else{/yun}{yun:}$v.times{/yun}{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}if $v.order_time{/yun}
+	{yun:}if $v.timess<60{/yun} <span style="color:red;">{yun:}$v.timess{/yun}</span> {yun:}else{/yun}{yun:}$v.timess{/yun}{yun:}/if{/yun}
+	{yun:}/if{/yun}
+
+	{yun:}if $v.downtime{/yun}
+	下载了 {yun:}$v.username{/yun} 的简历
+	{yun:}/if{/yun}
+
+	{yun:}if $v.job_name{/yun}
+	{yun:}if $v.eid{/yun}申请了{yun:}else{/yun}收藏了{yun:}/if{/yun} {yun:}$v.job_name{/yun} 职位
+	{yun:}/if{/yun}
+
+	{yun:}if $v.jobid{/yun}
+	浏览了 {yun:}$v.jobname{/yun} 职位
+	{yun:}/if{/yun}
+
+	{yun:}if $v.resume_id{/yun}
+	浏览了 {yun:}$v.username{/yun} 简历
+	{yun:}/if{/yun}
+
+	{yun:}if $v.order_time{/yun}
+	充值了 {yun:}$v.order_price{/yun}
+	{yun:}/if{/yun}
+	</li>
+	{yun:}/foreach{/yun}
+	</ul>
+
+{yun:}elseif ($type=="rz"){/yun}
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+	<ul class="right_web_list rightWebListOne">
+	{yun:}foreach name=$name from=$list item=v{/yun}
+	<li>会员 {yun:}$v.username{/yun} 在
+	{yun:}if $v.ctime{/yun}
+	{yun:}if $v.time<60{/yun} <span style="color:red;">{yun:}$v.time{/yun}</span> {yun:}else{/yun}{yun:}$v.time{/yun}{yun:}/if{/yun}
+	{yun:}/if{/yun}
+	{yun:}$v.content{/yun}{yun:}if $v.sub_n{/yun}；{yun:}$v.sub_n{/yun}{yun:}/if{/yun}</li>
+	{yun:}/foreach{/yun}
+	</ul>
+	</body>
+{yun:}/if{/yun}
+</html>

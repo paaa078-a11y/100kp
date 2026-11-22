@@ -1,0 +1,834 @@
+{yun:}include file="$wapadminstyle/header.htm"{/yun}
+<style>
+	body,
+	html {
+		padding: 0;
+		margin: 0;
+		overflow: auto;
+	}.behavSchedule ul li .layuiTimeline span{ margin-bottom: 0px;;}
+	.respurpose{ margin-top: 0px;;}
+</style>
+<body>
+	<div id="yunvue" class="none">
+
+		<div class="new_bgcor">
+			<a href="javascript:goBack()" class="new_header_fh"></a>
+
+		</div>
+		<div class="new_job_box">
+			<div class="new_job_info">
+				<div class="new_user_resume">
+					<div class="new_user_pic"> <img :src="info.photo" alt=""></div>
+					<div class="new_job_name">{{info.name}}</div>
+					<div class="new_job_wzd">简历完整度： <span class="new_job_wzdbg">
+							<em class="new_job_wzd_jd" :style="'width: '+expect.integrity+'%;'"></em>
+						</span>
+						<span>{{expect.integrity}}%</span>
+					</div>
+
+					<div class="new_user_time">更新时间：{{info.lastupdate}}</div>
+
+				</div>
+				<span class="shzt">
+					<span v-if="info.state==1" class="ysh"><i class="wshicon"></i>已审核</span>
+					<span v-else-if="info.state==0" class="wsh"><i class="wshicon"></i>未审核</span>
+					<span v-else-if="info.state==3" class="ysd"><i class="wshicon"></i>未通过</span>
+				</span>
+			</div>
+
+
+
+			<div class="clear"></div>
+			<div class="new_job_cz">
+				<div class="new_job_cz_a">
+					<a href="###" @click="topMore" class="new_job_cz_l">
+						<i class="new_job_cz_icon new_user_cz_iconzd"></i>简历置顶<i class="new_job_cz_jr"></i>
+						<span v-if="expect.top_day && expect.top_day > 0" class="new_job_cz_ok">已置顶</span>
+					</a>
+				</div>
+				<div class="new_job_cz_a">
+					<a href="###" @click="setRec(expect.rec_resume)" class="new_job_cz_r">
+						<i class="new_job_cz_icon new_user_cz_icontj"></i>简历推荐<i class="new_job_cz_jr"></i>
+						<span v-if="expect.rec_resume && expect.rec_resume == 1" class="new_job_cz_ok">已推荐</span>
+					</a>
+				</div>
+				<div class="new_job_cz_a">
+					<a href="###" @click="labelboxShow = true" class="new_job_cz_l">
+						<i class="new_job_cz_icon new_user_cz_iconjp"></i>简历备注<i class="new_job_cz_jr"></i>
+						<span v-if="(expect.label && expect.label > 0) || content != ''"
+							class="new_job_cz_ok">已备注</span>
+					</a>
+				</div>
+				<div class="new_job_cz_a">
+					<a href="###" @click="refresh" class="new_job_cz_r">
+						<i class="new_job_cz_icon new_user_cz_iconsx"></i>刷新简历<i class="new_job_cz_jr"></i>
+					</a>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<!--基本信息-->
+			<section class="new_job_infobox">
+				<div class="new_job_infotit">数据统计</div>
+				<div class="new_job_date">
+					<div class="new_job_date_list">
+						<div class="new_job_date_c">
+							<span class="new_job_datename">面试邀请</span>
+							<span class="new_job_date_n">{{yqnum}}</span>
+						</div>
+					</div>
+					<div class="new_job_date_list">
+						<div class="new_job_date_c">
+							<span class="new_job_datename">投递职位</span>
+							<span class="new_job_date_n">{{sqnum}}</span>
+						</div>
+					</div>
+					<div class="new_job_date_list">
+						<div class="new_job_date_c">
+							<span class="new_job_datename">被浏览量</span>
+							<span class="new_job_date_n">{{lknum}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="new_user_infotit"><span class="new_user_info_name">基本信息</span><span class="new_user_info_cz"
+						@click="pageTo('index.php?m=user&c=users_resume&a=edit&type=info&uid='+info.uid)"></span></div>
+
+				<div class="resume_show_info">
+					<ul>
+
+						<li><i class="resume_show_icon1"></i>{{info.name}}<span class="resume_line">|</span><span class="">{{info.sex_n}}</span><span class="resume_line">|</span>{{info.age}}岁</li> 
+						<li><i class="resume_show_icon2"></i>{{info.exp_n}}经验</li>
+						<li><i class="resume_show_icon3"></i>{{info.edu_n}}学历</li>
+						<li><i class="resume_show_icon4"></i>{{info.telphone}}</li>
+						<li><i class="resume_show_icon6"></i>现居{{info.living}}</li>
+						<li><i class="resume_show_icon7"></i>{{expect.jobstatus_n}}-{{expect.report_n}}</li>
+						
+					</ul>
+				</div>
+				<div class="new_user_infotit"><span class="new_user_info_name">求职意向</span><span class="new_user_info_cz"
+						@click="pageTo('index.php?m=user&c=users_resume&a=edit&type=jobinten&eid='+eid+'&uid='+info.uid)"></span>
+				</div>
+				<div class="new_job_i">
+					<ul>
+
+						<li><span class="new_job_i_n">工作职能：</span>{{expect.job_classname}}</li>
+						<li><span class="new_job_i_n">意向岗位：</span>{{expect.name}}</li>
+						<li><span class="new_job_i_n">从事行业：</span>{{expect.hy_n}}</li>
+						<li><span class="new_job_i_n">期望薪资：</span>{{expect.salary}}</li>
+						<li><span class="new_job_i_n">工作性质：</span>{{expect.type_n}}</li>
+						<li><span class="new_job_i_n">工作地点：</span>{{expect.city_classname}}</li>
+					</ul>
+				</div>
+				<div class=" " v-if="workcount>0">
+					<div class="new_user_infotit"><span class="new_user_info_name">工作经历</span> </div>
+
+
+					<div class="behavSchedule">
+						<ul>
+							<li v-for="(item, wkey) in work" :key="wkey">
+								<i> <img src="img/quans.png" alt=""></i>
+								<div class="layuiTimeline workHistory">
+									<span>{{item.name}}</span>
+									<div class="workHistoryInfo">
+										<div class="istoryInfOne">
+											<p>{{item.date_n}}</p>
+											<p>{{item.title}}</p>
+										</div>
+										<div class="istoryInfTwo">
+											{{item.content}}
+										</div>
+									</div>
+
+								</div>
+								<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=work&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class=" " v-if="educount>0">
+					<div class="new_user_infotit"><span class="new_user_info_name">教育经历</span> </div>
+					<div class="behavSchedule">
+						<ul>
+							<li v-for="(item, ekey) in edu" :key="ekey">
+								<i> <img src="img/quans.png" alt=""></i>
+								<div class="layuiTimeline workHistory">
+									<span>{{item.name}}</span>
+									<div class="workHistoryInfo">
+										<div class="istoryInfOne">
+											<p>{{item.date_n}}</p>
+											<p>{{item.education_n}}</p>
+					    	</div>
+										<div class="istoryInfTwo">
+											{{item.specialty}}
+										</div>
+									</div>
+
+								</div>
+								<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=edu&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+							</li>
+						</ul>
+					</div>
+
+
+					<div class="respurpose" v-if="projectcount>0">
+						<div class="new_user_infotit"><span class="new_user_info_name">项目经历</span> </div>
+						<div class="behavSchedule">
+							<ul>
+								<li v-for="(item, ekey) in project" :key="ekey">
+									<i> <img src="img/quans.png" alt=""></i>
+									<div class="layuiTimeline workHistory">
+										<span>{{item.name}}</span>
+										<div class="workHistoryInfo">
+											<div class="istoryInfOne">
+												<p>{{item.date_n}}</p>
+												<p>{{item.title}}</p>
+											</div>
+											<div class="istoryInfTwo">
+												{{item.content}}
+											</div>
+						 			</div>
+
+									</div>
+									<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=project&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+								</li>
+							</ul>
+						</div>
+
+
+
+					</div>
+					<div class="respurpose" v-if="trainingcount>0">
+						<div class="new_user_infotit"><span class="new_user_info_name">培训经历</span> </div>
+
+
+						<div class="behavSchedule">
+							<ul>
+								<li v-for="(item, pkey) in training" :key="pkey">
+									<i> <img src="img/quans.png" alt=""></i>
+									<div class="layuiTimeline workHistory">
+										<span>{{item.name}}</span>
+										<div class="workHistoryInfo">
+											<div class="istoryInfOne">
+												<p>{{item.date_n}}</p>
+												<p>{{item.title}}</p>
+											</div>
+											<div class="istoryInfTwo">
+												{{item.content}}
+											</div>
+										</div>
+
+									</div>
+									<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=training&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+					<div class=" " v-if="skillcount>0">
+						<div class="new_user_infotit"><span class="new_user_info_name">职位技能</span> </div>
+						<div class="behavSchedule">
+							<ul>
+								<li v-for="(item, skey) in skill" :key="skey">
+									<i> <img src="img/quans.png" alt=""></i>
+									<div class="layuiTimeline workHistory">
+										<span>{{item.name}}</span>
+										<div class="workHistoryInfo">
+											<div class="istoryInfOne">
+												<p>{{item.longtime}}年</p>
+												<p>{{item.ing_n}}</p>
+											</div>
+
+										</div>
+
+									</div>
+									<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=skill&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+								</li>
+							</ul>
+						</div>
+
+
+
+
+					</div>
+					<div class=" " v-if="othercount>0">
+						<div class="new_user_infotit"><span class="new_user_info_name">其它信息</span> </div>
+
+						<div class="behavSchedule">
+							<ul>
+								<li v-for="(item, okey) in other" :key="okey">
+									<i> <img src="img/quans.png" alt=""></i>
+									<div class="layuiTimeline workHistory">
+										<span>{{item.name}}</span>
+
+										<div class="istoryInfTwo">
+											{{item.content}}
+										</div>
+									</div>
+									<span class="user_i_xg" @click="pageTo('index.php?m=user&c=users_resume&a=edit&type=other&eid='+eid+'&uid='+info.uid+'&id='+item.id)"></span>
+								</li>
+							</ul>
+						</div>
+
+
+
+						<div class=" " v-if="showcount>0">
+							<div class="new_user_infotit"><span class="new_user_info_name">个人作品</span> <span
+									class="new_user_info_cz"
+									@click="pageTo('index.php?m=user&c=users_resume&a=edit&type=show&eid='+eid+'&uid='+info.uid)"></span>
+							</div>
+
+
+
+							<div class="undergoInfo">
+								<div class="undergopt">
+									<div class="undergophoto">
+										<img :src="item.picurl" alt="" v-if="skey<3" v-for="(item, skey) in show"
+											:key="skey">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class=" " v-if="info.description && info.arrayTag">
+							<div class="new_user_infotit"><span class="new_user_info_name">个人优势</span> <span
+									class="new_user_info_cz"
+									@click="pageTo('index.php?m=user&c=users_resume&a=edit&type=desc&eid='+eid+'&uid='+info.uid)"></span>
+							</div>
+
+
+							<div class="undergoInfo">
+								<div class="undergopt">
+									<p v-if="info.description">
+										{{info.description}}
+									</p>
+									<div class="haisgui" v-if="info.arrayTag">
+										<span v-for="(item, akey) in info.arrayTag" :key="akey">{{item}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+			</section>
+
+
+		</div>
+
+		<div class="job_footer">
+			<div class="job_footer_fix">
+				<div class="job_footer_box">
+					<div class="job_footer_box_l">
+						<a class="shenhe job_sh" href="javascript:void(0)" @click="statusShow = true">审核
+						</a>
+
+
+					</div>
+					<div class="job_footer_box_r">
+						<a v-if="is_outcall && info.telphone" class="bodTel job_tel" @click="contactMobile(info.uid,info.telphone)">拨打电话</a>
+						<a v-else if="info.telphone" class="bodTel job_tel" :href="'tel:(' + info.telphone+')'">拨打电话</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<van-popup v-model="statusShow" round position="bottom">
+			<section class="positePopup">
+				<div class="positeShen">
+					<img class="positeClose" src="img/close.png" alt="" @click="statusShow = false">
+					<div class="positeForms">
+						<h3>审核操作</h3>
+						<form class="layui-form" onsubmit="return false;">
+							<div v-if="info.r_status == 2" class="positeSubes">
+								<p>锁定操作</p>
+								<div class="positeList">
+									<a href="javascript:void(0);" @click="setLockStatus(1)"
+										:class="lock_status == 1 ? 'positeButton' : ''">正常</a>
+									<a href="javascript:void(0);" @click="setLockStatus(2)"
+										:class="lock_status == 2 ? 'positeButton' : ''">锁定</a>
+								</div>
+								<div class="admin_jobshtip">
+									<div style="overflow: hidden;padding: 0.1rem 0.16rem; margin-top: 0.3rem; background: rgba(255, 51, 0, 0.2);
+                                font-size: var(--font-12); color: #f10b03;">
+										锁定原因：{{info.statusbody}}
+									</div>
+								</div>
+							</div>
+							<div v-if="lock_status != 2">
+								<div class="positeSubes">
+									<p>简历审核</p>
+									<div class="positeList" v-if="info.state!=3">
+										<a href="javascript:void(0);" class="positeButton" @click="setState(1)">正常</a>
+										<a href="javascript:void(0);" @click="setState(3)">未通过</a>
+									</div>
+									<div class="positeList" v-else-if="info.state==3">
+										<a href="javascript:void(0);" @click="setState(1)">正常</a>
+										<a href="javascript:void(0);" class="positeButton" @click="setState(3)">未通过</a>
+									</div>
+								</div>
+								<div class="positeSubes">
+									<p>审核模板</p>
+									<div class="layui-input-inline">
+										<div class="ubesMobanImg"
+											style="line-height: 1.01333rem; border: 1px solid #eee; padding: 0 0.2rem;border-radius: 0.1rem;">
+											<p @click="tpShow = true">{{tplstr ? tplstr : '请选择'}}</p>
+										</div>
+									</div>
+								</div>
+								<div class="positeSubes" style="margin-bottom: 0.4rem;">
+									<p>审核说明</p>
+									<div class="positeCont" style="border: 1px solid #eee; padding: 0.15rem;">
+										<textarea class="follotextarea" v-model="statusbody"></textarea>
+									</div>
+								</div>
+
+								<div class="positeSubes">
+									<div class="positeCont">
+										<button @click="statusSubmit">提交</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</van-popup>
+		<van-popup v-model="tpShow" round position="bottom">
+			<van-picker title="审核模板" :columns="tparr" show-toolbar @confirm="tpconfirm" @cancel="tpShow=false" />
+		</van-popup>
+		<van-popup v-model="moreShow" round position="bottom">
+			<section class="positePopup">
+				<div class="positeExtend">
+					<img class="positeCloseTui" src="img/close.png" alt="" @click="moreShow=false">
+					<div class="positeForms">
+						<h3>简历推广</h3>
+						<div class="positeSpread">
+							<ul>
+								<li @click="topMore">
+									<div class="spreadOne">
+										<img src="img/ding.png" alt="">
+										<div class="spreadTwo">
+											<p>置顶</p>
+											<span>锁定前排好位置，坐享牛人滚滚来</span>
+										</div>
+									</div>
+									<a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+								</li>
+								<li @click="setRec(expect.rec_resume)">
+									<div class="spreadOne">
+										<img src="img/recom.png" alt="">
+										<div class="spreadTwo">
+											<p v-if="expect.rec_resume ==0">推荐</p>
+											<p v-else class="yituijian">已推荐</p>
+											<span>享特殊标识，提高曝光几率</span>
+										</div>
+									</div>
+									<a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+		</van-popup>
+		<van-popup v-model="topShow" round position="bottom">
+			<section class="positePopup">
+				<div class="positeExtseo">
+					<img class="positeCloseseo" src="img/close.png" alt="" @click="topShow=false">
+					<div class="positeForms">
+						<h3>简历置顶</h3>
+						<div class="positeSeoAll">
+							<form onsubmit="return false">
+								<div class="positeSeoAllOne">
+									<div class="kouye">
+										<p>置顶简历：</p>
+										<input type="number" v-model="addday" oninput="value=value.replace(/^0|[\^d]/g,'')" />
+										<span class="spanSeo">天</span>
+									</div>
+									<span class="spanSheny" v-if="expect.top>0">当前结束日期： {{expect.topdate_n}}</span>
+								</div>
+								<div class="positeSeoAllOne">
+									<div class="buttonTi">
+										<button @click="topSubmit(0)">提交</button>
+									</div>
+									<div class="buttonTi" v-if="expect.top>0">
+										<button @click="topSubmit(1)" class="tijiaor">取消置顶</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+		</van-popup>
+		<van-popup v-model="labelboxShow" round position="bottom">
+			<section class="customerPopup">
+				<div class="customerAls">
+					<img class="customClose" src="img/close.png" alt="" @click="labelboxShow = false">
+					<div class="customForms">
+						<h3>备注简历</h3>
+						<form class="layui-form" onsubmit="return false">
+							<div class="customSubes">
+								<p>标记 {{info.name}} 的简历</p>
+								<div class="layui-input-inline mobanshehe">
+									<input name="labnem" v-model="labselectedname" readonly placeholder="请选择"
+										@click="labelShow = true">
+								</div>
+							</div>
+
+							<div class="customSubes">
+								<p>备注任务：</p>
+								<div class="customCont">
+									<textarea class="follotextarea" v-model="content"
+										placeholder="简要说明跟进内容，与客户的交流情况。"></textarea>
+								</div>
+							</div>
+
+							<div class="customSubes">
+								<div class="customCont">
+									<button @click="resumeLabel">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</van-popup>
+		<van-popup v-model="labelShow" round position="bottom">
+			<van-picker title="标签" value-key="text" :default-index="defaultindex" :columns="labelarr" show-toolbar
+				@confirm="labconfirm" @cancel="labelShow=false" />
+		</van-popup>
+	</div>
+	<script src="{yun:}$plusstyle{/yun}/user.cache.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script>
+		var eid = '{yun:}$smarty.get.id{/yun}',
+			labelarrs = useri['user_label'],
+			usernarrs = usern,
+			is_outcall = '{yun:}$is_outcall{/yun}';
+		var yunvue = new Vue({
+			el: '#yunvue',
+			data() {
+				return {
+					info: {},
+					expect: {},
+					eid: eid,
+					edu: [],
+					work: [],
+					project: [],
+					skill: [],
+					training: [],
+					other: [],
+					show: [],
+					userdata: [],
+					userclass_name: [],
+					source: [],
+
+					yqnum: 0,
+					sqnum: 0,
+					lknum: 0,
+
+					statusShow: false,
+					tpseleted: '',
+					statusbody: '',
+
+					moreShow: false,
+					topShow: false,
+					addday: '',
+					tparr: [],
+					tpShow: false,
+
+					tplstr: '',
+					lock_status: 1,
+
+					// 备注
+					labelShow: false,
+					labelarr: [],
+					labelidarr: [],
+					defaultindex: 0,
+					labelboxShow: false,
+					labselected: '',
+					labselectedname: '请选择',
+					content: '',
+                    is_outcall: is_outcall
+				}
+
+			},
+			computed: {
+				workcount() {
+					return this.work.length;
+				},
+				educount() {
+					return this.edu.length;
+				},
+				projectcount() {
+					return this.project.length;
+				},
+				skillcount() {
+					return this.skill.length;
+				},
+				othercount() {
+					return this.other.length;
+				},
+				showcount() {
+					return this.show.length;
+				},
+				trainingcount() {
+					return this.training.length;
+				}
+
+			},
+			created() {
+				let that = this;
+				labelarrs.forEach(function(item) {
+					that.labelarr.push({
+						text: usernarrs[item],
+						value: item
+					});
+					that.labelidarr.push(item);
+				});
+				this.getInfo();
+			},
+			methods: {
+				getInfo: function() {
+					showLoading();
+					var that = this;
+					var param = {
+						id: eid
+					};
+
+					$.post('index.php?m=user&c=users_resume&a=show', param, function(res) {
+						hideLoading();
+						that.info = res.info ? res.info : {};
+						if (res.info) {
+							that.statusbody = res.info.statusbody ? res.info.statusbody : '';
+						}
+						that.expect = res.expect ? res.expect : {};
+
+						if (that.expect.content && that.expect.content != null) {
+							that.content = that.expect.content;
+						}
+						if (that.expect.label && that.expect.label > 0) {
+							that.defaultindex = that.labelidarr.indexOf(parseInt(that.expect.label));
+							that.labselected = that.expect.label;
+							that.labselectedname = usernarrs[that.expect.label];
+						}
+
+						that.edu = res.edu ? res.edu : [];
+						that.work = res.work ? res.work : [];
+						that.project = res.project ? res.project : [];
+						that.skill = res.skill ? res.skill : [];
+						that.training = res.training ? res.training : [];
+						that.other = res.other ? res.other : [];
+						that.show = res.show ? res.show : [];
+						that.userdata = res.userdata ? res.userdata : [];
+						that.userclass_name = res.userclass_name ? res.userclass_name : [];
+						that.tparr = res.tparr ? res.tparr : [];
+						that.source = res.source ? res.source : [];
+
+						that.yqnum = res.yqnum ? res.yqnum : 0;
+						that.sqnum = res.sqnum ? res.sqnum : 0;
+						that.lknum = res.lknum ? res.lknum : 0;
+
+						that.lock_status = res.info.r_status;
+
+						$("#yunvue").css('display', 'block');
+					}, 'json');
+				},
+				setLockStatus: function(val) {
+					this.lock_status = val;
+				},
+				setState: function(e) {
+					this.info.state = e;
+				},
+				tpconfirm: function(e) {
+					this.tplstr = e;
+					this.statusbody = e;
+					this.tpShow = false;
+				},
+				statusSubmit: function() {
+					let that = this;
+					if (that.info.state == 0) {
+						that.info.state = 1;
+					}
+					var param = {
+						id: eid,
+						uid: that.info.uid,
+						status: that.info.state,
+						statusbody: that.statusbody,
+					};
+					showLoading('审核中');
+					if (that.info.r_status != 1) {
+						if (that.lock_status == 1) {
+							param.lock_status = that.lock_status;
+						}
+						var url = 'index.php?m=user&c=users_resume&a=resumestatus';
+					} else {
+						var url = 'index.php?m=user&c=users_resume&a=status';
+					}
+					$.post(url, param, function(res) {
+						hideLoading();
+						if (res.error == 9) {
+							that.statusShow = false;
+							showToast(res.msg, 2, function() {
+								if(res.url){
+									showConfirm('是否跳转到下一份待审核简历？',function(){
+										window.location.href = res.url;
+									},'','',function(){
+										window.location.href = 'index.php?m=user&c=users_resume&state=4';
+									})
+								} else {
+									window.location.href = 'index.php?m=user&c=users_resume&state=4';
+								}
+							})
+						} else {
+							showToast(res.msg);
+						}
+					}, 'json');
+				},
+				topMore: function() {
+					this.moreShow = false;
+					this.topShow = true;
+				},
+				topSubmit: function(e) {
+					let that = this;
+					var param = {
+						eid: eid,
+						s: e,
+						addday: that.addday
+					}
+					showLoading('设置中');
+					$.post('index.php?m=user&c=users_resume&a=top', param, function(res) {
+						hideLoading();
+						if (res.error == 9) {
+							that.topShow = false;
+							showToast(res.msg, 2, function() {
+								window.location.reload();
+							})
+						} else {
+							showToast(res.msg);
+						}
+					}, 'json');
+				},
+				setRec: function(e) {
+					let that = this;
+					var param = {
+						id: eid
+					}
+					if (e == null || e == 0) {
+						param['rec'] = 1;
+					} else {
+						param['rec'] = 0;
+					}
+					showLoading('设置中');
+					$.post('index.php?m=user&c=users_resume&a=rec', param, function(res) {
+						hideLoading();
+						that.moreShow = false;
+						if (res.error == 9) {
+							showToast(res.msg, 2, function() {
+								window.location.reload();
+							})
+						} else {
+							showToast(res.msg);
+						}
+					}, 'json');
+				},
+				refresh: function() {
+					showLoading('刷新中');
+					$.get('index.php?m=user&c=users_resume&a=refresh&id=' + eid, function(res) {
+						hideLoading();
+						if (res.error == 9) {
+							showToast(res.msg, 2, function() {
+								window.location.reload();
+							})
+						} else {
+							showToast(res.msg);
+						}
+					}, 'json')
+				},
+				labconfirm: function(e) {
+					this.labselected = e.value;
+					this.labselectedname = this.userclass_name[e.value]
+					this.labelShow = false;
+				},
+				resumeLabel: function() {
+					var that = this;
+					var param = {
+						id: that.eid,
+						label: that.labselected,
+						content: that.content
+					};
+
+					showLoading('备注中');
+					$.post('index.php?m=user&c=users_resume&a=label', param, function(res) {
+						hideLoading();
+						if (res.error == 9) {
+							that.labelboxShow = false;
+							showToast(res.msg, 2, function() {
+								window.location.reload();
+							});
+						} else {
+							return showToast(res.msg);
+						}
+					}, 'json');
+				},
+				pageTo: function(url) {
+					window.location.href = url;
+				},
+                // 外呼联系客户
+                contactMobile(uid, mobile){
+                    showConfirm('确定要联系客户吗？',function(){
+                        $.post('index.php?m=user&c=users_member&a=contactCustomer', {uid, mobile}, function(res){
+                            showToast(res.msg)
+                        },'json');
+                    })
+                }
+			}
+		});
+	</script>
+	<style type="text/css">
+		.positePopup {
+			position: relative !important;
+			width: auto !important;
+			height: auto !important;
+			display: block !important
+		}
+
+		.positePopup .positeShen {
+			position: relative !important;
+			bottom: auto !important;
+			display: block !important
+		}
+
+		.positePopup .positeExtend {
+			position: relative !important;
+			bottom: auto !important;
+			display: block !important
+		}
+
+		.positePopup .positeExtseo {
+			position: relative !important;
+			bottom: auto !important;
+			display: block !important
+		}
+
+		.sonpedit {
+			position: absolute;
+			right: 0;
+			top: 40px;
+			font-size: 0.5rem;
+		}
+
+		.customerPopup {
+			position: relative !important;
+			width: auto !important;
+			height: auto !important;
+			display: block !important
+		}
+
+		.customerPopup .customerAls {
+			position: relative !important;
+			bottom: auto !important;
+			display: block !important
+		}
+	</style>
+</body>
+</html>

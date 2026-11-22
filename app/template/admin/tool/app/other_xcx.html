@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="百度小程序" name="baidu">
+                    <xcxbaidu ref="baidu"></xcxbaidu>
+                </el-tab-pane>
+                <el-tab-pane label="抖音小程序" name="dy">
+                    <xcxdouyin ref="dy"></xcxdouyin>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#moduapp',
+            data: function () {
+                return {
+                    activeName: 'baidu'
+                }
+            },
+            components: {
+                'xcxbaidu': httpVueLoader('./component/xcxbaidu.vue'),
+                'xcxdouyin': httpVueLoader('./component/xcxdouyin.vue')
+            },
+            created: function(){
+                var that = this
+                setTimeout(() => {
+                    that.$refs[that.activeName].getinfo();
+                }, 500)
+            },
+            methods: {
+                handleClick(tab) {
+                    if (tab.name == 'baidu') {
+                        this.$refs.baidu.getinfo();
+                    } else if (tab.name == 'dy') {
+                        this.$refs.dy.getinfo();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

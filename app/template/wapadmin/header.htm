@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>{yun:}$config.sy_webname{/yun}</title>
+    <link rel="stylesheet" href="css/style.css?v={yun:}$config.cachecode{/yun}">
+	  <link rel="stylesheet" href="css/wapadmin_new.css?v={yun:}$config.cachecode{/yun}">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css?v={yun:}$config.cachecode{/yun}">
+    <link rel="stylesheet" href="css/size.css?v={yun:}$config.cachecode{/yun}">
+	<script src="js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/swiper-bundle.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/echarts.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<link href="js/vant/lib/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+	<script src="js/vant/lib/vant.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/vant/phpyun_vant.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/public.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script type="text/javascript">
+		var wapurl = 'index.php';
+		var weburl="{yun:}$config.sy_weburl{/yun}";
+	</script>
+	<script>
+		window.localStorage.removeItem("needRefresh");
+		window.addEventListener('pageshow', function(){
+			var storage = window.localStorage.getItem("needRefresh");
+			if(storage){
+				window.location.reload();
+			}
+		});
+	</script>
+</head>

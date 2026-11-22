@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp" class="moduleElenAl">
+        <div class="moduleSeachs">
+            <div class="">
+                意见建议
+            </div>
+            <div class="moduleSeachButn">
+                <el-button type="primary" icon="el-icon-document-add" size="mini" @click="add({id: 0})">提需求</el-button>
+            </div>
+        </div>
+        <div class="moduleElTable" style="height: calc(100% - (85px + 50px + 12px + 12px));">
+            <div class="tableDome_tip">
+                <el-alert title="关于PHP云系统产品功能，欢迎您将想法及需求提交给我们，我们将及时处理并给您反馈。" type="success" :closable="false">
+                </el-alert>
+            </div>
+            <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange" ref="multipleTable"
+                :header-cell-style="{background:'#f5f7fa',color:'#606266'}" height="calc(100% - 48px)" v-loading="loading" :empty-text="emptytext">
+                <el-table-column type="selection" width="50"></el-table-column>
+                <el-table-column prop="id" label="编号" width="80">
+                </el-table-column>
+                <el-table-column prop="title" label="标题"> </el-table-column>
+                <el-table-column prop="plat_n" label="适用端"> </el-table-column>
+                <el-table-column prop="result" label="状态">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status == '待处理'" style="color: red;">待处理</span>
+                        <span v-else>{{scope.row.results}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="140">
+                    <template slot-scope="scope">
+                        <div class="cz_button">
+                            <el-button size="mini" @click="add(scope.row)">修改</el-button>
+                            <el-button size="mini" @click="rowdel(scope.row)" type="danger">删除</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="modulePaging" style="height: initial; flex-wrap: wrap; padding-top: 10px;">
+            <div class="bottomButnBull" style="width:100%;">
+                <div class="bottomButnBlak">
+                    <el-checkbox v-model="checkedAll" @change="selectAllBottom">全选</el-checkbox>
+                    <el-button size="mini" @click="delall">批量删除</el-button>
+                </div>
+            </div>
+            <div class="modulePagNum" style="padding-top: 8px;">
+                <el-pagination background @size-change="handleSizeChange"
+                               @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+                               :page-size="perPage" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <div class="modulePaging">
+            <el-drawer title="意见建议" :visible.sync="drawer" :modal-append-to-body="false" :show-close="true" :with-header="true" size="85%">
+				<adviceadd :info="info" @child-event="closeAdd"></adviceadd>
+			</el-drawer>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                    emptytext: '暂无数据',
+                    loading: false,
+                    currentPage: 1,
+                    perPage: 0,
+                    pageSizes: [],
+                    total: 0,
+                    tableData: [],
+					drawer: false,
+					info: {},
+                    checkedAll: false,
+                    selectedItem: [],
+                    tableHig: true
+                }
+            },
+            components: {
+				'adviceadd': httpVueLoader('./component/advice_add.vue'),
+            },
+            created: function () {
+                this.getList();
+            },
+            methods: {
+                handleSelectionChange(val) {
+                    this.selectedItem = [];
+                    let _this = this;
+                    if (val.length) {
+                        val.forEach(item => {
+                            _this.selectedItem.push(item.id);
+                        });
+                    }
+                    if (_this.selectedItem.length == 0) {
+                        _this.checkedAll = false;
+                    } else {
+                        if (_this.selectedItem.length == _this.tableData.length) {
+                            _this.checkedAll = true;
+                        } else {
+                            _this.checkedAll = false;
+                        }
+                    }
+                },
+                selectAllBottom(value) {
+                    value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+                },
+                handleSizeChange(val) {
+                    this.perPage = val;
+                    scrollToTop()
+                    this.getList()
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val;
+                    this.getList()
+                },
+				add(data){
+					if (data.id == 0){
+                        this.info = {
+                            id: 0,
+                            title: '',
+                            content: '',
+                            plat: ''
+                        }
+					}else{
+						this.info = {
+                            id: data.id,
+                            title: data.title,
+                            content: data.content,
+                            plat: data.plat
+                        }
+					}
+					this.drawer = true;
+				},
+                handleSizeChange(val) {
+                    this.perPage = val;
+                    this.getList()
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val;
+                    this.getList()
+                },
+                async getList() {
+                    let that = this;
+                    that.loading = true;
+                    that.emptytext = "数据加载中";
+                    httpPost('m=system&c=role_advice&a=index', { page: that.currentPage, pageSize: that.perPage }).then(function (result) {
+                        var res = result.data
+                        if (res.error == 0) {
+                            that.tableData = res.data.list
+                            that.perPage = parseInt(res.data.perPage)
+                            that.pageSizes = res.data.pageSizes
+                            that.total = parseInt(res.data.total);
+                            that.loading = false;
+                            if (that.tableData.length === 0){
+                                that.emptytext = "暂无数据";
+                            }
+                        }
+                    }).catch(function (e) {
+                        console.log(e)
+                    })
+                },
+                delall: function(){
+                    if (this.selectedItem.length == 0) {
+                        message.error('请选择要删除的数据');
+                        return false;
+                    }
+                    delConfirm(this, this.selectedItem.join(','), this.delete);
+                },
+                rowdel(row) {
+                    if (!row.id) {
+                        message.error('请选择要删除的数据');
+                        return false;
+                    }
+                    delConfirm(this, row.id, this.delete);
+                },
+                delete(id) {
+                    let _this = this;
+                    let params = {
+                        id: id
+                    };
+                    httpPost('m=system&c=role_advice&a=del', params).then(function (response) {
+                        if (response.data.error == 0) {
+                            _this.$message.success('操作成功');
+                            _this.getList();
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
+                },
+                closeAdd(){
+                    this.drawer = false;
+                    this.getList();
+                }
+            }
+        });
+    </script>
+</body>
+<style>
+	.el-table .el-table__cell { padding: 12px 0; }
+</style>
+</html>

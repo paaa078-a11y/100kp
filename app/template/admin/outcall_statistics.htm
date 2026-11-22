@@ -1,0 +1,633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+    <script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <title>后台管理</title>
+    <style>
+        .curr {
+            background-color: #1E9FFF;
+            color:#fff
+        }
+        .layui-btn-group .layui-btn-primary:hover {
+            border-color: #C9C9C9;
+            color: #C9C9C9;
+        }
+		.wh_tj_outcall{width:100px;height:40px; line-height: 40px; text-align: center; background-color: #fcaa20 ;display:inline-block;border-radius:20px;color:#fff;position: absolute;right:150px;top:40px;}
+		.wh_tj_outcall:hover {
+			border-color: #ee7d31;
+			color: #fff;
+		}
+    </style>
+</head>
+<body class="body_ifm">
+<div class="infoboxp">
+    <iframe id="supportiframe"  name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+
+	 <div class="wh_tj_box">
+	<div class="wh_tj_show">
+	<div class="wh_tj_list">
+		<div class="wh_tj_listpd">
+			<i class="wh_tj_icon wh_tj_icon1"></i>
+			<div class="">呼出总数</div>
+			<div class="wh_tj_n" id="all_cnt_container" onclick="gotoLogList(1)">0</div>
+		</div>
+	</div>
+	<div class="wh_tj_list">
+		<div class="wh_tj_listpd">
+			<i class="wh_tj_icon wh_tj_icon2"></i>
+			<div class="">接通量</div>
+			<div class="wh_tj_n" id="jt_cnt_container" onclick="gotoLogList(2)">0</div>
+		</div>
+	</div>
+	<div class="wh_tj_list">
+		<div class="wh_tj_listpd">
+			<i class="wh_tj_icon wh_tj_icon3"></i>
+			<div class="">无人接听量</div>
+			<div class="wh_tj_n" id="wr_cnt_container" onclick="gotoLogList(3)">0</div>
+		</div>
+	</div>
+	<div class="wh_tj_list">
+		<div class="wh_tj_listpd">
+			<i class="wh_tj_icon wh_tj_icon4"></i>
+			<div class="">呼出总时长</div>
+			<div class="wh_tj_n" id="total_time_container" onclick="gotoLogList(1)">0</div>
+		</div>
+	</div>
+	</div>
+	<div class="wh_tj_5tc">
+		<div class="wh_tj_tcbox">
+		<div class="wh_tj_tit">通话时长包<span class="wh_tj_tctip">本功能按实际通话时长计费，不足1分钟按1分钟计算</span></div>
+		<div class="wh_tj_tcyl">当前套餐余量：<span class="wh_tj_tcyl_n">{yun:}$balanceArr['total_send']{/yun}</span> 分钟</div>
+		<div class="wh_tj_tcyl">额外时长包余量：<span class="wh_tj_tcyl_n">{yun:}$balanceArr['total_personal']{/yun}</span> 分钟</div>
+		<a href="javascript:;" class="wh_tj_outcall showCall">云外呼</a>
+		<a target="_blank" href="https://u.phpyun.com"  class="wh_tj_tccz">在线充值</a>
+	</div>	</div>
+	</div>
+	<div class="wh_tj_p">
+		 <div class="wh_tj_p_show">
+		 <div class="wh_tj_tit">业务员看板 </div>
+			 <div class="wh_tj_timebox">
+				 <div id="staffTimeBtGroup" class="timeBtGroup layui-btn-group">
+					 <button type="button" class="tiemBt layui-btn layui-btn-primary curr" onclick="timeSel(0, 1)">今日</button>
+					 <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(7, 1)">近7天</button>
+					 <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(30, 1)">近30天</button>
+					 <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(-1, 1)">自定义</button>
+				 </div>
+				 <div id="staff_time_range" class="time_range" style="display:none;"  >
+					 <input type="text" id="staff_s_time" class="layui-input" placeholder="开始日期" autocomplete="off" style="width: 150px;display: inline-block;">
+					 -
+					 <input type="text" id="staff_e_time" class="layui-input" placeholder="结束日期" autocomplete="off" style="width: 150px; display: inline-block;">
+				 </div>
+			 </div>
+		 <div class="wh_tj_p_table">
+		    <table style="width: 100%;" id="staffTjTbl">
+				<tr class="admin_table_top">
+					<th align="left"><div class="crm_listpd">业务员</div></th>
+					<th align="left">电话量(次)</th>
+					<th align="left">总时长(分钟)</th>
+					<th align="left">平均时长(分钟)</th>
+					<th align="left">接通量(次)</th>
+					<th align="left">接通率(%)</th>
+					<th align="left">无人接听量(次)</th>
+				</tr>
+				<tr><td colspan="7" style="border:none;"><div class="whkbnotip">今日暂无外呼记录</div></td></tr>
+			</table>
+		</div>
+		</div>
+	</div>
+		 <div class=" ">
+		 <div class="wh_tj_tu">
+			 <div class="wh_tj_tit">数据看板<span class="wh_tj_tctip"></span></div>
+			  <div class="wh_tj_timebox">
+			 <div id="timeBtGroup" class="timeBtGroup layui-btn-group">
+			             <button type="button" class="tiemBt layui-btn layui-btn-primary curr" onclick="timeSel()">今日</button>
+			             <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(7)">近7天</button>
+			             <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(30)">近30天</button>
+			             <button type="button" class="tiemBt layui-btn layui-btn-primary" onclick="timeSel(-1)">自定义</button>
+			       </div>
+			         <div id="time_range" class="time_range" style="display:none;"  >
+			                     <input type="text" id="s_time" class="layui-input" placeholder="开始日期" autocomplete="off" style="width: 150px;display: inline-block;">
+			               -
+			                     <input type="text" id="e_time" class="layui-input" placeholder="结束日期" autocomplete="off" style="width: 150px; display: inline-block;">
+			         </div>
+			 <div class="admin_atatic_chart  " id="main2" style="width:100%;height:460px;margin-top: 20px;"></div>
+			  </div>
+			  </div>
+		 </div>
+	<div id="crmCallMobile"  style="display:none; width:450px; margin-top: 15px;height:70px;">
+		<form class="layui-form">
+			<div class="crm_record_list">
+				<div class="crm_record_name"><span class="admin_required_icon"></span>联系电话：</div>
+				<div class="crm_record_textbox" style="width:260px;">
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id='outCallMobile' name="mobile"  style='width:173px;'>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="layui-input-inline" style="padding-left: 10px;">
+							<input type="hidden" name="pytoken" id='pytoken' value="{yun:}$pytoken{/yun}">
+							<input type="button"  value='拨号' id="outCallBt" class="admin_examine_bth" style="height:36px;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+    </div>
+
+<script src="{yun:}$config.sy_weburl{/yun}/js/echarts.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script>
+	var lasturl = '{yun:}$lasturl{/yun}',
+		today = '{yun:}$today{/yun}',
+		staffDays = 0,
+		days = 0,
+		laydate=null,
+		upStaffLaydate = 0,
+		staff_sdate = '',
+        staff_edate = '',
+        sdate = '',
+        edate = '',
+		upLaydate = 0;
+
+    $(document).ready(function() {
+        getTjData(days);
+        getStaffTjData(staffDays);
+        getTotalTjData(staffDays);
+    })
+	// 跳转到外呼列表页
+	function gotoLogList(type){
+	    var url = 'index.php?m=crm_contact_log&s_time=' + today +' 00:00:00&e_time=' + today + ' 23:59:59';
+	    if (type == 2) {// 接通
+            url += '&call_status=3'
+		} else if(type == 3) {// 无人接听
+            url += '&call_status=2'
+		}
+		window.location.href = url
+	}
+
+	// 渲染自定义时间选择框
+	function initLaydate(type = 1, isStaff = 0){
+        if (type == 1) {// 开始时间
+			if (isStaff == 0) {
+                laydate.render({
+                    elem: '#s_time',
+                    type: 'datetime',
+                    min: -90,
+                    max: 0,
+                    done: function(value){
+                        sdate = value
+                        if (sdate && edate) {
+                            getTjData(-1, sdate, edate)
+                        }
+                    }
+                });
+			} else {
+                laydate.render({
+                    elem: '#staff_s_time',
+                    type: 'datetime',
+                    min: -90,
+                    max: 0,
+                    done: function(value){
+                        staff_sdate = value
+                        if (staff_sdate && staff_edate) {
+                            getStaffTjData(-1, staff_sdate, staff_edate)
+                            getTotalTjData(-1, staff_sdate, staff_edate)
+                        }
+                    }
+                });
+			}
+		} else {// 结束时间
+            if (isStaff == 0) {
+                laydate.render({
+                    elem: '#e_time',
+                    type: 'datetime',
+                    min: -90,
+                    max: 1,
+                    done: function(value){
+                        edate = value
+                        if (sdate && edate) {
+                            getTjData(-1, sdate, edate)
+                        }
+                    }
+                });
+			} else {
+                laydate.render({
+                    elem: '#staff_e_time',
+                    type: 'datetime',
+                    min: -90,
+                    max: 1,
+                    done: function(value){
+                        staff_edate = value
+                        if (staff_sdate && staff_edate) {
+                            getStaffTjData(-1, staff_sdate, staff_edate)
+                            getTotalTjData(-1, staff_sdate, staff_edate)
+                        }
+                    }
+                });
+			}
+		}
+	}
+
+    function timeSel(timeType = 0, isStaff = 0){
+        // 默认查今日
+        if (isStaff) {
+            staffDays = 0;
+		} else {
+            days = 0;
+		}
+        if (isStaff) {
+            $('#staffTimeBtGroup button').removeClass('curr')
+		} else {
+            $('#timeBtGroup button').removeClass('curr')
+		}
+        if (timeType == 7) {
+            if (isStaff) {
+                staffDays = 7;
+                $('#staffTimeBtGroup button:eq(1)').addClass('curr')
+                $('#staff_time_range').hide();
+			} else {
+                days = 7;
+                $('#timeBtGroup button:eq(1)').addClass('curr')
+                $('#time_range').hide();
+			}
+        } else if (timeType == 30) {
+            if (isStaff) {
+                $('#staffTimeBtGroup button:eq(2)').addClass('curr')
+                $('#staff_time_range').hide();
+                staffDays = 30;
+			} else {
+                $('#timeBtGroup button:eq(2)').addClass('curr')
+                $('#time_range').hide();
+                days = 30;
+			}
+
+        } else if(timeType == 0) {
+            if (isStaff) {
+                $('#staffTimeBtGroup button:eq(0)').addClass('curr')
+                $('#staff_time_range').hide();
+                staffDays = 0;
+            } else {
+                $('#timeBtGroup button:eq(0)').addClass('curr')
+                $('#time_range').hide();
+                days = 0;
+            }
+		}else {
+            if (isStaff) {
+                $('#staffTimeBtGroup button:eq(3)').addClass('curr')
+                $('#staff_time_range').css('display', '');
+                staffDays = -1;
+                upStaffLaydate = 1;
+			} else {
+                $('#timeBtGroup button:eq(3)').addClass('curr')
+                $('#time_range').css('display', '');
+                days = -1;
+                upLaydate = 1;
+			}
+        }
+        if (days >= 0 && !isStaff) {
+            getTjData(days)
+		}
+		if (staffDays >= 0 && isStaff) {
+            getStaffTjData(staffDays)
+            getTotalTjData(staffDays)
+		}
+		if (laydate && upStaffLaydate){
+            upStaffLaydate = 0;
+            staff_sdate = staff_edate = ''
+            $('#staff_time_range').html('<input type="text" id="staff_s_time" class="layui-input" placeholder="开始日期" autocomplete="off" style="width: 150px;display: inline-block;"> - <input type="text" id="staff_e_time" class="layui-input" placeholder="结束日期" autocomplete="off" style="width: 150px; display: inline-block;">')
+            initLaydate(1, 1)
+            initLaydate(2, 1)
+		}
+        if (laydate && upLaydate){
+            upLaydate = 0;
+            sdate = edate = ''
+            $('#time_range').html('<input type="text" id="s_time" class="layui-input" placeholder="开始日期" autocomplete="off" style="width: 150px;display: inline-block;"> - <input type="text" id="e_time" class="layui-input" placeholder="结束日期" autocomplete="off" style="width: 150px; display: inline-block;">')
+            initLaydate(1)
+            initLaydate(2)
+        }
+    }
+    var myChart = echarts.init(document.getElementById('main2'));
+    var option = {
+        tooltip : {trigger: 'axis'},
+        legend: {data:['总电话量','业务电话','客勤电话','接通量']},
+        calculable : false,
+        backgroundColor: '#fff',
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : []
+            }
+        ],
+        yAxis : [
+            // {type : 'value',minInterval: 1}
+            {
+                name: '电话量',
+                type: 'value',
+                minInterval: 1,
+                axisTick: {
+                   inside: true
+                },
+                axisLabel: {
+                    inside: false
+                },
+            }
+        ],
+        series : [
+            {
+                name:'总电话量',
+                type:'line',
+                symbol:'emptyCircle',
+                // smooth: true,
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            width: 2,
+                            color:'rgb(224, 108, 104)'
+                        }
+                    }
+                },
+                data:[]
+            },
+            {
+                name:'业务电话',
+                type:'line',
+                symbol:'emptyCircle',
+                // smooth: true,
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            width: 2,
+                            color:'rgb(191,227,249)'
+                        }
+                    }
+                },
+                data:[]
+            },
+            {
+                name:'客勤电话',
+                type:'line',
+                symbol:'emptyCircle',
+                // smooth: true,
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            width: 2,
+                            color:'rgb(146, 196, 202)'
+                        }
+                    }
+                },
+                data:[]
+            },
+            {
+                name:'接通量',
+                type:'line',
+                symbol:'emptyCircle',
+                // smooth: true,
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            width: 2,
+                            color:'rgb(237, 205, 193)'
+                        }
+                    }
+                },
+                data:[]
+            }
+        ]
+    };
+    myChart.setOption(option); // 为echarts对象加载数据
+    setTimeout(function () {
+        window.addEventListener("resize", () => {
+            myChart.resize();
+        });
+    }, 200);
+
+    layui.use(['form', 'laydate'], function(){
+        laydate = layui.laydate
+        var	form = layui.form,
+			$ = layui.$;
+        // 初始化数据看板时间选择框
+        initLaydate(1)
+        initLaydate(2)
+        // 初始化业务员数据看板时间选择框
+        initLaydate(1, 1)
+        initLaydate(2, 1)
+    });
+    // 业务员看板表格
+    function getStaffTjData(days,sdate = '', edate = '', page = 1){
+        var url = 'index.php?m=crm_contact_log&c=staffTj'
+		if (days) {
+		    url += '&days='+days
+		}
+        if (sdate) {
+            url += '&sdate=' + sdate
+        }
+        if (edate) {
+            url += '&edate=' + edate
+        }
+        url += '&page=' + page
+        $.get(url,function(data){
+            var html = '<tr class="admin_table_top"><th align="left"><div class="crm_listpd">业务员</div></th><th align="left">电话量(次)</th><th align="left">总时长(分钟)</th><th align="left">平均时长(分钟)</th><th align="left">接通量(次)</th><th align="left">接通率(%)</th><th align="left">无人接听量(次)</th></tr>'
+            if (data == '') {
+				html += '<tr><td colspan="7" style="border:none;"><div class="whkbnotip">今日暂无外呼记录</div></td></tr>'
+			} else {
+                var datas = JSON.parse(data)
+				if (datas.list) {
+                    for (const key in datas.list) {
+                        html += '<tr align="center"'
+                        if ((key+1)%2=='0') {
+                            html += ' class="admin_com_td_bg"'
+                        }
+                        html += '><td align="left"><div class="crm_listpd"> ' + datas.list[key].username + ' </div> </td><td align="left">  ' + datas.list[key].total_cnt + '</td><td align="left">  ' + datas.list[key].total_length + '</td><td align="left">  ' + datas.list[key].avg_length + '</td><td align="left">  ' + datas.list[key].jt_cnt + '</td><td align="left">  ' + datas.list[key].jt_rate + '</td><td align="left">  ' + datas.list[key].wr_cnt + '</td></tr>'
+                    }
+				} else {
+                    html += '<tr><td colspan="7" style="border:none;"><div class="whkbnotip">今日暂无外呼记录</div></td></tr>'
+				}
+                if (parseInt(datas.pages.total) > parseInt(datas.pages.per_page)) {
+                    html += '<tr>'
+                    if (datas.pages.curr_page == 1) {
+                        html += '<td colspan="3"> 从 1 到 ' + datas.pages.per_page + ' ，总共 ' + datas.pages.total + ' 条</td>'
+                    } else if (datas.pages.curr_page > 1 && datas.pages.curr_page < datas.pages.total_page){
+                        html += '<td colspan="3"> 从 ' + ((datas.pages.total_page - 1) * datas.pages.per_page + 1) + ' 到 ' + datas.pages.curr_page * datas.pages.per_page + '，总共 ' + datas.pages.total + ' 条</td>'
+                    } else if (datas.pages.curr_page == datas.pages.total_page) {
+                        html += '<td colspan="3"> 从 ' + ((datas.pages.curr_page - 1) * datas.pages.per_page + 1) +' 到 '+datas.pages.total + ' ，总共 ' + datas.pages.total + ' 条</td>'
+                    }
+                    if (datas.pages.pagenav) {
+                        html += '<td colspan="6" class="digg">' + datas.pages.pagenav + '</td></tr>'
+					}
+                }
+			}
+            $('#staffTjTbl').html(html)
+            $('#staffTjTbl .digg a').attr('href', 'javascript:;')
+			$('#staffTjTbl .digg a').each(function(index, domEle) {
+                index
+				var pg = 1;
+				if (domEle.innerText == '上一页') {
+                    pg = datas.pages.curr_page - 1 > 1 ? datas.pages.curr_page - 1 : 1
+				} else if (domEle.innerText == '下一页') {
+				    pg = datas.pages.curr_page + 1 > datas.pages.total_page ? datas.pages.total_page : datas.pages.curr_page + 1
+				} else {
+				    pg = domEle.innerText
+				}
+				$(this).attr('onclick', 'goto('+pg+')')
+            })
+        });
+    }
+
+    // 外呼总受统计信息
+    function getTotalTjData(days,sdate = '', edate = ''){
+        var url = 'index.php?m=crm_contact_log&c=totalTj'
+        if (days) {
+            url += '&days='+days
+        }
+        if (sdate) {
+            url += '&sdate=' + sdate
+        }
+        if (edate) {
+            url += '&edate=' + edate
+        }
+        $.get(url,function(data){
+			var datas = JSON.parse(data)
+            $('#all_cnt_container').html(datas.all_cnt)
+            $('#jt_cnt_container').html(datas.jt_cnt)
+            $('#wr_cnt_container').html(datas.wr_cnt)
+            $('#total_time_container').html(datas.total_time)
+        });
+    }
+
+    //页码跳转
+    function goto(page = 1){
+        sdate = $('#staff_s_time').val()
+        edate = $('#staff_e_time').val()
+        getStaffTjData(staffDays, sdate, edate, page)
+	}
+
+    // 统计信息
+    function getTjData(days,sdate = '', edate = ''){
+        var url = 'index.php?m=crm_contact_log&c=tj'
+		if (days) {
+		    url += '&days=' + days
+		}
+        if (sdate) {
+            url += '&sdate=' + sdate
+        }
+        if (edate) {
+            url += '&edate=' + edate
+        }
+        $.get(url,function(data){
+            var datas = JSON.parse(data)
+            var x_data = [];
+            var s1_data = [], s2_data = [], s3_data = [], s4_data = []
+            for (const key in datas.list1) {
+                x_data.push(key)
+                s1_data.push(datas.list1[key])
+            }
+            for (const key in datas.list2) {
+                s2_data.push(datas.list2[key])
+            }
+            for (const key in datas.list3) {
+                s3_data.push(datas.list3[key])
+            }
+            for (const key in datas.list4) {
+                s4_data.push(datas.list4[key])
+            }
+            option.xAxis[0].data = x_data
+            option.series[0].data = s1_data
+            option.series[1].data = s2_data
+            option.series[2].data = s3_data
+            option.series[3].data = s4_data
+            myChart.setOption(option)
+        });
+    }
+    // 发起外呼
+    $('#outCallBt').click(function(){
+        var url = 'index.php?m=crm_contact_log&c=contactMobile'
+		var phone = $('#outCallMobile').val()
+		if (!phone) {
+            layer.msg('请输入要呼叫的号码', 2, 8);
+            return false
+		}
+        $.post(url,{
+            mobile: phone,
+            pytoken: $("#pytoken").val()
+        },function(data){
+            layer.closeAll();
+            var datas = JSON.parse(data)
+            if (datas.code == 200) {
+                layer.msg(datas.msg, 2, 9)
+                if (datas.data.jump_type == 1) {// 跳转到跟进页面
+                    var uid	= datas.data.company.uid;
+                    if(parseInt(uid) > 0){
+						$('#public_link').html('<option value="">请选择联系人员</option>');
+						var param = {};
+						param.uid = uid;
+						param.pytoken = $('#pytoken').val();
+						$.post('index.php?m=crm_index&c=getCrmLink', param, function (data) {
+							var crmLink = eval('(' + data + ')');
+							if (crmLink.length > 0) {
+								crmLink.forEach(item => {
+									$('#public_link').append(new Option(item.link_man+" - "+item.link_mobile, item.link_man+"-"+item.link_mobile));
+								});
+							}
+							form.render('select');
+						});
+                    }else{
+						$('#newLinkA').hide();
+					}
+					$("#com_uid").val(uid);
+					var name = datas.data.company.name;
+					if(name){
+
+						$("#fcomname").val(name);
+						$("#fcomname").attr("disabled", true);
+					}
+                    $('#call_log_id').val(datas.data.log_id)
+                    $("#newwindow").val('1');
+                    $('.layui-anim_all').html('');
+                    setTimeout(function(){
+                        $.layer({
+                            type : 1,
+                            title :'联系跟进',
+                            closeBtn : [0 , true],
+                            border : [10 , 0.3 , '#000', true],
+							area: ['880px', 'auto'],
+							offset: ['168px', ''],
+                            page : {dom :"#crmNewConcern"}
+                        }, 1000)
+                    }, 1000)
+                } else if (datas.data.jump_type == 2) {// 跳转到客户录入页
+                    window.location.href = 'index.php?m=crm_my_customer&c=add&mobile=' + phone
+                }
+            } else {
+                layer.msg(datas.msg, 2, 8);
+            }
+        });
+	})
+    // 外呼拨号
+	$('.showCall').click(function(){
+        $.layer({
+            type : 1,
+            title :'外呼拨号',
+            closeBtn : [0 , true],
+            border : [10 , 0.3 , '#000', true],
+            area : ['450px','auto'],
+            offset: ['20px', ''],
+            page : {dom :"#crmCallMobile"}
+        }, 1000)
+	})
+</script>
+{yun:}include file="$adminstyle/crm_public.htm"{/yun}
+</body>
+</html>

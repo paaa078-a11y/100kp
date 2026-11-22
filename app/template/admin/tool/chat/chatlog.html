@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+	<script src="../../../admin/js/socketfun.js"></script>
+    <link href="../../../chat/css/chat.css" rel="stylesheet">
+</head>
+<body>
+<div id="moduapp" class="moduleDome">
+    <div class="setDomeAll setDomeInte">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="聊天记录" name="first" lazy>
+                <chatlist ref="first"></chatlist>
+            </el-tab-pane>
+            <el-tab-pane label="不感兴趣记录" name="second" lazy>
+                <chatblacklist ref="second"></chatblacklist>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function () {
+            return {
+                activeName: 'first',
+            }
+        },
+        components: {
+            'chatlist': httpVueLoader('./component/chatlist.vue'),
+            'chatblacklist': httpVueLoader('./component/chatblacklist.vue'),
+        },
+        mounted(){
+			var that = this;
+            let params = window.parent.homeapp.$route.params;
+			let query = window.parent.homeapp.$route.query;
+			
+            if (params.tab == 'log'){
+                this.activeName = 'first';
+                this.keyword = params.keyword;
+            }
+			
+        },
+        methods: {
+            handleClick(tab, event) {
+                this.$nextTick(() => {
+                    this.$refs[tab.name].doLayout();
+                });
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

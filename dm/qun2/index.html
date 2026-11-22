@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>本地找工作群_百城快聘人才招聘网</title>
+    <link href="images/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        body {background-image: url("images/pic_01.jpg"); background-color: #fb7381; background-position: center 0; background-repeat: no-repeat; background-size: auto;}
+        a { text-decoration: none; }
+        .content { margin: 0 auto; max-width: 1200px; }
+        .clearfix { overflow: hidden; _zoom: 1; }
+        .header { padding-top: 30px; text-align: center; }
+        .header .pic { max-width: 100%; }
+        .header .city-list {padding: 10px 0 30px 0; color: #fff; word-break: keep-all; word-break: normal\9; }
+        .header a { position: relative; word-break: keep-all; word-break: normal\9; margin-right: -1px; padding: 0 20px; line-height: 30px; font-size: 20px; color: #fff; }
+        .header a span { position: absolute; top: 50%; right: 0px; margin-top: -10px; height: 16px; border-right: 1px solid #fff; }
+        .header .empty-line span { border-right: 0; }		
+        
+        .container {
+            max-width: 1020px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        
+        .search-box {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .search-box input {
+            padding: 10px 15px 10px 45px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            width: 100%;
+            font-size: 18px;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+        }
+        
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 18px;
+            top: 10px;
+            color: #aaa;
+            font-size: 18px;
+        }
+        
+        .select-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .select-row select {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 18px;
+            background-color: white;
+            -webkit-appearance: none;
+        }
+        
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .qr-title {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .qr-code {
+            max-width: 500px;
+            margin: 0 auto;
+            border: 3px solid white;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-description {
+            margin: 5px 0 30px 0;
+            color: #f00;
+            font-size: 20px;
+			font-weight: 600;
+        }
+        
+        .search-results {
+            position: absolute;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .search-result-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 576px) {
+            .select-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .select-row select {
+                width: 100%;
+            }
+            
+            .qr-code {
+                max-width: 180px;
+            }
+        }
+				
+    </style>
+	
+	</head>
+	<body>
+    <div class="page">
+        <div class="header">
+            <div class="content">
+                <img class="pic" src="images/title.png">
+                <div class="city-list">
+					<a class="link" href="#" >免费入群</a> <span>|</span>
+					<a class="link" href="#" >1对1服务</a> <span>|</span>
+					<a class="link" href="#" >同城本地群</a> <span>|</span>
+					<a class="link" href="#" >信息直达</a> <span>|</span>
+					<a class="link" href="#" >老板快聘</a> <span>|</span>
+					<a class="link" href="#" >全国10000+个群</a>   
+                </div>
+            </div>
+        </div>
+        <div class="main">
+                
+		<div class="container">
+        <div style="font-size: 28px; font-weight: bold; padding: 0 0 25px 20px;">选择您的城市：</div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="输入省份、城市或区县名称搜索..." autocomplete="off">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        
+        <div class="select-row">
+            <select id="province" class="form-select">
+                <option value="">请选择省份</option>
+            </select>
+            <select id="city" class="form-select" disabled>
+                <option value="">请选择城市</option>
+            </select>
+            <select id="district" class="form-select" disabled>
+                <option value="">请选择区县</option>
+            </select>
+        </div>
+        
+        <div class="qr-container" id="qrContainer">
+            <div class="qr-description" id="selectedArea" >默认二维码</div>
+            <div class="qr-code">
+                <img id="qrImage" src="qrcodes/hao.png" alt="地区二维码" class="img-fluid">
+            </div>
+            <div style="font-size: 16px; font-weight: bold; color: #FD2225; padding: 30px 0;">注：请选择您所在的城市群，避免重复进入，祝您早日找到满意的工作！！！</div>
+        </div>
+    </div>
+            </div>
+            <div style="text-align: center;font-size: 18px; color:#fff; padding-top: 50px;">Copyright 2025 © 本地找工作群 百城快聘</div>
+        </div>
+
+    <script src="area-data.js"></script>
+    <script src="script.js"></script>
+    <script  src="https://w1022.ttkefu.com/k/?fid=4B1AFDF3" charset=utf-8></script><div style="display:none;"><a href='https://www.ttkefu.com'>在线客服系统</a></div>
+	</body>
+</html>

@@ -1,0 +1,5390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>后台管理 - CRM - 客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+	<script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="js/crm.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/clipboard/clipboard.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/formSelects-v4.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/data/plus/job.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/data/plus/jobparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+	<script src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/data/plus/cityparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+	<link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+	<script src="{yun:}$config.sy_weburl{/yun}/js/newclass.public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/formSelects-v4.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script>var weburl = '{yun:}$config.sy_weburl{/yun}'</script>
+	<style type="text/css">
+		::-webkit-scrollbar {
+            width: 8px;
+            background: #eee;
+            display: none;
+        }
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background-color: #aaa;
+        }
+		.other_page{background-color: #FFFFFF; color:#2778F8;}
+		.current_page{background-color: #2778F8; color:#FFFFFF;}
+
+		.xm-select-parent .xm-select{
+			min-height: 38px;padding: 1px 10px;
+		}
+		.xm-select-parent .xm-select .xm-select-input{width: 100px;}
+		.news_expect_text_newcity_nth {
+			height: 35px;
+		}
+		.news_expect_text_new_nth {
+			height: 35px;
+		}
+		.scroll_xg{
+			overflow: auto;
+			height: 102px;
+		}
+
+		.scroll_xg::-webkit-scrollbar {
+			display: block;
+			width: 6px !important;
+			height: 0px !important;
+		}
+		.scroll_xg::-webkit-scrollbar-thumb {
+			border-radius: 10px !important;
+			background: #ccc9c7 !important;
+		}
+		.scroll_xg::-webkit-scrollbar-track {
+			border-radius: 10px !important;
+			background: #eef1f3 !important;
+		}
+
+		.scroll_zt{
+			overflow: auto;
+			height: 70px;
+		}
+
+		.scroll_zt::-webkit-scrollbar {
+			display: block;
+			width: 6px !important;
+			height: 0px !important;
+		}
+		.scroll_zt::-webkit-scrollbar-thumb {
+			border-radius: 10px !important;
+			background: #ccc9c7 !important;
+		}
+		.scroll_zt::-webkit-scrollbar-track {
+			border-radius: 10px !important;
+			background: #eef1f3 !important;
+		}
+	</style>
+</head>
+<body style="background:#fff;height:auto; overflow:auto">
+<div id="comApp" style="display: none;">
+	<div class="crmCompanyAll">
+		<!-- 公司信息 -->
+		<div class="crmCompanTop">
+			<div class="crmCompanTopImg">
+				<img :src="Info.logo_n" alt="">
+			</div>
+			<div class="crmCompanTopIno">
+				<div class="crmComTopInoTit">
+					<div class="crmComTopInoNam">
+						<h3>{{Info.name}}</h3>
+						<a :href="'https://www.tianyancha.com/search?key='+Info.name" target="_blank" ><img src="images/tianyanc.png" alt=""></a>
+					</div>
+					<div class="crmComTopInoLik" style="display: flex;">
+						<a href="javascript:;" @click="clueCustomer" style="width: 90px; margin-right: 10px;" v-if="Info.clue == 2">转企业库</a>
+						<a href="javascript:;" @click="toMember('index.php?m=crm_my_customer&c=Imitate&uid='+Info.uid, Info.usertype)">
+							<img src="images/logins.png" alt="">一键登录企业中心
+						</a>
+					</div>
+				</div>
+				<div class="crmComTopInoTips">
+					<div class="ts ">
+						<a href="#"class="tsbox " @click="openTinxShow();"><em class="ts_name">简历提醒</em>企业有 <em class="ts_n">{{Info.unReadNum}}</em> 份简历未查看，请及时提醒企业查看<em class="ts_a ">立即提醒></em></a>
+					</div>
+					<span>{{Info.crm_status_n}}</span>
+					<span class="blos">{{Info.crm_type_n}}</span>
+				</div>
+				<div class="crmComTopInoXinx">
+					<div class="pInoXinxLis">
+						<p>所属销售：{{Info.crm_name}} </p>
+						<p>跟进记录：<span style="color: #f60;">{{Info.follow_num}}</span> </p>
+						<p>最后跟进：{{Info.f_time_n}} </p>
+					</div>
+					<div class="pInoXinxLis">
+						<p>会员套餐：<span>{{Info.rating_name}}</span> </p>
+						<p>会员时间：{{Info.vipstime_n}} ~ {{Info.vipetime_n}} </p>
+						<p>绑定状态：
+							<img :src="Info.moblie_status == 1 ? '../config/ajax_img/2-1.png' : '../config/ajax_img/2-2.png'" class="company_rzpng" width="20" height="20">
+							<img :src="Info.wx_status==1 ? '../config/ajax_img/4-1.png' : '../config/ajax_img/4-2.png'" class="company_rzpng" width="20" height="20"/>
+							<img :src="Info.yyzz_status==1 ? '../config/ajax_img/3-1.png' : '../config/ajax_img/3-2.png'" class="company_rzpng" width="20" height="20">
+							<img :src="Info.email_status==1 ? '../config/ajax_img/1-1.png' : '../config/ajax_img/1-2.png'" class="company_rzpng" width="20" height="20">
+						</p>
+					</div>
+					<div class="pInoXinxLis">
+						<p>收到简历：{{Info.sqNum}} </p>
+						<p>聊天未读：{{Info.unReadChatNum}} </p>
+						<p>企业账号：{{Info.username}} </p>
+					</div>
+					<div class="pInoXinxLis">
+						<p>最近登录：{{Info.login_day}} </p>
+						<p>注册时间：{{Info.reg_date}} </p>
+						<p>企业UID：{{Info.uid}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 数据信息 -->
+		<div class="crmCompanTabs">
+			<div class="layui-tab layui-tab-card" lay-filter="crmComTab">
+				<ul class="layui-tab-title">
+					<li @click="changeTab(1)" :class="tab==1 ? 'layui-this': ''">跟进记录</li>
+					<li @click="changeTab(2)" :class="tab==2 ? 'layui-this': ''">发送消息</li>
+					<li @click="changeTab(3)" :class="tab==3 ? 'layui-this': ''">客户详情</li>
+					<li @click="changeTab(4)" :class="tab==4 ? 'layui-this': ''">在招职位<span style="margin-left: 3px; color: #6a778a; font-size: 12px;">{{Info.jobNum}}</span></li>
+					<li @click="changeTab(5)" :class="tab==5 ? 'layui-this': ''">推荐候选人</li>
+					<li @click="changeTab(6)" :class="tab==6 ? 'layui-this': ''">推送历史</li>
+					<li @click="changeTab(7)" :class="tab==7 ? 'layui-this': ''">订单记录</li>
+					<li @click="changeTab(8)" :class="tab==8 ? 'layui-this': ''">用户日志</li>
+					<li @click="changeTab(9)" :class="tab==9 ? 'layui-this': ''">用户轨迹</li>
+					<li @click="changeTab(10)" :class="tab==10 ? 'layui-this': ''">操作记录</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item" :class="tab==1 ? 'layui-show': ''">
+						<div class="crmComTabsCont">
+							<div class="comTabsConGenInp">
+								<div class="ts" style="margin-left: 20px;" v-if="Info.taskTime">
+									<a href="javascript:;"class="tsbox" v-if="Info.task == 1"><em class="ts_name">跟进提醒</em>您有一个跟进任务尚未完成，任务时间为 <em class="ts_n">{{Info.taskTime}}</em> <em class="ts_a">请及时跟进>></em></a>
+									<a href="javascript:;"class="tsbox" v-else-if="Info.task == 2"><em class="ts_name">跟进提醒</em>您有一个新跟进任务，任务时间为 <em class="ts_n">{{Info.taskTime}}</em> <em class="ts_a">请注意查看>></em></a>
+								</div>
+								<form class="layui-form" lay-filter="test1" id="followForm">
+									<div class="layuIormTem">
+										<div class="layuIormext">客户名称：</div>
+										<div class="layuInputLock">
+											<input type="text" v-model="Info.name" class="layui-input" disabled>
+										</div>
+									</div>
+									<div class="layuIormTem" style="overflow: visible">
+										<div class="layuIormext">客户等级：</div>
+										<div class="layuInputLock" style="overflow: visible">
+											<select name="crm_type" id="crm_type" lay-filter="crm_type">
+												<option value="" title="请选择">请选择</option>
+												<option v-for="(ctitem, ctk) in clientTypeArr" :value="ctitem.id" :key="ctk" :selected="Info.crm_type == ctitem.id">{{ctitem.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="layuIormTem" style="overflow: visible">
+										<div class="layuIormext">客户状态：</div>
+										<div class="layuInputLock" style="overflow: visible">
+											<select name="crm_status" id="crm_status" lay-filter="crm_status">
+												<option value="" title="请选择">请选择</option>
+												<option v-for="(csitem, csk) in clientStatusArr" :value="csitem.id" :key="csk" :selected="Info.crm_status == csitem.id">{{csitem.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="layuIormTem" style="overflow: visible">
+										<div class="layuIormext">跟进方式：</div>
+										<div class="layuInputLock" style="overflow: visible">
+											<select name="f_type" id="f_type" lay-filter="f_type">
+												<option v-for="(item, fwk) in followWay" :value="item.id" :key="fwk">{{item.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext">跟进时间：</div>
+										<div class="layuInputLock layuInpuTime">
+											<input type="text" name="f_time" id="f_time" lay-verify="f_time" autocomplete="off" placeholder="请输入跟进时间"  class="layui-input" />
+										</div>
+									</div>
+									<div class="layuIormTem" style="overflow: visible">
+										<div class="layuIormext">联系人员：</div>
+										<div class="layuInputLock layuInpuMode" style="overflow: visible">
+											<div style="width: calc(100% - 118px);">
+												<select name="link_id" id="link_id" v-model="sel_linkid" lay-filter="link_id">
+													<option id="link_id - 1" :linkman="Info.linkman" :mobile="Info.phone_n" :value="-1" v-if="Info.linkman">{{Info.linkman}} - {{Info.phone_n}}</option>
+													<option v-for="(item, link_key) in links" :id="'link_id' + item.id" :linkman="item.link_man" :mobile="item.link_mobile" :value="item.id" :key="link_key">{{item.link_man}} - {{item.link_mobile}}</option>
+												</select>
+											</div>
+											<div class="layuInputNewTell">
+												<a href="javascript:;" @click="initAddCrmLink">新增</a>
+												<a href="javascript:;" @click="contactCustomer">外呼</a>
+											</div>
+										</div>
+									</div>
+									<div class="layuIormTem" v-if="show_add_link==1">
+										<div class="layuIormext" style="margin-right: 70px;"></div>
+										<div class="layuInputLock layuInpuMode">
+											<input type="text" name="link_man" style="width:110px;" autocomplete="off" placeholder="联系人姓名" v-model="link_man" class="layui-input modeName">
+											<input type="text" name="link_tel" style="width:197px;" autocomplete="off" placeholder="联系人手机号码" v-model="link_tel" class="layui-input modeTell">
+											<div class="layuInputNewTell">
+												<a href="javascript:;" @click="addCrmLink">保存</a>
+												<a href="javascript:;" @click="show_add_link=0">取消</a>
+											</div>
+										</div>
+									</div>
+									<div class="layuIormTem layuInpuTare">
+										<div class="layuIormext">跟进结果：</div>
+										<div class="layuInputLock">
+											<textarea id="followContent" placeholder="请输入内容" class="layui-textarea" style="padding: 0; border: none;"></textarea>
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext">下次跟进：</div>
+										<div class="layuInputLock layuInpuMode layuInpuTime">
+
+											<input type="checkbox" lay-filter="nextCheck" id="nextCheck" lay-skin="primary" title="设定下次跟进时间">
+
+											<input type="text" name="next_time" id="next_time" lay-filter="next_time" autocomplete="off" placeholder="请输入任务时间"  class="layui-input modeTell" />
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext" style="opacity: 0.001;">提交按钮：</div>
+										<div class="layuInputLock layuButto">
+											<a href="javascript:;" @click="addFollow">{{followBtn}}</a>
+										</div>
+									</div>
+								</form>
+
+								 <div class="absConGenAgain" style="display: none;" id="followTips">
+									<div>
+										<img src="images/yun_xink.png" alt="">
+										<span>真是辛苦您啦~</span>
+										<a href="javascript:;" @click="againFollow">再次填写</a>
+									</div>
+								</div>
+							</div>
+							<div class="comTabsConGenRec">
+								<div class="layui-tab">
+									<ul class="layui-tab-title">
+										<li @click="changeFollowTab(1)" :class="followTab == 1 ? 'layui-this' : ''">我的跟进记录</li>
+										<li @click="changeFollowTab(2)" :class="followTab == 2 ? 'layui-this' : ''">历史跟进记录</li>
+									</ul>
+									<div class="layui-tab-content">
+										<div class="layui-tab-item layui-show">
+											<div class="onGenRecAlls" v-show="followNum > 0" id="layer-pic">
+												<div class="onGenRecAllFlext">
+													<div class="onGenRecList" v-for="(item, fk) in FollowList"  :key="fk">
+														<div class="genRecListTop">
+															<div class="genRecListTool">
+																<span>{{item.f_type_n}}</span>
+															</div>
+															<div class="genRecLisTouc">
+																<span>{{item.link_man}}</span>
+																<span v-if="item.link_job">【{{item.link_job}}】</span>
+																<span class="redsu">{{item.link_tel}}</span>
+
+																<div class="lbbox" onclick="playVoice(this)" :data-id="item.id" :data-voice="item.oss_record_path" v-if="item.oss_record_path">
+																	<div class="lybf"  >
+																		<i :id="'onplay_'+item.id" class="yuyinbox_wt"></i>{{item.time_length_n}}
+																	</div>
+																</div>
+															</div>
+															<div class="genReopsdiz" v-if="item.is_note == 2 && auid!=Info.crm_uid">
+																<a href="javascript:;" @click="addNote(item.id, fk);"><i></i><span>批注</span></a>
+															</div>
+															<div class="genReopsdiz" v-if="item.up == 1 && auid==item.auid">
+																<a href="javascript:;" @click="upFollow(item.id);"><i></i><span>修改</span></a>
+															</div>
+														</div>
+														<div class="genRecListConts">
+															<div class="genRecListConText">
+																<div v-if="item.crm_type_n || item.crm_status_n">
+																	<span v-if="item.crm_type_n" style="display: inline">客户等级：{{item.crm_type_n}}</span>
+																	<span v-if="item.crm_type_n && item.crm_status_n" style="display: inline">&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>
+																	<span v-if="item.crm_status_n" style="display: inline">客户状态：{{item.crm_status_n}}</span>
+																</div>
+																<div>
+																	<span>{{item.content_n}}</span>
+																</div>
+																<div class="genRecListConImgs">
+																	<img  v-for="(v, imgk) in item.imgArr" :src="v" :lay-src="v">
+																</div>
+															</div>
+															<div class="genRecListConTime">
+																<span>{{item.f_time_n}}</span>
+																<span>{{item.f_user}}</span>
+																<span v-if="item.task_time">下次跟进：{{item.task_time}}</span>
+															</div>
+														</div>
+
+														<div class="genRecPizhu" :class="item.is_note==1 ? 'genRecPizhuPad' : ''">
+															<div class="genRecPizhuIcon" v-show="item.is_note == 1">
+																<div class="genRecPizhuOnw">
+																	<i></i>
+																	<span>{{item.note_user}}于{{item.noteTime}}进行批注；</span>
+																</div>
+																<div class="genRecPizhuTwi" v-show="auid!=Info.crm_uid">
+																	<a href="javascript:;" @click="editNote(item.id, fk, item.note_content)"></a>
+																	<a href="javascript:;" @click="delNote(item.id, fk)" class="zhuTlodes"></a>
+																</div>
+															</div>
+															<div class="genRecPizhuTexy"  :id="'noteShowC_'+item.id">
+																<span>{{item.noteContent}}</span>
+																<div style="display: flex;">
+																	<img  v-for="(v, nimgk) in item.noteImgArr" :src="v" :lay-src="v" style="width: 100%;max-width: 150px;height: auto;" />
+																</div>
+															</div>
+															<div class="genRecTextar" :id="'note_'+item.id" style="display: none;">
+																<div class="textarContsdr">
+																	<textarea :id="'noteContent_'+item.id" style="max-width: 500px;"></textarea>
+																	<div class="textarConBton">
+																		<span @click="noteLog(item.id, fk);" class="textBtnTwo">批注</span>
+																		<span @click="hideNote(item.id, item.is_note)">取消</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="genRecListPagesd" v-if="followPageTotal > 1" >
+													<span style="margin-left: 5px; margin-right: 40px;">从 {{followStart}} 到 {{followEnd}}，共 {{followPageTotal}} 页，{{followTotal}} 条 </span>
+													<span @click="preFollowPage" class="zt_box_s other_page" v-if="followPage > 1"><上一页</span>
+													<span class="zt_box_s" v-for="(pageV, pageK) in followPageArr" @click="followPageJump(pageV+1)" :class="followPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+													<span @click="nextFollowPage" class="zt_box_s other_page" v-if="followPage < followPageTotal">下一页></span>
+												</div>
+											</div>
+											<div class="layuiNoEcords" v-show="followNum == 0">
+												<div>
+													<img src="images/zwtip.png" alt="">
+													<span>暂无跟进记录</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==2 ? 'layui-show': ''">
+						<div class="crmComTabsCont">
+							<div class="comTabsConGenInp">
+								<form class="layui-form" lay-filter="test2">
+									<div class="layuIormTem">
+										<div class="layuIormext">短信分类：</div>
+										<div class="layuInputLock layuShorTess">
+											<span v-for="(item, msgK) in msgTpl" :key="msgK" :class="item.name==msgTp ? 'horTesCur' : ''" @click="msgTplChange(item.name, item.content)">{{item.title}}</span>
+										</div>
+									</div>
+									<div class="layuIormTem layuInpuTare">
+										<div class="layuIormext">短信内容：</div>
+										<div class="layuInputLock">
+											<textarea id="sms_content" placeholder="请输入内容" class="layui-textarea"></textarea>
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext">接收号码：</div>
+										<div class="layuInputLock layuInpuMode">
+											<input type="text" v-model="msgPhone" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext" style="opacity: 0.001;">发送短信：</div>
+										<div class="layuInputLock layuButto">
+											<a href="javascript:;" @click="sendMsg">发送短信</a>
+										</div>
+									</div>
+									<div class="layuIormTem">
+										<div class="layuIormext" style="opacity: 0.001;">温馨提示：</div>
+										<div class="layuInputLock layuCozyTis">
+											<p>温馨小提示</p>
+											<span>
+												如果给客户打电话,客户可能因为各种情况而不愿意接,次数多了,对方还会嫌弃, 可能因为频繁打电话,引起对方的反感；可以选择发送短信给客户更容易接受
+											</span>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="comTabsConGenRec">
+								<div class="layui-tab">
+									<ul class="layui-tab-title">
+										<li @click="changeMsgTab(1)" :class="msgTab == 1 ? 'layui-this' : ''">我的发送记录</li>
+										<li @click="changeMsgTab(2)" :class="msgTab == 2 ? 'layui-this' : ''">历史发送记录</li>
+									</ul>
+									<div class="layui-tab-content">
+										<div class="layui-tab-item layui-show">
+
+											<div class="onGenRecAlls" v-for="(item, mk) in msgList"  :key="mk" v-show="msgNum > 0">
+												<div class="onGenRecAllFlext">
+													<div class="onGenRecList">
+														<div class="genRecListTop">
+															<div class="genRecListduanx">
+																<img src="images/duanxi.png" alt="">
+															</div>
+															<div class="genRecLisTouc">
+																<span>发送电话</span>
+																<span class="redsu">{{item.moblie}}</span>
+															</div>
+														</div>
+														<div class="genRecListConts">
+															<div class="genRecListConText">
+																<span>{{item.content}}</span>
+															</div>
+															<div class="genRecListConTime">
+																<span>{{item.ctime_n}}</span>
+																<span>{{item.name}}</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="genRecListPagesd" v-if="msgPageTotal > 0" >
+												<span style="margin-left: 5px; margin-right: 40px;">从 {{msgStart}} 到 {{msgEnd}}，共 {{msgPageTotal}} 页，{{msgTotal}} 条 </span>
+												<span @click="preMsgPage" class="zt_box_s other_page" v-if="msgPage > 1"><上一页</span>
+												<span class="zt_box_s" v-for="(pageV, pageK) in msgPageArr" @click="msgPageJump(pageV+1)" :class="msgPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+												<span @click="nextMsgPage" class="zt_box_s other_page" v-if="msgPage < msgPageTotal">下一页></span>
+											</div>
+											<div class="layuiNoEcords" v-show="msgNum == 0">
+												<div>
+													<img src="images/zwtip.png" alt="">
+													<span>暂无发送记录</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==3 ? 'layui-show': ''">
+						<div class="crmComTabsCont">
+							<div class="comTabsConGenInp">
+								<div class="layuiCustomer">
+									<div class="layuiCustoTit">
+										<span>客户信息</span>
+									</div>
+									<div class="layuiCustoAlls">
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>客户名称：</span>
+												<p>{{Info.name}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="qiyexiug" @click="openBoxShow('name');">修改</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>企业账号：</span>
+												<p>{{Info.username}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="zhanghxiug" @click="openBoxShow('account');">修改</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>客户等级：</span>
+												<p style="background: #ECF5FC;color: #449DE6">{{Info.crm_type_n}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="denxiug" @click="openBoxShow('crmType');">修改</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>客户状态：</span>
+												<p style="background:#FFEBEA; color: #FA3E2E;">{{Info.crm_status_n}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="mertaxiug" @click="openBoxShow('crmStatus');">修改</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>会员套餐时间：</span>
+												<p>{{Info.vipstime_n}}</p>
+												<p style="padding: 0 10px;"> ~ </p>
+												<p>{{Info.vipetime_n}}</p>
+											</div>
+											<div class="layuiCustoLikn" v-if="Info.r_status!=4">
+												<a href="javascript:void(0);" @click="stopCom">暂停招聘</a>
+											</div>
+										</div>
+										<div class="layuiCustoList" v-if="Info.r_status == 4">
+											<div class="layuiCustoName">
+												<span>会员暂停时间：</span>
+												<p>{{Info.zt_time_n}}</p>
+												<p style="margin-left: 25px;">已暂停 <em style="color:#ff002a;">{{Info.zt_days}}</em> 天</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" @click="openCom">解除暂停</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>联系方式：</span>
+												<p>{{Info.linkman}}  {{Info.linktel}}  {{Info.linkphone}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="lianxixiug" @click="openBoxShow('link');">修改</a>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<p style="margin-left: 70px;">{{Info.address}}</p>
+											</div>
+										</div>
+										<div class="layuiCustoList">
+											<div class="layuiCustoName">
+												<span>备注：</span>
+												<p>{{Info.crm_remark}}</p>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" @click="openBoxShow('remark');">修改</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="layuiCustomer">
+									<div class="layuiCustoTit" style="display: flex;">
+										<span>更多联系方式</span>
+										<div class="layuiCustoLikn">
+											<a href="javascript:void(0);" class="qiyexiug" @click="openBoxShow('crmLink');" style="verflow: hidden;display: flex;align-items: center;justify-content: center;width: 50px;border: 1px solid #2778F8;font-size: 14px;color: #2778F8;"><img src="images/addsre.png" />新增</a>
+										</div>
+									</div>
+									<div class="layuiCustoAlls" >
+										<div class="layuiCustoList" v-if="Info.linktel">
+											<div class="layuiCustoName">
+												<span>{{Info.linkman}} ~ {{Info.linktel}} （企业默认）</span>
+											</div>
+											<div class="layuiCustoLikn">
+												<a href="javascript:void(0);" class="qiyexiug" @click="openBoxShow('link');">修改</a>
+											</div>
+										</div>
+										<div style="overflow-y: auto; height: 300px;" >
+											<div class="layuiCustoList" v-for="(item, lk) in linkList"  :key="lk"  v-show="linkNum > 0">
+												<div class="layuiCustoName">
+													<span>{{item.link_man}} ~ {{item.link_mobile}}</span>
+												</div>
+												<div class="layuiCustoLikn">
+													<a href="javascript:void(0);" class="qiyexiug" @click="upCrmLink(item.id, item.link_man, item.link_mobile, lk);">修改</a>
+													<a href="javascript:void(0);" class="qiyexiug" @click="delCrmLink(item.id, lk);">删除</a>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="comTabsConGenRec">
+								<div class="layuiCussystem">
+									<div class="layuiSystemTite">
+										<span>系统信息2</span>
+									</div>
+									<div class="layuiSystemAlls">
+										<div class="layuiSystemList">
+											<div class="layuiSystName">
+												<b>所属销售：</b>
+												<span>{{Info.crm_name}}</span>
+											</div>
+											<div class="layuiSystLink" v-if="Info.crm_uid > 0">
+												<a href="javascript:void(0);" class="zhuanjiaobut" @click="setDeliverBoxShow">转交</a>
+												<a href="javascript:void(0);" class="fangqibutn" @click="setGiveUpShow">放弃</a>
+											</div>
+											<div class="layuiSystLink" v-else>
+												<a href="javascript:void(0);" class="zhuanjiaobut" @click="claimCustomer">领取</a>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName">
+												<b>领取时间：</b>
+												<span>{{Info.crm_time_n}}</span>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName">
+												<b>跟进记录：</b>
+												<span>{{Info.follow_num}}</span>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName">
+												<b>最后跟进时间：</b>
+												<span>{{Info.f_time_n}}</span>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName">
+												<b>最后跟进人：</b>
+												<span>{{Info.follow_user}}</span>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName layuiSystFlex">
+												<b>职位信息：</b>
+												<div class="layuiSystNubm">
+													<span>在招职位：{{Info.jobNum}}个</span>
+													<span>推荐：{{Info.recJobNum}}个</span>
+													<span>置顶：{{Info.topJobNum}}个</span>
+													<span>急聘：{{Info.urgentJobNum}}个</span>
+													<span>自动刷新职位：{{Info.autoJobNum}}个</span>
+													<span>总发布职位：{{Info.allJobNum}}个</span>
+												</div>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName layuiSystFlex">
+												<b>简历信息：</b>
+												<div class="layuiSystNubm">
+													<span>收到简历：{{Info.sqNum}}份</span>
+													<span>查看简历：{{Info.lookNum}}份</span>
+													<span>下载简历：{{Info.downNum}}份</span>
+												</div>
+											</div>
+										</div>
+										<div class="layuiSystemList">
+											<div class="layuiSystName layuiSystFlex">
+												<b>剩余套餐：</b>
+												<div class="layuiSystNubm" v-if="static.rating_type == 0">
+													<span>会员已到期</span>
+												</div>
+												<div class="layuiSystNubm" v-else-if="static.rating_type == 1">
+													<span>可上架职位：{{static.crm_job_num}}个</span>
+													<span>刷新职位数：{{static.breakjob_num}}个</span>
+													<span>邀请面试数：{{static.invite_resume}}个</span>
+													<span>置顶天数：{{static.top_num}}天</span>
+													<span>紧急天数：{{static.urgent_num}}天</span>
+													<span>推荐天数：{{static.rec_num}}天</span>
+													<span>招聘会数：{{static.zph_num}}次</span>
+													<span>子账号数：{{static.sons_num}}个</span>
+													<span>直聊数：{{static.chat_num}}个</span>
+													<span>视频面试数：{{static.spview_num}}个</span>
+												</div>
+												<div class="layuiSystNubm" v-else="static.rating_type == 2">
+													<span>可上架职位：{{static.crm_job_num}}个</span>
+													<span>今日可刷新职位数：{{static.crm_sx_num}}个</span>
+													<span>今日可邀请面试数：{{static.crm_yq_num}}个</span>
+													<span>置顶天数：{{static.top_num}}天</span>
+													<span>紧急天数：{{static.urgent_num}}天</span>
+													<span>推荐天数：{{static.rec_num}}天</span>
+													<span>今日可报名招聘会数：{{static.crm_zph_num}}次</span>
+													<span>子账号数：{{static.sons_num}}个</span>
+													<span>今日可直聊数：{{static.crm_chat_num}}个</span>
+													<span>今日可发布视频面试数：{{static.crm_sp_num}}个</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==4 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<div class="layuiAppoInput">
+								<input v-model="job_keyword" type="text" placeholder="输入职位名称" />
+								<button @click="jobSearch"><img src="images/suoe.png" alt="">查询</button>
+								<a href="javascript:;" @click="setComTwShow(Info.uid, Info.name, Info.update_day, Info.taskNum)" ><img src="images/addsre.png" alt="">推企业</a>
+							</div>
+							<div class="layuiAppoNubm">
+								<span>总数：{{jobNum}}</span>
+								<span>未审核：{{job1Num}}</span>
+								<span>未通过：{{job2Num}}</span>
+								<span>已下架：{{statusNum}}</span>
+								<span>搜索结果：{{jobTotal}}</span>
+							</div>
+						</div>
+						<div class="layuiAppoiDatas">
+							<form>
+								<table class="layuiAppTable" border="0" width="100%">
+									<thead class="layuiAppThead">
+										<tr align="left">
+											<th width="40">
+												<label>
+													<input type="checkbox" id='chkAll' onclick='CheckAll(this.form)' />
+												</label>
+											</th>
+											<th width="50">职位ID</th>
+											<th width="200">职位名称</th>
+											<th width="50">简历量</th>
+											<th width="180">发布时间/更新时间</th>
+											<th width="80">招聘状态</th>
+											<th width="80">审核状态</th>
+											<th width="80">推送次数</th>
+											<th width="200" align="center">操作</th>
+										</tr>
+									</thead>
+									<tbody class="layuiAppTbody">
+										<tr align="left" v-for="(item, jk) in jobList" :key="jk">
+											<td>
+												<input type="checkbox" :value="item.id" :data-num="item.taskNum" :data-upday="item.update_day" :data-state="item.state" :data-status="item.status" name="jobCk" class="check_all" onclick='unselectall()' rel="del_chk"/>
+											</td>
+											<td>{{item.id}}</td>
+											<td>
+												<a>{{item.name}}</a>
+												<span>{{item.link_man}} {{item.link_tel}}</span>
+											</td>
+											<td>
+												<span>{{item.sq_num}}</span>
+												<a href="javascript:;" @click="newIFrame('index.php?m=admin_comlog&job_id='+item.id, '80%')">查看</a>
+											</td>
+											<td>
+												<span>{{item.update_n}} 更新</span>
+												<span>{{item.sdate_n}} 发布</span>
+											</td>
+											<td>
+												<div class="layuiApZhon" :class="item.status==0 ? 'layuiApCurSh' : '' " @click="setJobStatus(item.id, item.status, jk)">
+													<span></span>
+												</div>
+												<p v-if="item.status == 0">招聘中</p>
+												<p v-else>已下架</p>
+											</td>
+											<td>
+												<span v-if="item.state == 1">已审核</span>
+												<span v-else-if="item.state == 0">未审核</span>
+												<span v-else-if="item.state == 3">未通过</span>
+											</td>
+											<td><span>{{item.tw_num}}</span></td>
+											<td align="center">
+												<div class="layuiApButon">
+													<div class="layuiApButAbio">
+														<a href="javascript:void(0);" class="againTui" v-if="item.state==1" @click="setTwShow(item.id, item.name, item.update_day, item.taskNum)">推文助手</a>
+														<a href="javascript:void(0);" class="againPipei" @click="openMatch(item.id, item.link_man, item.link_tel, item.jobClassId, item.cityClassId,'')">匹配简历</a>
+													</div>
+													<div class="layuiApMore">
+														<span>更多</span>
+														<div class="layuiApMoreLikr">
+															<a href="javascript:;" class="copyUrl" data-clipboard-action="copy" :data-clipboard-text="item.xcx_url" v-if="item.xcx_url">复制小程序链接</a>
+															<a href="javascript:;" class="copyUrl" data-clipboard-action="copy" :data-clipboard-text="item.job_url">复制pc链接</a>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr align="left">
+											<td>
+												<input type="checkbox" class="" id="chkAll2" onclick="CheckAll2(this.form)" />
+											</td>
+											<td colspan="8">
+												<div class="layuiAppTuiwe">
+													<span>全选</span>
+													<a href="javascript:;" @click="setATwShow" v-if="Info.r_status==1">推文助手</a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+						<div class="layuiAppoPages" v-if="jobPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{jobStart}} 到 {{jobEnd}}，共 {{jobPageTotal}} 页，{{jobTotal}} 条 </span>
+							<span @click="preJobPage" class="zt_box_s other_page" v-if="jobPage > 1"><上一页</span>
+							<span class="zt_box_s" v-for="(pageV, pageK) in jobPageArr" @click="jobPageJump(pageV+1)" :class="jobPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+							<span @click="nextJobPage" class="zt_box_s other_page" v-if="jobPage < jobPageTotal && jobPageTotal > 10">下一页></span>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==5 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<div class="layuisugstNam">
+								<span>推送列表</span>
+							</div>
+							<div class="layuisugstNubm">
+								<div class="layuisugNubData">
+									<span>总数：{{recTotal}}</span>
+								</div>
+								<div class="layuisugNubAdds">
+									<a href="javascript:;" @click="openMatch('', Info.linkman, Info.linktel, '', '','')"><img src="images/adds.png" alt="">新增推荐</a>
+								</div>
+							</div>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+									<tr align="left">
+										<th width="150">推送日期</th>
+										<th width="240">推送链接</th>
+										<th width="80">关联简历</th>
+										<th width="80">链接点击数</th>
+										<th width="80">电话查看数</th>
+										<th width="60" align="center">操作</th>
+									</tr>
+								</thead>
+								<tbody class="layuiAppTbody">
+									<tr align="left" v-for="(item, recK) in recList" :key="recK">
+										<td>{{item.time_n}}</td>
+										<td>
+											<a :href="item.url" target="_blank">{{item.url}}</a>
+										</td>
+										<td><span>{{item.enum}}</span></td>
+										<td><span>{{item.hits}}</span></td>
+										<td><span>{{item.downNum}}</span></td>
+										<td align="center">
+											<div class="layuiApButon">
+												<div class="layuiApButAbio">
+													<a href="javascript:void(0);" class="candidateer" @click="openTsResume(item.id)">详情</a>
+													<a href="javascript:void(0);" class="candidateer" @click="openMatch('', Info.linkman, Info.linktel, '', '', item.id)">修改</a>
+													<a href="javascript:void(0);" class="candidateer" @click="delRecResumeLog(item.id, recK)">删除</a>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="recPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{recStart}} 到 {{recEnd}}，共 {{recPageTotal}} 页，{{recTotal}} 条 </span>
+							<span @click="preRecPage" class="zt_box_s  other_page" v-if="recPage > 1"><上一页</span>
+							<span class="zt_box_s" v-for="(pageV, pageK) in recPageArr" @click="recPageJump(pageV+1)" :class="recPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+							<span @click="nextRecPage" class="zt_box_s other_page" v-if="recPage < recPageTotal">下一页></span>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==6 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<form action="" class="layui-form">
+								<div class="layuiHistoSele">
+									<div class="layuiHisTptio">
+										<div class="layui-input-block">
+											<select name="tw_type" id="tw_type" lay-filter="tw_type">
+												<option value="">推文类型</option>
+												<option value="2">企业推文</option>
+												<option value="1">职位推文</option>
+											</select>
+										</div>
+										<div class="layui-input-block">
+											<select name="tw_user" id="tw_user" lay-filter="tw_user">
+												<option value="">创建人</option>
+												<option v-for="(item, adminK) in adminUser" :value="item.uid" :title="item.name" :key="adminK">{{item.name}}</option>
+											</select>
+										</div>
+										<div class="layui-input-block">
+											<select name="tw_status" id="tw_status" lay-filter="tw_status">
+												<option value="">推送状态</option>
+												<option value="2">未推送</option>
+												<option value="1">已推送</option>
+											</select>
+										</div>
+										<div class="layuiAppoInput">
+											<input type="text" placeholder="输入职位名称" v-model="twSJobName" />
+										</div>
+									</div>
+									<div class="layuiHisTipse" style="padding-left: 10px;">
+										<span>标签</span>
+										<div class="layuiHisImage">
+											<img :src="twUrgent ? 'images/tw_jph.png' : 'images/tw_jp.png'" alt="" @click="twUrgent=!twUrgent">
+											<img :src="twMoments ? 'images/tw_pyq_h.png' : 'images/tw_pyq.png'" alt="" @click="twMoments=!twMoments">
+											<img :src="twGzh ? 'images/tw_gzh_h.png' : 'images/tw_gzh.png'" alt="" @click="twGzh=!twGzh">
+										</div>
+									</div>
+									<div class="layuiHisAnnius">
+										<a style="background: #2778F8; cursor:pointer;" @click="twSearch"><img src="images/search_icon.png" alt="">&nbsp;搜索</a>
+										<button type="reset" class="layui-btn layui-btn-primary" @click="resetTwSearch">重置</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+									<tr align="left">
+										<th width="50">ID</th>
+										<th width="60">标签</th>
+										<th width="180">企业/职位 名称</th>
+										<th width="180">推文类型</th>
+										<th width="120">企业更新/职位创建 时间</th>
+										<th width="80">状态</th>
+										<th width="80">创建人</th>
+										<th width="120">添加时间</th>
+										<th width="80">推送历史</th>
+										<th width="120">推送时间</th>
+										<th width="150">备注</th>
+									</tr>
+								</thead>
+								<tbody class="layuiAppTbody">
+									<tr align="left" v-for="(item, twk) in twList" :key="twk">
+										<td>{{item.id}}</td>
+										<td>
+											<div class="layuiAppImage">
+												<img :src="item.urgent == 1 ? 'images/tw_jph.png' : 'images/tw_jp.png'" alt="">
+												<img :src="item.wcmoments == 1 ? 'images/tw_pyq_h.png' : 'images/tw_pyq.png'" alt="">
+												<img :src="item.gzh == 1 ? 'images/tw_gzh_h.png' : 'images/tw_gzh.png'" alt="">
+											</div>
+										</td>
+										<td>
+											<div class="layuiAppTopse">
+												<p>{{item.name}}</p>
+												<span style="color: #f30;" v-if="item.jobStatus">（{{item.jobStatus}}）</span>
+											</div>
+										</td>
+										<td><span>{{item.type_n}}</span></td>
+										<td><span>{{item.sdate_n}}</span></td>
+										<td><span>{{item.status_n}}</span></td>
+										<td><span>{{item.aname}}</span></td>
+										<td><span>{{item.ctime_n}}</span></td>
+										<td><span>{{item.tsNum}}</span></td>
+										<td><span>{{item.etime_n}}</span></td>
+										<td><span>{{item.content}}</span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="twPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{twStart}} 到 {{twEnd}}，共 {{twPageTotal}} 页，{{twTotal}} 条 </span>
+							<span @click="preTwPage" class="zt_box_s other_page" v-if="twPage > 1"><上一页</span>
+							<span class="zt_box_s" v-for="(pageV, pageK) in twPageArr" @click="twPageJump(pageV+1)" :class="twPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+							<span @click="nextTwPage" class="zt_box_s other_page" v-if="twPage < twPageTotal">下一页></span>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==7 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<form class="layui-form" lay-filter="test7">
+								<div class="layuiHistoSele">
+									<div class="layuiHisTptio layuiHisTptMargin">
+										<div class="layui-input-block">
+											<select name="order_state" id="order_state" lay-filter="order_state">
+												<option value="">订单状态</option>
+												<option v-for="(v, sk) in stateArr" :value="v.id" :key="sk">{{v.name}}</option>
+											</select>
+										</div>
+										<div class="layui-input-block">
+											<select name="order_type" id="order_type" lay-filter="order_type">
+												<option value="">付款方式</option>
+												<option v-for="(v, otk) in oTypeArr" :value="v.id" :key="otk">{{v.name}}</option>
+											</select>
+										</div>
+										<div class="layui-input-block">
+											<select name="o_type" id="o_type" lay-filter="o_type">
+												<option value="">订单类型</option>
+												<option v-for="(v, tk) in typeArr" :value="v.id" :key="tk">{{v.name}}</option>
+											</select>
+										</div>
+										<div class="layui-inline">
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="order_s_time" class="layui-input" placeholder="开始日期" lay-filter="order_s_time">
+											</div>
+											<div class="layui-form-mid">-</div>
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="order_e_time" class="layui-input" placeholder="结束日期" lay-filter="order_e_time">
+											</div>
+										</div>
+										<div class="layui-input-block">
+											<input type="text" name="order_keyword"  id="order_keyword" autocomplete="off" placeholder="请输订单号" class="layui-input">
+										</div>
+									</div>
+									<div class="layuiHisAnnius" style="margin: 0;">
+										<a style="background: #2778F8; cursor:pointer;" @click="orderSearch"><img src="images/search_icon.png" alt=""> &nbsp;搜索</a>
+										<button type="reset" class="layui-btn layui-btn-primary" @click="resetOrderSearch">重置</button>
+										<a href="javascript:;" style="background: #2778F8; width: 95px; cursor: pointer;" @click="openBoxShow('order');"><img src="images/adds.png" alt="">新增订单</a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+									<tr align="left">
+										<th width="120">订单编号</th>
+										<th width="80">金额</th>
+										<th width="100">业务类型</th>
+										<th width="100">支付渠道</th>
+										<th width="150">创建时间</th>
+										<th width="80">状态</th>
+										<th width="150">备注</th>
+									</tr>
+								</thead>
+								<tbody class="layuiAppTbody">
+									<tr align="left" v-for="(item, ork) in orderList" :key="ork">
+										<td>
+											<span>{{item.order_id}}</span>
+										</td>
+										<td>
+											<span>{{item.order_price}}</span>
+										</td>
+										<td><span>{{item.type_n}}</span></td>
+										<td><span>{{item.order_type_n}}</span></td>
+										<td><span>{{item.order_time_n}}</span></td>
+										<td><span>{{item.order_state_n}}</span></td>
+										<td><span>{{item.order_remark}}</span></td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="orderPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{orderStart}} 到 {{orderEnd}}，共 {{orderPageTotal}} 页，{{orderTotal}} 条 </span>
+							<span @click="preOrderPage" class="zt_box_s other_page" v-if="orderPage > 1"><上一页</span>
+
+							<span class="zt_box_s" v-for="(pageV, pageK) in orderPageArr" @click="orderPageJump(pageV+1)" :class="orderPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+
+							<span @click="nextOrderPage" class="zt_box_s other_page" v-if="orderPage < orderPageTotal">下一页></span>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==8 ? 'layui-show': ''" style="padding: 0 12px;">
+
+						<div class="layuiAppoiSous">
+							<form class="layui-form" lay-filter="test8">
+								<div class="layuiHistoSele">
+									<div class="layuiHisTptio">
+										<div class="layui-inline">
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="log_s_time" class="layui-input" placeholder="开始日期" lay-filter="log_s_time">
+											</div>
+											<div class="layui-form-mid">-</div>
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="log_e_time" class="layui-input" placeholder="结束日期" lay-filter="log_e_time">
+											</div>
+										</div>
+										<div class="layui-input-block">
+											<input type="text" name="log_keyword"  id="log_keyword" autocomplete="off" placeholder="请输入关键词" class="layui-input">
+										</div>
+									</div>
+									<div class="layuiHisAnnius" style="margin: 0;">
+										<a style="background: #2778F8; cursor:pointer;" @click="logSearch"><img src="images/search_icon.png" alt="">&nbsp;搜索</a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+								<tr align="left">
+									<th width="120">编号</th>
+									<th width="400">内容</th>
+									<th width="150">IP</th>
+									<th width="160" align="center">时间</th>
+								</tr>
+								</thead>
+								<tbody class="layuiAppTbody">
+								<tr align="left" v-for="(item, mlk) in logList" :key="mlk">
+									<td><span>{{item.id}}</span></td>
+									<td><span>{{item.content}}</span></td>
+									<td><span>{{item.ip}}</span></td>
+									<td align="center"><span>{{item.ctime_n}}</span></td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="logPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{logStart}} 到 {{logEnd}}，共 {{logPageTotal}} 页，{{logTotal}} 条 </span>
+							<span @click="preLogPage" class="zt_box_s other_page" v-if="logPage > 1"><上一页</span>
+							<span class="zt_box_s" v-for="(pageV, pageK) in logPageArr" @click="logPageJump(pageV+1)" :class="logPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+							<span @click="nextLogPage" class="zt_box_s other_page" v-if="logPage < logPageTotal">下一页></span>
+						</div>
+
+					</div>
+					<div class="layui-tab-item" :class="tab==9 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<form class="layui-form" lay-filter="test9">
+								<div class="layuiHistoSele">
+									<div class="layuiHisTptio">
+										<div class="layui-inline">
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="web_s_time" class="layui-input" placeholder="开始日期" lay-filter="web_s_time">
+											</div>
+											<div class="layui-form-mid">-</div>
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="web_e_time" class="layui-input" placeholder="结束日期" lay-filter="web_e_time">
+											</div>
+										</div>
+									</div>
+									<div class="layuiHisAnnius" style="margin: 0;">
+										<a style="background: #2778F8; cursor:pointer;" @click="webSearch"><img src="images/search_icon.png" alt="">&nbsp;搜索</a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+								<tr align="left">
+									<th width="120">编号</th>
+									<th width="400">行为事件</th>
+									<th width="150">IP</th>
+									<th width="160" align="center">时间</th>
+								</tr>
+								</thead>
+								<tbody class="layuiAppTbody">
+								<tr align="left" v-for="(item, wlk) in webList" :key="wlk">
+									<td><span>{{item.id}}</span></td>
+									<td><span>{{item.action_name}}</span></td>
+									<td><span>{{item.ip}}</span></td>
+									<td align="center"><span>{{item.time_n}}</span></td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="webPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{webStart}} 到 {{webEnd}}，共 {{webPageTotal}} 页，{{webTotal}} 条 </span>
+							<span @click="preWebPage" class="zt_box_s other_page" v-if="webPage > 1"><上一页</span>
+
+							<span class="zt_box_s" v-for="(pageV, pageK) in webPageArr" @click="webPageJump(pageV+1)" :class="webPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+
+							<span @click="nextWebPage" class="zt_box_s other_page" v-if="webPage < webPageTotal">下一页></span>
+						</div>
+					</div>
+					<div class="layui-tab-item" :class="tab==10 ? 'layui-show': ''" style="padding: 0 12px;">
+						<div class="layuiAppoiSous">
+							<form class="layui-form" lay-filter="test10">
+								<div class="layuiHistoSele">
+									<div class="layuiHisTptio">
+										<div class="layui-inline">
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="com_log_s_time" class="layui-input" placeholder="开始日期" lay-filter="com_log_s_time">
+											</div>
+											<div class="layui-form-mid">-</div>
+											<div class="layui-input-inline">
+												<input type="text" autocomplete="off" id="com_log_e_time" class="layui-input" placeholder="结束日期" lay-filter="com_log_e_time">
+											</div>
+										</div>
+									</div>
+									<div class="layuiHisAnnius" style="margin: 0;">
+										<a style="background: #2778F8; cursor:pointer;" @click="comLogSearch"><img src="images/search_icon.png" alt="">&nbsp;搜索</a>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="layuiAppoiDatas">
+							<table class="layuiAppTable" border="0" width="100%">
+								<thead class="layuiAppThead">
+								<tr align="left">
+									<th width="200">操作时间</th>
+									<th width="150">操作人员</th>
+									<th width="400">操作描述</th>
+									<th width="" align="center"/>备注</th>
+								</tr>
+								</thead>
+								<tbody class="layuiAppTbody" id="log_pic">
+								<tr align="left" v-for="(item, clk) in comLogList" :key="clk">
+									<td><span>{{item.ctime_n}}</span></td>
+									<td><span>{{item.aname}}</span></td>
+									<td><span>{{item.content}}</span></td>
+									<td>
+										<span>{{item.remark}}</span>
+										<div>
+											<img  v-for="(v, imgk) in item.imgArr" :src="v" :lay-src="v" style="width: 100%;max-width: 150px;height: auto;">
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="layuiAppoPages" v-if="comLogPageTotal > 1" >
+							<span style="margin-left: 5px; margin-right: 40px;">从 {{comLogStart}} 到 {{comLogEnd}}，共 {{comLogPageTotal}} 页，{{comLogTotal}} 条 </span>
+							<span @click="preComLogPage" class="zt_box_s other_page" v-if="comLogPage > 1"><上一页</span>
+							<span class="zt_box_s" v-for="(pageV, pageK) in comLogPageArr" @click="comLogPageJump(pageV+1)" :class="comLogPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+							<span @click="nextComLogPage" class="zt_box_s other_page" v-if="comLogPage < comLogPageTotal">下一页></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 弹窗模块 -->
+	<!-- 客户详情弹窗--修改企业名称 -->
+	<div class="enterpPopup" v-show="nameBoxShow">
+		<div class="enterpConts layui-form">
+			<div class="kehudetConTops">
+				<span>修改客户名称</span>
+				<img src="images/closeimg.png" class="qiyeclose" alt="" @click="closeBoxShow('name');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>请输入新的企业名称</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" placeholder="" v-model="comName" class="layui-input" />
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="setComName">确认</span>
+				<span class="butnLink" @click="closeBoxShow('name');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--修改账户信息 -->
+	<div class="zhanghuPopup" v-show="accountBoxShow">
+		<div class="zhanghuConts layui-form">
+			<div class="kehudetConTops">
+				<span>修改账户信息</span>
+				<img src="images/closeimg.png" class="zhanhuclose" alt="" @click="closeBoxShow('account');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>请输入新的用户名</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" v-model="accountName" placeholder="请输入新用户名" class="layui-input" />
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>请输入新的密码</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="password"  autocomplete="off" v-model="accountPass" placeholder="请输入新密码，不做修改请留空" class="layui-input" />
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="setUserInfo">确认</span>
+				<span class="butnLink" @click="closeBoxShow('account');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--修改客户等级 -->
+	<div class="kehudetPopup" v-show="crmTypeBoxShow">
+		<div class="kehudetConts layui-form">
+			<div class="kehudetConTops">
+				<span>修改客户等级</span>
+				<img src="images/closeimg.png" class="kehuclose" alt="" @click="closeBoxShow('crmType');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>把客户等级设置为</span>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-input-block scroll_xg">
+						<input type="radio" name="crmType" v-for="(item, ctKey) in clientTypeArr" :key="ctKey" :value="item.id" :title="item.name" :checked="item.id == Info.crm_type" >
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>备注修改原因</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea placeholder="请输入内容" class="layui-textarea" id="crmTypeRemark"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="setCrmType">确认</span>
+				<span class="butnLink" @click="closeBoxShow('crmType')">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 简历提醒 -->
+	<div class="lianxisPopup" v-show="linkTixinShow">
+		<div class="lianxisConts layui-form" style="width:375px;">
+			<div class="kehudetConTops">
+				<span>提醒企业查看简历</span>
+				<img src="images/closeimg.png" class="lianxiclose" alt="" @click="closeTxinShow();">
+			</div>
+			 <div class="ts_qylook">
+              <div class="">方法一: 复制二维码发送给企业，企业识别二维码后即可查看简历</div>
+			    <div class="">方法二: 复制链接直接发给企业查看简历</div> 
+				</div> 
+			<div class="kehudetCoNadi" style="display: flex; align-items: center; justify-content: center;padding:0px;">
+				<div class="kehudetCoWeChat">
+					<img src="{yun:}pubqrcode  toc=nlresume totype=wap{/yun}" alt="">
+					<span class="copyUrl" data-clipboard-action="copy" data-clipboard-text="{yun:}url m=index c=nlresume{/yun}">复制链接发送给企业</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--修改客户状态 -->
+	<div class="kehuStatuSopup" v-show="crmStatusBoxShow">
+		<div class="kehuStatuConts layui-form">
+			<div class="kehudetConTops">
+				<span>修改客户状态</span>
+				<img src="images/closeimg.png" class="mertaclose" alt="" @click="closeBoxShow('crmStatus');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>把客户状态设置为</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block scroll_zt">
+						<input type="radio" name="crmStatus" v-for="(item, csKey) in clientStatusArr" :key="csKey" :value="item.id" :title="item.name" :checked="item.id == Info.crm_status" >
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>备注修改原因</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea placeholder="请输入内容" class="layui-textarea" id="crmStatusRemark"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="setCrmStatus">确认</span>
+				<span class="butnLink" @click="closeBoxShow('crmStatus');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--修改联系方式 -->
+	<div class="lianxisPopup" v-show="linkBoxShow">
+		<div class="lianxisConts layui-form">
+			<div class="kehudetConTops">
+				<span>修改联系方式</span>
+				<img src="images/closeimg.png" class="lianxiclose" alt="" @click="closeBoxShow('link');">
+			</div>
+
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>请输入新的联系方式</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" placeholder="请输入联系人" v-model="linkMan" class="layui-input lianxiNam">
+						<input type="text" autocomplete="off" placeholder="联系人职称 如：经理" v-model="linkJob" class="layui-input lianxiZhic">
+					</div>
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" placeholder="请输入联系手机号码" v-model="linkTel" class="layui-input lianxiTel">
+						<input type="text" autocomplete="off" placeholder="请输入联系电话" v-model="linkPhone" class="layui-input lianxiPhone">
+					</div>
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" placeholder="请输入联系邮箱" v-model="linkMail" class="layui-input">
+					</div>
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" placeholder="请输入公司地址" v-model="linkAddress" class="layui-input">
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span  @click="setComLink">确认</span>
+				<span class="butnLink"  @click="closeBoxShow('link');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--修改企业备注 -->
+	<div class="enterpPopup" v-show="remarkBoxShow">
+		<div class="enterpConts layui-form" style="height: calc(240px - 30px);">
+			<div class="kehudetConTops">
+				<span>备注客户信息</span>
+				<img src="images/closeimg.png" class="qiyeclose" alt="" @click="closeBoxShow('remark');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>请输入新的企业名称</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea id="comRemark" placeholder="请输入备注内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="remarkCom">确认</span>
+				<span class="butnLink" @click="closeBoxShow('remark');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--新增/修改 更多联系人 -->
+	<div class="zhanghuPopup" v-show="crmLinkBoxShow">
+		<div class="zhanghuConts layui-form">
+			<div class="kehudetConTops">
+				<span>{{crmLinkTitle}}</span>
+				<img src="images/closeimg.png" class="zhanhuclose" alt="" @click="closeBoxShow('crmLink');">
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>联系人姓名</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="text" autocomplete="off" v-model="crmLinkMan" placeholder="请输入联系人姓名" class="layui-input" />
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>联系人手机号码</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="text"  autocomplete="off" v-model="crmLinkMobile" placeholder="请输入联系方式" class="layui-input" />
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="setCrmLink">确认</span>
+				<span class="butnLink" @click="closeBoxShow('crmLink');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--转交客户 -->
+	<div class="zhuanjiaoPopup" v-show="deliverBoxShow">
+		<div class="zhuanjiaoConts layui-form">
+			<div class="kehudetConTops">
+				<span>转交客户</span>
+				<img src="images/closeimg.png" class="zhuanjclose" alt="" @click="closeBoxShow('deliver');">
+			</div>
+			<div class="zhuanjiaoTips">
+				<img src="images/lingdan.png" alt="">
+				<span>重要提示：客户被转交后将不能拥有客户操作权限</span>
+			</div>
+			<div class="zhuanjiaoInput">
+				<div class="zhuanjiaoInpTite">
+					<span>客户经理：</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<select name="crm_user" id="crm_user" lay-filter="crm_user">
+							<option value=""></option>
+							<option v-for="(item, crmK) in crmUser" :value="item.uid" :title="item.name" :key="crmK">{{item.name}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="zhuanjiaoInput zhuanjiaFlex">
+				<div class="zhuanjiaoInpTite">
+					<span>备注信息：</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea id="deliverRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="deliverUser">确认</span>
+				<span class="butnLink" @click="closeBoxShow('deliver');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 客户详情弹窗--放弃客户 -->
+	<div class="fangqikePopup" v-show="giveUpShow">
+		<div class="fangqikeConts layui-form">
+			<div class="kehudetConTops">
+				<span>放弃客户</span>
+				<img src="images/closeimg.png" class="fangqiclose" alt="" @click="closeBoxShow('giveUp');">
+			</div>
+			<div class="zhuanjiaoTips">
+				<img src="images/lingdan.png" alt="">
+				<span>重要提示：客户被放弃后将不能拥有客户操作权限</span>
+			</div>
+			<div class="kehudetCoNadi">
+				<div class="kehudetCoNadiTite">
+					<span>说一说为什么放弃</span>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<textarea id="giveUpContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="kehudetCoButn">
+				<span @click="giveUp">确认</span>
+				<span class="butnLink" @click="closeBoxShow('giveUp');">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 企业推文 -->
+	<div class="againTuiwen" v-show="comTwBoxShow">
+		<div class="againTuiConts layui-form">
+			<div class="againTuiTop">
+				<span>添加企业到社群推文助手</span>
+				<img src="images/closeimg.png" class="againTuiClose" alt="" @click="closeBoxShow('comTw');">
+			</div>
+			<div class="againTuiIput">
+				<div class="layui-form-item itemTips" v-show="comTwTipsShow">
+					<img src="images/lingdan.png" alt="">
+					<div class="againTips">{{comTwTips}}</div>
+				</div>
+				<div class="layui-form-item" v-show="twComShow">
+					<div class="againSpan">企业名称：</div>
+					<div class="layui-input-block">
+						<span>{{twComName}}</span>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="againSpan">标签：</div>
+					<div class="layui-input-block">
+						<div class="againTipy" @click="twComUrgent=!twComUrgent">
+							<img :src="twComUrgent ? 'images/tw_jp.png' : 'images/tw_jph.png'" alt="">
+							<span>加急</span>
+						</div>
+						<div class="againTipy" @click="twComPyq=!twComPyq">
+							<img :src="twComPyq ? 'images/tw_pyq.png' : 'images/tw_pyq_h.png' " alt="">
+							<span>朋友圈</span>
+						</div>
+						<div class="againTipy" @click="twComGzh=!twComGzh">
+							<img :src="twComGzh ? 'images/tw_gzh.png' : 'images/tw_gzh_h.png'" alt="">
+							<span>公众号</span>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<div class="againSpan">备注：</div>
+					<div class="layui-input-block">
+						<textarea id="comTwRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="againSpan" style="opacity: 0.0001;">按钮</div>
+					<div class="layui-input-block">
+						<button @click="addComTwTask">确认</button>
+						<span class="quxiaods" @click="closeBoxShow('comTw');">取消</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 在招推文 -->
+	<div class="againTuiwen" v-show="twBoxShow">
+		<div class="againTuiConts layui-form">
+			<div class="againTuiTop">
+				<span>添加职位到社群推文助手</span>
+				<img src="images/closeimg.png" class="againTuiClose" alt="" @click="closeBoxShow('tw');">
+			</div>
+			<div class="againTuiIput">
+				<div class="layui-form-item itemTips" v-show="twTipsShow">
+					<img src="images/lingdan.png" alt="">
+					<div class="againTips">{{twTips}}</div>
+				</div>
+				<div class="layui-form-item" v-show="twJobShow">
+					<div class="againSpan">职位名称：</div>
+					<div class="layui-input-block">
+						<span>{{twJobName}}</span>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="againSpan">标签：</div>
+					<div class="layui-input-block">
+						<div class="againTipy" @click="twJobUrgent=!twJobUrgent">
+							<img :src="twJobUrgent ? 'images/tw_jp.png' : 'images/tw_jph.png'" alt="">
+							<span>加急</span>
+						</div>
+						<div class="againTipy" @click="twJobPyq=!twJobPyq">
+							<img :src="twJobPyq ? 'images/tw_pyq.png' : 'images/tw_pyq_h.png' " alt="">
+							<span>朋友圈</span>
+						</div>
+						<div class="againTipy" @click="twJobGzh=!twJobGzh">
+							<img :src="twJobGzh ? 'images/tw_gzh.png' : 'images/tw_gzh_h.png'" alt="">
+							<span>公众号</span>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<div class="againSpan">备注：</div>
+					<div class="layui-input-block">
+						<textarea id="twRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="againSpan" style="opacity: 0.0001;">按钮</div>
+					<div class="layui-input-block">
+						<button @click="addTwTask">确认</button>
+						<span class="quxiaods" @click="closeBoxShow('tw');">取消</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 在招简历匹配 -->
+	<div class="againMatcher">
+		<div class="againMatchCont againMatchConuer">
+			<!--左侧推荐预览-->
+			<div class="againMatcObile">
+				<div class="againMobileRame">
+					<div class="againMobileTops">
+						<div class="againMobileTopOne">
+							<span>{{time}}</span>
+						</div>
+						<div class="againMobileTopTwo">
+							<span>推荐简历</span>
+						</div>
+						<div class="againMobileTopOne">
+							<img src="images/moblie3.png" alt="">
+						</div>
+					</div>
+					<div class="againMobileLeiron">
+						<!-- 内容消息 -->
+						<div class="againMobileList" v-for="(item, tsk) in tsResume" :key="tsk" v-show="tsNum > 0">
+							<div class="againMobileToux">
+								<img :src="item.photo_n" alt="">
+							</div>
+							<div class="againMobileData">
+								<div class="againMobiDataTitle">
+									<a href="javascript:;">{{item.uname}}</a>
+									<span>{{item.name}}</span>
+								</div>
+								<div class="againMobiDataTips">
+									<span>{{item.age_n}}岁</span>
+									<span>{{item.sex_n}}</span>
+									<span>{{item.edu_n}}学历</span>
+									<span>{{item.exp_n}}经验</span>
+								</div>
+							</div>
+							<div class="againMobileClose" @click="removeTsResume(tsk)">
+								<img src="images/qxicon.png" alt="">
+							</div>
+						</div>
+
+						<div class="againMobileLeNone" v-show="tsNum==0">
+                            <div class="againleLeNoneIng">
+                                <img src="images/zwtip.png" alt="">
+                                <span>请从右侧挑选简历</span>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<div class="againMobileButon">
+					<span class="againFuzi" @click="setCopyShow">复制文案</span>
+					<span class="faduanx" @click="setSendShow">发送短信</span>
+				</div>
+			</div>
+			<!--右侧简历筛选-->
+			<div class="againMatcVitae">
+				<div class="againMaVitClose" @click="closeMatch">
+					<img src="images/closeimg.png" alt="">
+				</div>
+				<div class="againMaVitSubst layui-form">
+					<div class="againVitSubOne">
+						<div class="againVitSubTitle"><span>匹配简历</span></div>
+						<div class="againVitSubEful">
+							<img src="images/lingdan.png" alt="">
+							<span>在这里为企业挑选匹配的简历发送给HR查看</span>
+						</div>
+					</div>
+					<div class="againVitSubTwo">
+						<div class="againVitTwoXial">
+							<div class="layui-form-item" style="width: 32.5%;">
+								<div class="layui-input-block againTwoXialInpr">
+									<input type="text" v-model="searchKeyword" autocomplete="off" placeholder="关键字搜索" class="layui-input">
+									<button @click="getMatchResume" style="cursor: pointer;"><img src="images/suoe.png" alt="">搜索</button>
+								</div>
+							</div>
+							<div class="layui-form-item" style="width: 32.5%;">
+								<div class="layui-input-block againTwoShurBguze">
+									<select id="jobclass_search" class="expect_text" name="jobclass_search" xm-select-type="jobclass" xm-select="jobclass_search" xm-select-search="" xm-select-radio="" xm-select-skin="default"  xm-select-direction="down" style="width: 250px;margin-top: 0;">
+										<option value="">输入搜索职能</option>
+									</select>
+									<div onclick="index_job_new(1,'#workadds_job','#job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="请输入职能关键词"></div>
+									<input id="job_class" type="hidden" value="" name="job_class">
+								</div>
+							</div>
+							<div class="layui-form-item" style="width: 32.5%;">
+								<div class="layui-input-block againTwoShurBgmap">
+									<select id="cityclass_search" class="expect_text" name="cityclass_search" xm-select-type="cityclass" xm-select="cityclass_search" xm-select-search="" xm-select-radio="" xm-select-skin="default" xm-select-direction="down">
+										<option value="">输入搜索城市</option>
+									</select>
+									<div onclick="index_city_new(1,'#workadds_city','#city_class','left:100px;top:100px; position:absolute;')" class="news_expect_text_newcity_nth" title="请输入城市关键词"></div>
+									<input type="hidden" name="city_class" id="city_class" value="" />
+								</div>
+							</div>
+							
+						</div>
+						<div class="againVitTwoXial">
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="user_edu" id="user_edu" lay-filter="user_edu">
+										<option value="">学历要求</option>
+										<option v-for="(item, eduK) in userEdu" :value="item.id" :key="eduK" :title="item.name">{{item.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="user_word" id="user_word" lay-filter="user_word">
+										<option value="">工作经验</option>
+										<option v-for="(item, expK) in userWord" :value="item.id" :key="expK">{{item.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="user_label" id="user_label" lay-filter="user_label">
+										<option value="">简历标签</option>
+										<option v-for="(item, repK) in userLabel" :value="item.id" :key="repK">{{item.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="integrity" id="integrity" lay-filter="integrity">
+										<option value="">简历完整度</option>
+										<option v-for="(item, intK) in integrityArr" :value="item.id" :key="intK">{{item.name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="user_time" id="user_time" lay-filter="user_time">
+										<option value="">创建时间</option>
+										<option v-for="(item, tK) in timeArr" :value="item.id" :key="tK">{{item.name}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="againVitTwoXial">
+							<div class="layui-form-item">
+								<div class="layui-input-block">
+									<select name="auto_search" id="auto_search" lay-filter="auto_search">
+										<option value="">匹配方式</option>
+										<option value="2">手动添加</option>
+										<option value="1">自动匹配</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item" v-show="intervalShow">
+								<div class="layui-input-block">
+									<input type="text" v-model="interval" autocomplete="off" placeholder="更新频率（分钟）" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-form-item"></div>
+							<div class="layui-form-item"></div>
+							<div class="layui-form-item"></div>
+							<div class="layui-form-item" v-show="!intervalShow"></div>
+						</div>
+					</div>
+					<div class="againVitSubThree">
+						<div class="againVitThreTips">
+							<span v-show="searchJobClassShow">工作职能：{{searchJobClassText}}<img src="images/admin_tip_close.png" @click="resetMatchResume('jobClass')"></span>
+							<span v-show="searchCityClassShow">意向城市：{{searchCityClassText}}<img src="images/admin_tip_close.png" @click="resetMatchResume('cityClass')"></span>
+							<span v-show="searchRemarkShow">备注信息：{{searchRemarkName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('remark')"></span>
+							<span v-show="searchEduShow">学历要求：{{searchEduName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('edu')"></span>
+							<span v-show="searchWordShow">工作经验：{{searchWordName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('word')"></span>
+							<span v-show="searchLabelShow">简历标签：{{searchLabelName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('label')"></span>
+							<span v-show="searchLabelShow">创建时间：{{searchTimeName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('time')"></span>
+							<span v-show="searchIntegrityShow">完整度：{{searchIntegrityName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('integrity')"></span>
+							<span v-show="searchKeywordShow">关键词：{{searchKeywordName}}<img src="images/admin_tip_close.png" @click="resetMatchResume('keyword')"></span>
+						</div>
+						<div class="againVitThreChonx" v-show="searchJobClassShow || searchCityClassShow || searchRemarkShow || searchEduShow || searchWordShow || searchLabelShow || searchIntegrityShow || searchKeywordShow">
+							<a href="javascript:;" @click="resetMatchResume('all')">
+								<img src="images/chachong.png" alt="">
+								<span>重新选择</span>
+							</a>
+						</div>
+					</div>
+
+					<form class="layui-form" style="height: calc(100% - 230px); overflow: hidden;">
+						<div class="againVitSubFourt layui-form-item" v-if="resumePageTotal > 0">
+							<div class="againSubFourList" v-for="(item, rk) in resumeList" :key="rk">
+								<div class="againFourLisKuan" v-show="!intervalShow">
+									<input type="checkbox" lay-skin="primary" :data-id="item.id" :data-photo_n="item.photo_n" :data-uname="item.uname" :data-name="item.name" :data-age_n="item.age_n" :data-sex_n="item.sex_n" :data-edu_n="item.edu_n" :data-exp_n="item.exp_n" lay-filter="sel_resume" class="sel_resume" />
+								</div>
+								<div class="againFourLisData">
+									<div class="againFourLisImg">
+										<img :src="item.photo_n" alt="">
+									</div>
+									<div class="againFourLisInfo">
+										<div class="againFourLisTitle">
+											<div class="againFourLisName">
+												<a href="javascript:;" @click="newIFrame('index.php?m=admin_resume&c=resumePreview&id='+item.id, '51%')">{{item.uname}}</a>
+												<span>{{item.name}}</span>
+											</div>
+											<div class="againFourLisWanz">
+												<div class="againFourWanzDuta">
+													<span>完整度：</span>
+													<div class="againFourWanColod"><i :style="'width:'+item.integrity+'%;'"></i></div>
+													<span>{{item.integrity}}%</span>
+												</div>
+												<div class="againFourLisTimes">
+													<span>{{item.lastupdate_n}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="againFourLisuydsy">
+											<span>{{item.age_n}}岁</span>
+											<span>{{item.sex_n}}</span>
+											<span>{{item.edu_n}}学历</span>
+											<span>{{item.exp_n}}经验</span>
+											<span>{{item.city_n}}</span>
+											<span>{{item.salary}}</span>
+											<span>{{item.report_n}}</span>
+											<span>{{item.type_n}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="display: flex; margin: 20px 0;" v-if="resumePageTotal > 0" v-show="!intervalShow">
+							<input type="checkbox" lay-skin="primary" id="sel_resume_all" lay-filter="sel_resume_all" />
+							<span>全选</span>
+							<span style="margin-left: 10px;" v-show="selNum > 0">已选 <span style="color: #ff2b00">{{selNum}}</span> 份简历</span>
+							<a href="javascript:;" style="margin-left: 10px; border: #2778F8 1px solid; color: #2778F8; padding: 0 4px; border-radius: 3px;" @click="addResume">添加</a>
+						</div>
+						<div class="layuiNoEcords" v-show="resumePageTotal == 0">
+							<div>
+								<img src="images/zwtip.png" alt="">
+								<span>未检索到相关简历</span>
+							</div>
+						</div>
+					</form>
+					<div class="" v-if="resumePageTotal > 1" >
+						<span style="margin-left: 5px; margin-right: 40px;">从 {{resumeStart}} 到 {{resumeEnd}}，共 {{resumePageTotal}} 页，{{resumeTotal}} 条 </span>
+						<span @click="preResumePage" class="zt_box_s other_page" v-if="resumePage > 1"><上一页</span>
+						<span class="zt_box_s" v-for="(pageV, pageK) in resumePageArr" @click="resumePageJump(pageV+1)" :class="resumePage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}</span>
+						<span @click="nextResumePage" class="zt_box_s other_page" v-if="resumePage < resumePageTotal">下一页></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 复制文案 -->
+	<div class="againCopywriting" v-show="copyLinkShow">
+		<div class="againSendSonts layui-form">
+			<div class="againSendTikyt">
+				<span>复制文案</span>
+				<img class="fuzclose" src="images/closeimg.png" @click="copyLinkShow = false">
+			</div>
+			<div class="againSendFromk">
+				<div class="againSendFroOne">
+					<div>复制以下文案，以短信方式或通过社交软件推送给客户：</div>
+				</div>
+				<div class="againSendFroDier">
+					<p>这是为您挑选的简历。点击链接查看：</p>
+					<a :href="tsWapUrl" target="_blank">「页面链接」</a>
+				</div>
+			</div>
+			<div class="againSendLikns">
+				<span class="copyUrl" data-clipboard-action="copy" :data-clipboard-text="'这是为您挑选的简历。点击链接查看：'+tsWapUrl">复制文案</span>
+				<span class="againSenHuy" @click="copyLinkShow = false">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 发送短信 -->
+	<div class="againSendSMSAlls" v-show="sendLinkShow">
+		<div class="againSendSonts layui-form">
+			<div class="againSendTikyt">
+				<span>发送短信</span>
+				<img class="sendclose" src="images/closeimg.png" @click="sendLinkShow = false">
+			</div>
+			<div class="againSendFromk">
+				<div class="againSendFroOne">
+					<div class="againSendText">
+						<span>短信将发送至手机号：</span>
+					</div>
+					<div class="layui-input-block">
+						<select name="msgLink" id="msgLink" lay-filter="msgLink">
+							<option value="1">{{matchLinkMan}} {{matchLinkTel}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="againSendFroDier">
+					<textarea style="width: 100%;border: none;border-radius: 2px;height: 42px;" id="msgContent">这是为您挑选的简历。点击链接查看：「页面链接」</textarea>
+				</div>
+				<div @click="copyLink('「页面链接」');" style="background-color: aliceblue;color: #2778F8;padding: 2px 10px;border-radius: 4px;margin-top: 5px;display: inline-block;cursor: pointer;">添加链接</div>
+			</div>
+			<div class="againSendLikns">
+				<span @click="sendResumeMsg">发送短信</span>
+				<span class="againSenHuy" @click="sendLinkShow = false">取消</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- 推荐候选人详情 -->
+	<div class="againCandid">
+		<div class="againCandidCont againCandidContuer">
+			<div class="againMatcVitae">
+				<div class="againcandidClose">
+					<img src="images/closeimg.png" alt="" @click="closeTsResume">
+				</div>
+				<div class="againMaVitSubst layui-form">
+					<div class="againVitSubOne">
+						<div class="againVitSubTitle"><span>推荐详情</span></div>
+					</div>
+					<div class="againCandidTipsa">
+						<div class="againCandidTuis">
+							<span>推送时间：{{recInfo.time_n}}，简历 {{recInfo.enum}} 份，合计点击 {{recInfo.hits}} 次，电话被查看 {{recInfo.downNum}} 次</span>
+						</div>
+						<div class="againCandidButon">
+							<a href="javascript:;" class="copyUrl" data-clipboard-action="copy" :data-clipboard-text="recInfo.link">复制推送</a>
+						</div>
+					</div>
+					<div class="againVitSubFourt layui-form-item">
+						<div class="againSubFourList"  v-for="(item, rrsK) in recResumes" :key="rrsK">
+							<div class="againFourLisKuan">
+
+							</div>
+							<div class="againFourLisData">
+								<div class="againFourLisImg">
+									<img :src="item.photo_n" alt="">
+								</div>
+								<div class="againFourLisInfo">
+									<div class="againFourLisTitle">
+										<div class="againFourLisName">
+											<a href="javascript:;" @click="newIFrame('index.php?m=admin_resume&c=resumePreview&id='+item.id, '61%')">{{item.uname}}</a>
+											<span>{{item.name}}</span>
+										</div>
+										<div class="againFourLisWanz">
+											<div class="againFourWanzDuta">
+												<span>完整度：</span>
+												<div class="againFourWanColod"><i :style="'width:'+ item.integrity+'%;'"></i></div>
+												<span>{{item.integrity}}%</span>
+											</div>
+											<div class="againFourLisTimes">
+												<span>{{item.lastupdate_n}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="againFourLisuydsy">
+										<span>{{item.age_n}}岁</span>
+										<span>{{item.sex_n}}</span>
+										<span>{{item.edu_n}}学历</span>
+										<span>{{item.edu_n}}经验</span>
+										<span>{{item.city_n}}</span>
+										<span>{{item.salary}}</span>
+										<span>{{item.report_n}}</span>
+										<span>{{item.type_n}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 订单记录弹窗 -->
+	<div class="rderRemPopup" v-show="orderBoxShow">
+		<div class="rderRemPoCont layui-form">
+			<div class="rderRemPoTop">
+				<span>录订单</span>
+				<img src="images/closeimg.png" class="rderReClose" alt="" @click="closeBoxShow('order');">
+			</div>
+			<div class="rderRemPoIput">
+				<div class="layui-form-item">
+					<span>客户名称：</span>
+					<div class="layui-input-block">
+						<input type="text" v-model="Info.name" autocomplete="off" class="layui-input" disabled>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<span>订单类型：</span>
+					<div class="layui-input-block">
+						<select name="deal_type" id="deal_type" lay-filter="deal_type">
+							<option value="">请选择</option>
+							<option v-for="(v, tk) in typeArr" :value="v.id" :key="tk">{{v.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item" v-show="orderRatingShow">
+					<span>会员套餐：</span>
+					<div class="layui-input-block">
+						<select name="deal_rating" id="deal_rating" lay-filter="deal_rating">
+							<option value="">请选择</option>
+							<option v-for="(v, rak) in ratingArr" :value="v.id" :data-price="v.price" :key="rak">{{v.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item" v-show="orderRatingShow">
+					<span>业务模式：</span>
+					<div class="layui-input-block">
+						<select name="deal_open" id="deal_open" lay-filter="deal_open">
+							<option value="">请选择</option>
+							<option value="1">开通</option>
+							<option value="2">不开通</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<span>支付方式：</span>
+					<div class="layui-input-block">
+						<select name="deal_pay" id="deal_pay" lay-filter="deal_pay">
+							<option value="">请选择</option>
+							<option v-for="(v, otk) in oTypeArr" :value="v.id" :key="otk">{{v.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<span>付款金额：</span>
+					<div class="layui-input-block">
+						<input type="text" v-model="orderPrice" autocomplete="off" placeholder="" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<span>合同图片：</span>
+					<div class="layui-input-block">
+						<span class="yun_bth_pic noupload" lay-data="{parentid: 'img_container',uploadmulti:'1', url: 'index.php?m=company_order&c=multiupload'}" style="vertical-align:top">选择图片</span>
+						<input type="hidden" id="uploadmulti" value="1"/>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div id="img_container" class="none crm_imgbox"></div>
+				<div class="layui-form-item layui-form-text">
+					<span>备注信息：</span>
+					<div class="layui-input-block">
+						<textarea id="order_remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<span style="opacity: 0.0001;">确认按钮：</span>
+					<div class="layui-input-block">
+						<button @click="addDeal">确认</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="recordvoice" class="none"></div>
+</div>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+<script>
+	var weburl = '{yun:}$config.sy_weburl{/yun}',
+		comId = '{yun:}$smarty.get.id{/yun}',
+		auid = '{yun:}$auid{/yun}',
+		pytoken = '{yun:}$pytoken{/yun}';
+
+	var followContent = UE.getEditor('followContent', {
+		toolbars: [['simpleupload']],
+		wordCount: false,
+		elementPathEnabled: false,
+		initialFrameHeight: 200
+	});
+
+	var form = null,
+		formSelects = null;
+	layui.use(['form', 'laydate'], function () {
+
+		var layer = layui.layer
+			, element = layui.element
+			, laydate = layui.laydate
+			, $ = layui.$;
+
+		formSelects = layui.formSelects;
+		form = layui.form;
+
+		formSelects.btns('cityclass_search', []);
+
+		formSelects.btns('jobclass_search', []);
+
+		//实时获取选中值
+		formSelects.on('jobclass_search', function(id, vals, val, isAdd, isDisabled){
+			var jobvalue = [];
+			vals.forEach(function(item,index){
+				jobvalue.push(item.value);
+			})
+			$('#job_class').val(jobvalue.join(','));
+
+			var jobClassId = jobvalue.join(',');
+			comApp.$data.searchJobClass = jobClassId;
+			comApp.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+			comApp.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		}, true);
+
+		formSelects.on('cityclass_search', function(id, vals, val, isAdd, isDisabled){
+			var cityvalue = [];
+			vals.forEach(function(item,index){
+				cityvalue.push(item.value);
+			})
+			$('#city_class').val(cityvalue.join(','));
+
+			var cityClassId = cityvalue.join(',');
+			comApp.$data.searchCityClass = cityClassId;
+			comApp.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+			comApp.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		}, true);
+
+		form.on('select(link_id)', function(data){
+		    var link_man = $('#link_id'+ data.value).attr('linkman')
+		    var link_mobile = $('#link_id'+ data.value).attr('mobile')
+			comApp.$data.sel_linkid = data.value
+            comApp.$data.link_man = link_man
+            comApp.$data.link_tel = link_mobile
+			comApp.$data.show_add_link = 0
+            form.render('select');
+		})
+
+		form.on('checkbox(nextCheck)', function(data) {
+			if (data.elem.checked){
+				comApp.$data.next_check = 1;
+			}else{
+				comApp.$data.next_check = 2;
+			}
+			form.render('checkbox');
+		});
+
+		form.on('checkbox(sel_resume)', function (data) {
+			if (data.elem.checked){
+				comApp.$data.selNum++;
+			}else{
+				comApp.$data.selNum--;
+				$('#sel_resume_all').prop('checked', false);
+				form.render();
+			}
+		});
+
+		form.on('checkbox(sel_resume_all)', function (data) {
+			if (data.elem.checked){
+
+				comApp.$data.selNum = (comApp.$data.resumeEnd - comApp.$data.resumeStart) + 1;
+				$('.sel_resume').prop('checked', true);
+				form.render();
+			}else{
+				comApp.$data.selNum = 0;
+				$('.sel_resume').prop('checked', false);
+				form.render();
+			}
+		});
+
+		laydate.render({
+			elem : '#f_time',
+			type : 'datetime',
+			min	 : -7,
+			max	 : str,
+			value: ''
+		});
+		laydate.render({
+			elem : '#next_time',
+			type : 'datetime',
+			min : str,
+			value: ''
+		});
+		laydate.render({
+			elem : '#order_s_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#order_e_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#log_s_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#log_e_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#web_s_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#web_e_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#com_log_s_time',
+			value: '',
+			max  : str
+		});
+		laydate.render({
+			elem : '#com_log_e_time',
+			value: '',
+			max  : str
+		});
+
+		form.on('select(user_edu)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.searchEdu = data.value;
+			comApp.$data.searchEduName = e[e.selectedIndex].text;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		});
+		form.on('select(user_word)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.searchWord = data.value;
+			comApp.$data.searchWordName = e[e.selectedIndex].text;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		});
+		form.on('select(user_label)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.searchLabel = data.value;
+			comApp.$data.searchLabelName = e[e.selectedIndex].text;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		});
+		form.on('select(integrity)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.searchIntegrity = data.value;
+			comApp.$data.searchIntegrityName = e[e.selectedIndex].text;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		});
+
+		form.on('select(user_time)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.searchTime = data.value;
+			comApp.$data.searchTimeName = e[e.selectedIndex].text;
+			comApp.getMatchResume();
+			if (comApp.$data.autoSearch == 1){
+				comApp.getAutoResumeList();
+			}
+		});
+
+		form.on('select(auto_search)', function(data) {
+			var v = data.value;
+			if (v == 1){
+
+				comApp.$data.intervalShow = true;
+				comApp.getAutoResumeList();
+			}else{
+				comApp.$data.tsResume = [];
+				comApp.$data.tsNum = 0;
+				comApp.$data.selNum = 0;
+				comApp.$data.intervalShow = false;
+			}
+			comApp.$data.autoSearch = v;
+		});
+
+		form.on('select(deal_type)', function (data) {
+
+			comApp.$data.orderType = data.value;
+			if (data.value == 1){
+				comApp.$data.orderRatingShow = true;
+			}else{
+				comApp.$data.orderRatingShow = false;
+			}
+		});
+		form.on('select(deal_rating)', function (data) {
+			var e = data.elem;
+
+			comApp.$data.orderRating = data.value;
+			comApp.$data.orderPrice = e[e.selectedIndex].dataset.price;
+		});
+		form.on('select(deal_open)', function (data) {
+			comApp.$data.orderOpen = data.value;
+		});
+		form.on('select(deal_pay)', function (data) {
+			comApp.$data.orderPay = data.value;
+		});
+	});
+
+	function jobSearchReset() {
+
+		var jobClassId	=	$('#job_class').val();
+		var formSelects = layui.formSelects,
+			jobclassArr = jobClassId != '' ? jobClassId.split(",") : [],
+			jarr = [];
+
+		for (var i = 0; i < jobclassArr.length; i++) {
+			jarr.push({"name": jn[jobclassArr[i]], "value": jobclassArr[i], "selected": 'selected'});
+		}
+
+		formSelects.data('jobclass_search', 'local', {
+			arr: jarr
+		});
+
+		comApp.$data.searchJobClass = jobClassId;
+		comApp.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+		comApp.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+	}
+
+	function citySearchReset() {
+
+		var cityClassId	=	$('#city_class').val();
+
+		var formSelects = layui.formSelects,
+			cityclassArr = cityClassId != '' ? cityClassId.split(",") : [],
+			carr = [];
+
+		for (var i = 0; i < cityclassArr.length; i++) {
+			carr.push({"name": cn[cityclassArr[i]], "value": cityclassArr[i], "selected": 'selected'});
+		}
+		formSelects.data('cityclass_search', 'local', {
+			arr: carr
+		});
+
+		comApp.$data.searchCityClass = cityClassId;
+		comApp.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+		comApp.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+	}
+
+	function setJobSearch() {
+
+		var jobClassId	=	$('#job_class').val();
+		var formSelects = layui.formSelects,
+				jobclassArr = jobClassId != '' ? jobClassId.split(",") : [],
+				jarr = [];
+
+		for (var i = 0; i < jobclassArr.length; i++) {
+			jarr.push({"name": jn[jobclassArr[i]], "value": jobclassArr[i], "selected": 'selected'});
+		}
+
+		formSelects.data('jobclass_search', 'local', {
+			arr: jarr
+		});
+
+		comApp.$data.searchJobClass = jobClassId;
+		comApp.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+		comApp.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+	}
+
+	function setCitySearch() {
+
+		var cityClassId	=	$('#city_class').val();
+
+		var formSelects = layui.formSelects,
+				cityclassArr = cityClassId != '' ? cityClassId.split(",") : [],
+				carr = [];
+
+		for (var i = 0; i < cityclassArr.length; i++) {
+			carr.push({"name": cn[cityclassArr[i]], "value": cityclassArr[i], "selected": 'selected'});
+		}
+		formSelects.data('cityclass_search', 'local', {
+			arr: carr
+		});
+
+		comApp.$data.searchCityClass = cityClassId;
+		comApp.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+		comApp.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+	}
+
+	var d = new Date(),
+			str = '';
+	str += d.getHours() + ':';
+	str += d.getMinutes() + ':';
+	str += d.getSeconds();
+
+	var h = d.getHours(), m = d.getMinutes();
+	if (h < 10){h = '0'+h;}
+	if (m < 10){m = '0'+m;}
+	var time = h + ':'+m;
+
+	var noteC;
+
+	var comApp = new Vue({
+		el: '#comApp',
+		data: {
+
+			comId: comId,
+			auid: auid ? auid : '',
+
+			Info: [],
+			tab: 1,
+
+			followWay: [],
+			link_man: '',
+			link_tel: '',
+			isContinue: 1,
+			next_check: 2,
+			links: [],
+			show_add_link: 0,
+			sel_linkid: -1,// 企业默认联系人
+
+			crmUser: [],
+			adminUser: [],
+
+			//	跟进记录
+			followTab: 1,
+			FollowList: [],
+			followStart: '',
+			followEnd: '',
+			followNum: 0,
+			followTotal: 0,
+			followPageArr: [],
+			followPage: 1,
+			followPageTotal: 0,
+
+			followKey: 0,
+
+			followBtn: '新增',
+			followId: 0,
+
+			msgTpl: [],
+			msgTp: 'msgcrmlink',
+			msgPhone: '',
+
+			//	短信记录
+			msgTab: 1,
+			msgList: [],
+			msgStart: '',
+			msgEnd: '',
+			msgNum: 0,
+			msgTotal: 0,
+			msgPageArr: [],
+			msgPage: 1,
+			msgPageTotal: 0,
+
+			//	客户详情
+			static: [],
+
+			nameBoxShow: false,
+			comName: '',
+
+			accountBoxShow: false,
+			accountName: '',
+			accountPass: '',
+
+			crmTypeBoxShow: false,
+			clientTypeArr: [],
+
+			crmStatusBoxShow: false,
+			clientStatusArr: [],
+
+			linkBoxShow: false,
+			linkTixinShow: false,
+			linkMan: '',
+			linkJob: '',
+			linkTel: '',
+			linkPhone: '',
+			linkMail: '',
+			linkAddress: '',
+
+			remarkBoxShow: false,
+
+			linkList: [],
+			linkNum: '',
+			crmLinkBoxShow: false,
+			crmLinkTitle: '新增客户联系人',
+			crmLinkMan: '',
+			crmLinkMobile: '',
+			crmLinkId: 0,
+			crmLinkKey: '',
+
+			giveUpShow: false,
+			deliverBoxShow: false,
+
+			//	在招职位
+			job_keyword: '',
+
+			job1Num: 0,
+			job2Num: 0,
+			statusNum: 0,
+
+			jobList: [],
+			jobStart: '',
+			jobEnd: '',
+			jobNum: 0,
+			jobTotal: 0,
+			jobPageArr: [],
+			jobPage: 1,
+			jobPageTotal: 0,
+
+			userEdu: [],
+			userWord: [],
+			userLabel: [],
+			integrityArr: [],
+			timeArr: [{id: 1, name: '今日'},{id: 2, name: '最近三天'},{id: 3, name: '最近7天'},{id: 4, name: '最近一月'}],
+
+			intervalShow: false,
+			interval: '',
+
+			matchJob: 0,
+			matchLinkMan: '',
+			matchLinkTel: '',
+			tsWapUrl: '',
+
+			searchJobClassShow: false,
+			searchJobClass: '',
+			searchJobClassText: '',
+
+			searchCityClassShow: false,
+			searchCityClass: '',
+			searchCityClassText: '',
+
+			searchRemarkShow: false,
+			searchRemark: '',
+			searchRemarkName: '',
+
+			searchEduShow: false,
+			searchEdu: '',
+			searchEduName: '',
+
+			searchWordShow: false,
+			searchWord: '',
+			searchWordName: '',
+
+			searchLabelShow: '',
+			searchLabel: '',
+			searchLabelName: '',
+
+			searchIntegrityShow: false,
+			searchIntegrity: '',
+			searchIntegrityName: '',
+
+			searchTimeShow: false,
+			searchTime: '',
+			searchTimeName: '',
+
+			searchKeywordShow: false,
+			searchKeyword:'',
+			searchKeywordName:'',
+
+			autoSearch: '',
+
+			selNum: 0,
+
+			resumeList: [],
+			resumeStart: '',
+			resumeEnd: '',
+			resumeNum: 0,
+			resumeTotal: 0,
+			resumePageArr: [],
+			resumePage: 1,
+			resumePageTotal: 0,
+
+			tsResume: [],
+			tsNum: 0,
+
+			copyLinkShow: false,
+			sendLinkShow: false,
+
+			//	推荐候选人
+			recList: [],
+			recStart: '',
+			recEnd: '',
+			recNum: 0,
+			recTotal: 0,
+			recPageArr: [],
+			recPage: 1,
+			recPageTotal: 0,
+
+			resumeTsId: 0,
+
+			recInfo: [],
+			recResumes: [],
+
+			//	推送历史
+			twList: [],
+			twStart: '',
+			twEnd: '',
+			twNum: 0,
+			twTotal: 0,
+			twPageArr: [],
+			twPage: 1,
+			twPageTotal: 0,
+
+			twType: '',
+			twUser: '',
+			twStatus: '',
+			twSJobName: '',
+			twUrgent: false,
+			twMoments: false,
+			twGzh: false,
+
+			comTwBoxShow: false,
+			comTwTipsShow: false,
+			twComShow: true,
+			comTwTips: '企业已超过3天没有更新，请确认无误后添加',
+			twComName: '',
+			twComUid: '',
+			twComUrgent: true,
+			twComPyq: true,
+			twComGzh: true,
+
+			twBoxShow: false,
+			twTipsShow: false,
+			twJobShow: true,
+			twTips: '职位已超过3天没有更新，请确认无误后添加',
+			twJobName: '',
+			twJobId: '',
+			twJobUrgent: true,
+			twJobPyq: true,
+			twJobGzh: true,
+
+			//	开单记录
+			stateArr: [],
+			typeArr: [],
+			oTypeArr: [],
+
+			order_state: '',
+			order_type: '',
+			o_type: '',
+			order_s_time: '',
+			order_e_time: '',
+			order_keyword: '',
+
+			ratingArr: [],
+			orderBoxShow: false,
+			orderRatingShow: false,
+
+			orderType: '',
+			orderPay: '',
+			orderRating: '',
+			orderOpen: '',
+			orderPrice: '',
+
+			orderList: [],
+			orderStart: '',
+			orderEnd: '',
+			orderNum: 0,
+			orderTotal: 0,
+			orderPageArr: [],
+			orderPage: 1,
+			orderPageTotal: 0,
+
+
+			//	用户日志
+			log_s_time: '',
+			log_e_time: '',
+			log_keyword: '',
+
+			logList: [],
+			logStart: '',
+			logEnd: '',
+			logNum: 0,
+			logTotal: 0,
+			logPageArr: [],
+			logPage: 1,
+			logPageTotal: 0,
+
+			//	用户轨迹
+			webList: [],
+			webStart: '',
+			webEnd: '',
+			webNum: 0,
+			webTotal: 0,
+			webPageArr: [],
+			webPage: 1,
+			webPageTotal: 0,
+
+			//	操作记录
+			comLogList: [],
+			comLogStart: '',
+			comLogEnd: '',
+			comLogNum: 0,
+			comLogTotal: 0,
+			comLogPageArr: [],
+			comLogPage: 1,
+			comLogPageTotal: 0,
+			// 外呼
+            call_log_id: 0,
+
+			time: time
+		},
+		created: function() {
+
+			$("#comApp").css('display', 'block');
+			this.getData();
+			this.getFollowList();
+		},
+		methods:{
+			getData:function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getComInfo";
+				$.post(url, {
+					id: self.comId,
+					pytoken: pytoken
+				}, function(res) {
+
+					var data = res.data;
+
+					if (res.error == 0){
+						self.Info = data.Info;
+						self.followWay = data.followWay;
+						self.stateArr = data.stateArr;
+						self.typeArr = data.typeArr;
+						self.oTypeArr = data.oTypeArr;
+
+						self.clientTypeArr = data.clientType;
+						self.clientStatusArr = data.clientStatus;
+
+						self.userEdu = data.userEdu;
+						self.userWord = data.userWord;
+						self.userLabel = data.userLabel;
+						self.integrityArr = data.integrityArr;
+
+						self.ratingArr = data.ratingArr;
+
+						self.comName = self.Info.name;
+                        // 默认选中的联系人信息
+                        self.link_man = self.Info.linkman,
+						self.link_tel = self.Info.linktel,
+
+						self.linkMan = self.Info.linkman;
+						self.linkJob = self.Info.linkjob;
+						self.linkTel = self.Info.linktel;
+						self.linkPhone = self.Info.linkphone;
+						self.linkMail = self.Info.linkmail;
+						self.linkAddress = self.Info.address;
+
+						self.crmUser = data.crmUser;
+						self.adminUser = data.adminUser;
+
+						self.msgPhone = self.Info.linktel;
+
+						self.links = data.links
+
+						layuiForm();
+					}
+				}, 'json');
+			},
+            getLinkList: function(){
+                var self = this;
+                var url = "index.php?m=crm_my_customer&c=getLinkList";
+                $.post(url, {
+                    id: self.comId,
+                    pytoken: pytoken
+                }, function(res) {
+                    var data = res.data;
+                    if (res.error == 0){
+                        self.links = data.links
+                        layuiForm();
+                    }
+                }, 'json');
+            },
+			contactCustomer: function(){
+			    var self = this;
+                layer.confirm('确定联系客户吗？', function () {
+                    layer.load('连接中，请稍候...', 4);
+                    layer.closeAll();
+                    var url = 'index.php?m=crm_my_customer&c=contactCustomer'
+                    $.post(url, {
+                        mobile: self.link_tel,
+                        uid: self.comId,
+                        pytoken: pytoken
+                    }, function (data) {
+                        layer.closeAll();
+                        var datas = JSON.parse(data)
+                        if (datas.code == 200) {
+                            layer.msg(datas.msg, 2, 9)
+                            self.call_log_id = datas.data
+                        } else {
+                            layer.msg(datas.msg, 2, 8);
+                        }
+                    });
+                });
+			},
+			toMember: function (url, usertype){
+				var self = this;
+				if (usertype !='2'){
+					if(usertype == '0'){
+						layer.confirm("该账户当前没有设置身份，以招聘者身份模拟进入可能导致部分功能无法正常使用，是否确认进入？", function() {
+							layer.closeAll();
+							window.open(url);
+						});
+					}else{
+						if(usertype == '1'){
+							var u = '求职者';
+						}else if (usertype == '3'){
+							var u = '猎头';
+						}else if (usertype == '4'){
+							var u = '培训';
+						}
+						layer.confirm("该账户当前身份为"+u+"，以招聘者身份模拟进入可能导致部分功能无法正常使用，是否确认进入？", function() {
+							layer.closeAll();
+							window.open(url);
+						});
+					}
+				}else{
+					window.open(url);
+				}
+			},
+			clueCustomer: function(){
+				var self = this;
+
+				var url = 'index.php?m=crm_my_customer&c=clueCustomer'
+				$.post(url, {
+					uids: self.comId,
+					pytoken: pytoken
+				}, function (data) {
+					layer.closeAll();
+					var datas = JSON.parse(data)
+					if (datas.errcode == 9) {
+						layer.msg(datas.msg, 2, 9)
+						self.Info.clue = 1;
+					} else {
+						layer.msg(datas.msg, 2, 8);
+					}
+				});
+			},
+			changeTab: function (e) {
+				this.tab = e;
+				if (this.tab == 2){
+
+					this.getMsgTpl();
+					this.getMsgList();
+				}else if (this.tab == 3){
+
+					this.getStatic();
+					this.getCrmLink();
+				}else if (this.tab == 4){
+
+					this.getJobList();
+				}else if (this.tab == 5){
+
+					this.getRecList();
+				}else if (this.tab == 6){
+
+					this.getTwList();
+				}else if (this.tab == 7){
+
+					this.getOrderList();
+				}else if (this.tab == 8){
+
+					this.getMemberLogList();
+				}else if (this.tab == 9){
+
+					this.getWebLogList();
+				}else if (this.tab == 10){
+
+					this.getCrmComLogList();
+				}
+			},
+			// 点击联系人 新建 按钮
+			initAddCrmLink: function(){
+                var self = this;
+                self.show_add_link = 1;
+                self.link_man = '';
+                self.link_tel = '';
+			},
+			// 添加企业联系人
+            addCrmLink: function(){
+                var self = this;
+			    if (!self.link_man) {
+                    layer.msg('请填写联系人', 2, 8);
+                    return false;
+				}
+                if (!self.link_tel) {
+                    layer.msg('请填写联系手机号码', 2, 8);
+                    return false;
+                }else if(!isjsMobile(self.link_tel)){
+					layer.msg('请填写正确的手机号码', 2, 8);
+					return false;
+				}
+                var url = "index.php?m=crm_my_customer&c=addCrmLink";
+                var param = {};
+                param.link_man = self.link_man;
+                param.link_mobile = self.link_tel;
+                param.uid = self.comId;
+                if (self.isContinue == 2){
+                	param.add = 1;
+				}
+                param.pytoken = pytoken;
+				layer.load('请稍候...', 4);
+                $.post(url, param, function(res) {
+					layer.closeAll();
+                    if (res.errcode == 9){
+
+                        self.show_add_link = 0;
+                        if (res.nid == -1){
+                        	self.Info.linkman = self.link_man;
+							self.Info.linktel = self.link_tel;
+							self.Info.phone_n = self.link_tel;
+						}
+						self.sel_linkid = res.nid;
+						self.isContinue = 1;
+                        self.getLinkList();
+                        setTimeout(function () {
+                            layuiForm()
+                        }, 500);
+                    }else if (res.errcode == 7){
+						layer.confirm(res.msg, {
+							btn: ['继续添加', '更换号码']
+						}, function () {
+							self.isContinue = 2;
+							self.addCrmLink();
+						}, function () {
+
+							self.link_tel = '';
+						});
+					}else{
+						self.isContinue = 1;
+                        layer.msg(res.msg, 2, 8);
+                        return false;
+                    }
+                }, 'json');
+			},
+			//	（添加|更新）跟进记录
+			addFollow: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=addFollow";
+				var param = {};
+				param.uid = self.comId;
+				param.crm_type = $('#crm_type').val();
+				param.crm_status = $('#crm_status').val();
+				param.type = $('#f_type').val();
+				param.ftime = $('#f_time').val();
+				param.link_man = self.link_man;
+				param.link_tel = self.link_tel;
+				param.remark = followContent.getContent();
+				param.follow = self.next_check;
+				param.next_time = $('#next_time').val();
+				param.call_log_id = self.call_log_id;
+				if (self.followId > 0){
+					param.id = self.followId;
+				}
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == 9){
+
+						$('#followForm').hide();
+						$('#followTips').show();
+						self.followBtn = '新增';
+						$('#f_time').val('');
+						self.getFollowList();
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			againFollow: function(){
+
+				var self = this;
+				$('#followForm').show();
+				$('#followTips').hide();
+				layuiForm();
+			},
+			changeFollowTab: function (e) {
+				this.followTab = e;
+				this.getFollowList()
+			},
+			upFollow: function(id){
+				var self = this;
+				$('#followForm').show();
+				$('#followTips').hide();
+				var url = "index.php?m=crm_my_customer&c=getFollowInfo";
+				self.followId = id;
+				var param = {};
+				param.uid = self.comId;
+				param.id = id;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.error == 0){
+						var f_type = res.info.type;
+						$('#f_type').find("option[value="+f_type+"]").attr("selected", true);
+						$('#f_time').val(res.info.time_n);
+						var link_id = res.info.link_id;
+						$('#link_id').find("option[value="+link_id+"]").attr("selected", true);
+						followContent.setContent(res.info.content);
+						if (res.info.taskid > 0){
+							$('#nextCheck').prop('checked', true);
+							$('#next_time').val(res.info.taskTime);
+						}
+						self.followBtn = '更新';
+						form.render('select');
+					}
+				}, 'json');
+			},
+			//	跟进记录
+			preFollowPage: function(){
+
+				var self = this;
+				if(self.followPage > 1){
+
+					self.followPage = self.followPage - 1;
+					self.getFollowList();
+				}
+			},
+			nextFollowPage: function(){
+
+				var self = this;
+				if(self.followPage < self.followPageTotal){
+
+					self.followPage = self.followPage + 1;
+					self.getFollowList();
+				}
+			},
+			followPageJump:function(e){
+				var self = this;
+				self.followPage = e;
+				self.getFollowList();
+			},
+			addNote: function(e){
+				var self = this;
+				$('#note_'+e).show();
+
+				noteC = UE.getEditor('noteContent_'+e, {
+					toolbars: [['Bold', 'italic', 'underline', 'removeformat', '|', 'justifyleft', 'justifyright', 'insertunorderedlist','simpleupload']],
+					wordCount: false,
+					elementPathEnabled: false,
+					initialFrameHeight: 200
+				});
+			},
+			editNote: function(e, key, content){
+
+				var self = this;
+				$('#noteShowC_'+e).hide();
+				$('#note_'+e).show();
+
+				noteC = UE.getEditor('noteContent_'+e, {
+					toolbars: [['Bold', 'italic', 'underline', 'removeformat', '|', 'justifyleft', 'justifyright', 'insertunorderedlist','simpleupload']],
+					wordCount: false,
+					elementPathEnabled: false,
+					initialFrameHeight: 200
+				});
+				noteC.ready(function(){			//	Vue中使用编辑器赋值
+					noteC.setContent(content);
+				});
+			},
+			noteLog: function(id, key){
+				var self = this;
+				self.followKey = key;
+				var url = "index.php?m=crm_my_customer&c=noteFollow";
+				var param = {};
+				param.id = id;
+				param.uid = self.comId;
+				param.content = noteC.getContent();
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == '9'){
+
+						layer.msg(res.errmsg, 2, 9, function () {
+
+							self.FollowList[self.followKey].is_note = res.is_note;
+							self.FollowList[self.followKey].note_user =	res.note_user;
+							self.FollowList[self.followKey].noteTime = res.noteTime;
+							self.FollowList[self.followKey].noteContent = res.noteContent;
+							self.FollowList[self.followKey].noteImgArr = res.noteImgArr;
+
+							$('#note_'+id).hide();
+							$('#noteShowC_'+id).show();
+						});
+					}else{
+						layer.msg(res.errmsg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			delNote: function(id, key){
+				var self = this;
+				self.followKey = key;
+				var url = "index.php?m=crm_my_customer&c=delFollowNote";
+				var param = {};
+				param.id = id;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == '9'){
+
+						layer.msg(res.errmsg, 2, 9, function () {
+
+							self.FollowList[self.followKey].is_note = 2;
+							self.FollowList[self.followKey].note_user =	'';
+							self.FollowList[self.followKey].noteTime = '';
+							self.FollowList[self.followKey].noteContent = '';
+							self.FollowList[self.followKey].noteImgArr = [];
+
+							$('#note_'+id).hide();
+							$('#noteShowC_'+id).show();
+						});
+					}else{
+						layer.msg(res.errmsg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			hideNote: function(id, note){
+
+				var self = this;
+				if (parseInt(note) == 1){
+					$('#noteShowC_'+id).show();
+				}
+				$('#note_'+id).hide();
+			},
+			getFollowList:function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getFollowList";
+				var param = {};
+				param.id = self.comId;
+				param.followTab = self.followTab;
+				param.page = self.followPage;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.FollowList = data.followList;
+						self.followStart = data.start;
+						self.followEnd = data.end;
+						self.followNum = data.followNum;
+						self.followTotal = data.followTotal;
+						self.followPageTotal = data.pageTotal;
+						self.followPageArr = [];
+						if (self.followPage <= 6 ){
+
+							var maxPage = self.followPageTotal > 10 ? 10 : self.followPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.followPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.followPage + 4 < self.followPageTotal ? self.followPage + 4 : self.followPageTotal;
+							var minPage = self.followPage + 4 < self.followPageTotal ? self.followPage - 6 : self.followPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.followPageArr.push($i);
+							}
+						}
+
+						setTimeout(function () {
+							layuiForm()
+						}, 500);
+					}
+				}, 'json');
+			},
+			//	发送消息
+			getMsgTpl: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getMsgTpl";
+				var param = {};
+				param.uid = self.comId;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+
+						self.msgTpl = data.msgTpl;
+						$('#sms_content').val(data.msgContent);
+					}
+				}, 'json');
+			},
+			msgTplChange: function(tp, content){
+
+				var self = this;
+				self.msgTp = tp;
+				$('#sms_content').val(content);
+			},
+			sendMsg: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=sendMsg";
+				var param = {};
+				param.uid = self.comId;
+				param.tp = self.msgTp;
+				param.content = $("#sms_content").val();
+				param.mobile = self.msgPhone;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == 9){
+
+						self.getMsgList();
+					}
+				}, 'json');
+			},
+			changeMsgTab: function (e) {
+				this.msgTab = e;
+				this.getMsgList()
+			},
+			getMsgList: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getMsgList";
+				var param = {};
+				param.uid = self.comId;
+				param.msgTab = self.msgTab;
+				param.page = self.msgPage;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.msgList = data.msgList;
+						self.msgStart = data.start;
+						self.msgEnd = data.end;
+						self.msgNum = data.msgNum;
+						self.msgTotal = data.msgTotal;
+						self.msgPageTotal = data.pageTotal;
+						self.msgPageArr = [];
+						if (self.msgPage <= 6 ){
+
+							var maxPage = self.msgPageTotal > 10 ? 10 : self.msgPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.msgPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.msgPage + 4 < self.msgPageTotal ? self.msgPage + 4 : self.msgPageTotal;
+							var minPage = self.msgPage + 4 < self.msgPageTotal ? self.msgPage - 6 : self.msgPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.msgPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			//	客户详情（剩余套餐信息）
+			getStatic: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getComStatic";
+				var param = {};
+				param.id = self.comId;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.static = data.static;
+					}
+				}, 'json');
+			},
+			getCrmLink: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getLinkList";
+				$.post(url, {
+					id: self.comId,
+					pytoken: pytoken
+				}, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.linkList = data.links;
+						self.linkNum = data.links.length;
+					}
+				}, 'json');
+			},
+			openTinxShow: function(){
+				var self = this;
+				self.linkTixinShow = true;
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			},
+			closeTxinShow: function(){
+				var self = this;
+				self.linkTixinShow = false;
+				parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+			},
+			openBoxShow: function(e){
+				var self = this;
+				if (e == 'name') {
+					self.nameBoxShow = true;
+				} else if (e == 'account') {
+					self.accountBoxShow = true;
+				} else if (e == 'crmType') {
+					self.crmTypeBoxShow = true;
+				} else if (e == 'crmStatus') {
+					self.crmStatusBoxShow = true;
+				} else if (e == 'link') {
+					self.linkBoxShow = true;
+				} else if (e == 'remark') {
+					self.remarkBoxShow = true;
+				} else if (e == 'crmLink') {
+					self.crmLinkId = 0;
+					self.crmLinkMan = '';
+					self.crmLinkMobile = '';
+					self.crmLinkBoxShow = true;
+				} else if (e == 'order') {
+					self.orderBoxShow = true;
+				}
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			},
+			closeBoxShow: function(e){
+				var self = this;
+				if (e == 'name') {
+					self.nameBoxShow = false;
+				} else if (e == 'account') {
+					self.accountBoxShow = false;
+				} else if (e == 'crmType') {
+					self.crmTypeBoxShow = false;
+				} else if (e == 'crmStatus') {
+					self.crmStatusBoxShow = false;
+				} else if (e == 'link') {
+					self.linkBoxShow = false;
+				} else if (e == 'remark') {
+					self.remarkBoxShow = false;
+				} else if (e == 'crmLink') {
+					self.crmLinkBoxShow = false;
+				} else if (e == 'deliver') {
+					self.deliverBoxShow = false;
+				} else if (e == 'giveUp') {
+					self.giveUpShow = false;
+				} else if (e == 'comTw') {
+					self.comTwBoxShow = false;
+				} else if (e == 'tw') {
+					self.twBoxShow = false;
+					self.twJobShow = true;
+				} else if (e == 'order') {
+					self.orderBoxShow = false;
+				}
+				parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+			},
+			setComName: function () {
+				var self = this;
+
+				if (self.Info.name != self.comName && self.comName != '') {
+
+					var url = "index.php?m=crm_my_customer&c=upComName";
+					var param = {};
+					param.id = self.comId;
+					param.name = self.comName;
+					param.pytoken = pytoken;
+
+					$.post(url, param, function (res) {
+						if (res.errcode == 9) {
+							layer.msg(res.msg, 2, 9, function () {
+								self.Info.name	=	self.comName;
+								self.nameBoxShow = false;
+								parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+								parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+							});
+						}else{
+							layer.msg(res.msg, 2, 8);
+							return false;
+						}
+					}, 'json');
+				}else{
+					layer.msg('客户名称未发现变动', 2, 8);
+					return false;
+				}
+			},
+			setUserInfo: function () {
+				var self = this;
+
+				if (self.accountName == '' && self.accountPass == '') {
+
+					layer.msg('请输入账号新用户名或者新密码', 2, 8);
+					return false;
+				}else if (self.accountPass == '' && self.accountName != '' && self.Info.username == self.accountName) {
+
+					layer.msg('账号用户名未发现变动', 2, 8);
+					return false;
+				}
+
+				var url = "index.php?m=crm_my_customer&c=upUserInfo";
+				var param = {};
+				param.id = self.comId;
+				param.username = self.accountName;
+				param.password = self.accountPass;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+							self.Info.username = self.accountName;
+							self.accountBoxShow = false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json')
+
+			},
+			setCrmType: function () {
+				var self = this;
+				var st = $("input[name=crmType]:checked").val();
+				var st_n = $("input[name=crmType]:checked")[0].title;
+				var remark = $('#crmTypeRemark').val();
+				if (self.Info.crm_type != st) {
+
+					var url = "index.php?m=crm_my_customer&c=upStatusType";
+					var param = {};
+					param.uid = self.comId;
+					param.st = st;
+					param.st_n = st_n;
+					param.remark = remark;
+					param.isSt = 'type';
+					param.pytoken = pytoken;
+
+					$.post(url, param, function (res) {
+						if (res.errcode == 9) {
+							layer.msg(res.msg, 2, 9, function () {
+								self.Info.crm_type = st;
+								self.Info.crm_type_n = st_n;
+								self.crmTypeBoxShow = false;
+								parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+								parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+							});
+						}else{
+							layer.msg(res.msg, 2, 8);
+							return false;
+						}
+					}, 'json');
+				}else{
+					layer.msg('客户等级未发生变动', 2, 8);
+					return false;
+				}
+			},
+			setCrmStatus: function () {
+				var self = this;
+				var st = $("input[name=crmStatus]:checked").val();
+				var st_n = $("input[name=crmStatus]:checked")[0].title;
+				var remark = $('#crmStatusRemark').val();
+				if (self.Info.crm_status != st) {
+
+					var url = "index.php?m=crm_my_customer&c=upStatusType";
+					var param = {};
+					param.uid = self.comId;
+					param.st = st;
+					param.st_n = st_n;
+					param.remark = remark;
+					param.isSt = 'status';
+					param.pytoken = pytoken;
+
+					$.post(url, param, function (res) {
+						if (res.errcode == 9) {
+							layer.msg(res.msg, 2, 9, function () {
+								self.Info.crm_status = st;
+								self.Info.crm_status_n = st_n;
+								self.crmStatusBoxShow = false;
+								parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+								parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+							});
+						}else{
+							layer.msg(res.msg, 2, 8);
+							return false;
+						}
+					}, 'json');
+				}else{
+					layer.msg('客户状态未发生变动', 2, 8);
+					return false;
+				}
+			},
+			stopCom: function(){
+				var self = this;
+
+				if (self.Info.isVip == 2){
+
+					layer.msg('会员已到期，无需设置暂停招聘', 2, 8);
+					return false;
+				}
+				if (self.Info.r_status == 2){
+
+					layer.msg('企业已锁定，请先解锁后暂停', 2, 8);
+					return false;
+				}
+
+				var url = "index.php?m=crm_my_customer&c=stopCom";
+				var param = {};
+				param.uid = self.comId;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+
+							self.Info.r_status	=	4;
+							self.Info.zt_time_n	=	res.zt_time_n;
+							self.Info.zt_days	=	res.zt_days;
+							self.nameBoxShow = false;
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+
+			},
+			openCom: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=openCom";
+				var param = {};
+				param.uid = self.comId;
+				param.pytoken = pytoken;
+				if (self.Info.zt_days > 0){
+					parent.layer.confirm('已暂停' + self.Info.zt_days + '天，是否为客户延续会员有效期？', {btn: ['是', '否', '取消']},
+						function () {
+							param.add = 1;
+							$.post(url, param, function (res) {
+								if (res.errcode == 9) {
+									layer.msg(res.msg, 2, 9, function () {
+										self.Info.r_status	=	1;
+									});
+								}else{
+									layer.msg(res.msg, 2, 8);
+									return false;
+								}
+							}, 'json');
+						},
+						function () {
+							$.post(url, param, function (res) {
+								if (res.errcode == 9) {
+									layer.msg(res.msg, 2, 9, function () {
+										self.Info.r_status	=	1;
+									});
+								}else{
+									layer.msg(res.msg, 2, 8);
+									return false;
+								}
+							}, 'json');
+						},
+						function () {
+							parent.layer.closeAll();
+						}
+					);
+				}else{
+					$.post(url, param, function (res) {
+						if (res.errcode == 9) {
+							layer.msg(res.msg, 2, 9, function () {
+								self.Info.r_status	=	1;
+							});
+						}else{
+							layer.msg(res.msg, 2, 8);
+							return false;
+						}
+					}, 'json');
+				}
+			},
+			setComLink: function(){
+				var self = this;
+
+				if (self.linkMan == self.Info.linkman && self.linkJob == self.Info.linkjob && self.linkTel == self.Info.linktel && self.linkPhone == self.Info.linkphone && self.linkMail == self.Info.linkmail && self.linkAddress == self.Info.address){
+
+					layer.msg('联系方式未发生改变', 2, 8, function () {
+						self.linkBoxShow = false;
+					});
+					return false;
+				}else if (self.linkMan == ''){
+
+					layer.msg('联系人信息不能为空', 2, 8);
+					return false;
+				}else if (self.linkTel == '' && self.linkPhone == ''){
+
+					layer.msg('联系号码不能为空', 2, 8);
+					return false;
+				}else if (self.linkAddress == ''){
+
+					layer.msg('公司地址不能为空', 2, 8);
+					return false;
+				}
+
+				var url = "index.php?m=crm_my_customer&c=upComLink";
+				var param = {};
+				param.uid = self.comId;
+				param.linkman = self.linkMan;
+				param.linkjob = self.linkJob;
+				param.linktel = self.linkTel;
+				param.linkphone = self.linkPhone;
+				param.linkmail = self.linkMail;
+				param.address = self.linkAddress;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+							self.Info.linkman	=	self.linkMan;
+							self.Info.linktel	=	self.linkTel;
+							self.Info.linkphone	=	self.linkPhone;
+							self.Info.linkmail	=	self.linkMail;
+							self.Info.address	=	self.linkAddress;
+							self.Info.phone_n	=	self.linkTel ? self.linkTel : self.linkPhone;
+							self.linkBoxShow = false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			remarkCom: function () {
+				var self = this;
+				var crm_remark = $('#comRemark').val();
+				if (crm_remark == ''){
+					layer.msg('请填写备注内容', 2, 8);
+					return false;
+				}
+				var url = "index.php?m=crm_my_customer&c=remarkCom";
+				var param = {};
+				param.uid = self.comId;
+				param.crm_remark = crm_remark;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+							self.Info.crm_remark = crm_remark;
+							self.remarkBoxShow = false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			setCrmLink: function () {
+				var self = this;
+				if (self.crmLinkMan == '') {
+					layer.msg('请填写联系人姓名', 2, 8);
+					return false;
+				}else if (self.crmLinkMobile == '') {
+
+					layer.msg('请填写联系人电话', 2, 8);
+					return false;
+				}else if (!isjsMobile(self.crmLinkMobile)){
+
+					layer.msg('请填写正确的手机号码', 2, 8);
+					return false;
+				}
+				var url = "index.php?m=crm_my_customer&c=addCrmLink";
+				var param = {};
+
+				param.uid = self.comId;
+				param.id = self.crmLinkId;
+				param.link_man = self.crmLinkMan;
+				param.link_mobile = self.crmLinkMobile;
+				if (self.isContinue == 2){
+					param.add = 1;
+				}
+				param.pytoken = pytoken;
+				layer.load('请稍候...', 4);
+				$.post(url, param, function(res) {
+					layer.closeAll();
+					if (res.errcode == 9){
+
+						layer.msg(res.msg, 2, 9, function () {
+							if(self.crmLinkId > 0){
+
+								self.linkList[self.crmLinkKey].link_man = self.crmLinkMan;
+								self.linkList[self.crmLinkKey].link_mobile = self.crmLinkMobile;
+							}else{
+								var newV = {};
+
+								if (res.nid > 0){
+
+									newV.id = res.nid;
+									newV.link_man = self.crmLinkMan;
+									newV.link_mobile = self.crmLinkMobile;
+									self.linkList.push(newV);
+									self.links.push(newV);
+									self.linkNum++;
+									setTimeout(function () {
+										layuiForm()
+									}, 500);
+								}else if(res.nid == -1){
+
+									self.Info.linkman = self.crmLinkMan;
+									self.Info.linktel = self.crmLinkMobile;
+									self.Info.phone_n = self.crmLinkMobile;
+								}
+							}
+
+							self.crmLinkBoxShow = false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else if (res.errcode == 7){
+						layer.confirm(res.msg, {
+							btn: ['继续添加', '更换号码']
+						}, function () {
+							self.isContinue = 2;
+							self.addCrmLink();
+						}, function () {
+
+							self.link_tel = '';
+						});
+					}else{
+						self.isContinue = 1;
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			upCrmLink: function(id, man, mobile, k){
+				var self = this;
+				self.crmLinkTitle = '更新客户联系人'
+				self.crmLinkId = id;
+				self.crmLinkMan = man;
+				self.crmLinkMobile = mobile;
+				self.crmLinkKey = k;
+				self.crmLinkBoxShow = true;
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			},
+			delCrmLink: function(id, k){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=delCrmLink";
+				var param = {};
+				param.uid = self.comId;
+				param.id = id;
+				param.pytoken = pytoken;
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+
+							self.linkList.splice(k, 1);
+							self.linkNum--;
+							self.links = self.links.filter(item => item.id != id);
+							setTimeout(function () {
+								layuiForm()
+							}, 500);
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			setGiveUpShow: function(){
+				var self = this;
+
+				if (self.Info.crm_uid == self.auid){
+					self.giveUpShow = true;
+					parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+					parent.$(".iframeLinks").addClass("iframeLinksacCur");
+				}else{
+					layer.msg('只有企业客户经理本人才可以放弃客户', 2, 8);
+					return false;
+				}
+			},
+			giveUp: function(){
+				var self = this;
+				var remark = $('#giveUpContent').val();
+				if (remark == '') {
+
+					layer.msg('请填写放弃客户的理由', 2, 8);
+					return false;
+				}
+
+				var url = "index.php?m=crm_my_customer&c=giveUp";
+				var param = {};
+				param.uid = self.comId;
+				param.remark = remark;
+				param.pytoken = pytoken;
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						parent.layer.msg(res.msg, 2, 9, function () {
+							parent.location.href = 'index.php?m=crm_my_customer&recrm_prev=1';
+							parent.iframCloe();
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			setDeliverBoxShow: function(){
+				var self = this;
+
+				if (self.Info.crm_uid == self.auid){
+
+					self.deliverBoxShow = true;
+					parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+					parent.$(".iframeLinks").addClass("iframeLinksacCur");
+				}else{
+
+					layer.msg('只有企业客户经理本人才可以转交客户', 2, 8);
+					return false;
+				}
+			},
+			deliverUser: function(){
+				var self = this;
+				var crm_uid = $("#crm_user").val(),
+					crm_name = $('#crm_user').find('option:selected').text();
+				if (crm_uid == ''){
+
+					layer.msg('请选择转交客户经理', 2, 8);
+					return false;
+				}
+				var remark = $('#deliverRemark').val();
+				if (remark == '') {
+
+					layer.msg('请填写转交备注信息', 2, 8);
+					return false;
+				}
+
+				var url = "index.php?m=crm_my_customer&c=deliver";
+				var param = {};
+				param.uid = self.comId;
+				param.crm_uid = crm_uid;
+				param.crm_name = crm_name;
+				param.remark = remark;
+				param.pytoken = pytoken;
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						parent.layer.msg(res.msg, 2, 9, function () {
+							parent.location.href = 'index.php?m=crm_my_customer&recrm_prev=1';
+							parent.iframCloe();
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			claimCustomer: function(){
+				var self = this;
+				var url = "index.php?m=crm_customer&c=claimCom";
+				var param = {};
+				param.uids = self.comId;
+				param.pytoken = pytoken;
+				$.post(url, param, function (res) {
+					if (res.errcode == 9) {
+						layer.msg(res.msg, 2, 9, function () {
+
+							self.Info.crm_uid	=	res.crm_uid;
+							self.Info.crm_name	=	res.crm_name;
+							self.Info.crm_time_n=	res.crm_time_n;
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			//	在招职位
+			preJobPage: function(){
+
+				var self = this;
+				if(self.jobPage > 1){
+
+					self.jobPage = self.jobPage - 1;
+					self.getJobList();
+				}
+			},
+			nextJobPage: function(){
+
+				var self = this;
+				if(self.jobPage < self.jobPageTotal){
+
+					self.jobPage = self.jobPage + 1;
+					self.getJobList();
+				}
+			},
+			jobPageJump:function(e){
+				var self = this;
+				self.jobPage = e;
+				self.getJobList();
+			},
+			jobSearch: function () {
+				var self = this;
+				self.jobPage = 1;
+
+				self.getJobList();
+			},
+			getJobList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getJobList";
+				var param = {};
+				param.id = self.comId;
+				param.page = self.jobPage;
+				param.pytoken = pytoken;
+
+				if (self.job_keyword != ''){
+					param.job_keyword = self.job_keyword;
+				}
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.jobList = data.jobList;
+						self.jobStart = data.start;
+						self.jobEnd = data.end;
+						self.jobNum = data.jobNum;
+						self.job1Num = data.job1Num;
+						self.job2Num = data.job2Num;
+						self.statusNum = data.statusNum;
+						self.jobTotal = data.jobTotal;
+						self.jobPageTotal = data.pageTotal;
+						self.jobPageArr = [];
+						if (self.jobPage <= 6 ){
+
+							var maxPage = self.jobPageTotal > 10 ? 10 : self.jobPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.jobPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.jobPage + 4 < self.jobPageTotal ? self.jobPage + 4 : self.jobPageTotal;
+							var minPage = self.jobPage + 4 < self.jobPageTotal ? self.jobPage - 6 : self.jobPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.jobPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			setJobStatus: function(id, status, jk){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=setJobStatus";
+				var param = {};
+				param.uid = self.comId;
+				param.jobid = id;
+				param.status = status;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.error == 0){
+
+						if (status == 1){
+
+							self.jobList[jk].status =	0;
+							self.Info.jobNum++;
+							self.statusNum--;
+						}else{
+
+							self.jobList[jk].status =	1;
+							self.Info.jobNum--;
+							self.statusNum++;
+						}
+
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			setComTwShow: function(uid, name, day, num){
+				var self = this;
+				if (num > 0){
+					parent.layer.confirm('该企业已有推文未发送，是否继续添加？', {btn: ['是', '否']},
+						function () {
+							parent.layer.closeAll();
+							if (day == 1) {
+								self.comTwTips = '企业已超过3天没有更新，请确认无误后添加';
+								self.comTwTipsShow = true;
+
+								parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+								parent.$(".iframeLinks").addClass("iframeLinksacCur");
+							} else {
+								self.comTwTipsShow = false;
+							}
+							self.twComUid = uid;
+							self.twComName = name;
+							self.comTwBoxShow = true;
+						},
+						function () {
+							parent.layer.closeAll();
+						}
+					);
+				}else {
+					if (day == 1) {
+						self.comTwTips = '企业已超过3天没有更新，请确认无误后添加';
+						self.comTwTipsShow = true;
+
+						parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+						parent.$(".iframeLinks").addClass("iframeLinksacCur");
+					} else {
+						self.comTwTipsShow = false;
+					}
+					self.twComUid = uid;
+					self.twComName = name;
+					self.comTwBoxShow = true;
+				}
+			},
+			setTwShow: function(id, name, day, num){
+
+				var self = this;
+
+				if (num > 0){
+					parent.layer.confirm('该职位上有推文未发送，是否继续添加？', {btn: ['是', '否']},
+						function () {
+							parent.layer.closeAll();
+							if (day == 1) {
+								self.twTips = '职位已超过3天没有更新，请确认无误后添加';
+								self.twTipsShow = true;
+
+								parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+								parent.$(".iframeLinks").addClass("iframeLinksacCur");
+							} else {
+								self.twTipsShow = false;
+							}
+							self.twJobId = id;
+							self.twJobName = name;
+							self.twBoxShow = true;
+						},
+						function () {
+							parent.layer.closeAll();
+						}
+					);
+				}else {
+					if (day == 1) {
+						self.twTips = '职位已超过3天没有更新，请确认无误后添加';
+						self.twTipsShow = true;
+
+						parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+						parent.$(".iframeLinks").addClass("iframeLinksacCur");
+					} else {
+						self.twTipsShow = false;
+					}
+					self.twJobId = id;
+					self.twJobName = name;
+					self.twBoxShow = true;
+				}
+			},
+			setATwShow: function(){
+				var self = this;
+				var jobIds = "";
+				var upDay = 0;
+				var twNum = 0;
+				var twTip = '';
+				var statusMsg = '';
+				var stateMsg = '';
+
+				$(".check_all:checked").each(function () {
+
+					if (jobIds == "") {
+						jobIds = $(this).val();
+					} else {
+						jobIds = jobIds + "," + $(this).val();
+					}
+
+					if (twNum == 0) {
+						twNum = Number($(this).attr('data-num'));
+					}
+
+					upDay = Number($(this).attr('data-upday'));
+					if (twTip == '' && upDay == 1) {
+						twTip = '有部分职位已超过3天没有更新，请确认无误后添加';
+					}
+					if ($(this).attr('data-status') != '0') {
+						statusMsg = '已下架';
+					}
+					if ($(this).attr('data-state') != '1') {
+						stateMsg = '未审核';
+					}
+				});
+				if (statusMsg != '' || stateMsg != '') {
+					var msg = '部分所选职位';
+					var douhao = '';
+					if (statusMsg != '') {
+						msg += douhao + statusMsg;
+						douhao = '、';
+					}
+					if (stateMsg != '') {
+						msg += douhao + stateMsg;
+						douhao = '、';
+					}
+					msg += '，请重新选择。';
+					layer.msg(msg, 2, 8);
+					return false;
+				}
+
+				if (jobIds == "") {
+
+					layer.msg("请选择要生成推文任务的职位！", 2, 8);
+					return false;
+				} else if (twNum > 0) {
+
+					self.twTips = '部分职位已超过3天没有更新，请确认无误后添加';
+					self.twTipsShow = true;
+
+					layer.confirm('有部分职位已添加推文未发送，是否继续添加？', {btn: ['是', '否']},
+						function () {
+							layer.closeAll();
+
+							self.twJobId = jobIds;
+							self.twJobShow = false;
+							self.twBoxShow = true;
+
+							parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").addClass("iframeLinksacCur");
+						},
+						function () {
+							self.twJobShow = true;
+							layer.closeAll();
+						}
+					);
+				} else {
+					self.twJobId = jobIds;
+					self.twJobShow = false;
+					self.twBoxShow = true;
+				}
+			},
+			addComTwTask: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=addTwTask";
+				var param = {};
+				param.cuid = self.comId;
+				param.type = 2;
+				param.content = $('#comTwRemark').val();
+
+				param.urgent = self.twComUrgent ? 1 : 2;
+				param.wcmoments = self.twComPyq ? 1 : 2;
+				param.gzh = self.twComGzh ? 1 : 2;
+
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == 9){
+						layer.msg(res.msg, 2, 9, function () {
+
+							self.comTwBoxShow	=	false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+
+			},
+			addTwTask: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=addTwTask";
+				var param = {};
+				param.cuid = self.comId;
+				param.type = 1;
+				param.jobid = self.twJobId;
+				param.content = $('#twRemark').val();
+
+				param.urgent = self.twJobUrgent ? 1 : 2;
+				param.wcmoments = self.twJobPyq ? 1 : 2;
+				param.gzh = self.twJobGzh ? 1 : 2;
+
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == 9){
+						layer.msg(res.msg, 2, 9, function () {
+
+							self.twBoxShow	=	false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			openMatch: function(id, man, tel, jobClassId, cityClassId, recLogId){
+
+				var self = this;
+				self.matchJob = id;
+				self.matchLinkMan = man;
+				self.matchLinkTel = tel;
+
+				self.resumeTsId = recLogId;
+
+				if (parseInt(self.resumeTsId) > 0){
+					self.getRecResumeInfo();
+				}
+
+				$('#job_class').val(jobClassId);
+				jobSearchReset();
+
+				$('#city_class').val(cityClassId);
+				citySearchReset();
+
+				self.getMatchResume();
+
+				self.tsResume = [];
+				self.tsNum = 0;
+
+				self.selNum = 0;
+				$('#sel_resume_all').prop('checked', false);
+				$('.sel_resume').prop('checked', false);
+				form.render();
+
+				$(".againMatcher").addClass("againMatchCuer");
+				$(".againMatchCont").addClass("againMatchConuer");
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			},
+			preResumePage: function(){
+
+				var self = this;
+				if(self.resumePage > 1){
+
+					self.resumePage = self.resumePage - 1;
+					self.selNum = 0;
+					$('#sel_resume_all').prop('checked', false);
+					$('.sel_resume').prop('checked', false);
+					form.render();
+					self.getMatchResume();
+					if (self.autoSearch == 1){
+						self.getAutoResumeList();
+					}
+				}
+			},
+			nextResumePage: function(){
+
+				var self = this;
+				if(self.resumePage < self.resumePageTotal){
+
+					self.resumePage = self.resumePage + 1;
+					self.selNum = 0;
+					$('#sel_resume_all').prop('checked', false);
+					$('.sel_resume').prop('checked', false);
+					form.render();
+					self.getMatchResume();
+					if (self.autoSearch == 1){
+						self.getAutoResumeList();
+					}
+				}
+			},
+			resumePageJump:function(e){
+				var self = this;
+				self.resumePage = e;
+				self.selNum = 0;
+				$('#sel_resume_all').prop('checked', false);
+				$('.sel_resume').prop('checked', false);
+				form.render();
+				self.getMatchResume();
+				if (self.autoSearch == 1){
+					self.getAutoResumeList();
+				}
+			},
+			resetMatchResume: function (e) {
+				var self = this;
+				self.resumePage = 1;
+				if (e == 'all') {
+					self.searchJobClass = '';
+					self.searchCityClass = '';
+					self.searchRemark = '';
+					self.searchEdu = '';
+					$('#user_edu').val('');
+					self.searchWord = '';
+					$('#user_word').val('');
+					self.searchLabel = '';
+					$('#user_label').val('');
+					self.searchIntegrity = '';
+					$('#integrity').val('');
+					self.searceTime = '';
+					$('#user_time').val('');
+					self.searchKeyword = '';
+				} else if (e == 'jobClass') {
+					self.searchJobClass = '';
+				} else if (e == 'cityClass') {
+					self.searchCityClass = '';
+				} else if (e == 'remark') {
+					self.searchRemark = '';
+				} else if (e == 'edu') {
+					self.searchEdu = '';
+					$('#user_edu').val('');
+				} else if (e == 'word') {
+					self.searchWord = '';
+					$('#user_word').val('');
+				} else if (e == 'label') {
+					self.searchLabel = '';
+					$('#user_label').val('');
+				} else if (e == 'integrity') {
+					self.searchIntegrity = '';
+					$('#integrity').val('');
+				} else if (e == 'time') {
+					self.searceTime = '';
+					$('#user_time').val('');
+				} else if (e == 'keyword') {
+					self.searchKeyword = '';
+				}
+				self.selNum = 0;
+				$('#sel_resume_all').prop('checked', false);
+				$('.sel_resume').prop('checked', false);
+				form.render();
+				self.getMatchResume();
+				if (self.autoSearch == 1){
+					self.getAutoResumeList();
+				}
+			},
+			getMatchResume: function(){
+
+				var self = this;
+
+				var url = "index.php?m=crm_my_customer&c=getResumeList";
+				var param = {};
+
+				param.uid = self.comId;
+				param.id = self.matchJob;
+
+				param.job_class = self.searchJobClass;
+				param.city_class= self.searchCityClass;
+				param.remark = self.searchRemark;
+				param.edu = self.searchEdu;
+				param.word = self.searchWord;
+				param.label = self.searchLabel;
+				param.integrity = self.searchIntegrity;
+				param.time = self.searchTime;
+				param.keyword = self.searchKeyword;
+
+				param.page = self.resumePage;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+
+						setTimeout(function () {
+							layuiForm()
+						}, 500);
+
+						self.selNum = 0;
+						$('#sel_resume_all').prop('checked', false);
+						$('.sel_resume').prop('checked', false);
+
+						self.searchJobClassShow =	self.searchJobClass > 0 ? true : false;
+						if (self.searchJobClass == ''){
+							$('#job_class').val('');
+							setJobSearch();
+						}
+
+						self.searchCityClassShow =	self.searchCityClass > 0 ? true : false;
+						if (self.searchCityClass == ''){
+							$('#city_class').val('');
+							setCitySearch();
+						}
+
+						self.searchRemarkShow =	self.searchRemark != '' ? true : false;
+						self.searchRemarkName =	self.searchRemark;
+
+						self.searchEduShow =	self.searchEdu > 0 ? true : false;
+						self.searchWordShow =	self.searchWord > 0 ? true : false;
+						self.searchLabelShow =	self.searchLabel > 0 ? true : false;
+						self.searchIntegrityShow =	self.searchIntegrity > 0 ? true : false;
+						self.searchTimeShow =	self.searchTime > 0 ? true : false;
+						self.searchKeywordShow = self.searchKeyword != '' ? true : false;
+						self.searchKeywordName = self.searchKeyword;
+
+						self.resumeList = data.resumeList;
+						self.resumeStart = data.start;
+						self.resumeEnd = data.end;
+						self.resumeNum = data.resumeNum;
+						self.resumeTotal = data.resumeTotal;
+						self.resumePageTotal = data.pageTotal;
+						self.resumePageArr = [];
+						if (self.resumePage <= 6 ){
+
+							var maxPage = self.resumePageTotal > 10 ? 10 : self.resumePageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.resumePageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.resumePage + 4 < self.resumePageTotal ? self.resumePage + 4 : self.resumePageTotal;
+							var minPage = self.resumePage + 4 < self.resumePageTotal ? self.resumePage - 6 : self.resumePageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.resumePageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			getAutoResumeList: function(){
+
+				var self = this;
+
+				var url = "index.php?m=crm_my_customer&c=getAutoResumeList";
+				var param = {};
+
+				param.uid = self.comId;
+				param.id = self.matchJob;
+
+				param.job_class = self.searchJobClass;
+				param.city_class= self.searchCityClass;
+				param.remark = self.searchRemark;
+				param.edu = self.searchEdu;
+				param.word = self.searchWord;
+				param.label = self.searchLabel;
+				param.integrity = self.searchIntegrity;
+				param.time = self.searchTime;
+				param.keyword = self.searchKeyword;
+
+				param.page = self.resumePage;
+				param.pytoken = pytoken;
+
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+
+						setTimeout(function () {
+							layuiForm()
+						}, 500);
+
+						self.selNum = 0;
+						$('#sel_resume_all').prop('checked', false);
+						$('.sel_resume').prop('checked', false);
+
+						self.searchJobClassShow =	self.searchJobClass > 0 ? true : false;
+						if (self.searchJobClass == ''){
+							$('#job_class').val('');
+							setJobSearch();
+						}
+
+						self.searchCityClassShow =	self.searchCityClass > 0 ? true : false;
+						if (self.searchCityClass == ''){
+							$('#city_class').val('');
+							setCitySearch();
+						}
+
+						self.searchRemarkShow =	self.searchRemark != '' ? true : false;
+						self.searchRemarkName =	self.searchRemark;
+
+						self.searchEduShow =	self.searchEdu > 0 ? true : false;
+						self.searchWordShow =	self.searchWord > 0 ? true : false;
+						self.searchLabelShow =	self.searchLabel > 0 ? true : false;
+						self.searchIntegrityShow =	self.searchIntegrity > 0 ? true : false;
+						self.searchTimeShow =	self.searchTime > 0 ? true : false;
+						self.searchKeywordShow = self.searchKeyword != '' ? true : false;
+						self.searchKeywordName = self.searchKeyword;
+
+						self.tsResume = data.resumeList;
+						self.tsNum = data.resumeList.length;
+					}
+				}, 'json');
+			},
+			addResume: function(){
+				var self = this;
+				$(".sel_resume:checked").each(function(){
+					var newV = {};
+					newV.id = $(this).attr('data-id');
+					newV.photo_n = $(this).attr('data-photo_n');
+					newV.uname = $(this).attr('data-uname');
+					newV.name = $(this).attr('data-name');
+					newV.age_n = $(this).attr('data-age_n');
+					newV.sex_n = $(this).attr('data-sex_n');
+					newV.edu_n = $(this).attr('data-edu_n');
+					newV.exp_n = $(this).attr('data-exp_n');
+
+					if (JSON.stringify(self.tsResume).indexOf(JSON.stringify(newV)) === -1){
+
+						self.tsResume.push(newV);
+						self.tsNum++;
+					}
+				});
+			},
+			removeTsResume: function(k){
+
+				var self = this;
+				self.tsResume.splice(k,1);
+				self.tsNum--;
+			},
+			getRecWapUrl: function (type){
+				let self = this;
+				var param = {};
+
+				var url = "index.php?m=crm_my_customer&c=setResumeLink";
+				if (self.autoSearch == 1){
+
+					param.auto	=	1;
+					param.interval	=	self.interval;
+
+					param.search_job = self.searchJobClass;
+					param.search_city = self.searchCityClass;
+					param.search_keyword = self.searchKeyword;
+					param.search_edu = self.searchEdu;
+					param.search_word = self.searchWord;
+					param.search_label = self.searchLabel;
+					param.search_integrity = self.searchIntegrity;
+					param.search_time = self.searchTime;
+				}else{
+
+					param.auto	=	2;
+				}
+				var resumeIdArr = [];
+				self.tsResume.forEach(item => {
+					resumeIdArr.push(item.id);
+				});
+				param.uid = self.comId;
+				param.jobid = self.matchJob;
+				param.resumeids = resumeIdArr.join(',');
+				if (self.resumeTsId > 0) {
+					param.id = self.resumeTsId;
+				}
+				param.pytoken = pytoken;
+				layer.load('请稍候...', 4);
+				$.post(url, param, function (res) {
+					layer.closeAll();
+					if (res.errcode == 9) {
+						self.tsWapUrl = res.wap_url;
+						if (type == 1){
+							self.copyLinkShow = true;
+						}else if (type == 2){
+							self.sendLinkShow = true;
+						}
+						self.resetRecSearch();
+					} else {
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			setCopyShow: function(){
+
+				var self = this;
+				if (self.autoSearch == 1){
+					if(self.interval == ''){
+						layer.msg('推键简历自动匹配，更新频率不能为空', 2, 8);
+						return false;
+					}
+					if (self.searchJobClass == '' && self.searchCityClass == '' && self.searchKeyword == '' && self.searchEdu == '' && self.searchWord == '' && self.searchLabel == '' && self.searchIntegrity == '' && self.searchTime == '') {
+						layer.msg('自动匹配简历，搜索条件不能全部为空', 2, 8);
+						return false;
+					}else{
+						self.getRecWapUrl(1);
+					}
+				}else {
+					if (self.tsNum > 0) {
+						self.getRecWapUrl(1);
+					} else {
+						layer.msg('请先添加推荐简历', 2, 8);
+						return false;
+					}
+				}
+			},
+			setSendShow: function(){
+				var self = this;
+				if (self.autoSearch == 1){
+					if(self.interval == ''){
+						layer.msg('推键简历自动匹配，更新频率不能为空', 2, 8);
+						return false;
+					}
+					if (self.searchJobClass == '' && self.searchCityClass == '' && self.searchKeyword == '' && self.searchEdu == '' && self.searchWord == '' && self.searchLabel == '' && self.searchIntegrity == '' && self.searchTime == '') {
+						layer.msg('自动匹配简历，搜索条件不能全部为空', 2, 8);
+						return false;
+					}else{
+						self.getRecWapUrl(2);
+					}
+				}else {
+					if (self.tsNum > 0) {
+						self.getRecWapUrl(2);
+					} else {
+						layer.msg('请先添加推荐简历', 2, 8);
+						return false;
+					}
+				}
+			},
+			copyLink: function(txt){
+
+				var myField = document.getElementById('msgContent');
+				myField.value += txt;
+				myField.focus();
+			},
+			sendResumeMsg: function(){
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=sendResumeMsg";
+				var content = document.getElementById('msgContent').value;
+				var param = {};
+				param.uid = self.comId;
+				param.mobile = self.matchLinkTel;
+				param.content = content;
+				param.link = self.tsWapUrl;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					if (res.errcode == 9){
+						layer.msg(res.msg, 2, 9, function () {
+							self.sendLinkShow = false;
+						});
+					}else{
+						layer.msg(res.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			closeMatch: function(){
+
+				var self = this;
+				self.resumePage=1;
+				$(".againMatcher").removeClass("againMatchCuer");
+				$(".againMatchCont").removeClass("againMatchConuer");
+				parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+			},
+			//	推荐候选人
+			preRecPage: function(){
+
+				var self = this;
+				if(self.recPage > 1){
+
+					self.recPage = self.recPage - 1;
+					self.getRecList();
+				}
+			},
+			nextRecPage: function(){
+
+				var self = this;
+				if(self.recPage < self.recPageTotal){
+
+					self.recPage = self.recPage + 1;
+					self.getRecList();
+				}
+			},
+			recPageJump:function(e){
+				var self = this;
+				self.recPage = e;
+				self.getRecList();
+			},
+			recSearch: function () {
+				var self = this;
+				self.recPage = 1;
+				self.getRecList();
+			},
+			resetRecSearch: function(){
+				var self = this;
+				self.recPage = 1;
+				self.getRecList();
+			},
+			getRecList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getRecList";
+				var param = {};
+				param.uid = self.comId;
+				param.page = self.recPage;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.recList = data.recList;
+						self.recStart = data.start;
+						self.recEnd = data.end;
+						self.recNum = data.recNum;
+						self.recTotal = data.recTotal;
+						self.recPageTotal = data.pageTotal;
+						self.recPageArr = [];
+						if (self.recPage <= 6 ){
+
+							var maxPage = self.recPageTotal > 10 ? 10 : self.recPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.recPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.recPage + 4 < self.recPageTotal ? self.recPage + 4 : self.recPageTotal;
+							var minPage = self.recPage + 4 < self.recPageTotal ? self.recPage - 6 : self.recPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.recPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			openTsResume: function(id){
+				var self = this;
+				self.resumeTsId = id;
+				var url = "index.php?m=crm_my_customer&c=getRecInfo";
+				var param = {};
+				param.id = self.resumeTsId;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+
+						self.recInfo = data.recInfo;
+						self.recResumes = data.recResumes;
+					}
+				}, 'json');
+
+				$(".againCandid").addClass("againCandidCuer");
+				$(".againCandidCont").addClass("againCandidContuer");
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+			},
+			closeTsResume: function(){
+
+				var self= this;
+				self.recInfo = [];
+				self.recResumes = [];
+
+				$(".againCandid").removeClass("againCandidCuer");
+				$(".againCandidCont").removeClass("againCandidContuer");
+				parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+			},
+			getRecResumeInfo: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getRecInfo";
+				var param = {};
+				param.id = self.resumeTsId;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.tsResume = data.recResumes;
+						self.tsNum = data.recResumes.length;
+
+						self.autoSearch = data.recInfo.auto;
+						$('#auto_search').val(data.recInfo.auto);
+
+						if (data.recInfo.auto == 1) {
+							if (data.recInfo.search_job) {
+								$('#job_class').val(data.recInfo.search_job);
+								setJobSearch();
+							}
+							if (data.recInfo.search_city) {
+								$('#city_class').val(data.recInfo.search_city);
+								setCitySearch();
+							}
+							if (data.recInfo.search_keyword) {
+								self.searchKeyword = data.recInfo.search_keyword;
+								self.searchKeywordName = data.recInfo.search_keyword;
+								self.searchKeywordShow = true;
+							}
+							if (data.recInfo.search_edu) {
+								$('#user_edu').val(data.recInfo.search_edu);
+								self.searchEdu = data.recInfo.search_edu;
+								self.searchEduName = data.recInfo.search_edu_name;
+							}
+							if (data.recInfo.search_word) {
+								$('#user_word').val(data.recInfo.search_word);
+								self.searchWord = data.recInfo.search_word;
+								self.searchWordName = data.recInfo.search_word_name;
+							}
+							if (data.recInfo.search_label) {
+								$('#user_label').val(data.recInfo.search_label);
+								self.searchLabel = data.recInfo.search_label;
+								self.searchLabelName = data.recInfo.search_label_name;
+							}
+							if (data.recInfo.search_integrity) {
+								$('#integrity').val(data.recInfo.search_integrity);
+								self.searchIntegrity = data.recInfo.search_integrity;
+								self.searchIntegrityName = data.recInfo.search_integrity_name;
+							}
+
+							if (data.recInfo.search_time) {
+								$('#user_time').val(data.recInfo.search_time);
+								self.searchTime = data.recInfo.search_time;
+								self.searchTimeName = data.recInfo.search_time_name;
+							}
+							self.interval = data.recInfo.interval;
+							self.intervalShow = true;
+						}
+
+						form.render();
+						self.getMatchResume();
+						if (data.recInfo.re_search){
+							self.getAutoResumeList();
+						}
+					}
+				}, 'json');
+			},
+			delRecResumeLog: function(id, key){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=delRecInfo";
+				var param = {};
+				param.id = id;
+				param.pytoken = pytoken;
+				layer.load('请稍候...', 4);
+				parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+				parent.$(".iframeLinks").addClass("iframeLinksacCur");
+				$.post(url, param, function(res) {
+					layer.closeAll();
+					if (res.errcode == 9){
+						layer.msg(res.errmsg, 2, 9, function () {
+							self.recList.splice(key, 1);
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+						});
+					}else{
+						layer.msg(res.errmsg, 2, 8);
+					}
+				}, 'json');
+			},
+			//	推送历史
+			preTwPage: function(){
+
+				var self = this;
+				if(self.twPage > 1){
+
+					self.twPage = self.twPage - 1;
+					self.getTwList();
+				}
+			},
+			nextTwPage: function(){
+
+				var self = this;
+				if(self.twPage < self.twPageTotal){
+
+					self.twPage = self.twPage + 1;
+					self.getTwList();
+				}
+			},
+			twPageJump:function(e){
+				var self = this;
+				self.twPage = e;
+				self.getTwList();
+			},
+			twSearch: function () {
+				var self = this;
+				self.twPage = 1;
+				self.twType = $('#tw_type').val();
+				self.twUser = $('#tw_user').val();
+				self.twStatus = $('#tw_status').val();
+				self.getTwList();
+			},
+			resetTwSearch: function(){
+				var self = this;
+				self.twPage = 1;
+				self.twType = '';
+				self.twUser = '';
+				self.twStatus = '';
+				self.twSJobName = '';
+				self.twUrgent = false;
+				self.twMoments = false;
+				self.twGzh = false;
+				layuiForm();
+				self.getTwList();
+			},
+			getTwList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getTwList";
+				var param = {};
+				param.uid = self.comId;
+				param.auid = self.twUser;
+				param.type = self.twType;
+				param.status = self.twStatus;
+				param.keyword = self.twSJobName;
+				param.urgent = self.twUrgent ? 1: 0;
+				param.wcmoments = self.twMoments ? 1: 0;
+				param.gzh = self.twGzh ? 1: 0;
+				param.page = self.twPage;
+				param.pytoken = pytoken;
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.twList = data.twList;
+						self.twStart = data.start;
+						self.twEnd = data.end;
+						self.twNum = data.twNum;
+						self.twTotal = data.twTotal;
+						self.twPageTotal = data.pageTotal;
+						self.twPageArr = [];
+						if (self.twPage <= 6 ){
+
+							var maxPage = self.twPageTotal > 10 ? 10 : self.twPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.twPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.twPage + 4 < self.twPageTotal ? self.twPage + 4 : self.twPageTotal;
+							var minPage = self.twPage + 4 < self.twPageTotal ? self.twPage - 6 : self.twPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.twPageArr.push($i);
+							}
+						}
+						layuiForm();
+					}
+				}, 'json');
+			},
+			//	订单记录
+			preOrderPage: function(){
+
+				var self = this;
+				if(self.orderPage > 1){
+
+					self.orderPage = self.orderPage - 1;
+					self.getOrderList();
+				}
+			},
+			nextOrderPage: function(){
+
+				var self = this;
+				if(self.orderPage < self.orderPageTotal){
+
+					self.orderPage = self.orderPage + 1;
+					self.getOrderList();
+				}
+			},
+			orderPageJump:function(e){
+				var self = this;
+				self.orderPage = e;
+				self.getOrderList();
+			},
+			orderSearch: function () {
+				var self = this;
+				self.orderPage = 1;
+				self.order_state = $('#order_state').val();
+				self.order_type = $('#order_type').val();
+				self.o_type = $('#o_type').val();
+				self.order_s_time = $('#order_s_time').val();
+				self.order_e_time = $('#order_e_time').val();
+				self.order_keyword = $('#order_keyword').val();
+
+				self.getOrderList();
+			},
+			resetOrderSearch: function(){
+
+				var self = this;
+				self.orderPage = 1;
+				self.order_state = '';
+				self.order_type = '';
+				self.o_type = '';
+				self.order_s_time = '';
+				self.order_e_time = '';
+				self.order_keyword = '';
+
+				self.getOrderList();
+			},
+			getOrderList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getOrderList";
+				var param = {};
+				param.id = self.comId;
+				param.page = self.orderPage;
+				param.pytoken = pytoken;
+				if (self.order_state != ''){
+					param.order_state = self.order_state;
+				}
+				if (self.order_type != ''){
+					param.order_type = self.order_type;
+				}
+				if (self.o_type != ''){
+					param.o_type = self.o_type;
+				}
+				if (self.order_s_time != ''){
+					param.order_s_time = self.order_s_time;
+				}
+				if (self.order_e_time != ''){
+					param.order_e_time = self.order_e_time;
+				}
+				if (self.order_keyword != ''){
+					param.order_keyword = self.order_keyword;
+				}
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.orderList = data.orderList;
+						self.orderStart = data.start;
+						self.orderEnd = data.end;
+						self.orderNum = data.orderNum;
+						self.orderTotal = data.orderTotal;
+						self.orderPageTotal = data.pageTotal;
+						self.orderPageArr = [];
+						if (self.orderPage <= 6 ){
+
+							var maxPage = self.orderPageTotal > 10 ? 10 : self.orderPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.orderPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.orderPage + 4 < self.orderPageTotal ? self.orderPage + 4 : self.orderPageTotal;
+							var minPage = self.orderPage + 4 < self.orderPageTotal ? self.orderPage - 6 : self.orderPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.orderPageArr.push($i);
+							}
+						}
+						layuiForm();
+					}
+				}, 'json');
+			},
+			addDeal: function(){
+				var self = this;
+				var url = 'index.php?m=crm_my_customer&c=addDeal';
+				var param = {};
+				param.uid = self.comId;
+				if (self.orderType == ''){
+					layer.msg('请选择订单类型', 2, 8);
+					return false;
+				}else{
+					param.type = self.orderType;
+					if (self.orderType == 1){
+						if (self.orderRating == ''){
+							layer.msg('请选择会员套餐', 2, 8);
+							return false;
+						}else{
+							param.rating = self.orderRating;
+						}
+						if (self.orderOpen == ''){
+							layer.msg('请选择是否开通业务逻辑', 2, 8);
+							return false;
+						}else{
+							param.deal_model = self.orderOpen;
+						}
+					}
+				}
+				if (self.orderPay == ''){
+					layer.msg('请选择支付方式', 2, 8);
+					return false;
+				}else{
+					param.order_type = self.orderPay;
+				}
+				if (self.orderPrice == ''){
+					layer.msg('请填写付款金额', 2, 8);
+					return false;
+				}else{
+					param.order_price = self.orderPrice;
+				}
+				param.order_remark = $('#order_remark').val();
+                var picurls = []
+                $(".addpicurls").each(function(){
+                    picurls.push($(this).val())
+                });
+                param.htpics = picurls;
+                param.pytoken = pytoken;
+				$.post(url, param, function(data) {
+					if (data.errcode == 9){
+
+						layer.msg(data.msg, 2, 9, function () {
+
+							self.orderBoxShow = false;
+							parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+							parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+							self.resetOrderSearch();
+						});
+					}else{
+						layer.msg(data.msg, 2, 8);
+						return false;
+					}
+				}, 'json');
+			},
+			//	用户日志
+			preLogPage: function(){
+
+				var self = this;
+				if(self.logPage > 1){
+
+					self.logPage = self.logPage - 1;
+					self.getMemberLogList();
+				}
+			},
+			nextLogPage: function(){
+
+				var self = this;
+				if(self.logPage < self.logPageTotal){
+
+					self.logPage = self.logPage + 1;
+					self.getMemberLogList();
+				}
+			},
+			logPageJump:function(e){
+				var self = this;
+				self.logPage = e;
+				self.getMemberLogList();
+			},
+			logSearch: function () {
+				var self = this;
+				self.logPage = 1;
+				self.log_s_time = $('#log_s_time').val();
+				self.log_e_time = $('#log_e_time').val();
+				self.log_keyword = $('#log_keyword').val();
+
+				self.getMemberLogList();
+			},
+			getMemberLogList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getMemberLogList";
+				var param = {};
+				param.id = self.comId;
+				param.page = self.logPage;
+				param.pytoken = pytoken;
+				if (self.log_s_time != ''){
+					param.log_s_time = self.log_s_time;
+				}
+				if (self.log_e_time != ''){
+					param.log_e_time = self.log_e_time;
+				}
+				if (self.log_keyword != ''){
+					param.log_keyword = self.log_keyword;
+				}
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.logList = data.logList;
+						self.logStart = data.start;
+						self.logEnd = data.end;
+						self.logNum = data.logNum;
+						self.logTotal = data.logTotal;
+						self.logPageTotal = data.pageTotal;
+						self.logPageArr = [];
+
+						if (self.logPage <= 6 ){
+
+							var maxPage = self.logPageTotal > 10 ? 10 : self.logPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.logPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.logPage + 4 < self.logPageTotal ? self.logPage + 4 : self.logPageTotal;
+							var minPage = self.logPage + 4 < self.logPageTotal ? self.logPage - 6 : self.logPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.logPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			//	用户轨迹
+			preWebPage: function(){
+
+				var self = this;
+				if(self.webPage > 1){
+
+					self.webPage = self.webPage - 1;
+					self.getWebLogList();
+				}
+			},
+			nextWebPage: function(){
+
+				var self = this;
+				if(self.webPage < self.webPageTotal){
+
+					self.webPage = self.webPage + 1;
+					self.getWebLogList();
+				}
+			},
+			webPageJump:function(e){
+				var self = this;
+				self.webPage = e;
+				self.getWebLogList();
+			},
+			webSearch: function () {
+				var self = this;
+				self.webPage = 1;
+				self.web_s_time = $('#web_s_time').val();
+				self.web_e_time = $('#web_e_time').val();
+
+				self.getWebLogList();
+			},
+			getWebLogList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getWebLogList";
+				var param = {};
+				param.id = self.comId;
+				param.page = self.webPage;
+				param.pytoken = pytoken;
+				if (self.web_s_time != ''){
+					param.web_s_time = self.web_s_time;
+				}
+				if (self.web_e_time != ''){
+					param.web_e_time = self.web_e_time;
+				}
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.webList = data.webList;
+						self.webStart = data.start;
+						self.webEnd = data.end;
+						self.webNum = data.webNum;
+						self.webTotal = data.webTotal;
+						self.webPageTotal = data.pageTotal;
+						self.webPageArr = [];
+						if (self.webPage <= 6 ){
+
+							var maxPage = self.webPageTotal > 10 ? 10 : self.webPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.webPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.webPage + 4 < self.webPageTotal ? self.webPage + 4 : self.webPageTotal;
+							var minPage = self.webPage + 4 < self.webPageTotal ? self.webPage - 6 : self.webPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.webPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			//	操作记录
+			preComLogPage: function(){
+
+				var self = this;
+				if(self.comLogPage > 1){
+
+					self.comLogPage = self.comLogPage - 1;
+					self.getCrmComLogList();
+				}
+			},
+			nextComLogPage: function(){
+
+				var self = this;
+				if(self.comLogPage < self.comLogPageTotal){
+
+					self.comLogPage = self.comLogPage + 1;
+					self.getCrmComLogList();
+				}
+			},
+			comLogPageJump:function(e){
+				var self = this;
+				self.comLogPage = e;
+				self.getCrmComLogList();
+			},
+			comLogSearch: function () {
+				var self = this;
+				self.comLogPage = 1;
+				self.com_log_s_time = $('#com_log_s_time').val();
+				self.com_log_e_time = $('#com_log_e_time').val();
+
+				self.getCrmComLogList();
+			},
+			getCrmComLogList: function(){
+
+				var self = this;
+				var url = "index.php?m=crm_my_customer&c=getCrmComLogList";
+				var param = {};
+				param.id = self.comId;
+				param.page = self.comLogPage;
+				param.pytoken = pytoken;
+				if (self.com_log_s_time != ''){
+					param.com_log_s_time = self.com_log_s_time;
+				}
+				if (self.com_log_e_time != ''){
+					param.com_log_e_time = self.com_log_e_time;
+				}
+				$.post(url, param, function(res) {
+					var data = res.data;
+					if (res.error == 0){
+						self.comLogList = data.comLogList;
+						self.comLogStart = data.start;
+						self.comLogEnd = data.end;
+						self.comLogNum = data.comLogNum;
+						self.comLogTotal = data.comLogTotal;
+						self.comLogPageTotal = data.pageTotal;
+						self.comLogPageArr = [];
+						if (self.comLogPage <= 6 ){
+
+							var maxPage = self.comLogPageTotal > 10 ? 10 : self.comLogPageTotal;
+
+							for ($i = 0; $i < maxPage; $i++) {
+								self.comLogPageArr.push($i);
+							}
+						}else {
+
+							var maxPage = self.comLogPage + 4 < self.comLogPageTotal ? self.comLogPage + 4 : self.comLogPageTotal;
+							var minPage = self.comLogPage + 4 < self.comLogPageTotal ? self.comLogPage - 6 : self.comLogPageTotal - 10;
+							for ($i = minPage; $i < maxPage; $i++) {
+								self.comLogPageArr.push($i);
+							}
+						}
+					}
+				}, 'json');
+			},
+			//	新窗口
+			newIFrame: function(url, width){
+				iframfunct(url, width);
+			},
+		}
+	});
+	function layuiForm() {
+		layui.use(['form', 'element', 'layer'], function () {
+
+			var form = layui.form
+				, layer = layui.layer
+				, element = layui.element
+				, $ = layui.$;
+
+			layer.photos({
+				photos: '#layer-pic'
+				,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+			});
+			form.render();
+		});
+	}
+	$(function () {
+		var clipboard = new ClipboardJS(".copyUrl");
+		clipboard.on('success', function(e) {
+			layer.msg('复制成功！');
+			e.clearSelection();
+		});
+		clipboard.on('error', function(e) {
+		});
+	});
+	setInterval(function () {
+		let date = new Date();
+		let hour = date.getHours(),
+				minutes = date.getMinutes();
+		if (hour < 10){hour = '0'+hour;}
+		if (minutes < 10){minutes = '0'+minutes;}
+		comApp.$data.time = hour + ':' + minutes;
+	}, 1000);
+
+	var isIELowVision = false;
+	var ossUrl="{yun:}$contactOssUrl{/yun}";
+	$(document).ready(function() {
+		isIELowVision = IEVersion();
+	})
+
+	function IEVersion() {
+		//取得浏览器的userAgent字符串
+		var userAgent = navigator.userAgent;
+		//判断是否IE浏览器
+		var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+		if (isIE) {
+			var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+			reIE.test(userAgent);
+			var fIEVersion = parseFloat(RegExp["$1"]);
+			if (fIEVersion < 10) {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	//播放语音
+	function playVoice(obj) {
+		var chatid = $(obj).attr('data-id');
+		var voiceurl = ossUrl + $(obj).attr('data-voice');
+		var onplay = false;
+		if ($('.yuyinbox_onplay')) {
+			$('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+		}
+		if (isIELowVision) {
+			var head = document.head || document.getElementsByTagName('head')[0];
+			var bgsound = document.getElementsByTagName('bgsound')[0];
+			if (!bgsound) {
+				var player = document.createElement('bgsound');
+				head.appendChild(player);
+				player.src = voiceurl;
+				onplay = true;
+			}else{
+				if (bgsound.src == '') {
+					bgsound.src = voiceurl;
+					onplay = true;
+				} else {
+					bgsound.src = '';
+				}
+			}
+		} else {
+			var audio = $("#player")[0];
+			if(audio && !audio.paused && audio.src==voiceurl){
+				audio.pause();
+				audio.currentTime = 0;
+			}else{
+				$("#recordvoice").html("")
+				var aud = $('<audio id="player"  src="' + voiceurl + '" hidden></audio>')
+				$("#recordvoice").html(aud)
+				//获取当前audio
+				audio = aud[0];
+				audio.play(); // 播放
+				onplay = true;
+			}
+			audio.addEventListener("play", function() { //开始播放时触发
+				//console.log('开始播放');
+			});
+			audio.addEventListener("pause", function() { // 暂停时会触发，当播放完一首歌曲时也会触发
+				//console.log('播放暂停');
+			})
+			audio.addEventListener("ended", function() {
+				//console.log('播放结束');
+				$('.yuyinbox_onplay').attr('class', 'yuyinbox_wt');
+			}, false);
+		}
+		console.log(onplay);
+		if (onplay) {
+			$('#onplay_' + chatid).attr('class', 'yuyinbox_onplay');
+		} else {
+			$('#onplay_' + chatid).attr('class', 'yuyinbox_wt');
+		}
+	}
+
+</script>
+{yun:}include file="$adminstyle/crm_iframes.htm"{/yun}
+</body>
+</html>

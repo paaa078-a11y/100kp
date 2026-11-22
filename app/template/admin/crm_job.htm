@@ -1,0 +1,1307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>后台管理 - CRM - 业务员 - 推职位</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="images/workspace.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" />
+
+    <script src="../js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/xm-select-v1.2.4/dist/xm-select.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+    <link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/formSelects-v4.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/job.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/jobparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <script src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/data/plus/cityparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+
+    <script src="{yun:}$config.sy_weburl{/yun}/js/newclass.public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+    <script src="{yun:}$config.sy_weburl{/yun}/js/layui/formSelects-v4.js?v={yun:}$config.cachecode{/yun}"></script>
+
+    <script>var weburl = '{yun:}$config.sy_weburl{/yun}'</script>
+
+    <style type="text/css">
+        ::-webkit-scrollbar{width:8px;background:#eee;display:none}
+        ::-webkit-scrollbar-track{-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.1);border-radius:3px}
+        ::-webkit-scrollbar-thumb{border-radius:3px;height:100px;background-color:#aaa}
+        .other_page{background-color:#fff;color:#2778f8}
+        .current_page{background-color:#2778f8;color:#fff}
+        .iframCloseOpacCur{opacity:.1;pointer-events:none;cursor:default}
+        .layui-form-label{
+            display: block;
+            width: fit-content;
+            padding: 7px 0px;
+        }
+        .SearchJobs{
+            margin-top: 10px;
+        }
+        .Search_jobs_cxz{
+            padding: 4px 10px;
+            border: 1px solid #E7E7E7;
+            border-radius: 4px;
+            margin: 0px 6px;
+            cursor: pointer;
+        }
+
+        .Search_jobs_cxz_active{
+            border: 1px solid #2778F8;
+            color: #2778F8;
+        }
+        .againVitTwoXial .layui-form-item{
+            display: flex;
+
+        }
+        .job_xz_text{
+            max-width: 80px;
+            padding: 4px 10px;
+            border: 1px solid #E7E7E7;
+            border-radius: 4px;
+            margin: 0px 6px;
+        }
+        .layui-form-select .layui-input{
+            padding-right: 70px;
+        }
+    </style>
+</head>
+<body style="background: none;">
+<div id="jobVue" class="tuijianAlls none">
+    <div class="againMatcObile">
+        <div class="againMobileRame">
+            <div class="againMobileTops">
+                <div class="againMobileTopOne">
+                    <span>{{time}}</span>
+                </div>
+                <div class="againMobileTopTwo">
+                    <span>推荐职位</span>
+                </div>
+                <div class="againMobileTopOne">
+                    <img src="images/moblie3.png" alt="">
+                </div>
+            </div>
+            <div class="againMobileLeiron">
+                <!-- 内容消息 -->
+                <div class="againMobileList" v-for="(item, recK) in recJob" :key="recK" v-show="recNum > 0">
+                    <div class="againMobileData">
+                        <div class="againMobiDataTitle">
+                            <a href="javascript:;">{{item.name}}</a>
+                            <span>{{item.salary_n}}</span>
+                        </div>
+                        <div class="againMobiDataTips">
+                            <span>{{item.cityStr}}</span>
+                            <span>{{item.edu_n}}学历</span>
+                            <span>{{item.exp_n}}经验</span>
+                        </div>
+                        <div class="againMobiDatConpany">
+                            <span>{{item.com_name}}</span>
+                        </div>
+                    </div>
+                    <div class="againMobileClose" @click="removeJob(recK)" v-show="!intervalShow">
+                        <img src="images/qxicon.png" alt="">
+                    </div>
+                </div>
+                <div class="againMobileLeNone" v-show="recNum==0">
+                    <div class="againleLeNoneIng">
+                        <img src="images/zwtip.png" alt="">
+                        <span>请从右侧挑选职位</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="againMobileButon" @click="addInfo">
+            <span class="faduanx scerweims">分享朋友圈</span>
+        </div>
+    </div>
+    <div class="againMatcVitae">
+        <div class="againMaVitSubst layui-form">
+            <div class="againVitSubOne">
+                <div class="againVitSubTitle"><span>推荐职位</span></div>
+                <div class="againVitSubEful">
+                    <img src="images/lingdan.png" alt="">
+                    <span>在这里为客户精选职位进行推广，您可以筛选职位手动添加，也可以选择搜索条件自动匹配职位分享</span>
+                </div>
+            </div>
+            <div class="againVitSubTwo">
+                <div class="againVitTwoShur">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block againTwoShurBguze">
+                            <select id="jobclass_search" class="expect_text" name="jobclass_search" xm-select-type="jobclass" xm-select="jobclass_search" xm-select-search="" xm-select-radio="" xm-select-skin="default" xm-select-direction="down" style="width: 250px;margin-top: 0;">
+                                <option value="">输入搜索职能</option>
+                            </select>
+                            <div onclick="index_job_new(1,'#workadds_job','#job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="请输入职能关键词"></div>
+                            <input id="job_class" type="hidden" value="" name="job_class">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block againTwoShurBgmap">
+                            <select id="cityclass_search" class="expect_text" name="cityclass_search" xm-select-type="cityclass" xm-select="cityclass_search" xm-select-search="" xm-select-radio="" xm-select-skin="default" xm-select-direction="down">
+                                <option value="">输入搜索城市</option>
+                            </select>
+                            <div onclick="index_city_new(1,'#workadds_city','#city_class','left:100px;top:100px; position:absolute;')" class="news_expect_text_newcity_nth" title="请输入城市关键词"></div>
+                            <input type="hidden" name="city_class" id="city_class" value="" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block tuijianTwoXialInpr">
+                            <input type="text" v-model="searchKeyword" autocomplete="off" placeholder="关键字搜索" class="layui-input">
+                            <button @click="getJobList" style="cursor: pointer;"><img src="images/suoe.png" alt="">搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="againVitTwoXial">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_edu" id="job_edu" lay-filter="job_edu">
+                                <option value="">学历要求</option>
+                                <option v-for="(item, eduK) in jobEdu" :value="item.id" :key="eduK" :title="item.name">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_exp" id="job_exp" lay-filter="job_exp">
+                                <option value="">工作经验</option>
+                                <option v-for="(item, expK) in jobExp" :value="item.id" :key="expK">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_report" id="job_report" lay-filter="job_report">
+                                <option value="">到岗时间</option>
+                                <option v-for="(item, reportK) in jobReport" :value="item.id" :key="reportK">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_time" id="job_time" lay-filter="job_time">
+                                <option value="">更新日期</option>
+                                <option v-for="(item, timeK) in jobTime" :value="item.id" :key="timeK">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_stime" id="job_stime" lay-filter="job_stime">
+                                <option value="">创建时间</option>
+                                <option v-for="(item, timeK) in jobTime" :value="item.id" :key="timeK">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <select name="job_salary" id="job_salary" lay-filter="job_salary">
+                                <option value="">最低薪资</option>
+                                <option value="2000" >2000元</option>
+                                <option value="4000" >4000元</option>
+                                <option value="6000" >6000元</option>
+                                <option value="8000" >8000元</option>
+                                <option value="10000" >10000元</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="againVitTwoXial">
+                    <div id="welfare_select" class="layui-form-item"></div>
+                    <div class="layui-form-item">
+                        <select name="auto_search" id="auto_search" lay-filter="auto_search">
+                            <option value="">推广方式</option>
+                            <option value="2">手动添加</option>
+                            <option value="1">自动匹配</option>
+                        </select>
+                    </div>
+                    <div class="layui-form-item" v-show="intervalShow">
+                        <div class="layui-input-block">
+                            <input type="text" v-model="interval" autocomplete="off" placeholder="更新频率（分钟）" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item"></div>
+                    <div class="layui-form-item"></div>
+                    <div class="layui-form-item"></div>
+                    <div class="layui-form-item" v-show="!intervalShow"></div>
+                </div>
+            </div>
+            <div class="againVitSubThree">
+                <div class="againVitThreTips">
+                    <span v-show="searchJobClassShow">工作职能：{{searchJobClassText}}<img src="images/admin_tip_close.png" @click="resetJobList('jobClass')"></span>
+                    <span v-show="searchCityClassShow">意向城市：{{searchCityClassText}}<img src="images/admin_tip_close.png" @click="resetJobList('cityClass')"></span>
+                    <span v-show="searchEduShow">学历要求：{{searchEduName}}<img src="images/admin_tip_close.png" @click="resetJobList('edu')"></span>
+                    <span v-show="searchExpShow">工作经验：{{searchExpName}}<img src="images/admin_tip_close.png" @click="resetJobList('exp')"></span>
+                    <span v-show="searchReportShow">到岗时间：{{searchReportName}}<img src="images/admin_tip_close.png" @click="resetJobList('report')"></span>
+                    <span v-show="searchTimeShow">更新日期：{{searchTimeName}}<img src="images/admin_tip_close.png" @click="resetJobList('time')"></span>
+                    <span v-show="searchSTimeShow">创建时间：{{searchSTimeName}}<img src="images/admin_tip_close.png" @click="resetJobList('stime')"></span>
+                    <span v-show="searchWelShow">企业福利：{{searchWelName}}<img src="images/admin_tip_close.png" @click="resetJobList('welfare')"></span>
+                    <span v-show="searchSalaryShow">最低薪资：{{searchSalaryName}}<img src="images/admin_tip_close.png" @click="resetJobList('salary')"></span>
+                    <span v-show="searchKeywordShow">关键词：{{searchKeywordName}}<img src="images/admin_tip_close.png" @click="resetJobList('keyword')"></span>
+                </div>
+                <div class="againVitThreChonx" v-show="searchJobClassShow || searchCityClassShow || searchEduShow || searchExpShow || searchReportShow || searchSTimeShow || searchTimeShow || searchSalaryShow || searchWelShow || searchKeywordShow">
+                    <a href="javascript:;" @click="resetJobList('all')">
+                        <img src="images/chachong.png" alt="">
+                        <span>重新选择</span>
+                    </a>
+                </div>
+            </div>
+            <form class="layui-form" style="height: calc(100% - 260px); overflow: hidden;">
+                <div class="tuiJianZhiwAll">
+                    <div class="tuijian_content">
+                        <div class="tuiJianZhilist" v-for="(item, k) in jobList" :key="k">
+                            <div class="tuiJianXuaz" v-show="!intervalShow">
+                                <input type="checkbox" lay-skin="primary" :data-id="item.id" :data-name="item.name" :data-com_name="item.com_name" :data-salary_n="item.salary_n" :data-cityStr="item.cityStr" :data-edu_n="item.edu_n" :data-exp_n="item.exp_n" lay-filter="sel_job" class="sel_job" />
+                            </div>
+                            <div class="tuiJianLeirong">
+                                <div class="tuiJianLeiTite">
+                                    <a href="#">{{item.name}}</a>
+                                    <span>{{item.salary_n}}</span>
+                                </div>
+                                <div class="tuiJianLeiComs">
+                                    <div class="tuiJianLeiComName">{{item.com_name}}</div>
+                                    <div class="tuiJianLeiComDiz">
+                                        <span>{{item.city_n}} | {{item.edu_n}}学历 | {{item.exp_n}}经验</span>
+                                    </div>
+                                </div>
+                                <div class="tuiJianLeiTips">
+                                    <span v-for="(wel, wk) in item.welfare_n" :key="wk">{{wel}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tuijian_foot">
+                        <div style="display: flex; margin: 20px 0; align-items: center;" v-if="jobPageTotal > 0" v-show="!intervalShow">
+                            <input type="checkbox" lay-skin="primary" id="sel_job_all" lay-filter="sel_job_all" />
+                            <span>全选</span>
+                            <span style="margin-left: 10px;" v-show="selNum > 0">已选 <span style="color: #ff2b00">{{selNum}}</span> 份职位</span>
+                            <a href="javascript:;" style="margin-left: 10px; border: #2778F8 1px solid; background: #2778F8; color: #fff; padding: 3px 8px; border-radius: 3px;" @click="addJob" >添加</a>
+                        </div>
+                        <div class="layuiNoEcords" v-show="jobPageTotal == 0">
+                            <div>
+                                <img src="images/zwtip.png" alt="">
+                                <span>未检索到相关职位</span>
+                            </div>
+                        </div>
+                        <div class="" v-if="jobPageTotal > 1">
+                            <span style="margin-left: 5px; margin-right: 10px;">从 {{jobStart}} 到 {{jobEnd}}，共 {{jobPageTotal}} 页，{{jobTotal}} 条 </span>
+                            <span @click="preJobPage" class="zt_box_s other_page" v-if="jobPage > 1">
+                                    <上一页</span> <span class="zt_box_s" v-for="(pageV, pageK) in jobPageArr" @click="jobPageJump(pageV+1)" :class="jobPage == pageV+1 ? 'current_page' : 'other_page'">{{pageV+1}}
+                                </span>
+                            <span @click="nextJobPage" class="zt_box_s other_page" v-if="jobPage < jobPageTotal">下一页></span>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="weChatsTanc" :class="QrCodeShow ? 'weChatsTancCur' : ''">
+        <div class="weChatsConts">
+            <div class="weChatClose" @click="closeQrCode">
+                <img src="images/closeimg.png" alt="">
+            </div>
+            <div class="weChatsContinfo">
+                <img :src="shareCode" alt="">
+                <span>二维码分享</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recJobPopup" v-show="shareBoxShow">
+        <div class="recJobPoCont layui-form">
+            <div class="recJobPoTop">
+                <span>分享设置</span>
+                <img src="images/closeimg.png" class="rderReClose" alt="" @click="closeShareBox">
+            </div>
+            <div class="recJobPoIput">
+                <div class="layui-form-item">
+                    <span>分享标题：</span>
+                    <div class="layui-input-block">
+                        <input type="text" v-model="shareTitle" autocomplete="off" placeholder="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <span>分享描述：</span>
+                    <div class="layui-input-block">
+                        <textarea  id="shareDesc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <span>分享图片：</span>
+                    <div class="layui-input-block">
+                        <input type="hidden" id="laynoupload" value="1">
+                        <div class="admin_uppicbox logoDiv" style="width:80px;height:80px">
+                            <div>
+                                <img width="80" height="80" id="logoShare" src="" class="none">
+                            </div>
+                            <span class="btnShow">
+                                    <button type="button" lay-data="{imgid: 'logoShare'}" class="noupload recJobBtn">上传图片</button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <span style="opacity: 0.0001;">确认按钮：</span>
+                    <div class="layui-input-block">
+                        <button @click="getCode">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var weburl = '{yun:}$config.sy_weburl{/yun}',
+        auid = '{yun:}$auid{/yun}',
+        id = '{yun:}$smarty.get.id{/yun}',
+        pytoken = '{yun:}$pytoken{/yun}';
+
+    var form = null,
+        formSelects = null,
+        welfareSelect = null;
+    layui.use(['form', 'layer', 'element'], function() {
+
+        var layer = layui.layer,
+            element = layui.element,
+            $ = layui.$;
+
+        formSelects = layui.formSelects;
+        form = layui.form;
+
+        formSelects.btns('cityclass_search', []);
+
+        formSelects.btns('jobclass_search', []);
+
+        //实时获取选中值
+        formSelects.on('jobclass_search', function(id, vals, val, isAdd, isDisabled) {
+            var jobvalue = [];
+            vals.forEach(function(item, index) {
+                jobvalue.push(item.value);
+            })
+            $('#job_class').val(jobvalue.join(','));
+
+            var jobClassId = jobvalue.join(',');
+            jobVue.$data.searchJobClass = jobClassId;
+            jobVue.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+            jobVue.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        }, true);
+
+        formSelects.on('cityclass_search', function(id, vals, val, isAdd, isDisabled) {
+            var cityvalue = [];
+            vals.forEach(function(item, index) {
+                cityvalue.push(item.value);
+            })
+            $('#city_class').val(cityvalue.join(','));
+
+            var cityClassId = cityvalue.join(',');
+            jobVue.$data.searchCityClass = cityClassId;
+            jobVue.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+            jobVue.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        }, true);
+
+        form.on('select(job_edu)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchEdu = data.value;
+            jobVue.$data.searchEduName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(job_exp)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchExp = data.value;
+            jobVue.$data.searchExpName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(job_report)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchReport = data.value;
+            jobVue.$data.searchReportName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(job_time)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchTime = data.value;
+            jobVue.$data.searchTimeName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(job_stime)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchSTime = data.value;
+            jobVue.$data.searchSTimeName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(job_salary)', function(data) {
+            var e = data.elem;
+
+            jobVue.$data.searchSalary = data.value;
+            jobVue.$data.searchSalaryName = e[e.selectedIndex].text;
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('select(auto_search)', function(data) {
+            var v = data.value;
+            if (v == 1){
+
+                jobVue.$data.intervalShow = true;
+                jobVue.getAutoJobList();
+            }else{
+                jobVue.$data.recJob = [];
+                jobVue.$data.recNum = 0;
+                jobVue.$data.intervalShow = false;
+            }
+            jobVue.$data.autoSearch = v;
+        });
+
+        form.on('checkbox(job_welfare)', function(data) {
+
+            if (data.elem.checked){
+
+                jobVue.$data.searchWelArr.push(data.value);
+                jobVue.$data.searchWelNameArr.push(data.othis[0].innerText);
+            }else{
+                $.each(jobVue.$data.searchWelArr, function(index, item){
+                    if (item == data.value){
+                        jobVue.$data.searchWelArr.splice(index,1);
+                    }
+                });
+                $.each(jobVue.$data.searchWelNameArr, function(index, item){
+                    if (item == data.othis[0].innerText){
+                        jobVue.$data.searchWelNameArr.splice(index,1);
+                    }
+                });
+            }
+
+            jobVue.$data.searchWel = jobVue.$data.searchWelArr.join('，');
+            jobVue.$data.searchWelName = jobVue.$data.searchWelNameArr.join('，');
+
+            jobVue.getJobList();
+            if (jobVue.$data.autoSearch == 1){
+                jobVue.getAutoJobList();
+            }
+        });
+
+        form.on('checkbox(sel_job)', function(data) {
+            if (data.elem.checked) {
+                jobVue.$data.selNum++;
+            } else {
+                jobVue.$data.selNum--;
+                $('#sel_job_all').prop('checked', false);
+                form.render();
+            }
+        });
+
+        form.on('checkbox(sel_job_all)', function(data) {
+            if (data.elem.checked) {
+
+                jobVue.$data.selNum = (jobVue.$data.jobEnd - jobVue.$data.jobStart) + 1;
+                $('.sel_job').prop('checked', true);
+                form.render();
+            } else {
+                jobVue.$data.selNum = 0;
+                $('.sel_job').prop('checked', false);
+                form.render();
+            }
+        });
+
+        $(".logoDiv").hover(
+            function() {
+                $(".btnShow").show();
+            },
+            function() {
+                $(".btnShow").hide();
+            }
+        );
+    });
+
+    function jobSearchReset() {
+
+        var jobClassId = $('#job_class').val();
+        var formSelects = layui.formSelects,
+            jobclassArr = jobClassId != '' ? jobClassId.split(",") : [],
+            jarr = [];
+
+        for (var i = 0; i < jobclassArr.length; i++) {
+            jarr.push({ "name": jn[jobclassArr[i]], "value": jobclassArr[i], "selected": 'selected' });
+        }
+
+        formSelects.data('jobclass_search', 'local', {
+            arr: jarr
+        });
+
+        jobVue.$data.searchJobClass = jobClassId;
+        jobVue.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+        jobVue.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+        jobVue.getJobList();
+
+        if (jobVue.$data.autoSearch == 1){
+            jobVue.getAutoJobList();
+        }
+    }
+
+    function citySearchReset() {
+
+        var cityClassId = $('#city_class').val();
+
+        var formSelects = layui.formSelects,
+            cityclassArr = cityClassId != '' ? cityClassId.split(",") : [],
+            carr = [];
+
+        for (var i = 0; i < cityclassArr.length; i++) {
+            carr.push({ "name": cn[cityclassArr[i]], "value": cityclassArr[i], "selected": 'selected' });
+        }
+        formSelects.data('cityclass_search', 'local', {
+            arr: carr
+        });
+
+        jobVue.$data.searchCityClass = cityClassId;
+        jobVue.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+        jobVue.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+        jobVue.getJobList();
+
+        if (jobVue.$data.autoSearch == 1){
+            jobVue.getAutoJobList();
+        }
+    }
+
+    function setJobSearch() {
+
+        var jobClassId = $('#job_class').val();
+        var formSelects = layui.formSelects,
+            jobclassArr = jobClassId != '' ? jobClassId.split(",") : [],
+            jarr = [];
+
+        for (var i = 0; i < jobclassArr.length; i++) {
+            jarr.push({ "name": jn[jobclassArr[i]], "value": jobclassArr[i], "selected": 'selected' });
+        }
+
+        formSelects.data('jobclass_search', 'local', {
+            arr: jarr
+        });
+
+        jobVue.$data.searchJobClass = jobClassId;
+        jobVue.$data.searchJobClassText = jobClassId > 0 ? jn[jobClassId] : '';
+        jobVue.$data.searchJobClassShow = jobClassId > 0 ? true : false;
+    }
+
+    function setCitySearch() {
+
+        var cityClassId = $('#city_class').val();
+
+        var formSelects = layui.formSelects,
+            cityclassArr = cityClassId != '' ? cityClassId.split(",") : [],
+            carr = [];
+
+        for (var i = 0; i < cityclassArr.length; i++) {
+            carr.push({ "name": cn[cityclassArr[i]], "value": cityclassArr[i], "selected": 'selected' });
+        }
+        formSelects.data('cityclass_search', 'local', {
+            arr: carr
+        });
+
+        jobVue.$data.searchCityClass = cityClassId;
+        jobVue.$data.searchCityClassText = cityClassId > 0 ? cn[cityClassId] : '';
+        jobVue.$data.searchCityClassShow = cityClassId > 0 ? true : false;
+    }
+
+    var d = new Date();
+    var h = d.getHours(),
+        m = d.getMinutes();
+    if (h < 10){h = '0'+h;}
+    if (m < 10){m = '0'+m;}
+    var time = h + ':'+m;
+    var jobVue = new Vue({
+        el: '#jobVue',
+        data: {
+
+            searchJobClassShow: false,
+            searchJobClass: '',
+            searchJobClassText: '',
+
+            searchCityClassShow: false,
+            searchCityClass: '',
+            searchCityClassText: '',
+
+            jobEdu: [],
+            jobExp: [],
+            jobReport: [],
+            jobWelfare: [],
+            jobTime: [],
+
+            searchKeywordShow: false,
+            searchKeyword: '',
+            searchKeywordName: '',
+
+            searchEduShow: false,
+            searchEdu: '',
+            searchEduName: '',
+
+            searchExpShow: false,
+            searchExp: '',
+            searchExpName: '',
+
+            searchReportShow: false,
+            searchReport: '',
+            searchReportName: '',
+
+            searchTimeShow: false,
+            searchTime: '',
+            searchTimeName: '',
+
+            searchSTimeShow: false,
+            searchSTime: '',
+            searchSTimeName: '',
+
+            searchWelShow: false,
+            searchWel: '',
+            searchWelArr: [],
+            searchWelName: '',
+            searchWelNameArr: [],
+
+            searchSalaryShow: false,
+            searchSalary: '',
+            searchSalaryName: '',
+
+            autoSearch: '',
+
+            intervalShow: false,
+            interval: '',
+
+            selNum: 0,
+
+            jobList: [],
+            jobStart: '',
+            jobEnd: '',
+            jobNum: 0,
+            jobTotal: 0,
+            jobPageArr: [],
+            jobPage: 1,
+            jobPageTotal: 0,
+
+            logId: id ? id : '',
+            recJob: [],
+            recNum: 0,
+
+            shareBoxShow: false,
+            shareTitle: '',
+
+            QrCodeShow: false,
+            shareCode: '',
+
+            time: time
+        },
+        created: function() {
+            $("#jobVue").removeClass('none');
+            this.getData();
+            if (this.logId > 0){
+                this.getRecLogInfo();
+            }else{
+                this.getJobList();
+            }
+        },
+        methods: {
+            getData: function() {
+                var self = this;
+                var url = "index.php?m=crm_index&c=getJobData";
+                $.post(url, {
+                    type: 'job',
+                    pytoken: pytoken
+                }, function(res) {
+                    var data = res.data;
+                    if (res.error == 0) {
+                        self.jobEdu = data.jobEdu;
+                        self.jobExp = data.jobExp;
+                        self.jobReport = data.jobReport;
+                        self.jobWelfare = data.jobWelfare;
+                        self.jobTime = data.jobTime;
+
+                        layuiForm();
+
+                        var selData = [];
+                        self.jobWelfare.forEach(item=>{
+                            selData.push({name: item.name, value: item.id});
+                        })
+
+                        welfareSelect = xmSelect.render({
+                            el: '#welfare_select',
+                            name: 'xmWelfare',
+                            tips: '企业福利',
+                            theme: {
+                                color: '#2778f8',
+                            },
+                            on: function(data){
+
+                                var arr = data.arr;
+                                self.searchWelArr = [];
+                                self.searchWelNameArr = [];
+
+                                if (arr.length > 0){
+                                    arr.forEach(item=>{
+                                        self.searchWelArr.push(item.value);
+                                        self.searchWelNameArr.push(item.name);
+                                    });
+                                }
+                                self.searchWel = self.searchWelArr.join('，');
+                                self.searchWelName = self.searchWelNameArr.join('，');
+
+                                self.getJobList();
+                                if (self.autoSearch == 1){
+                                    self.getAutoJobList();
+                                }
+                            },
+                            data: selData
+                        })
+                    }
+                }, 'json');
+            },
+            preJobPage: function() {
+
+                var self = this;
+                if (self.jobPage > 1) {
+
+                    self.jobPage = self.jobPage - 1;
+                    self.selNum = 0;
+                    $('#sel_job_all').prop('checked', false);
+                    $('.sel_job').prop('checked', false);
+                    form.render();
+                    self.getJobList();
+                    if (self.autoSearch == 1){
+                        self.getAutoJobList();
+                    }
+                }
+            },
+            nextJobPage: function() {
+
+                var self = this;
+                if (self.jobPage < self.jobPageTotal) {
+
+                    self.jobPage = self.jobPage + 1;
+                    self.selNum = 0;
+                    $('#sel_job_all').prop('checked', false);
+                    $('.sel_job').prop('checked', false);
+                    form.render();
+                    self.getJobList();
+                    if (self.autoSearch == 1){
+                        self.getAutoJobList();
+                    }
+                }
+            },
+            jobPageJump: function(e) {
+                var self = this;
+                self.jobPage = e;
+                self.selNum = 0;
+                $('#sel_job_all').prop('checked', false);
+                $('.sel_job').prop('checked', false);
+                form.render();
+                self.getJobList();
+                if (self.autoSearch == 1){
+                    self.getAutoJobList();
+                }
+            },
+            resetJobList: function(e) {
+                var self = this;
+                self.jobPage = 1;
+                if (e == 'all') {
+                    self.searchJobClass = '';
+                    self.searchCityClass = '';
+
+                    self.searchEdu = '';
+                    $('#job_edu').val('');
+
+                    self.searchExp = '';
+                    $('#job_exp').val('');
+
+                    self.searchReport = '';
+                    $('#job_report').val('');
+
+                    self.searchTime = '';
+                    $('#job_time').val('');
+
+                    self.searchSTime = '';
+                    $('#job_stime').val('');
+
+                    self.searchWel = '';
+                    self.searchWelName = '';
+                    self.searchWelArr = [];
+                    self.searchWelNameArr = [];
+                    welfareSelect.setValue([]);
+
+                    self.searchSalary = '';
+                    $('#job_salary').val('');
+
+                    self.searchKeyword = '';
+                } else if (e == 'jobClass') {
+                    self.searchJobClass = '';
+                } else if (e == 'cityClass') {
+                    self.searchCityClass = '';
+                } else if (e == 'edu') {
+                    self.searchEdu = '';
+                    $('#job_edu').val('');
+                } else if (e == 'exp') {
+                    self.searchExp = '';
+                    $('#job_exp').val('');
+                } else if (e == 'report') {
+                    self.searchReport = '';
+                    $('#job_report').val('');
+                } else if (e == 'time') {
+                    self.searchTime = '';
+                    $('#job_time').val('');
+                } else if (e == 'stime') {
+                    self.searchSTime = '';
+                    $('#job_stime').val('');
+                }  else if (e == 'welfare') {
+
+                    self.searchWel = '';
+                    self.searchWelName = '';
+                    self.searchWelArr = [];
+                    self.searchWelNameArr = [];
+                    welfareSelect.setValue([]);
+                } else if (e == 'salary') {
+                    self.searchSalary = '';
+                    $('#job_salary').val('');
+                } else if (e == 'keyword') {
+                    self.searchKeyword = '';
+                }
+                self.selNum = 0;
+                $('#sel_job_all').prop('checked', false);
+                $('.sel_job').prop('checked', false);
+
+                form.render();
+
+                self.getJobList();
+                if (self.autoSearch == 1){
+                    self.getAutoJobList();
+                }
+            },
+            getJobList: function() {
+                var self = this;
+
+                var url = "index.php?m=crm_index&c=getJobList";
+                var param = {};
+
+                param.job_class = self.searchJobClass;
+                param.city_class = self.searchCityClass;
+                param.edu = self.searchEdu;
+                param.exp = self.searchExp;
+                param.report = self.searchReport;
+                param.time = self.searchTime;
+                param.stime = self.searchSTime;
+                param.welfare = self.searchWelName;
+                param.salary = self.searchSalary;
+
+                param.keyword = self.searchKeyword;
+
+                param.page = self.jobPage;
+                param.pytoken = pytoken;
+
+                $.post(url, param, function(res) {
+                    var data = res.data;
+                    if (res.error == 0) {
+
+                        setTimeout(function() {
+                            layuiForm()
+                        }, 500);
+
+                        self.selNum = 0;
+                        $('#sel_job_all').prop('checked', false);
+                        $('.sel_job').prop('checked', false);
+
+                        self.searchJobClassShow = self.searchJobClass > 0 ? true : false;
+                        if (self.searchJobClass == '') {
+                            $('#job_class').val('');
+                            setJobSearch();
+                        }
+
+                        self.searchCityClassShow = self.searchCityClass > 0 ? true : false;
+                        if (self.searchCityClass == '') {
+                            $('#city_class').val('');
+                            setCitySearch();
+                        }
+
+                        self.searchEduShow = self.searchEdu > 0 ? true : false;
+                        self.searchExpShow = self.searchExp > 0 ? true : false;
+                        self.searchReportShow = self.searchReport > 0 ? true : false;
+                        self.searchTimeShow = self.searchTime > 0 ? true : false;
+                        self.searchSTimeShow = self.searchSTime > 0 ? true : false;
+
+                        self.searchWelShow = self.searchWel != '' ? true : false;
+
+                        self.searchKeywordShow = self.searchKeyword != '' ? true : false;
+                        self.searchKeywordName = self.searchKeyword;
+
+                        self.searchSalaryShow = self.searchSalary != '' ? true : false;
+                        self.searchSalaryName = self.searchSalary+'元';
+
+                        self.jobList = data.jobList;
+                        self.jobStart = data.start;
+                        self.jobEnd = data.end;
+                        self.jobNum = data.jobNum;
+                        self.jobTotal = data.jobTotal;
+                        self.jobPageTotal = data.pageTotal;
+                        self.jobPageArr = [];
+                        if (self.jobPage <= 6) {
+
+                            var maxPage = self.jobPageTotal > 10 ? 10 : self.jobPageTotal;
+
+                            for ($i = 0; $i < maxPage; $i++) {
+                                self.jobPageArr.push($i);
+                            }
+                        } else {
+
+                            var maxPage = self.jobPage + 4 < self.jobPageTotal ? self.jobPage + 4 : self.jobPageTotal;
+                            var minPage = self.jobPage + 4 < self.jobPageTotal ? self.jobPage - 6 : self.jobPageTotal - 10;
+                            for ($i = minPage; $i < maxPage; $i++) {
+                                self.jobPageArr.push($i);
+                            }
+                        }
+                    }
+                }, 'json');
+            },
+            getAutoJobList: function(){
+                var self = this;
+
+                var url = "index.php?m=crm_index&c=getAutoJobList";
+                var param = {};
+
+                param.job_class = self.searchJobClass;
+                param.city_class = self.searchCityClass;
+                param.edu = self.searchEdu;
+                param.exp = self.searchExp;
+                param.report = self.searchReport;
+                param.time = self.searchTime;
+                param.stime = self.searchSTime;
+                param.welfare = self.searchWelName;
+                param.salary = self.searchSalary;
+                param.keyword = self.searchKeyword;
+                param.pytoken = pytoken;
+
+                $.post(url, param, function(res) {
+                    var data = res.data;
+                    if (res.error == 0) {
+
+                        setTimeout(function() {
+                            layuiForm();
+                        }, 500);
+
+                        self.searchJobClassShow = self.searchJobClass > 0 ? true : false;
+                        if (self.searchJobClass == '') {
+                            $('#job_class').val('');
+                            setJobSearch();
+                        }
+
+                        self.searchCityClassShow = self.searchCityClass > 0 ? true : false;
+                        if (self.searchCityClass == '') {
+                            $('#city_class').val('');
+                            setCitySearch();
+                        }
+
+                        self.searchEduShow = self.searchEdu > 0 ? true : false;
+                        self.searchExpShow = self.searchExp > 0 ? true : false;
+                        self.searchReportShow = self.searchReport > 0 ? true : false;
+                        self.searchTimeShow = self.searchTime > 0 ? true : false;
+                        self.searchSTimeShow = self.searchSTime > 0 ? true : false;
+
+                        self.searchWelShow = self.searchWel != '' ? true : false;
+                        self.searchSalaryShow = self.searchSalary != '' ? true : false;
+
+                        self.searchKeywordShow = self.searchKeyword != '' ? true : false;
+                        self.searchKeywordName = self.searchKeyword;
+
+                        self.recJob = data.jobList;
+                        self.recNum = data.jobList.length;
+
+                    }
+                }, 'json');
+            },
+            addJob: function() {
+                var self = this;
+                $(".sel_job:checked").each(function() {
+
+                    var newV = {};
+                    newV.id = $(this).attr('data-id');
+                    newV.name = $(this).attr('data-name');
+                    newV.com_name = $(this).attr('data-com_name');
+                    newV.salary_n = $(this).attr('data-salary_n');
+                    newV.cityStr = $(this).attr('data-cityStr');
+                    newV.edu_n = $(this).attr('data-edu_n');
+                    newV.exp_n = $(this).attr('data-exp_n');
+
+                    if (JSON.stringify(self.recJob).indexOf(JSON.stringify(newV)) === -1) {
+
+                        self.recJob.push(newV);
+                        self.recNum++;
+                    }
+                });
+            },
+            removeJob: function(k) {
+
+                var self = this;
+                self.recJob.splice(k, 1);
+                self.recNum--;
+            },
+            addInfo: function(){
+                var self = this;
+
+                if (self.autoSearch == 1){
+                    if(self.interval == ''){
+                        layer.msg('推广职位自动匹配，更新频率不能为空', 2, 8);
+                        return false;
+                    }
+                    if (self.searchJobClass == '' && self.searchCityClass == '' && self.searchKeyword == '' && self.searchEdu == '' && self.searchExp == '' && self.searchReport == '' && self.searchTime == ''  && self.searchSTime == '' && self.searchWel == '' && self.searchSalary == '' ) {
+                        layer.msg('自动匹配职位，搜索条件不能全部为空', 2, 8);
+                        return false;
+                    }else{
+                        self.shareBoxShow = true;
+                        parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+                        parent.$(".iframeLinks").addClass("iframeLinksacCur");
+                    }
+                }else {
+                    if (self.recNum > 0) {
+
+                        self.shareBoxShow = true;
+                        parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+                        parent.$(".iframeLinks").addClass("iframeLinksacCur");
+                    } else {
+
+                        layer.msg('请先添加推广职位', 2, 8);
+                        return false;
+                    }
+                }
+            },
+            closeShareBox: function(){
+                var self = this;
+                self.shareBoxShow = false;
+                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+            },
+            getCode: function() {
+                var self = this;
+                var url = "index.php?m=crm_index&c=setRecJob";
+                var file = $("input[name='file']").prop('files');
+
+                var jobIdArr = [];
+                self.recJob.forEach(item => {
+                    jobIdArr.push(item.id);
+                });
+                var formData = new FormData;
+                if (self.autoSearch == 1){
+
+                    formData.append('auto', '1');
+                    formData.append('interval', self.interval);
+
+                    formData.append('search_job', self.searchJobClass);
+                    formData.append('search_city', self.searchCityClass);
+                    formData.append('search_keyword', self.searchKeyword);
+                    formData.append('search_edu', self.searchEdu);
+                    formData.append('search_exp', self.searchExp);
+                    formData.append('search_report', self.searchReport);
+                    formData.append('search_welfare', self.searchWel);
+                    formData.append('search_salary', self.searchSalary);
+                    formData.append('search_time', self.searchTime);
+                    formData.append('search_stime', self.searchSTime);
+                }else{
+
+                    formData.append('auto', '2');
+                }
+                formData.append('jobids', jobIdArr.join(','));
+                formData.append('title', self.shareTitle);
+                formData.append('desc', $('#shareDesc').val());
+                formData.append('file', file[0]);
+                if (parseInt(self.logId) > 0){
+                    formData.append('id', self.logId);
+                }
+                formData.append('pytoken', pytoken);
+                layer.load('请稍候...', 4);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    dataType: 'json',
+                    success: function (res) {
+                        layer.closeAll();
+                        var res = JSON.stringify(res);
+                        var data = JSON.parse(res);
+
+                        if (data.errcode == 9) {
+
+                            self.shareBoxShow = false;
+                            self.QrCodeShow = true;
+
+                            self.shareCode = 'index.php?m=crm_index&c=getShareCode&ids=' + data.ids + '&pytoken=' + pytoken;
+                            self.resetJobList();
+                        }else{
+
+                            layer.msg(data.msg, 2, 8);
+                            return false;
+                        }
+                    }
+                });
+            },
+            closeQrCode: function() {
+                var self = this;
+                self.QrCodeShow = false;
+
+                parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+                parent.$(".iframeLinks").removeClass("iframeLinksacCur");
+
+            },
+            getRecLogInfo: function () {
+                var self = this;
+                var url = "index.php?m=crm_index&c=getRecInfo";
+                var param = {};
+                param.id = self.logId;
+                param.pytoken = pytoken;
+                $.post(url, param, function(res) {
+                    var data = res.data;
+                    if (res.error == 0){
+
+                        self.recJob = data.recJobs;
+                        self.recNum = data.recJobs.length;
+
+                        self.shareTitle = data.recInfo.title;
+                        $('#shareDesc').val(data.recInfo.desc);
+                        document.getElementById("logoShare").setAttribute("src", data.recInfo.logo);
+
+                        self.autoSearch = data.recInfo.auto;
+                        $('#auto_search').val(data.recInfo.auto);
+                        if (data.recInfo.auto == 1) {
+                            if (data.recInfo.search_job) {
+                                $('#job_class').val(data.recInfo.search_job);
+                                setJobSearch();
+                            }
+                            if (data.recInfo.search_city) {
+                                $('#city_class').val(data.recInfo.search_city);
+                                setCitySearch();
+                            }
+                            if (data.recInfo.search_keyword) {
+                                self.searchKeyword = data.recInfo.search_keyword;
+                                self.searchKeywordName = data.recInfo.search_keyword;
+                                self.searchKeywordShow = true;
+                            }
+                            if (data.recInfo.search_edu) {
+                                $('#job_edu').val(data.recInfo.search_edu);
+                                self.searchEdu = data.recInfo.search_edu;
+                                self.searchEduName = data.recInfo.search_edu_name;
+                            }
+                            if (data.recInfo.search_exp) {
+                                $('#job_exp').val(data.recInfo.search_exp);
+                                self.searchExp = data.recInfo.search_exp;
+                                self.searchExpName = data.recInfo.search_exp_name;
+                            }
+                            if (data.recInfo.search_report) {
+                                $('#job_report').val(data.recInfo.search_report);
+                                self.searchReport = data.recInfo.search_report;
+                                self.searchReportName = data.recInfo.search_report_name;
+                            }
+                            if (data.recInfo.search_time) {
+                                $('#job_time').val(data.recInfo.search_time);
+                                self.searchTime = data.recInfo.search_time;
+                                self.searchTimeName = data.recInfo.search_time_name;
+                            }
+                            if (data.recInfo.search_stime) {
+                                $('#job_stime').val(data.recInfo.search_stime);
+                                self.searchSTime = data.recInfo.search_stime;
+                                self.searchSTimeName = data.recInfo.search_stime_name;
+                            }
+                            if (data.recInfo.search_welfare) {
+
+                                self.searchWel = data.recInfo.search_wel;
+                                self.searchWelArr = data.recInfo.search_wel.split('，');
+                                self.searchWelName = data.recInfo.search_welfare;
+                                self.searchWelNameArr = data.recInfo.search_welfare.split('，');
+
+                                var welArr = data.recInfo.search_wel.split('，');
+                                welfareSelect.setValue(welArr);
+                            }
+                            if (data.recInfo.search_salary) {
+                                $('#job_salary').val(data.recInfo.search_salary);
+                                self.searchSalary = data.recInfo.search_salary;
+                                self.searchSalaryName = data.recInfo.search_salary;
+                            }
+
+                            self.interval = data.recInfo.interval;
+                            self.intervalShow = true;
+                        } else {
+
+                            self.interval = '';
+                            self.intervalShow = false;
+                        }
+
+                        form.render();
+                        self.getJobList();
+
+                        if (data.recInfo.re_search){
+                            self.getAutoJobList();
+                        }
+                    }
+                }, 'json');
+            }
+        }
+    });
+    function layuiForm() {
+        layui.use(['form', 'element', 'layer'], function() {
+
+            var form = layui.form,
+                layer = layui.layer,
+                element = layui.element,
+                $ = layui.$;
+            form.render();
+        });
+    }
+    setInterval(function () {
+        let date = new Date();
+        let hour = date.getHours(),
+            minutes = date.getMinutes();
+        if (hour < 10){hour = '0'+hour;}
+        if (minutes < 10){minutes = '0'+minutes;}
+        jobVue.$data.time = hour + ':' + minutes;
+    }, 1000);
+</script>
+<script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
+</body>
+</html>

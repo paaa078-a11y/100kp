@@ -1,0 +1,99 @@
+<!-- 一级弹窗 -->
+<!--div class="iframealls">
+    <div class="iframeConts ">
+        <div class="iframClose iframCloseOpac" onclick="iframCloe(this)">
+            <img src="images/closeimg.png" alt="">
+        </div>
+        <div class="iframeLinks iframeAllsi">
+            <iframe id="iframedata" class="erjhredffdfd" src="" width="100%" height="100%" frameborder=0 allowfullscreen></iframe>
+        </div>
+    </div>
+    <div class="iframeTwoLevel"></div>
+</div-->
+<!-- 二级弹窗 -->
+<!--div class="iframealls iframeaTwos"  style="z-index: 99999;">
+    <div class="iframeConts">
+        <div class="iframClose" onclick="iframTwoCloe(this)">
+            <img src="images/closeimg.png" alt="">
+        </div>
+        <div class="iframeLinks">
+            <iframe id="iframedata" src="" width="100%" height="100%" frameborder=0 allowfullscreen></iframe>
+        </div>
+    </div>
+</div-->
+<script>
+function iframfunct(url, widths) {
+    // 是否有父级弹窗
+    var parentIframe = parent.$(".iframealls").length;
+    var html = [];
+    if (parentIframe > 0) {
+        // 有父级弹窗
+        var iframealls = '<div class="iframealls iframeaTwos"  style="z-index: 99999;">';
+        var iframCloseOpac = '<div class="iframClose iframCloseOpab" onclick="iframCloe(this)">';
+        var iframeLinks = '<div class="iframeLinks iframeAllsi">';
+        var iframedata = '<iframe id="iframedata" src="" width="100%" height="100%" frameborder=0 allowfullscreen></iframe>';
+    } else {
+        var iframealls = '<div class="iframealls">';
+        var iframCloseOpac = '<div class="iframClose iframCloseOpac" onclick="iframCloe(this)">';
+        var iframeLinks = '<div class="iframeLinks">';
+        var iframedata = '<iframe id="iframedata" class="erjhredffdfd" src="" width="100%" height="100%" frameborder=0 allowfullscreen></iframe>';
+    }
+    html.push(iframealls);
+    html.push('<div class="iframeConts">');
+    html.push(iframCloseOpac);
+    html.push('<img src="images/closeimg.png" alt="">');
+    html.push('</div>');
+    html.push(iframeLinks);
+    html.push(iframedata);
+    html.push('</div>');
+    html.push('</div>');
+    if (parentIframe == 0) {
+        html.push('<div class="iframeTwoLevel"></div>');
+    }
+    html.push('</div>');
+    var iframeHtml = html.join('');
+    $('body').append(iframeHtml);
+
+    setTimeout(function() {
+        $("#iframedata").attr('src', url);
+        $(".iframeConts").addClass("iframeCuer");
+        $(".iframealls").addClass("iframeallsCuer");
+        $(".bodyScolld").addClass("bodyScolldCuer");
+        if (parentIframe > 0) {
+            parent.$(".iframeAllsi").addClass("iframeAfter");
+            parent.$(".iframCloseOpac").addClass("iframCloseOpacCur");
+            // $(".iframCloseOpac").addClass("iframCloseOpacCur");
+        }
+        $(".iframeConts").width(widths);
+    }, 10);
+
+    var a = document.body;
+    a.style.overflow="hidden";
+}
+
+function iframCloe() {
+    $(".iframeConts").removeClass("iframeCuer");
+    $(".iframealls").removeClass("iframeallsCuer");
+    $(".bodyScolld").removeClass("bodyScolldCuer");
+    var parentIframe = parent.$(".iframealls").length;
+    if (parentIframe > 0) {
+        // 有父级弹窗
+        parent.$(".iframeAllsi").removeClass("iframeAfter");
+        parent.$(".iframCloseOpac").removeClass("iframCloseOpacCur");
+        // $(".iframCloseOpac").removeClass("iframCloseOpacCur");
+    } else {
+        $(".iframeAllsi").removeClass("iframeAfter");
+        $(".iframCloseOpac").removeClass("iframCloseOpacCur");
+        var url = $("#iframedata").attr('src');
+        if (url.indexOf('index.php?m=crm_chat&c=audit') != -1){
+            location.href = 'index.php?m=crm_chat&rechat_prev=1';
+        }
+
+    }
+    setTimeout(function() {
+        $(".iframealls").remove();
+    }, 400);
+    var c = document.body;
+    c.style.overflow="auto";
+}
+</script>

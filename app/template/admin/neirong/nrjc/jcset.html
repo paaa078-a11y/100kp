@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+<body>
+<div id="yemanapp" class="moduleDome">
+    <div class="moduleHeadr">
+        <h3>检测设置</h3>
+    </div>
+    <div class="moduleTable">
+        <table class="tableVue">
+            <thead>
+            <tr align="left">
+                <th width="200">名称</th>
+                <th width="400">状态</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="TableTite">内容检测开放</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-switch
+                                v-model="sy_concheck_open">
+                        </el-switch>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Key</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="sy_concheck_appkey">
+
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <el-link type="info" icon="el-icon-warning" href="https://u.phpyun.com" target="_blank">前往申请直播服务秘钥</el-link>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">App Secret</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="sy_concheck_appsecret">
+
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="TableTite">剩余检测量</div>
+                </td>
+                <td>
+                    <div class="TableInpt">
+                        <el-input placeholder="请输入" v-model="num" disabled>
+
+                        </el-input>
+                    </div>
+                </td>
+                <td>
+                    <div class="TableShuom">
+                        <span></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="setBasicButn" style="border: none;">
+        <el-button type="primary" size="medium" @click="save" :disabled="saveLoading">提交</el-button>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#yemanapp',
+        data: function () {
+            return {
+                saveLoading: false,
+
+                sy_concheck_open: false,
+                sy_concheck_appkey: '',
+                sy_concheck_appsecret: '',
+                num: 0
+            }
+        },
+        components: {
+            // 'jibenset': httpVueLoader('./component/jibenset.vue'),
+        },
+        created: function () {
+            this.getinfo();
+        },
+        methods: {
+            getinfo(){
+                var that = this
+                httpPost('m=neirong&c=concheck_config&a=index', {}).then(function (result) {
+                    var res = result.data
+                    if (res.error == 0) {
+                        that.sy_concheck_open = res.data.sy_concheck_open == '1' ? true : false
+                        that.sy_concheck_appkey = res.data.sy_concheck_appkey
+                        that.sy_concheck_appsecret = res.data.sy_concheck_appsecret
+                        if (res.data.num) {
+                            that.num = res.data.num
+                        }
+                    } else {
+                        message.error(res.msg);
+                    }
+                }).catch(function (e) {
+                    console.log(e)
+                })
+            },
+            async save() {
+                let that = this;
+                let params = {
+                    sy_concheck_open:that.sy_concheck_open == true ? '1' : '2',
+                    sy_concheck_appkey:that.sy_concheck_appkey,
+                    sy_concheck_appsecret:that.sy_concheck_appsecret
+                };
+
+                if (that.saveLoading) {
+                    return false;
+                }
+                that.saveLoading = true;
+
+                httpPost('m=neirong&c=concheck_config&a=save', params).then(function (response) {
+                    that.saveLoading = false;
+                    if (response.data.error == 0) {
+                        message.success(response.data.msg);
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+        }
+    });
+</script>
+</body>
+
+</html>

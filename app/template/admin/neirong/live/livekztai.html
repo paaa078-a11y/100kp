@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+    <link rel="stylesheet" href="../../../admin/js/wangeditor/index.css">
+    <script src="../../../admin/js/wangeditor/index.js"></script>
+</head>
+<body>
+<div id="livekzt" class="moduleElenAl liveKztSubject">
+    <div class="liveKztMode">
+        <div class="liveKztModeUps">
+            <livevideo ref="video" :xinfo="info" :xexplain="explain"></livevideo>
+        </div>
+        <div class="liveKztModeDwon">
+            <livecompay></livecompay>
+        </div>
+    </div>
+    <div class="liveKztMode">
+        <div class="liveKztModeUps" :class="{'liveKztModeUpCur': liveHeight}">
+            <livehudon></livehudon>
+        </div>
+        <div class="liveKztModeDwon" :class="{'liveKztModeDwonCur': liveHeight}">
+            <div class="liveKztHeight">
+                <div class="liveKztHeIcon" @click="liveHeight = !liveHeight" :class="{'liveKztHeIconCur': liveHeight}">
+                    <i class="el-icon-arrow-down"></i>
+                    <i class="el-icon-arrow-up"></i>
+                </div>
+            </div>
+            <livetonji></livetonji>
+        </div>
+    </div>
+</div>
+<script>
+    const custoapp = new Vue({
+        el: '#livekzt',
+        data: function () {
+            return {
+                id: '',
+                info: {},
+                comlist: [],
+                jylist: [],
+                explain: {},
+                liveHeight: false,
+            }
+        },
+        components: {
+            'livevideo': httpVueLoader('./component/livevideo.vue'),
+            'livehudon': httpVueLoader('./component/livehudon.vue'),
+            'livecompay': httpVueLoader('./component/livecompay.vue'),
+            'livetonji': httpVueLoader('./component/livetonji.vue'),
+        },
+        created: function () {
+            let query = getUrlParams();
+            if (query && query.xid) {
+                this.id = query.xid;
+                this.getinfo()
+                this.getControlData()
+            }
+        },
+        methods: {
+            async getinfo(){
+                var that = this
+                let params = {id: that.id}
+                httpPost('m=neirong&c=xjhlive&a=control', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.info = response.data.data
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            async getControlData(){
+                var that = this
+                let params = {id: that.id}
+                httpPost('m=neirong&c=xjhlive&a=getControlData', params).then(function (response) {
+                    if (response.data.error == 0) {
+                        that.comlist = res.comlist;
+                        that.jylist = res.jylist;
+                        that.explain = res.explain;
+                    } else {
+                        message.error(response.data.msg);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            }
+        }
+    });
+</script>
+</body>
+</html>

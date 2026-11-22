@@ -1,0 +1,121 @@
+{yun:}include file="$wapstyle/header_cont.htm"{/yun}
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/skill.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+
+
+
+
+
+<body>
+    <section class="">
+        <section class="swipeContAllsu">
+            <div class="swiper-container" id="imgswiper">
+                <div class="swiper-wrapper">
+                    {yun:}adlist classid=514 item="lunbo" key=key{/yun}
+                    <div class="swiper-slide">
+                        <a href="{yun:}$lunbo.src{/yun}">
+                            <img src="{yun:}$lunbo.pic{/yun}" width='100%' height="auto"/>
+                        </a>
+                    </div>
+                    {yun:}/adlist{/yun}
+                </div>
+            </div>
+        </section>
+        <!-- 技能提升列表 -->
+        <!-- <div class="skillImprovImg">
+            {yun:}adlist classid=514 item="lunbo" key=key random=1{/yun}
+            <div class="skill_banner">{yun:}$lunbo.html{/yun}</div>
+            {yun:}/adlist{/yun}
+        </div> -->
+        <div class="skillImpAlls">
+            {yun:}foreach item=va key=key from=$class{/yun}
+            <div class="skillImpTitle">
+                <span>{yun:}$va.name{/yun}</span>
+            </div>
+            <div class="skillImpList" id="app">
+                <ul>
+                    {yun:}foreach item=v key=key  from=$va.lesson{/yun}
+                    <li>
+                        <a href="{yun:}url m=wap c=skill a=show id=$v.id{/yun}">
+                            <div class="skillImInfo">
+                                <div class="skillImInfoData">
+                                    <h3>{yun:}$v.title{/yun}</h3>
+                                    <p>{yun:}$v.desc{/yun}</p>
+                                    {yun:}if $v.welfare{/yun}
+                                    <div class="skillImInfoTips">
+                                        {yun:}foreach from=$v.welfare_n key=wkey item=wval{/yun}
+                                        <span>{yun:}$wval{/yun}</span>
+                                        {yun:}/foreach{/yun}
+                                    </div>
+                                    {yun:}/if{/yun}
+                                </div>
+                                <div class="skillImInfoImg">
+                                    <img src="{yun:}$v.cover_n{/yun}" alt="">
+                                </div>
+                            </div>
+                            <div class="skillImPrice">
+                                <div class="skillImMoney">
+                                    {yun:}if $v.price != 0{/yun}
+                                    <span>¥{yun:}$v.price{/yun}</span>
+                                    {yun:}else{/yun}
+                                    <span>免费</span>
+                                    {yun:}/if{/yun}
+                                    {yun:}if $v.prices > 0{/yun}
+                                    <span class="yuanao">¥{yun:}$v.prices{/yun}</span>
+                                    {yun:}/if{/yun}
+                                </div>
+                                {yun:}if $v.bm_num > 0{/yun}
+                                <div class="skillImView">
+                                    <span>{yun:}$v.bm_num{/yun}人喜欢</span>
+                                </div>
+                                {yun:}/if{/yun}
+                            </div>
+                        </a>
+                    </li>
+                    {yun:}/foreach{/yun}
+                </ul>
+            </div>
+            {yun:}foreachelse{/yun}
+            <div class="wap_member_nosearch">
+                <div class="wap_member_no_tip"> 很抱歉,暂时无技能提升信息！</div>
+            </div>
+            {yun:}/foreach{/yun}
+        </div>
+    </section>
+    {yun:}include file="$wapstyle/publichtm/public_js.htm"{/yun}
+<link href="{yun:}$wap_style{/yun}/js/swiper/swiper.min.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet"/>
+<script src="{yun:}$wap_style{/yun}/js/swiper/swiper.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script type="text/javascript">
+
+    // 轮播图
+    new Swiper('#imgswiper', {
+        direction: 'horizontal',
+        autoplay: true,
+        loop: true
+    });
+        
+    var wapurl = "{yun:}url m=wap{/yun}";
+    var currentPage = parseInt('{yun:}$smarty.get.page{/yun}'),
+        total = parseInt('{yun:}$total{/yun}'),
+        pagelink=  '{yun:}$pagelink{/yun}';
+
+    var skilllistvue =  new Vue({
+            el: '#app',
+            data: {
+                //分页相关
+                currentPage:currentPage?currentPage:1,
+                total:total,
+                perpage:10,
+            },
+            methods:{
+                pageChange:function(e){
+                    var pageurl = pagelink.replace('{{page}}',e);
+                    location.href = pageurl;
+                }
+            }
+        })
+
+</script>
+
+</body>
+
+</html>

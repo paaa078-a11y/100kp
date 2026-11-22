@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+<div id="daohaapp" class="moduleElenAl">
+    <div class="moduleSeachs">
+        <div class="moduleSeachInpt">
+            <el-input v-model="searchForm.keyword" size="small" placeholder="输入职位专题名称" clearable></el-input>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleSearch">查询</el-button>
+        </div>
+        <div class="moduleSeachButn">
+            <el-button type="primary" icon="el-icon-document-add" size="mini" @click="handleAdd">添加专题</el-button>
+        </div>
+    </div>
+    <div class="moduleElTable">
+        <el-table :data="tableData" border style="width: 100%" :header-cell-style="{background:'#f5f7fa',color:'#606266'}"
+                  height="100%" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading"
+                  @sort-change="shortChange">
+            <template slot="empty">
+                <p>{{dataText}}</p>
+            </template>
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="id" label="编号" width="80"></el-table-column>
+            <el-table-column prop="title" label="专题名称" min-width="240">
+                <template slot-scope="scope">
+                    <el-link :href="scope.row.title_url" target="_blank" type="primary">{{scope.row.title}}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.display_switch" active-color="#1890FF" inactive-color="#B8BDC9" @change="changeDisplay(scope)"></el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column label="推广">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.tuiguang_switch" active-color="#1890FF" inactive-color="#B8BDC9" @change="changeTuiguang(scope)"></el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column prop="sort" label="排序" sortable="custom" width="120">
+                <template slot-scope="scope">
+                    <el-input v-if="scope.row[scope.column.property + 'isShow']"
+                              :ref="scope.column.property + scope.$index" :id="scope.column.property + scope.$index"
+                              v-model="scope.row.sort" @blur="alterData(scope, 'int')"
+                              onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"></el-input>
+                    <span v-else>
+                            {{ scope.row.sort }}<img @click="editData(scope)" class="editIcon"
+                                                     src="../../../admin/images/bine.png" alt="" style="margin-left: 4px;" width="14" height="14">
+                        </span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="type" label="添加职位类型" width="120">
+                <template slot-scope="scope">
+                    <template v-if="scope.row.type == 2">自动搜索</template>
+                    <template v-else="">手动增加</template>
+                </template>
+            </el-table-column>
+            <el-table-column prop="jobnum" label="职位总数" width="160">
+                <template slot-scope="scope">
+                    {{scope.row.jobnum ? scope.row.jobnum : 0}}
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="210" align="center">
+                <template slot-scope="scope">
+                    <div class="cz_button">
+                        <el-button size="small" @click="handleJob(scope)" type="">职位</el-button>
+                        <el-button size="small" @click="editRow(scope)">编辑</el-button>
+                        <el-button type="danger" size="small" @click="deleteRow(scope)">删除</el-button>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="modulePaging">
+        <div class="modulecz modulePagButn">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="selectAllBottom">全选</el-checkbox>
+            <el-button @click="deleteRow(null, true)">批量删除</el-button>
+        </div>
+        <div class="modulePagNum">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchForm.page" :page-size="searchForm.limit" :page-sizes="pageSizes" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        </div>
+    </div>
+
+    <!--添加职位专题-->
+    <div class="modluDrawer">
+        <el-drawer :title="titleAddEdit" :close-on-press-escape="false" :wrapper-closable="false" :visible.sync="addVisible" :modal-append-to-body="false" append-to-body :show-close="true" size="70%">
+            <special_job_edit v-if="addVisible" :id="info.id ? info.id : 0" :rating-data="ratingData" :welfare-data="welfareData" :industry-data="industryData" :edu-data="eduData" :exp-data="expData" :sex-data="sexData" :report-data="reportData" @child-event="handleAddClose"></special_job_edit>
+        </el-drawer>
+    </div>
+
+    <!--职位专题-->
+    <div class="modluDrawer">
+        <el-drawer title="专题职位" :visible.sync="jobVisiable" :modal-append-to-body="false" :append-to-body="true" size="90%">
+            <special_job_list :id="info.id ? info.id : 0" :type="info.type ? info.type : 0" :rating-data="ratingData" :edu-data="eduData" :exp-data="expData" @child-event="getList"></special_job_list>
+        </el-drawer>
+    </div>
+</div>
+<!-- script -->
+<script>
+    const custoapp = new Vue({
+        el: '#daohaapp',
+        data: function () {
+            return {
+                loading: false,
+                dataText: '数据加载中',
+                searchForm: {
+                    page: 1,
+                    limit: null,
+                    keyword: null,//关键字
+                },
+                total: 0,
+                tableData: [],
+                pageSizes: [],
+                checked: false,//全选
+                isIndeterminate: false,// checkbox 的不确定状态
+                selectedItem: [],
+                addVisible: false,
+                titleAddEdit: '添加职位专题',
+                info: {},
+                select: '1',
+                value1: null,
+                value: true,
+                jobVisiable: false,
+                addJobVisible: false,
+                baseData: {},
+                welfareData: [],//福利
+                industryData: [],//行业
+				ratingData: [],//会员等级
+                eduData: [],//学历
+                expData: [],//学历
+                sexData: [],//性别
+                reportData: [],//到岗时间
+                prevPage:0
+            }
+        },
+        components: {
+            'special_job_edit': httpVueLoader('./component/special_job_edit.vue'),
+            'special_job_list': httpVueLoader('./component/special_job_list.vue'),
+        },
+        created: function () {
+            this.getList();
+            this.getBaseData();
+        },
+        methods: {
+            handleSelectionChange(val) {
+                this.selectedItem = val;
+                if (this.selectedItem.length == 0) {
+                    this.isIndeterminate = false;
+                    this.checked = false;
+                } else {
+                    if (this.selectedItem.length == this.tableData.length) {
+                        this.isIndeterminate = false;
+                        this.checked = true;
+                    } else {
+                        this.isIndeterminate = true;
+                        this.checked = false;
+                    }
+                }
+            },
+            selectAllBottom(value) {
+                value ? this.$refs.multipleTable.toggleAllSelection() : this.$refs.multipleTable.clearSelection();
+            },
+            shortChange(e) {
+                let orderMap = { ascending: 'asc', descending: 'desc' }
+                this.searchForm.t = e.order ? e.prop : null;
+                this.searchForm.order = orderMap[e.order];
+                this.searchForm.page = 1;
+                this.getList();
+            },
+            handleSizeChange(val) {
+                this.searchForm.limit = val;
+                this.getList();
+            },
+            handleCurrentChange(val) {
+                this.searchForm.page = val;
+                this.getList();
+            },
+            handleSearch() {
+                this.searchForm.page = 1
+                this.getList()
+            },
+            getBaseData() {
+                let _this = this;
+                httpPost('m=yunying&c=special_job&a=get_base_data', {}, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        _this.baseData = Object.freeze(res.data);
+                        let baseData = Object.freeze(res.data);
+                        //福利
+                        if (baseData.hasOwnProperty('comdata') && Array.isArray(baseData.comdata.job_welfare)) {
+                            let list = [];
+                            baseData.comdata.job_welfare.forEach((item) => {
+                                list.push({id: item, name: baseData.comclass_name[item]});
+                            })
+                            _this.welfareData = Object.freeze(list);
+                        }
+                        //行业
+                        if (baseData.hasOwnProperty('industry_index') && Array.isArray(baseData.industry_index)) {
+                            let list = [];
+                            baseData.industry_index.forEach((item) => {
+                                list.push({id: item, name: baseData.industry_name[item]});
+                            })
+                            _this.industryData = Object.freeze(list);
+                        }
+                        //学历
+                        if (baseData.hasOwnProperty('comdata') && Array.isArray(baseData.comdata.job_edu)) {
+                            let list = [];
+                            baseData.comdata.job_edu.forEach((item) => {
+                                list.push({id: item, name: baseData.comclass_name[item]});
+                            })
+                            _this.eduData = Object.freeze(list);
+                        }
+                        //经验
+                        if (baseData.hasOwnProperty('comdata') && Array.isArray(baseData.comdata.job_exp)) {
+                            let list = [];
+                            baseData.comdata.job_exp.forEach((item) => {
+                                list.push({id: item, name: baseData.comclass_name[item]});
+                            })
+                            _this.expData = Object.freeze(list);
+                        }
+                        //性别
+                        if (baseData.hasOwnProperty('com_sex')) {
+                            let list = [];
+                            for (let index in baseData.com_sex) {
+                                list.push({id: index, name: baseData.com_sex[index]});
+                            }
+                            _this.sexData = Object.freeze(list);
+                        }
+                        //到岗时间
+                        if (baseData.hasOwnProperty('comdata') && Array.isArray(baseData.comdata.job_report)) {
+                            let list = [];
+                            baseData.comdata.job_report.forEach((item) => {
+                                list.push({id: item, name: baseData.comclass_name[item]});
+                            })
+                            _this.reportData = Object.freeze(list);
+                        }
+                        _this.ratingData = baseData.ratingArr;
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            getList() {
+                let _this = this;
+                let params = JSON.parse(JSON.stringify(this.searchForm));
+                for (let index in params) {
+                    (params[index] === '') && (params[index] = null);
+                }
+                _this.loading = true;
+                httpPost('m=yunying&c=special_job&a=index', params, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        _this.tableData = res.data.list;
+                        _this.total = res.data.total;
+                        _this.searchForm.limit = res.data.perPage;
+                        _this.pageSizes = res.data.pageSizes;
+                        if(_this.prevPage != _this.searchForm.page){
+                            _this.prevPage = _this.searchForm.page;
+                            _this.$refs.multipleTable.bodyWrapper.scrollTop = 0;
+                        }
+                        _this.loading = false;
+                        if (_this.tableData.length === 0) {
+                            _this.dataText = "暂无数据";
+                        }
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            handleAdd() {
+                this.titleAddEdit = '添加职位专题';
+                this.info = {};
+                this.addVisible = true;
+            },
+            handleAddClose() {
+                this.addVisible = false;
+                this.info = {};
+                this.getList();
+            },
+            editRow(scope) {
+                this.titleAddEdit = '修改职位专题';
+                this.info = scope.row;
+                this.addVisible = true;
+            },
+            deleteRow(scope, isMore) {
+                let params = {};
+                if (isMore) {
+                    if (!this.selectedItem.length) {
+                        message.error('请选择要删除的数据');
+                        return false;
+                    }
+                    let list = [];
+                    for (let item of this.selectedItem) {
+                        list.push(item.id);
+                    }
+                    params.del = list;
+                } else {
+                    // let index = scope.$index;
+                    // this.tableData.splice(index, 1);
+                    params.id = scope.row.id;
+                }
+
+                delConfirm(this, params, this.delete);
+            },
+            delete(params) {
+                let _this = this;
+                httpPost('m=yunying&c=special_job&a=del', params).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        message.success('删除成功！');
+                        _this.getList();
+                    } else {
+                        message.error('删除失败！');
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            changeDisplay(scope) {
+                //状态
+                let _this = this;
+                let id = scope.row.id;
+                let rec = scope.row.display_switch ? 1 : 0;
+                let type = 'rec_display';
+                let params = {id: id, rec: rec, type: type};
+                httpPost('m=yunying&c=special_job&a=recommend', params, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        _this.getList();
+                        message.success('修改成功');
+                    } else {
+                        message.error('修改失败');
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+            changeTuiguang(scope) {
+                //推广
+                let _this = this;
+                let id = scope.row.id;
+                let rec = scope.row.tuiguang_switch ? 1 : 0;
+                let type = 'rec_tuiguang';
+                let params = {id: id, rec: rec, type: type};
+                httpPost('m=yunying&c=special_job&a=tuiguang', params, {hideloading: true}).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        _this.getList();
+                        message.success('修改成功');
+                    } else {
+                        message.error('修改失败');
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
+
+            editData(scope) {
+                let index = scope.$index;
+                let row = scope.row;
+                let column = scope.column;
+                this.oldData = JSON.parse(JSON.stringify(row));
+                let copyRow = JSON.parse(JSON.stringify(row));
+                copyRow[column.property + "isShow"] = true;
+                this.$set(this.tableData, index, copyRow);
+                this.$nextTick(() => {
+                    let ref = column.property + index;
+                    $("#" + ref).focus();
+                });
+            },
+            alterData(scope, type) {
+                if (this.oldData == null) {
+                    return false;
+                }
+                let index = scope.$index;
+                let row = scope.row;
+                let column = scope.column;
+                if (type === 'int') {
+                    row[column.property] = row[column.property].replace(/[^0-9]/g, '');
+                }
+                let copyRow = JSON.parse(JSON.stringify(row));
+                copyRow[column.property + "isShow"] = false;
+                this.$set(this.tableData, index, copyRow);
+                if (row[column.property] === this.oldData[column.property]) {
+                    return false;
+                }
+                let _this = this;
+                let params = { id: row.id };
+                params[column.property] = row[column.property];
+                httpPost('m=yunying&c=special_job&a=setOrder', params, { hideloading: true }).then(function (response) {
+                    let res = response.data;
+                    if (res.error === 0) {
+                        message.success('修改成功');
+                    } else {
+                        message.error('修改失败');
+                    }
+                    _this.oldData = null;
+                    _this.getList();
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            handleJob(scope) {
+                //职位
+                this.info = scope.row;
+                this.jobVisiable = true;
+            }
+        }
+    });
+</script>
+</body>
+</html>

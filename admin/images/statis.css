@@ -1,0 +1,212 @@
+.layui-form-item{
+  margin-top: 8px !important;
+  margin-bottom: 15px !important;
+}
+
+.sub-radio{
+  margin-left:100px;
+  border:1px dashed #c2c2c2;
+  display:inline-block
+}
+
+.layui-btn{
+  /*margin-left: 15px !important;*/
+}
+
+/*.layui-btn:hover{
+  background-color: #2fb90a !important;
+}*/
+
+.layui-form-label{
+  width: auto;
+  padding-left: 0px !important;
+}
+
+.layui-table{
+  margin-left: 25px;
+  width:95%;
+}
+
+.page-nav{
+  margin: 0px 0px 0px 25px;
+}
+
+/* 三个圆圈样式 begin */
+.com_pay_balance_data_q {
+  font-weight: bold;
+  padding-left:60px; position:relative
+}
+.com_pay_balance_data_q_icon{
+  width:44px;
+  height:44px; 
+  background:url(../images/profit1.png) no-repeat center;
+  background-size: 100%;
+}
+.com_pay_balance_data_n {
+  font-size:16px;
+  color: #2778F8;
+  font-weight: bold;
+}
+.border_blue .com_pay_balance_data_q_icon{
+  width:44px;
+  height:44px; 
+  background:url(../images/profit2.png) no-repeat center;
+  background-size: 100%;
+}
+.color_blue{
+  color: #fe8302 !important;
+}
+
+.border_orange .com_pay_balance_data_q_icon{
+  width:44px;
+  height:44px; 
+  background:url(../images/profit3.png) no-repeat center;
+  background-size: 100%;
+}
+.color_orange{
+  color: #32AA32 !important;
+}
+.com_pay_balance{
+  width: 250px;
+  margin-bottom: 5px;
+  display:inline-block
+}
+.com_pay{ padding-bottom:20px; margin-bottom:20px;
+  
+}
+/* 三个圆圈样式 end */
+.payments_nav{ padding:0px 0 10px 0;}
+.payments_com_pay{}
+.payments_com_pay_cont{ 
+  background:#fff;
+  padding:15px; 
+  position:relative;
+  overflow: hidden;
+}
+.admin_atatic_list_li li{ margin-top:15px;}
+.admin_atatic_list_rightbox{ position:relative}
+.admin_atatic_list_right{width:100%;}
+.layui-form_box{ padding-top:10px;}
+.com_pay_balance_qtbox{ padding:5px 0 0 0; background:#fff;border-bottom:1px solid #eee }
+.com_pay_balance_qtbox .layui-btn-normal{ 
+  background:#fff;
+  color:#333; 
+  /*margin-left:10px;*/
+  border-radius:none;
+}
+/* .com_pay_balance_qtbox .layui-btn-normal:hover{ background:#1E9FFF;color:#fff;} */
+.com_pay_balance_qtbox .layui-btn-warm{ 
+  background:none;
+  color:#2778F8; 
+  font-weight:bold;
+  border-radius:none;
+}
+
+.comBalanceWtbox{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+.comBalanceWtbox a{
+  overflow: hidden;
+  display: block;
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+}
+
+.comBalanceWtbox .layui-btn-warm:after{
+  overflow: hidden;
+  display: block;
+  content: "";
+  width: 40px;
+  height: 2px;
+  background: #2778F8;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 2;
+}
+
+
+.admin_atatic_list_right h3{width:100%; font-weight:bold;color:#333;}
+.admin_atatic_list_li li{width:32%; display:inline-block}
+.statis_list{ padding-top:20px;}
+.statis_list td,.statis_list th{padding:5px 3px;}
+.statis_list thead .admin_table_top{ background:#f9f9f9;}
+.statis_list thead th{ height:30px;  font-weight:normal;font-size:12px;    background: #f2f2f2;font-weight: bold;
+ border-bottom: 1px solid #eaeaea;color:#333}
+.statis_list thead  .admin_table_th_bg{ border-right:none}
+.statis_list tbody td,.statis_list .btn{border-bottom:1px solid #E6E6E6; padding-top:10px; padding-bottom:10px;white-space: normal; word-break: break-all;overflow:hidden;}
+.statis_list tbody  .crm_td_end{border:none;}
+.statis_list table tbody tr:hover{ background:#f5faff}
+
+.nstatisBoxProfit .com_pay_balance_data_q{
+  overflow: hidden;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+  padding-top: 2px;
+}
+.nstatisBoxProfit .com_pay_balance_data_q{
+  overflow: hidden;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+  padding-top: 2px;
+}
+.nstatisBoxProfit .com_pay_balance_data_q .balanceFlex{
+  overflow: hidden;
+  padding-left: 20px;
+}
+.nstatisBoxProfit .com_pay_balance_data_q .balanceFlex .com_pay_balance_data_name{
+  overflow: hidden;
+  font-weight: 500;
+  font-size: 13px;
+  color: #333;
+}
+
+.echartsDivAlls{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.echartsDivAlls .echartsOnes{
+  overflow: hidden;
+  width: 66%;
+  height: 445px;
+}
+.echartsDivAlls .echartsTwos{
+  overflow: hidden;
+  width: 1px;
+  height: 361px;
+  background: #EEEFF2;
+}
+.echartsDivAlls .echartsThrees{
+  overflow-y: auto; 
+  width: 28%; 
+  height: 445px;
+}
+.echartsDivAlls .echartsThrees::-webkit-scrollbar {display:none}
+
+.echartsDivAlls .echartsThrees .admin_atatic_list_li{
+  overflow: hidden;
+  padding-top: 10px;
+}
+.echartsDivAlls .echartsThrees .admin_atatic_list_li li{
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+.echartsDivAlls .echartsThrees .admin_atatic_list_li li span{
+  margin-right: 12px;
+}
+.echartsDivAlls .echartsThrees .admin_atatic_list_li li .layui-badge{
+  margin-right: 8px;
+}

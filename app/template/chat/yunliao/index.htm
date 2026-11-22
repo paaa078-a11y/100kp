@@ -1,0 +1,695 @@
+{yun:}if $usertype == 1{/yun}
+	{yun:}include file="$userstyle/header.htm"{/yun}
+{yun:}elseif $usertype == 2{/yun}
+	{yun:}include file="$comstyle/header.htm"{/yun}
+{yun:}elseif $usertype == 3{/yun}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+{yun:}include file="$lietoustyle/public.htm"{/yun} 
+<script type="text/javascript" src="{yun:}$config.sy_weburl{/yun}/js/member_public.js?v={yun:}$config.cachecode{/yun}"></script>
+<link rel="stylesheet" href="{yun:}$lietou_style{/yun}/css/jianli.css?v={yun:}$config.cachecode{/yun}" type="text/css">
+
+</head>
+<body>
+{yun:}include file="$lietoustyle/header.htm"{/yun} 
+
+{yun:}/if{/yun}
+
+<link href="{yun:}$config.sy_weburl{/yun}/app/template/chat/css/chat.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+
+<div id="chatapp" style="display: none;">
+	
+	{yun:}if $usertype == 1{/yun}
+	<div class="yun_w1200 yunChatspod">
+		{yun:}include file="$userstyle/left.htm"{/yun}
+	{yun:}elseif $usertype == 2{/yun}
+	<div class="admin_mainbody">
+		{yun:}include file="$comstyle/left.htm"{/yun}
+	{yun:}elseif $usertype == 3{/yun}
+		{yun:}include file="$lietoustyle/left.htm"{/yun}
+	{yun:}/if{/yun}
+
+
+	
+		<!-- 点击添加这个class名称就行chatContCurser -->
+		<div :class="'chat_content chatContFlexs ' + (expectOpen ? 'chatContCurser' : '')">
+			<div class="chat_boxall">
+				<!--  left-->
+				<div class="chat_box_left">
+					<div class="chat_box_header">
+						<div class="chat_box_header_l">
+							<div class="chat_box_header_l_u">{yun:}$config.sy_chat_day{/yun}天内联系人 </div>
+                            <span id="showUnread" @click="readlist()" class="chat_box_header_wd">
+                            	<i :class="showUnread?'chat_wd_checkbox chat_wd_checkbox_xz':'chat_wd_checkbox'"></i>未读消息
+                            </span>
+						</div>
+					</div>
+					<ul v-show="!chatlist_load" id="chatList" class="chat_box_userlist">
+						<template v-for="(item,ck) in chatlist">
+							<li :id="'chat_'+item.id" @click="toChat(item.id,item.tusertype,usertype)" :class="item.id==toid?'chat_box_user_cur':''">
+								<div class="chat_box_userpic">
+									<img :src="item.avatar" >
+									<i :id="'unread_'+item.id" class="chat_box_usermsg">{{item.unread>0?item.unread:''}}</i>
+								</div>
+								<div class="chat_box_userinfo">
+									<div class="chat_box_username">{{item.linkman}}
+										<span class="chat_box_userzw">
+											<span v-if="item.tusertype==2 || item.tusertype==3">招聘者</span>
+										</span>
+									</div>
+									
+									<div class="chat_box_userp" :id="'chat_desc_'+item.id">
+										{{item.content}}
+									</div>
+									<span class="chat_box_usertime">{{item.time}}</span>
+								
+								</div>
+							</li>
+						</template>
+					</ul>
+					<div v-show="chatlist_load" style="text-align: center; line-height: 200px;">
+						加载中...
+					</div>
+
+				</div>
+				<!--  right-->
+				<div class="chat_box_right chatBoxRightAll">
+					<!--  有内容-->
+					<div id="cbr_y" class="none">
+						<div id="single_head" class="chat_box_right_gtinfo">
+							<div  v-if="headshow">
+								<div class="chatBoxTopTime">
+									<div class="chatBoxTopShuju">
+										<span class="chat_box_right_gtinfo_u" v-if="linkman!=''">{{linkman}}</span>
+										<i v-if="totype == 1 && stime">(&nbsp;开始聊天时间：{{stime}}&nbsp;)</i>
+										<span v-else-if="totype == 2">{{identity}}</span>
+									</div>
+									<div  class="chatBoxTopBtuns" v-if="totype == 1" @click="openExpectDiv" >
+										<i v-if="expectOpen" class="chatBoxTopBtunsicon"></i>
+										<i v-else class="chatBoxTopBtunsicon2"></i>
+									</div>
+								</div>
+								
+								<div class="">
+									<!-- <div id="content_expect" class="chat_box_right_gtjob" v-if="totype==1 && expect">
+										<span class="chat_box_right_gtjob_xz">{{expect.salary}}</span>
+										<span class="chat_line">|</span>{{expect.city_classname}}
+										<span class="chat_line">|</span>{{expect.exp_n}}
+										<span class="chat_line">|</span>{{expect.edu_n}}
+										<a :href="expect.weburl" target="_blank" class="chat_box_right_gtjob_name">查看简历</a>
+									</div> -->
+									<!-- <div class="chatBoxTopTime">
+										<span>2022.11.16&nbsp;18:20</span>
+									</div> -->
+									<div id="content_job" class="chat_box_right_gtjob" v-if="totype!=1 && chatjob">
+										<span class="chat_box_right_gtjob_n">沟通职位</span><a :href="chatjob.weburl" target="_blank" class="chat_box_right_gtjob_name">{{chatjob.name}}</a>
+										<span class="chat_box_right_gtjob_xz">{{chatjob.job_salary}}</span><span class="chat_line">|</span>{{chatjob.job_city_one}}{{chatjob.job_city_two?'-'+chatjob.job_city_two:''}}
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div id="chat_box" class="chat_box_all">
+							<div id="chat_content" class="chat_sendcontent">
+								<div class="chatRemindText">
+									<span>防骗提醒：{yun:}$config.sy_chat_warn{/yun}</span>
+								</div>
+								<ul v-if="chatlog.length>0">
+
+									<li v-if="morelog" id="chat_more" class="chat_more" @click="moreChat()"><div class="chat_comjobtip"><span class="chat_comjobtip_p">查看更多消息</span></div></li>
+
+									<li v-for="(msg, ck) in chatlog" :key="ck" class="chat_li">
+										<div v-if="msg.time" class="chat_sendtime"><span class="chat_sendtime_b">{{msg.time}}</span></div>
+										<!--消息撤回-->
+										<div v-if="msg.msgtype=='recall'" class="chat_recall chatRecalls"><span class="chat_recall_b">{{msg.content}}</span></div>
+										<div v-if="msg.msgtype=='char' || msg.msgtype=='voice' || msg.msgtype=='spview' || msg.msgtype=='map'">
+											<!--我方消息-->
+											<div v-if="msg.mine" @click="recall(msg.chatid,msg.sendTime);" class="chat_sendcont">
+												<!--头像-->
+												<div class="chat_sendcont_pic"><img :src="msg.avatar"></div>
+												<!--面试邀请-->
+												<span v-if="msg.inviteid" class="chat_sendcont_p" @click.stop="inviteShow(msg.inviteid)">
+													<em class="chat_sendcont_yqbox">发送了面试邀请<i class="chat_sendcont_yq"></i></em>
+												</span>
+												<!--语音-->
+												<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p">
+													<div  @click.stop="playVoice(msg.chatid,ck)">
+														<div class="yuyinboxright"><i :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+														<div>
+															<audio :id="'voice_'+msg.chatid">
+																<source :src="msg.voice" type="audio/mpeg">
+															</audio>
+														</div>
+													</div>	
+												</span>
+												<!--我发的图片-->
+												<span v-else-if="msg.image" class="chat_sendcont_p">
+													<img class="chat_photos" :src="msg.image">
+												</span>
+												
+												<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p">
+													<div class="spqxboxtwo" v-if="msg.content == 'closesp'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+													<div class="spqxboxtwo" v-else-if="msg.content == 'refused'"><i class="spqx2"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+													<div class="spqxboxtwo" v-else><i class="spqx2"></i>{{msg.content}}</div>
+												</div>
+												<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p"><img class="chat_photos" :src="msg.url"></span>
+
+												<span v-else class="chat_sendcont_p">
+													<span v-for="(cn, cnk) in msg.content" :key="cnk">
+														<!--表情-->
+														<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+														<!--文字-->
+														<span v-else-if="cn.t == 'char'">
+															<em>{{cn.n}}</em>
+														</span>
+													</span>
+												</span>
+												<div class="chat_sendcont_read">{{msg.read=='1'?'已读':'未读'}}</div>
+											</div>
+											<!--对方消息-->
+											<div v-else class="chat_other_say">
+												<!--头像-->
+												<div class="chat_other_pic"><img :src="msg.avatar"></div>
+												<!--面试邀请-->
+												<span v-if="msg.inviteid" class="chat_sendcont_p2" @click.stop="inviteShow(msg.inviteid)">
+													<em class="chat_sendcont_jsbox">发送了面试邀请<i class="chat_sendcont_jsyq"></i></em>
+												</span>
+												<!--语音-->
+												<span v-else-if="msg.msgtype == 'voice'" class="chat_sendcont_p2">
+													<div  @click="playVoice(msg.chatid,ck)">
+														<div class="yuyinbox"><i  :class="playMsgid== msg.chatid?'yuyinbox_onplay':'yuyinbox_wt'"></i>{{msg.voicelength}}</div>
+														<div>
+															<audio :id="'voice_'+msg.chatid">
+																<source :src="msg.voice" type="audio/mpeg">
+															</audio>
+														</div>
+														<div v-if="msg.voicestatus != 1" class="xxwd"></div>
+													</div>
+												</span>
+												<!--我收到的图片-->
+												<span v-else-if="msg.image" class="chat_sendcont_p2">
+													<img class="chat_photos" :src="msg.image">
+												</span>
+												<div v-else-if="msg.msgtype == 'spview'" class="chat_sendcont_p2">
+													<div class="spqxbox" v-if="msg.content == 'closesp'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已取消</div>
+													<div class="spqxbox" v-else-if="msg.content == 'refused'"><i class="spqx"></i>{{msg.fusertype != usertype ? '对方' : ''}}已拒绝</div>
+													<div class="spqxbox" v-else><i class="spqx"></i>{{msg.content}}</div>
+												</div>
+												<span v-else-if="msg.msgtype == 'map'" class="chat_sendcont_p2"><img class="chat_photos" :src="msg.url"></span>
+
+												<span v-else class="chat_sendcont_p2">
+													<span v-for="(cn, cnk) in msg.content" :key="cnk">
+														<!--表情-->
+														<img v-if="cn.t == 'emoji'" class="chat_bq_img" :src="cn.n">
+														<!--文字-->
+														<span v-else-if="cn.t == 'char'">
+															<em>{{cn.n}}</em>
+														</span>
+													</span>
+												</span>
+											</div>
+										</div>
+										<div v-else-if="msg.msgtype == 'ask'">
+											<div v-if="msg.mine"  class="chat_hdh">
+												<span><div class="chat_hdh_p">{{msg.asktext}}</div></span>
+											</div>
+											<div v-else class="chat_hhyq">
+												<div class="chat_hhyq_p chat_hhyq_pq">
+													<i :class="msg.asktype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.asktext}}
+												</div>
+												<div v-if="msg.askstatus == '1'" class="chat_hhyq_bth"><span class="wxyty">已同意</span></div>
+												<div v-if="msg.askstatus == '2'" class="chat_hhyq_bth"><span class="wxyty">已拒绝</span></div>
+												<div v-if="msg.askstatus == '3'" class="chat_hhyq_bth">
+													<div  @click="confirmAsk(msg.asktype, msg.chatid)" class="bh_bth bh_bthline">同意</div>
+													<span @click="refuseAsk(msg.asktype, msg.chatid)" class="bh_bth">拒绝</span>
+												</div>
+											</div>
+										</div>
+										<div v-else-if="msg.msgtype == 'confirm' && msg.askvalue" class="chat_hhyq">
+											<div class="chat_hhyq_p"><i :class="msg.confirmtype=='tel'?'chat_hhyq_icon':'chat_hhwx_icon'"></i>{{msg.askmsg}}{{msg.askvalue}}</div>
+											<div @click="copyMsg(msg.askvalue)"  class="chat_hhyq_bth">
+												<span class="">{{msg.confirmtype=='wx'?'复制微信号':'复制手机号'}}</span>
+											</div>
+										</div>
+										<div v-else-if="msg.msgtype == 'refuse' && msg.refusetext" class="chat_hdh">
+											<span><div class="chat_hdh_p">{{msg.refusetext}}</div></span>
+										</div>
+										<div v-else-if="(msg.msgtype == 'job' || msg.msgtype == 'adminjob') && msg.job" class="chat_yx_job" @click="toShow(msg.job.weburl)">
+											<span>
+												<div class="chat_yx_job_name">{{msg.job.name}}</div>
+												<span class="chat_yx_xz">{{msg.job.job_salary}}</span>
+												<div class="chat_yx_com_name">{{msg.job.com_name}}</div>
+												<div class="">
+													{{msg.job.job_city_one}}{{msg.job.job_city_two?'-'+msg.job.job_city_two:''}}
+													{{msg.job.job_exp?'.'+msg.job.job_exp+'经验':''}}
+													{{msg.job.job_edu?'.'+msg.job.job_edu+'学历':''}}
+												</div>
+												<div class="chat_yx_time" v-if="msg.newjob">{{msg.ctime}} {{msg.newjob_tip}}</div>
+											</span>
+										</div>
+										<div v-else-if="msg.msgtype == 'resume'" class="chat_userresume" @click="toShow(expect.weburl)">
+											<span>
+												<div class="chat_userresume_name">{{expect.uname}}<span class="chat_userresume_ys">{{expect.sex_n}},{{expect.age}}岁</span></div>
+												<div class="chat_userresume_info">{{expect.exp_n}} . {{expect.edu_n}} </div>
+												<div class="chat_userresume_want">期望职位 <span class="chat_userresume_wantjob">{{expect.name}}</span> </div>
+												<div class="chat_userresume_pic"><img :src="expect.photo"></div>
+											</span>
+										</div>
+									</li>
+								</ul>
+								
+							</div>
+							<!-- <div class="chatRemindCont">
+								<div class="chatRemindText">
+									<span>防骗提醒：{yun:}$config.sy_chat_warn{/yun}</span>
+								</div>
+								<div class="chatRemindClose">
+									<img src="{yun:}$config.sy_weburl{/yun}/app/template/chat/images/closeimg.png?v={yun:}$config.cachecode{/yun}" alt="">
+								</div>
+							</div> -->
+						</div>
+						<!--footer-->
+						<div class="chat_footer_box">
+							<div class="chat_footer_czk">
+
+								
+								
+								<div class="cc_left">
+									<iframe id="chat_iframe" name="chat_iframe" class="chat_iframe"></iframe>
+									<form id="imgform" target="chat_iframe" method="post"  enctype="multipart/form-data" action="{yun:}$config.sy_weburl{/yun}/index.php?m=chat&c=uploadImage">
+									
+								
+									<i id="usefulButton" onclick="UsefulTrigger();" class="cyy changyiong"> 
+										<span class="chat_icontipcyy">常用语</span>	
+									</i>
+									<i id="face" class="sendbq sendbq_i">
+										<span class="chat_icontipbq">表情</span>	
+									</i>
+								
+										<i id="zdconButton" onclick="zdconTrigger();" class="zdh changyiong" class="cc_right" v-if="usertype==2 && totype==1 && is_zdrat=='1'">
+											<span class="chat_icontipcyy" style="width:70px;left:-20px;">自动回复</span>
+											<span class="chat_newgn"></span>
+										</i>
+								
+									<div id="commonly" class="showbq"></div>
+									<span class="chat_footer_czk_tj">
+										<input type="file" name="file" accept="image/*" onchange="upImage(this)" value="" class="chat_footer_czk_tj_bth">
+										<span class="chat_icontip">发送图片</span>									
+									</span>
+									</form>
+									<div id="usefulBox" class="cyy_box none">
+										<div class="cyy_box_tit">
+											<span class="cyy_box_titname">常用语</span> 
+											<a href="javascript:void(0);" onclick="usefulSetShow();" class="cyy_box_titset">设置</a>	
+										</div>
+										<div id="usefulListBox" class="cyy_show">
+											<div v-if="usefullist.length>0" v-for="(ul, ulk) in usefullist" :key="ulk" class="cyy_box_list" @click="sendUseful(ul.content)">
+												<span class="cyy_box_name">{{ul.content}}</span>  
+												<a href="javascript:void(0);" class="cyy_box_fs"> 发送</a>
+											</div>
+											<div v-else class="nocyy">目前没有添加常用语</div>
+										</div>
+									</div>
+
+									<div id="zdconBox" class="cyy_box none" v-if="usertype==2 && totype==1 && is_zdrat=='1'">
+										<div class="cyy_box_tit boxTitItname">
+											<span class="cyy_box_titname">自动回复</span> 
+											<div class="titnameAdds">
+												<div class="titnameFlst">
+													<!-- <a  href="javascript:void(0);" style="color: #3b7cff;" onclick="zdSwitch()">{{zd_switch=='1'?'点击停用':'点击启用'}}</a> -->
+													<a  href="javascript:void(0);" style="color: #3b7cff;" onclick="zdSwitch()"> 
+														<img v-if="zd_switch==1" src="{yun:}$config.sy_weburl{/yun}/app/template/chat/images/annie1.png?v={yun:}$config.cachecode{/yun}" alt=""> 
+														<img v-else src="{yun:}$config.sy_weburl{/yun}/app/template/chat/images/annie2.png?v={yun:}$config.cachecode{/yun}" alt=""> 
+														<span>{{zd_switch=='1'?'启用':'关闭'}}</span>
+													</a>
+													
+												</div>
+												<a href="javascript:void(0);" class="titnamAksi" style="color: #3b7cff;" @click="editZdcon()">
+													<img src="{yun:}$config.sy_weburl{/yun}/app/template/chat/images/ddimg.png?v={yun:}$config.cachecode{/yun}" alt="">
+													<span>添加</span>
+												</a>
+												
+											</div>
+											
+										</div>
+										<div id="zdconListBox" class="cyy_show">
+											<div v-if="zdconlist.length>0" >
+												<div v-for="(ul, ulk) in zdconlist" :key="ulk" class="cyy_box_list">
+													<span class="cyy_box_name">{{ul.content}}</span>  
+													<div class="deledesd">
+														<a href="javascript:void(0);" class="cyy_box_one" @click="editZdcon(ulk)">修改</a>
+														<a href="javascript:void(0);" class="cyy_box_fs" @click="delZdcon(ulk)">删除</a>
+													</div>
+													
+												</div>
+											</div>
+											<div v-else class="nocyy">目前没有添加自动回复，<a href="javascript:void(0);" style="color: #3b7cff;" @click="editZdcon()">点击添加</a></div>
+										</div>
+									</div>
+								</div>
+								
+								<div v-if="adminChat=='' && totype!=9" id="single_foot" class="chat_box_right_cz">
+									<span v-if="config.sy_chat_exphone!='1'">
+										<span @click="sendAsk('tel');" class="chat_box_right_cz_a">
+											<div id="header_hdh" :class="cantel=='3'?'chat_header_hdh_grey':'chat_header_hdh'"><i class="header_czicon header_hdhicon"></i>
+												<div id="header_hdhtxt"  class="hdhtipicon">{{cantel=='3'?'请求电话中':'互换电话'}}</div>
+											</div>
+										</span>
+										<span @click="sendAsk('wx');" class="chat_box_right_cz_a">
+											<div id="header_hwx" :class="canwx=='3'?'chat_header_hwx_grey':'chat_header_hwx'"><i class="header_czicon header_hwxicon"></i>
+												<div id="header_hwxtxt" class="hdhtipicon">{{canwx=='3'?'请求微信中':'互换微信'}}</div>
+											</div>
+										</span>
+									</span>
+									
+									<span v-if="usertype=='2'">	
+										<span v-if="config.sy_spview_web=='1'" id="spview" class="chat_box_right_cz_a"><i class="header_czicon header_spmsicon"></i><span class="header_cztip">视频面试</span></span>
+											
+										<span id="inviteCheck" @click="inviteResumeClick" uid='{yun:}$smarty.get.id{/yun}' class="chat_box_right_cz_a"><i class="header_czicon header_ymsicon"></i><span class="header_cztip">{{inviteNum>0?'已邀请':'面试邀请'}}</span></span>
+									</span>
+									
+									<span v-if="usertype=='1'" id="sendExpcet" onclick="sendExpcet();" class="chat_box_right_cz_a"><i class="header_czicon header_msicon"></i><span class="header_cztip">发简历</span></span>
+									
+									<span id="sendJob" onclick="sendJob();" class="chat_box_right_cz_a"><i class="header_czicon header_fbicon"></i><span class="header_cztip">发职位</span></span>
+									<span class="chat_box_right_cz_a buganxinquChatboxs" onmouseover="showlastjob()" v-if="usertype=='2'">
+										<i class="header_czicon header_mapsicon"></i>
+										<div v-if="lastjobshow && lastjob">
+											<div class="buganxinquFlwex">
+												<div class="buganxinqTite">
+													<span>发送工作地址</span>
+													<b>{{lastjob.job_address}}</b>
+												</div>
+												<div class="buganxinqButns">
+													<a href="javascript:void(0);" onclick="sendJobAddress();">发送</a>
+												</div>
+											</div>
+										</div>
+									</span>
+									<span id="nochat" onclick="nochat();" class="chat_box_right_cz_a"><i class="header_czicon header_bzhicon" title="不感兴趣"></i><span class="header_cztip">不感兴趣</span></span>
+								</div>
+								
+							</div>
+							<div class="chat_footer_box_c">
+								<textarea id="send_content" class="chat_footer_textarea" placeholder="请输入内容" oninput="checkSend()"></textarea>
+								<div class="chat_footer_bth_c">
+									<span class="chat_footer_bth_tip">按Enter可以发送</span>
+									<input id="send" type="submit" value="发送" class="chat_footer_bth">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="copytextid" class="copytext none" data-clipboard-text="" data-clipboard-action="copy"></div>
+					<!--无内容 提示-->
+					<div id="cbr_n" class="chattip">提示：与您进行过沟通过信息的都会在左侧列表中显示</div>
+                </div>
+
+				{yun:}if $usertype == 2{/yun}
+				<div class="chatBoxShows" v-if="expectInfo && expectInfo.uid">
+					<div class="chatBoxShowScolls">
+						<div class="chatBoxShowTops">
+							<div class="chatBoxShowTopFlex">
+								<div class="chatBoxShowImage">
+									<img :src="expectInfo.photo">
+								</div>
+								<div class="chatBoxShowTopinfo">
+									<h3>{{expectInfo.username_n}}</h3>
+									<span class="infod">{{expectInfo.user_exp}}经验 · {{expectInfo.useredu}}学历 · {{expectInfo.age}}岁</span>
+								</div>
+							</div>
+							<div class="chatBoxShowTopJies">
+								<span>{{expectInfo.description}}</span>
+							</div>
+						</div>
+						<div class="chatBoxShowDivs">
+							<div class="chatBoxShowTite">
+								<span>求职意向</span>
+							</div>
+							<div class="chatBoxShowSpan">
+								<span class="spanjine">{{expectInfo.customjob}} · {{expectInfo.cityname}} · {{expectInfo.report}} · {{expectInfo.type}} · {{expectInfo.jobstatus}}</span>
+								<span class="spanzhiw">{{expectInfo.jobname}}</span>
+								<span class="spanmony">{{expectInfo.salary}}</span>
+							</div>
+						</div>
+						<div v-if="expectInfo.user_work && expectInfo.user_work.length > 0" class="chatBoxShowDivs">
+							<div class="chatBoxShowTite">
+								<span>工作经历</span>
+							</div>
+							<div v-for="work in expectInfo.user_work" class="chatBoxShowSpan">
+								<span class="spanjine">{{work.name}}&nbsp;&nbsp;&nbsp;{{work.title}}</span>
+								<span class="spantime">{{work.sdate_n}} ~ {{work.edate_n}}</span>
+								<span class="spanzhiw">{{work.content}}</span>
+							</div>
+						</div>
+						<div v-if="expectInfo.user_edu && expectInfo.user_edu.length > 0" class="chatBoxShowDivs">
+							<div class="chatBoxShowTite">
+								<span>教育经历</span>
+							</div>
+							<div v-for="edu in expectInfo.user_edu" class="chatBoxShowSpan">
+								<span class="spanjine">{{edu.name}}</span>
+								<span class="spantime">{{edu.sdate_n}} ~ {{edu.edate_n}}</span>
+								<span class="spanzhiw">最高学历：{{edu.education_n}}   所学专业：{{edu.specialty}}</span>
+							</div>
+						</div>
+						<div v-if="expectInfo.user_tra && expectInfo.user_tra.length > 0" class="chatBoxShowDivs">
+							<div class="chatBoxShowTite">
+								<span>培训经历</span>
+							</div>
+							<div v-for="tra in expectInfo.user_tra" class="chatBoxShowSpan">
+								<span class="spanjine">{{tra.name}}&nbsp;&nbsp;&nbsp;培训方向： {{tra.title}}</span>
+								<span class="spantime">{{tra.sdate_n}} ~ {{tra.edate_n}}</span>
+								<span class="spanzhiw">{{tra.content}}</span>
+							</div>
+						</div>
+						<div v-if="expectInfo.user_xm && expectInfo.user_xm.length > 0" class="chatBoxShowDivs">
+							<div class="chatBoxShowTite">
+								<span>项目经历</span>
+							</div>
+							<div v-for="xm in expectInfo.user_xm" class="chatBoxShowSpan">
+								<span class="spanjine">{{xm.name}}&nbsp;&nbsp;&nbsp;{{xm.title}}</span>
+								<span class="spantime">{{xm.sdate_n}} ~ {{xm.edate_n}}</span>
+								<span class="spanzhiw">{{xm.content}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="watch_jl"  @click="com_lookresume_check(expectInfo.id,expectInfo.status,expectInfo.state)" >查看简历</div>
+				</div>
+				{yun:}/if{/yun}
+			</div>
+			
+		</div>
+	</div>
+	
+	<!--弹出职位-->
+	<div id="joblist" class="none">
+		<div id="bg" style="display:block"></div>
+		<div class="chatjob_box">
+			<div class="chatjob_box_tit"><span class="chatjob_box_tit_name">选职位</span><span id="closeJob" class="chatjob_box_tit_close"></span></div>
+			<div class="chatjob_box_c">
+				<div id="chatjob_list" class="chatjob_box_job">
+					<div v-for="(job, jk) in joblist" :key="jk" class="chatjob_list">
+						<div class="chatjob_name">{{job.name}}</div>
+						<div class="chatjob_xz">{{job.job_salary}}</div>
+						<div class="chatjob_info">{{job.job_city_one}}
+							<span v-if="job.job_exp && job.job_exp!=''"><span class="chatjob_info_line">|</span>{{job.job_exp}}经验</span>
+							<span v-if="job.job_edu && job.job_edu!=''"><span class="chatjob_info_line">|</span>{{job.job_edu}}学历</span>
+						</div>
+						<span class="chatjob_bth"  @click="jobShow(job.id)">发送</span>
+					</div>
+					<div  v-if="joblist.length==0" class="chat_nojob">~ 亲 , 暂无可选职位哦！</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--填写微信号/手机号-->
+	<div id="hhshow" class="none">
+		<div id="bg" style="display:block"></div>
+		<div  class="wx_tck_box">
+			<div class="wx_tck_boxall">
+			<div id="wxdiv" class="">
+				<div class="wx_tck_boxtit">互换微信</div>
+
+				<div class="wx_tck_boxall_text">
+					<input id="wxinput" type="text" value="" placeholder="请输入微信号" class="wx_tck_boxall_input">
+				</div>
+			</div>
+			<div id="teldiv" class="none">
+				<div class="wx_tck_boxtit">互换电话</div>
+				<div class="wx_tck_boxall_text">
+					<input id="telinput" type="text" value="" placeholder="请输入手机号" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" class="wx_tck_boxall_input">
+				</div>
+			</div>
+			<input id="sendtype" type="hidden" value="">
+			<input id="hhtype" type="hidden" value="">
+			<input id="chatlogid" type="hidden" value="">
+			<div class="wx_tck_boxall_bth">
+				<a href="javascript:void(0)" onclick="savehh();" class="wx_tck_boxall_bth_a">确认</a>
+				<a href="javascript:void(0)" onclick="$('#hhshow').hide();" class="wx_tck_boxall_no">聊聊再说~</a>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<input v-if="expect" type="hidden" name="eid" id="eid" :value="expect.id" />
+	
+	<div id="zwf" class="none">【&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;】</div>
+	<!--弹出职常用语设置-->
+	<div class="commonWords">
+		<div id="usefulSetBox" style=" display: none;">
+			<div class="cyy_setbox">
+				<div class="cyy_setcont">
+
+					<!--问候语-->
+					<div v-if="greeting!=''" id="greetingSet" class="why_box whyBoxOne"><!--需要在一行内显示-->
+						<div class="whyBoxOneTitle">
+							<span>问候语</span>
+						</div>
+						<div class="cyy_set_list">
+							<span id="greeting_str"> <i>.</i> {{greeting}}</span>
+							<span class="cyy_set_list_cz">
+								<a id="greetingedit" href="javascript:void(0);" onclick="editGreeting()">编辑</a>
+								
+								<a id="greetingtext" href="javascript:void(0);" onclick="greetingSwitch()">{{greeting_switch=='1'?'关闭':'开启'}}</a>
+							</span>
+						</div>
+					</div>
+					<!--问候语end-->
+					<div class="cyySetshowTwo">
+						<div class="cyySetshowTwoTitle">
+							<span>常用语</span>
+						</div>
+						<div id="usefulSetList" class="cyy_setshow">
+							<div v-if="usefullist.length>0" v-for="(ul, ulk) in usefullist" :key="ulk" class="cyy_set_list"> {{ul.content}}
+								<span class="cyy_set_list_cz" v-if="ul.iseidt!='1'">
+									<a href="javascript:void(0);" @click="delUseful(ulk);">删除</a>
+									<a href="javascript:void(0);" @click="editUseful(ulk)">编辑</a>
+								</span>
+							</div>
+							<div v-else class="nocyy">目前没有添加常用语</div>
+						</div>
+					</div>
+				
+					<div class="cyy_set_tj cyySetOneAdd">
+						<a href="javascript:void(0);" @click="editUseful();" class="cyy_set_tj_a">+添加常用语</a>
+					</div>
+
+					<div id="usefulAddBox" class="" style="display: none;">
+						<div class="cyy_set_tip">请不要填写手机、QQ、微信等联系方式或广告信息，否则系统将封禁您的账号！</div>
+						<div class="cyy_set_textarea">
+							<textarea id="usefulcon"></textarea>
+						</div>
+						<div class="cyy_set_bth">
+							<input type="button" onclick="usefulSave();" value="确认" class="cyy_set_bth_a"> 
+							<input type="button" onclick="editUsefulClose();" value="取消"  class="cyy_set_bth_b">
+						</div>
+						<input type="hidden" id="usefulid" name="usefulid" value=""> 
+						<input type="hidden" id="usefultype" name="usefultype" value=""> 
+			 		</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--弹出职常用语设置 end-->
+	<!--编辑自动回复-->
+	<div class="commonWords">
+		<div id="zdconSetBox" style=" display: none;">
+			<div class="cyy_setbox">
+				<div class="cyy_setcont">
+					<div class="automChat">
+						<div class="cyy_set_tip"> 当您离线时，求职者希望与您在线沟通，系统将按照设置自动回复</div>
+						<div class="cyy_set_textarea">
+							回复内容<textarea id="zdconcon"></textarea>
+						</div>
+						<div style="overflow: hidden; padding: 0 0 15px 0; font-size: 12px; color: #f30;">
+							<span>请不要填写手机、QQ、微信等联系方式或广告信息，否则系统将封禁您的账号！</span>
+						</div>
+						<div class="cyy_set_textarea">
+							关键字（当求职者发起的沟通咨询中含您设置的关键词，系统智能回复当前内容）<textarea id="zdconkeyword"></textarea>多个关键字请用','号分割
+						</div>
+						<div class="cyy_set_textarea automChatPaix">
+							排序<input type="text" id="zdconsort" name="zdconsort" placeholder="0" value="" />数字越大优先度越高
+						</div>
+						<div class="cyy_set_textarea" style="display: flex; align-items: center;">
+							<input id='zdcontype' name="zdcontype" type="checkbox"> <span style="padding-left: 0.28rem;">设为默认回复</span>
+						</div>
+						<div class="cyy_set_bth">
+							<input type="button" onclick="zdconSave();" value="确认" class="cyy_set_bth_a"> 
+							<input type="button" onclick="editZdconClose();" value="取消"  class="cyy_set_bth_b">
+						</div>
+						<input type="hidden" id="zdconid" name="zdconid" value=""> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--编辑自动回复end-->
+</div>
+	
+    <style>
+	
+	.m_cont_inner{ background:none;}
+	.m_inner_zuob{ display:none;}
+	</style>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/wap/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+	<script type="text/javascript">
+		var get_id = "{yun:}$smarty.get.id{/yun}",
+			get_type = "{yun:}$smarty.get.type{/yun}",
+
+			socketUrl = "{yun:}$config.sy_chat_weburl{/yun}",
+			weburl = "{yun:}$config.sy_weburl{/yun}",
+			jid = '{yun:}$smarty.get.jid{/yun}',
+			eid = '{yun:}$smarty.get.eid{/yun}',
+			toid = "{yun:}$smarty.get.id{/yun}",
+			totype = "{yun:}$smarty.get.type{/yun}",
+			
+			inviteid = '{yun:}$smarty.get.invite{/yun}',
+			mine = {id: '{yun:}$uid{/yun}',usertype: '{yun:}$usertype{/yun}'},
+			chat_name = '{yun:}$config.sy_chat_name{/yun}',
+
+			tel = "",
+			wxid = "",
+
+			usertype = '{yun:}$usertype{/yun}',
+			uid 	= '{yun:}$uid{/yun}',
+			
+			sy_chat_exphone = '{yun:}$config.sy_chat_exphone{/yun}',
+			sy_spview_web = '{yun:}$config.sy_spview_web{/yun}',
+			
+			recalltime = parseInt('{yun:}$config.sy_chat_recalltime{/yun}');
+
+		window.localStorage.setItem("closeChatPage",'close');
+
+		window.addEventListener("storage", function(e) {
+	
+			if (e.key == 'closeChatPage' && e.newValue == 'close') {
+				window.close();
+			}
+		});
+
+		window.localStorage.setItem("closeChatPage",'open');
+		
+	</script>
+	<script src="{yun:}$config.sy_weburl{/yun}/js/clipboard/clipboard.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$config.sy_weburl{/yun}/app/template/chat/yunliao/websocket.js?v={yun:}$config.cachecode{/yun}"></script>
+
+	<!-- <script> 
+		$(document).ready(function(){
+		  $("#usefulButton").hover(function(){
+		    $(".chat_icontipcyy").animate({
+		      height:'toggle'
+		    });
+		  });
+		});
+	</script> -->
+
+{yun:}if $usertype == 1{/yun}
+	{yun:}include file="$userstyle/footer.htm"{/yun}
+{yun:}elseif $usertype == 2{/yun}
+	{yun:}include file="$comstyle/yqms.htm"{/yun}
+	{yun:}include file="$comstyle/footer.htm"{/yun}
+{yun:}elseif $usertype == 3{/yun}
+	{yun:}include file="$lietoustyle/footer.htm"{/yun} 
+{yun:}/if{/yun}		 

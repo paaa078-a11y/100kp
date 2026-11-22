@@ -1,0 +1,187 @@
+{yun:}include file="$wapstyle/header.htm"{/yun}
+<script src="{yun:}$wap_style{/yun}/js/flexible.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$wap_style{/yun}/js/vue.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config_wapdomain{/yun}/js/vant/lib/vant.min.js?v={yun:}$config.cachecode{/yun}"></script>
+<script src="{yun:}$config_wapdomain{/yun}/js/vant/phpyun_vant.js?v={yun:}$config.cachecode{/yun}"></script>
+<link rel="stylesheet" href="{yun:}$wap_style{/yun}/css/manager.css?v={yun:}$config.cachecode{/yun}" type="text/css"/>
+<script src="{yun:}$config.sy_weburl{/yun}/js/clipboard/clipboard.min.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+<style>
+    .recbox {max-width: 740px;margin: auto;overflow-x: hidden;flex-direction: column; width: 100%;height: 100%;}
+    .top_return {max-width: 740px;}
+    .tj_item_top{display: flex;justify-content: space-between;}
+    .price{
+        font-size: 0.48rem;
+        font-weight: bold;
+        color: #F0093A;
+    }
+    .tj_yq{margin-top: 0.2066rem;}
+</style>
+<body>
+    <div id="recVue" class="none recbox" style="overflow-x: hidden;">
+        <!-- <div class="manager"> -->
+            <div class="manager_content">
+                <div class="manager_top">
+                    <div class="card-wrap">
+                        <div class="top_return">
+                            <div>推荐职位</div>
+                        </div>
+                        <div class="card-box">
+                            <div class="card-info">
+                                <div class="info_top">
+                                    <div class="top_left">
+                                        <img class="headpic" :src="Info.crm_photo" />
+                                        <div class="peo_info">
+                                            <div class="info_name">{{Info.crm_name}}</div>
+                                            <div class="info_gw">金牌招聘顾问</div>
+                                        </div>
+                                    </div>
+                                    <div class="top_right" @click="wxBoxShow = true;" v-if="Info.w_show == 1">加我微信</div>
+                                </div>
+                                <div class="info_bottom">
+                                    <div class="bottom_item">
+                                        <div class="bottom_num">{{Info.showNum}}</div>
+                                        <div class="bottom_info">在招职位</div>
+                                    </div>
+                                    <div class="bottom_item">
+                                        <div class="bottom_num">{{Info.time_n}}</div>
+                                        <div class="bottom_info">岗位已更新</div>
+                                    </div>
+                                    <div class="bottom_item">
+                                        <div class="bottom_num">{{Info.hits}}</div>
+                                        <div class="bottom_info">最近访客</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 电话地址 -->
+                <div class="content_sec">
+                    <a class="sec_item" :href="'tel:'+Info.crm_phone">
+                        <div class="sec_top"><img class="sec_img" src="{yun:}$wap_style{/yun}/images/manager_phone.png" mode="">拨打电话</div>
+                        <div class="sec_bottom">{{Info.crm_phone}}</div>
+                    </a>
+                    <div class="sec_item" style="flex: 1;margin-left: 8px;">
+                        <div class="sec_top"><img class="sec_img" src="{yun:}$wap_style{/yun}/images/manager_address.png" mode="">公司地址</div>
+                        <div class="sec_bottom">{{Info.crm_address}}</div>
+                    </div>
+                </div>
+                <!-- 广告 -->
+                {yun:}adlist classid=517 item="lunbo" key=key{/yun}
+                <div class="manager_adv">
+                    {yun:}$lunbo.html{/yun}
+                </div>
+                {yun:}/adlist{/yun}
+                <!-- 推荐职位 -->
+                <div class="tjzw">
+                    <div class="tj_title">
+                        <div class="title_left">推荐职位</div>
+                        <!--<div class="title_right">我要招人<img class="tj_more" src="{yun:}$wap_style{/yun}/images/manager_more.png" mode=""></div>-->
+                    </div>
+                    <div class="tj_item" v-for="(item, k) in jobList" :key="item.id">
+                        <a :href="item.url">
+                            <div class="tj_item_top">
+                                <div class="tj_name">{{item.name}}</div>
+                                <div class="price">{{item.salary_n}}</div>
+                            </div>
+                            <div class="tj_yq"><span style="color: rgb(20 93 255 / 75%); display: block;">{{item.com_name}}</span></div>
+                            <div class="tj_yq">{{item.cityStr}} | {{item.exp_n}}经验 | {{item.edu_n}}学历</div>
+                            <div class="tj_tag"><div class="" v-for="(wel, wk) in item.welfare_n" :key="wk">{{wel}}</div></div>
+                            
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="manager_foot" id="shareClick">
+                <div class="foot_left">
+                    <img class="foot_share" src="{yun:}$wap_style{/yun}/images/manager_share.png" mode="">
+                    分享给需要求职的朋友
+                </div>
+                <div class="foot_right">
+                    分享给朋友
+                </div>
+            </div>
+        <!-- </div> -->
+        <div class="detail_mask" v-show="wxBoxShow">
+            <div class="mask_box">
+                <div class="close" @click="wxBoxShow = false">
+                    <img src="{yun:}$wap_style{/yun}/images/mask_close.png" alt="">
+                </div>
+                <div class="mask_title">
+                    加微信直接聊
+                </div>
+                <div class="mask_imgbox" v-if="Info.crm_ewm">
+                    <img :src="Info.crm_ewm" alt="">
+                </div>
+                <div class="mask_tipbox">
+                    <div class="mask_tip" v-if="Info.crm_ewm">
+                        长按保存二维码
+                    </div>
+                    <div class="vx_num" v-if="Info.crm_wx">
+                        微信号：{{Info.crm_wx}}
+                    </div>
+                </div>
+                <div class="mask_btn copyWx" data-clipboard-action="copy" :data-clipboard-text="Info.crm_wx" v-if="Info.crm_wx" >
+                    复制微信号
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var id = '{yun:}$id{/yun}';
+    var recVue = new Vue({
+        el: '#recVue',
+        data: {
+            id: id ? id: '',
+            jobList: [],
+            Info: [],
+            wxBoxShow: false
+        },
+        created() {
+            $("#recVue").css('display', 'flex');
+            this.getList();
+        },
+        methods: {
+            getList: function () {
+                var that = this;
+                var paramer = {
+                    type: 2,
+                    id: that.id
+                };
+                $.post('index.php?m=upush', paramer, function (res) {
+                    that.loading = false;
+                    that.Info = res.data.info;
+                    var newList = res.data.list;
+                    if (newList.length > 0) {
+                        newList.forEach(item => {
+                            that.jobList.push(item);
+                        });
+                    }
+                }, 'json');
+            }
+        }
+    })
+    $(function () {
+        var clipboard = new ClipboardJS(".copyWx");
+        clipboard.on('success', function(e) {
+            showToast('复制成功！');
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+        });
+    });
+
+    var config = {
+        url: '{yun:}$share_url{/yun}',
+        title: '{yun:}$title{/yun}',
+        desc: '{yun:}$description{/yun}',
+        img: '{yun:}$share_logo{/yun}',
+        img_title: '职位推广',
+        from: '{yun:}$config.sy_webname{/yun}'
+    };
+</script>
+{yun:}include file="$wapstyle/nativeshare.htm"{/yun}
+</html>

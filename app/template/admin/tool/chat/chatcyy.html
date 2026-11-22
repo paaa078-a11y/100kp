@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="moduapp" class="moduleDome">
+        <div class="setDomeAll setDomeInte">
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="用户常用语" name="first" lazy>
+                    <chatcyy></chatcyy>
+                </el-tab-pane>
+                <el-tab-pane label="自定义常用语" name="second" lazy>
+                    <chatzdy></chatzdy>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+    </div>
+    <!-- script -->
+    <script>
+    const custoapp = new Vue({
+        el: '#moduapp',
+        data: function() {
+            return {
+                activeName: 'first'
+            }
+        },
+        components: {
+            'chatcyy': httpVueLoader('./component/chatcyy.vue'),
+            'chatzdy': httpVueLoader('./component/chatzdy.vue'),
+        },
+        methods: {
+
+        }
+    });
+    </script>
+</body>
+
+</html>

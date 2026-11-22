@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<link href="images/reset.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/system.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="images/table_form.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="{yun:}$style{/yun}/style/job.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+		<script src="{yun:}$config.sy_weburl{/yun}/js/jquery-1.8.0.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="js/admin_public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet">
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/phpyun_layer.js?v={yun:}$config.cachecode{/yun}"></script>
+		<link rel="stylesheet" href="{yun:}$style{/yun}/style/newclass.public.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
+		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/formSelects-v4.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+
+		<script src="{yun:}$config.sy_weburl{/yun}/data/plus/job.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/data/plus/jobparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+		<script src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/data/plus/cityparent.cache.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/newclass.public.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/layui/formSelects-v4.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script>var weburl = '{yun:}$config.sy_weburl{/yun}'</script>
+
+		<title>后台管理</title>
+	</head>
+	<body class="body_ifm">
+		<div class="infoboxp">
+			<div class="tty-tishi_top">
+			<div class="clear"></div>
+				<iframe id="supportiframe" name="supportiframe" onload="returnmessage('supportiframe');" style="display:none"></iframe>
+				<form id="spform" class="layui-form" name="myform" target="supportiframe" action="index.php?m=admin_special_job&c=save" method="post" encType="multipart/form-data">
+					<table width="100%" class="table_form" style="background:#fff;">
+						<tr class="admin_table_trbg">
+							<th colspan="2" class="admin_bold_box">
+								{yun:}if $row{/yun}
+								<div class="admin_bold">编辑职位专题</div>
+								{yun:}else{/yun}
+								<div class="admin_bold">添加职位专题</div>
+								{yun:}/if{/yun}
+							</th>
+						</tr>
+						<tr>
+							<th width="150">专题名称：</th>
+							<td><input class="layui-input t_w480" type="text" id="title" name="title" size="40" value="{yun:}$row.title{/yun}" /></td>
+						</tr>
+						<tr>
+							<th width="150">副标题：</th>
+							<td><input class="layui-input t_w480" type="text" id="sub_title" name="sub_title" size="40" value="{yun:}$row.sub_title{/yun}" /></td>
+						</tr>
+						<tr>
+							<th>是否启用：</th>
+							<td>
+								<div class="layui-input-block">
+									<input type="radio" name="display" value="1" title="开启" {yun:}if $row.display=='1' ||$row.display=="" {/yun}checked{yun:}/if{/yun}>
+									<input type="radio" name="display" value="0" title="关闭" {yun:}if $row.display=='0' {/yun}checked{yun:}/if{/yun}>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>是否推广：</th>
+							<td>
+								<div class="layui-input-block">
+									<input type="radio" name="tuiguang" value="1" title="开启" {yun:}if $row.tuiguang=='1' ||$row.tuiguang=="" {/yun}checked{yun:}/if{/yun}>
+									<input type="radio" name="tuiguang" value="0" title="关闭" {yun:}if $row.tuiguang=='0' {/yun}checked{yun:}/if{/yun}>
+									<span class="admin_web_tip" style="margin-left: 10px;position: absolute;margin-top: 4px;">开启推广，首页和搜索才展示；</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>职位方式：</th>
+							<td>
+								<div class="layui-input-block">
+									<input type="radio" lay-filter="addjobtype" name="type" value="1" title="手动增加职位" {yun:}if $row.type=='1' ||$row.type=="" {/yun}checked{yun:}/if{/yun}>
+									<input type="radio" lay-filter="addjobtype" name="type" value="2" title="自动搜索职位" {yun:}if $row.type=='2' {/yun}checked{yun:}/if{/yun}>
+								</div>
+							</td>
+						</tr>
+		                <tr class="tp2Show" {yun:}if $row.type == 2{/yun}{yun:}else{/yun}style="display: none;"{yun:}/if{/yun}>
+		                    <th>职位推广：</th>
+		                    <td>
+		                        <div class="compaBenefits layui-form-item">
+		                            <div class="layui-input-block">
+		                                <input type="checkbox" {yun:}if $row.is_zhiding==1{/yun}checked{yun:}/if{/yun} value="1" lay-skin="primary" name="is_zhiding" title="置顶" />
+		                                <input type="checkbox" {yun:}if $row.is_tuijian==1{/yun}checked{yun:}/if{/yun} value="1" lay-skin="primary" name="is_tuijian" title="推荐" />
+		                                <input type="checkbox" {yun:}if $row.is_jinji==1{/yun}checked{yun:}/if{/yun} value="1" lay-skin="primary" name="is_jinji" title="紧急" />
+		                            </div>
+		                        </div>
+		                    </td>
+		                </tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th width="150">更新频率：</th>
+							<td>
+								<div style="display:inline-block;">
+									<input id="refresh_minutes" class="layui-input t_w480" type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" id="refresh_minutes" name="refresh_minutes" size="40" value="{yun:}$row.refresh_minutes{/yun}" />
+								</div>
+								<div style="display:inline-block;">分钟</div>
+							</td>
+						</tr>
+
+
+						<!-- 新添加 -->
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th>公司福利：</th>
+							<td>
+								<div class="compaBenefits layui-form-item">
+									<!-- {yun:}foreach $comdata.job_welfare item=v{/yun}
+									<div class="layui-input-block"><input type="checkbox" lay-skin="primary" {yun:}if in_array($v, $row.welfare_arr){/yun}checked{yun:}/if{/yun} value="{yun:}$v{/yun}" name="welfare[]" />{yun:}$comclass_name[$v]{/yun}</div>
+									{yun:}/foreach{/yun} -->
+
+									<div class="layui-input-block">
+								      	{yun:}foreach $comdata.job_welfare item=v{/yun}
+										<input type="checkbox" {yun:}if in_array($v, $row.welfare_arr){/yun}checked{yun:}/if{/yun} value="{yun:}$v{/yun}" lay-skin="primary" name="welfare[]" title="{yun:}$comclass_name[$v]{/yun}" />
+										{yun:}/foreach{/yun}
+								    </div>
+								</div>
+							</td>
+						</tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th>公司行业：</th>
+							<td>
+								<div class="compaBenefits layui-form-item">
+									<!-- {yun:}foreach from=$industry_index item=v key=key{/yun}
+									<div class="layui-input-block"><input type="checkbox" lay-skin="primary" {yun:}if in_array($v, $row.hy_arr){/yun}checked{yun:}/if{/yun} name="hy[]" value="{yun:}$v{/yun}"/>{yun:}$industry_name[$v]{/yun}</div>
+									{yun:}/foreach{/yun} -->
+
+
+									<div class="layui-input-block">
+								      	{yun:}foreach from=$industry_index item=v key=key{/yun}
+										<input type="checkbox" {yun:}if in_array($v, $row.hy_arr){/yun}checked{yun:}/if{/yun} value="{yun:}$v{/yun}" lay-skin="primary" name="hy[]" title="{yun:}$industry_name[$v]{/yun}" />
+										{yun:}/foreach{/yun}
+								    </div>
+								</div>
+							</td>
+						</tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th>其它要求：</th>
+							<td>
+								<div class="compaBenOther">
+									<div class="compaOtherList">
+										<h3 class="sel_edu">{yun:}if $row.edu{/yun}{yun:}$comclass_name[$row.edu]{/yun}{yun:}else{/yun}学历要求{yun:}/if{/yun}</h3>
+										<div class="compaOtherCont">
+											<input id="edu" type="hidden" name="edu" value="{yun:}$row.edu{/yun}">
+											<ul>
+												{yun:}foreach $comdata.job_edu item=v{/yun}
+												<li class="edu_li" data-id="{yun:}$v{/yun}" data-name="{yun:}$comclass_name[$v]{/yun}">
+													<span>{yun:}$comclass_name[$v]{/yun}</span>
+												</li>
+												{yun:}/foreach{/yun}
+											</ul>
+										</div>
+									</div>
+									<div class="compaOtherList">
+										<h3 class="sel_exp">{yun:}if $row.exp{/yun}{yun:}$comclass_name[$row.exp]{/yun}{yun:}else{/yun}经验要求{yun:}/if{/yun}</h3>
+										<div class="compaOtherCont">
+											<input id="exp" type="hidden" name="exp" value="{yun:}$row.exp{/yun}">
+											<ul>
+												{yun:}foreach $comdata.job_exp item=v{/yun}
+												<li class="exp_li" data-id="{yun:}$v{/yun}" data-name="{yun:}$comclass_name[$v]{/yun}">
+													<span>{yun:}$comclass_name[$v]{/yun}</span>
+												</li>
+												{yun:}/foreach{/yun}
+											</ul>
+										</div>
+									</div>
+									<div class="compaOtherList">
+										<h3 class="sel_sex">{yun:}if $row.sex{/yun}{yun:}$com_sex[$row.sex]{/yun}{yun:}else{/yun}性别要求{yun:}/if{/yun}</h3>
+										<div class="compaOtherCont">
+											<input id="sex" type="hidden" name="sex" value="{yun:}$row.sex{/yun}">
+											<ul>
+												{yun:}foreach $com_sex key=j item=v{/yun}
+												<li class="sex_li" data-id="{yun:}$j{/yun}" data-name="{yun:}$v{/yun}">
+													<span>{yun:}$v{/yun}</span>
+												</li>
+												{yun:}/foreach{/yun}
+											</ul>
+										</div>
+									</div>
+									<div class="compaOtherList">
+										<h3 class="sel_report">{yun:}if $row.report{/yun}{yun:}$comclass_name[$row.report]{/yun}{yun:}else{/yun}到岗时间{yun:}/if{/yun}</h3>
+										<input id="report" type="hidden" name="report" value="{yun:}$row.report{/yun}">
+										<div class="compaOtherCont" style="display:none;">
+											<ul>
+												{yun:}foreach $comdata.job_report item=v{/yun}
+												<li class="report_li" data-id="{yun:}$v{/yun}" data-name="{yun:}$comclass_name[$v]{/yun}">
+													<span>{yun:}$comclass_name[$v]{/yun}</span>
+												</li>
+												{yun:}/foreach{/yun}
+											</ul>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th>薪资要求：</th>
+							<td>
+								<div class="SearchJobs">
+									<div>
+										<span data-min="" data-max="" class="Search_jobs_sub_a Search_jobs_cxz {yun:}if !$row.minsalary && !$row.maxsalary{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">全部</span>
+										<span data-min="2000" data-max="4000" class="Search_jobs_cxz {yun:}if $row.minsalary==2000&&$row.maxsalary==4000{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">2000-4000</span>
+										<span data-min="4000" data-max="6000" class="Search_jobs_cxz {yun:}if $row.minsalary==4000&&$row.maxsalary==6000{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">4000-6000</span>
+										<span data-min="6000" data-max="8000" class="Search_jobs_cxz {yun:}if $row.minsalary==6000&&$row.maxsalary==8000{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">6000-8000</span>
+										<span data-min="8000" data-max="10000" class="Search_jobs_cxz {yun:}if $row.minsalary==8000&&$row.maxsalary==10000{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">8000-10000</span>
+										<span data-min="10000" data-max="" class="Search_jobs_cxz {yun:}if $row.minsalary==10000{/yun}Search_jobs_sub_cur{yun:}/if{/yun}">10000以上</span>
+									</div>
+									<input type="text" name="minsalary" id="min" value="{yun:}if $row.minsalary{/yun}{yun:}$row.minsalary{/yun}{yun:}/if{/yun}" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" class="job_xz_text" />
+									<span class="job_xz_line">-</span>
+									<input type="text" name="maxsalary" id="max" value="{yun:}if $row.maxsalary{/yun}{yun:}$row.maxsalary{/yun}{yun:}/if{/yun}" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" class="job_xz_text" />
+								</div>
+							</td>
+						</tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th>更新时间：</th>
+							<td>
+								<div class="layui-input-block">
+									<input type="radio" name="uptime" value="1" title="今日" {yun:}if $row.uptime=='1' || $row.uptime==''{/yun}checked{yun:}/if{/yun}>
+									<input type="radio" name="uptime" value="2" title="最近三天" {yun:}if $row.uptime=='2'{/yun}checked{yun:}/if{/yun}>
+									<input type="radio" name="uptime" value="3" title="最近七天" {yun:}if $row.uptime=='3'{/yun}checked{yun:}/if{/yun}>
+									<input type="radio" name="uptime" value="4" title="最近一个月" {yun:}if $row.uptime=='4'{/yun}checked{yun:}/if{/yun}>
+								</div>
+							</td>
+						</tr>
+						<!-- 新添加结束 -->
+						{yun:}if $row.type == 2{/yun}
+		                <tr class="tp2Show">
+		                {yun:}else{/yun}
+		                <tr class="tp2Show" style="display: none;">
+		                {yun:}/if{/yun}
+		                    <th>搜索关键词：</th>
+		                    <td>
+		                        <div class="tellNameList">
+									<div class="tellNameListOne">
+										{yun:}if $row.searchKeyword{/yun}
+										{yun:}foreach from=$row.searchKeyword key=skey item=sval{/yun}
+										<span class="telClose">{yun:}$sval{/yun}<input type="hidden" name="searchKeyword[]" value="{yun:}$sval{/yun}"><i></i></span>
+										{yun:}/foreach{/yun}
+										{yun:}/if{/yun}
+										<input id="regname" autocomplete="off" style="display: none" type="text" placeholder="输入关键词" maxlength="50">
+										<a href="javascript:regnameAdd();" id="regname_add">添加</a>
+									</div>
+									<div class="tellNameListTwo">
+										<span>回车确定输入内容，点击下方保存按钮后生效。</span>
+										<span>将按设置的关键词搜索职位，支持设置多个。不建议超过5个，将影响搜索效率。</span>
+									</div>
+								</div>
+		                    </td>
+		                </tr>
+						{yun:}if $row.type == 2{/yun}
+						<tr class="tp2Show">
+						{yun:}else{/yun}
+						<tr class="tp2Show" style="display: none;">
+						{yun:}/if{/yun}
+							<th style="position: relative;"><span style="position: absolute; top: 8px; right: 0;">搜索类别：</span></th>
+							<td>
+								<div class="layui-input-block inputBlocAlls">
+									<div class="gjsousuo_qt_tj gjsousuoAllsde">
+										<div class="gjsousuo_list" style="width: auto;margin-right: 15px;">
+											<div class="admin_td_h" style="width:255px;position:relative">
+												<input id="job_class" type="hidden" value="{yun:}$row.job_class{/yun}" name="job_class">
+												<select id="jobclass_search" class="expect_text" name="jobclass_search" xm-select-type="jobclass" xm-select="jobclass_search" xm-select-search="" xm-select-radio="" xm-select-skin="default" xm-select-direction="down" style="width: 250px;margin-top: 0;">
+													<option value="">输入搜索职能</option>
+												</select>
+												<div onclick="index_job_new(1,'#workadds_job','#job_class','left:100px;top:100px; position:absolute;','1');" class="news_expect_text_new_nth" title="选择职位类别"></div>
+											</div>
+										</div>
+										<div class="gjsousuo_list" style="width: auto;margin-right: 15px;">
+											<div  style="width:255px;position:relative">
+												<select id="cityclass_search" class="expect_text" name="cityclass_search" xm-select-type="cityclass" xm-select="cityclass_search" xm-select-search=""  xm-select-radio="" xm-select-skin="default" xm-select-direction="down">
+													<option value="">输入搜索城市</option>
+												</select>
+												<div onclick="index_city_new(1,'#workadds_city','#city_class','left:100px;top:100px; position:absolute;')" class="news_expect_text_newcity_nth" title="选择城市"></div>
+												<input type="hidden" name="city_class" id="city_class" value="{yun:}$row.city_class{/yun}" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th class="t_fr">PC图片：</th>
+							<td>
+								<button type="button" class="yun_bth_pic noupload" lay-data="{imgid: 'imgpic'}">上传图片</button>
+								<img id="imgpic" src="{yun:}$row.pic_n{/yun}" width="200px" {yun:}if !$row.pic{/yun}class="none"{yun:}/if{/yun}>
+								<span class="admin_web_tip" style="margin-left: 10px;">尺寸：1920px * 380px；PC端专题背景图、职位列表推广展位图；</span>
+								<input type="hidden" name="pic" value="{yun:}$row.pic{/yun}">
+							</td>
+						</tr>
+						<tr>
+							<th class="t_fr">缩略图：</th>
+							<td>
+								<button type="button" class="yun_bth_pic noupload5" lay-data="{imgid: 'imgsjlist_pic'}">上传图片</button>
+								<img id="imgsjlist_pic" src="{yun:}$row.sjlist_pic_n{/yun}" width="200px" height="100px" {yun:}if !$row.sjlist_pic{/yun}class="none"{yun:}/if{/yun}>
+								<span class="admin_web_tip" style="margin-left: 10px;">尺寸：800px * 400px；&nbsp;&nbsp;&nbsp;专题列表展示图，移动端职位列表占位图、专题详情背景图，新入口展示图；</span>
+								<input type="hidden" name="sjlist_pic" value="{yun:}$row.pic{/yun}">
+							</td>
+						</tr>
+						<tr class="admin_table_trbg">
+							<th class="t_fr">匹配关键词：</th>
+							<td>
+								<textarea name="keyword" class="layui-textarea t_w480">{yun:}$row.keyword{/yun}</textarea>
+								<span class="admin_web_tip">以，分隔。找工作列表搜索时，如果匹配到专题招聘设置的关键词，展示相关专题招聘入口</span>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td align="left" colspan="2">
+								<input type="hidden" name="pytoken" value="{yun:}$pytoken{/yun}">
+								{yun:}if is_array($row){/yun}
+								<input type="hidden" name="id" size="40" value="{yun:}$row.id{/yun}" />
+								<input class="tty_sub" type="button" onclick="checkform()" value="&nbsp;更 新&nbsp;" />
+								{yun:}else{/yun}
+								<input class="tty_sub" type="button" onclick="checkform()" value="&nbsp;添 加&nbsp;" />
+								{yun:}/if{/yun}
+								<input class="tty_cz" type="reset" name="reset" value="&nbsp;重 置 &nbsp;" />
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+
+		<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.all.min.js?v={yun:}$config.cachecode{/yun}"></script>
+		<script language="javascript">
+			var uptime = '{yun:}$row.uptime_n{/yun}';
+			layui.use(['layer', 'form', 'laydate','upload'], function() {
+				var layer = layui.layer,
+					form = layui.form,
+					laydate = layui.laydate,
+					upload = layui.upload,
+                    formSelects = layui.formSelects,
+					$ = layui.$;
+                formSelects.btns('cityclass_search', []);
+                formSelects.btns('jobclass_search', []);
+                //实时获取选中值
+                formSelects.on('jobclass_search', function(id, vals, val, isAdd, isDisabled){
+                    debugger
+                    var jobvalue = [];
+                    vals.forEach(function(item,index){
+                        jobvalue.push(item.value);
+                    })
+                    $('#job_class').val(jobvalue.join(','));
+                }, true);
+                formSelects.on('cityclass_search', function(id, vals, val, isAdd, isDisabled){
+                    var cityvalue = [];
+                    vals.forEach(function(item,index){
+                        cityvalue.push(item.value);
+                    })
+                    $('#city_class').val(cityvalue.join(','));
+                }, true);
+                //重设职位类别数据
+                '{yun:}if $row.job_class{/yun}'
+                jobSearchReset();
+                '{yun:}/if{/yun}'
+                //重设城市类别数据
+                '{yun:}if $row.city_class{/yun}'
+                citySearchReset();
+                '{yun:}/if{/yun}'
+                formSelects.maxTips('jobclass_search', function(id, vals, val, max){
+                    layer.msg('最多只能选择1个！', 2, 8);
+                });
+                formSelects.maxTips('cityclass_search', function(id, vals, val, max){
+                    layer.msg('最多只能选择1个！', 2, 8);
+                });
+
+				laydate.render({
+					elem: '#stime'
+				});
+				laydate.render({
+					elem: '#etime'
+				});
+				//PC背景图
+				upload.render({
+					elem: '.noupload',
+					auto: false,
+					bindAction: '#test9', //触发上传的对象，暂未用到
+					accept: 'images',
+					field: 'bg',
+					exts: 'jpg|png|gif|bmp|jpeg',
+					choose: function(obj) {
+						if (this.imgid) {
+							//预读本地文件示例，不支持ie8/9
+							var imgid = null;
+							if (this.imgid) {
+								imgid = this.imgid;
+							}
+							obj.preview(function(index, file, result) {
+								$('#' + imgid).removeClass('none');
+								$('#' + imgid).attr('src', result);
+							});
+						}
+					}
+				});
+				// PC职位列表占位图
+				upload.render({
+					elem: '.noupload3',
+					auto: false,
+					bindAction: '#test9', //触发上传的对象，暂未用到
+					accept: 'images',
+					field: 'pclist',
+					exts: 'jpg|png|gif|bmp|jpeg',
+					choose: function(obj) {
+						if (this.imgid) {
+							//预读本地文件示例，不支持ie8/9
+							var imgid = null;
+							if (this.imgid) {
+								imgid = this.imgid;
+							}
+							obj.preview(function(index, file, result) {
+								$('#' + imgid).removeClass('none');
+								$('#' + imgid).attr('src', result);
+							});
+						}
+					}
+				});
+                // PC专题列表占位图
+                upload.render({
+                    elem: '.noupload5',
+                    auto: false,
+                    bindAction: '#test9', //触发上传的对象，暂未用到
+                    accept: 'images',
+                    field: 'pcsjlist',
+                    exts: 'jpg|png|gif|bmp|jpeg',
+                    choose: function(obj) {
+                        if (this.imgid) {
+                            //预读本地文件示例，不支持ie8/9
+                            var imgid = null;
+                            if (this.imgid) {
+                                imgid = this.imgid;
+                            }
+                            obj.preview(function(index, file, result) {
+                                $('#' + imgid).removeClass('none');
+                                $('#' + imgid).attr('src', result);
+                            });
+                        }
+                    }
+                });
+                form.on('radio(addjobtype)', function(data){
+                    if(data.value==1){
+                        $(".tp2Show").hide();
+                    }else{
+                        $(".tp2Show").show();
+                    }
+                });
+                form.render();
+			});
+            $(function(){
+                $('.compaOtherList').mouseover(function(){
+                    $(this).find(".compaOtherCont").show()
+                })
+                $('.compaOtherList').mouseout(function(){
+                    $(this).find(".compaOtherCont").hide()
+                })
+                $('.compaOtherCont li span').click(function(){
+                    var listhtml = $(this).html()
+                    $(this).parents(".compaOtherList").find('h3').html(listhtml)
+                    $('.compaOtherCont').hide()
+                })
+            })
+			// 设置自动搜索职位薪资范围
+			$('.Search_jobs_cxz').click(function () {
+				$('.Search_jobs_cxz').removeClass('Search_jobs_sub_cur');
+				var min = $(this).attr('data-min')
+				var max = $(this).attr('data-max')
+				$(this).addClass('Search_jobs_sub_cur');
+				$('#min').val(min);
+				// if (min && max) {
+                    $('#max').val(max);
+				// }
+			})
+
+            // 设置自动搜索职位学历要求
+            $('.edu_li').click(function () {
+                $('.sel_edu').val($(this).attr('data-name'));
+                $('#edu').val($(this).attr('data-id'));
+                $('.sel_edu').parent('.gjsousuo_list').find(".admin_Filter_text_box").hide()
+            })
+            // 设置自动搜索职位经验要求
+            $('.exp_li').click(function () {
+                $('.sel_exp').val($(this).attr('data-name'));
+                $('#exp').val($(this).attr('data-id'));
+                $('.sel_exp').parent('.gjsousuo_list').find(".admin_Filter_text_box").hide()
+            })
+            // 设置自动搜索职位性别要求
+            $('.sex_li').click(function () {
+                $('.sel_sex').val($(this).attr('data-name'));
+                $('#sex').val($(this).attr('data-id'));
+                $('.sel_sex').parent('.gjsousuo_list').find(".admin_Filter_text_box").hide()
+            })// 设置自动搜索职位到岗时间
+            $('.report_li').click(function () {
+                $('.sel_report').val($(this).attr('data-name'));
+                $('#report').val($(this).attr('data-id'));
+                $('.sel_report').parent('.compaOtherList').find(".compaOtherCont").hide()
+            })
+
+            // 设置自动搜索职位更新时间
+            $('.uptime_li').click(function () {
+                $('.sel_uptime').val($(this).attr('data-name'));
+                $('#uptime').val($(this).attr('data-id'));
+                $('.sel_uptime').parent('.gjsousuo_list').find(".admin_Filter_text_box").hide()
+            })
+
+            function jobSearchReset(){
+                var formSelects = layui.formSelects,
+                    jobclassArr= $("#job_class").val()!='' ? $("#job_class").val().split(",") : [],
+                    jarr = [];
+                for(var i=0;i<jobclassArr.length;i++){
+                    jarr.push({"name":jn[jobclassArr[i]],"value":jobclassArr[i],"selected":'selected'});
+                }
+                formSelects.data('jobclass_search', 'local', {
+                    arr: jarr
+                });
+            }
+            function citySearchReset(){
+                var formSelects = layui.formSelects,
+                    cityclassArr= $("#city_class").val()!='' ? $("#city_class").val().split(",") : [],
+                    carr = [];
+                for(var i=0;i<cityclassArr.length;i++){
+                    carr.push({"name":cn[cityclassArr[i]],"value":cityclassArr[i],"selected":'selected'});
+                }
+                formSelects.data('cityclass_search', 'local', {
+                    arr: carr
+                });
+            }
+
+			function checkform(myform) {
+				if ($("#title").val() == "") {
+					parent.layer.msg('请填写专题名称！', 2, 8);
+					return false;
+				}
+				if ($("#background").val() == "") {
+					parent.layer.msg('请选择背景图！', 2, 8);
+					return false;
+				}
+				if ($('input[name=type]:checked').val() == 2) {
+				    if (!$('#refresh_minutes').val()) {
+                        parent.layer.msg('自动搜索职位时，更新频率不能为空！', 2, 8);
+                        return false;
+					}
+
+					var  uptime = $("input[name='uptime']:checked").val(),
+						checked_hy=$("input[name^='hy']:checked").length,
+						report=$('#report').val(),
+						sex = $('#sex').val(),
+						exp=$('#exp').val(),
+						edu = $('#edu').val(),
+                        checked_welfare=$("input[name^='welfare']:checked").length,
+                        min = $('#min').val(),
+                        max = $('#max').val(),
+						job_class = $('#job_class').val(),
+						city_class = $('#city_class').val();
+					if (!uptime && checked_welfare== 0 && !report && !sex && !exp && !edu && checked_hy==0 && !min && !max && !job_class && !city_class) {
+                        parent.layer.msg('自动搜索职位时，搜索条件不能全为空！', 2, 8);
+                        return false;
+					}
+				}
+				loadlayer();
+				$("#spform").submit();
+			}
+			$("body").on('click', ".telClose", function(){
+				$(this).remove();
+			})
+			function regnameAdd() {
+				$("#regname").show();
+				$("#regname").focus();
+				$("#regname_add").hide();
+			}
+			$("#regname").keydown(function(event){
+				if(event.keyCode == 13){
+					let val = $(this).val();
+					if (val) {
+						let regname_obj = $('input[name="searchKeyword[]"]');
+						if (regname_obj.length > 0) {
+							let exist = false;
+							regname_obj.each(function(key, item) {
+								if (val == $(item).val()) {
+									exist = true;
+									return false;
+								}
+							})
+							if (exist) {
+								layer.msg('该关键词已存在!', 2, 8);
+								return false;
+							}
+						}
+						$("#regname").before('<span class="telClose">' + val + '<input type="hidden" name="searchKeyword[]" value="' + val + '"><i></i></span>');
+					}
+					$("#regname").hide();
+					$("#regname").val('');
+					$("#regname_add").show();
+				}
+			});
+		</script>
+	</body>
+</html>

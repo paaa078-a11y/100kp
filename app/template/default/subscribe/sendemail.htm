@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+
+<body>
+	<table width="700" bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="0" style="margin: auto; box-shadow: 0 0 2px #999; ">
+		<tbody>
+			<tr>
+				<td style="border:none;padding:30px;word-wrap: break-word; break-word: break-all;">
+					<div>
+						<div>
+							亲爱的<a href="javascript:void(0);" style="color: #2778f8;">{yun:}$info.email{/yun}</a>,你好!
+						</div>
+						<div style="text-indent:2em;margin: 10px 0; ">
+							你在<a href="{yun:}$config.sy_weburl{/yun}" style="color: #2778f8;">{yun:}$info.webname{/yun}</a>上订阅的{yun:}$info.type_n{/yun}信息，我们精心为你挑选了以下的{yun:}$info.type_n{/yun}，十分推荐你查看！
+						</div>
+						 
+					</div>
+					<p>以下是你订阅的{yun:}$info.type_n{/yun}</p>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0"
+						style="text-align: center; font-family: PingFangSC-Medium, Arial, Helvetica, sans-serif;">
+						<tbody>
+							{yun:}if $info.type==1{/yun}
+								{yun:}foreach from=$subList key=key item=v{/yun}
+								<tr>
+									<td style="display: block;margin: 10px 20px 0; border-bottom: 1px dashed #D8D8D8;">
+										<a href="{yun:}url m=job c=comapply id='`$v.id`'{/yun}" style="display: block; text-decoration: none;" rel="noopener" target="_blank">
+											<p style="clear: both; overflow: hidden; padding: 8px 0 0; margin: 0;">
+												<span style="float: left; font-size: 16px; color: #333333; font-weight: bold;">{yun:}$v.name{/yun}</span>
+												<span style="float: right; font-size: 16px; color: #FF6644;">{yun:}$v.job_salary{/yun}</span>
+											</p>
+											<p style="font-size: 14px; color: #666666; margin: 10px 0px; text-align: left;">{yun:}$v.com_name{/yun}</p>
+											<p style="padding: 0 0 20px; margin: 0; text-align: left;">
+												<span style="display: inline-block; padding: 2px 6px; margin: 0 5px 0 0; background-color: #F8F8F8; color: #999999; font-size: 12px;">{yun:}$v.citystr{/yun}</span>
+												<span style="display: inline-block; padding: 2px 6px; margin: 0 5px 0 0; background-color: #F8F8F8; color: #999999; font-size: 12px;">{yun:}$v.job_exp{/yun}</span>
+												<span style="display: inline-block; padding: 2px 6px; margin: 0 5px 0 0; background-color: #F8F8F8; color: #999999; font-size: 12px;">{yun:}$v.job_edu{/yun}</span>
+											</p>
+										</a>
+									</td>
+								</tr>
+								{yun:}/foreach{/yun}
+							{yun:}else if $info.type==2{/yun}
+								<!-- 简历 -->
+								{yun:}foreach from=$subList key=key item=v{/yun}
+								<tr>
+									<td style="display: block;margin: 10px 20px 0; border-bottom: 1px dashed #D8D8D8;">
+										<a href="{yun:}url m=resume c=show id=$v.id{/yun}" style="display: flex; align-items: center; margin-bottom: 10px; text-decoration: none;" rel="noopener" target="_blank">
+											<img src="{yun:}$v.photo{/yun}" width="50" height="50" style="border-radius: 50%;">
+											<div style="margin-left: 10px;">
+												<p style="padding: 0 0 5px 0; margin: 0; text-align: left; display: flex;align-items: center;">
+													<span
+														style="display: inline-block;  color: #2778f8; font-size: 16px;">{yun:}$v.name_n{/yun}</span>
+													<span
+														style="display: inline-block; margin-left: 10px;  color: #333; font-size: 15px;  font-weight: bold;">{yun:}$v.name{/yun}</span>
+												</p>
+												<p style="padding: 5px 0 0 0; margin: 0; text-align: left;">
+													<span style="color: #999999; font-size: 12px;">{yun:}$v.sex_n{/yun}{yun:}if $v.exp_n{/yun} |{yun:}/if{/yun}</span>
+													<span style="color: #999999; font-size: 12px;">{yun:}$v.exp_n{/yun}{yun:}if $v.edu_n{/yun} |{yun:}/if{/yun}</span>
+													<span style="color: #999999; font-size: 12px;">{yun:}$v.edu_n{/yun}{yun:}if $v.salary{/yun} |{yun:}/if{/yun}</span>
+													<span style="color: #999999; font-size: 12px;">{yun:}$v.salary{/yun}{yun:}if $v.description{/yun} |{yun:}/if{/yun}</span>
+													<span style="color: #999999; font-size: 12px;">{yun:}$v.description{/yun}</span>
+												</p>
+											</div>
+										</a>
+									</td>
+								</tr>
+								{yun:}/foreach{/yun}
+							{yun:}/if{/yun}
+						</tbody>
+					</table>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-align: center;">
+						<tbody>
+							<tr>
+								<td style="padding: 30px 0 20px 5px; font-size: 16px; color: #666666;">没有满意{yun:}$info.type_n{/yun}？</td>
+							</tr>
+							<tr>
+								<td>
+									
+									<a href="{yun:}if $info.type==2{/yun}{yun:}url m=resume{/yun}{yun:}else if $info.type==1{/yun}{yun:}url m=job{/yun}{yun:}/if{/yun}" 
+										style="display: inline-block;width: 150px; height: 36px; line-height: 36px; font-size: 16px; color: #ffffff; background-color: #2778f8; text-align: center; text-decoration: none; margin-bottom: 0px;"
+										rel="noopener" target="_blank">点击查看更多</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			{yun:}if $info.sy_wx_qcode{/yun}
+            <tr>
+			    <td style="padding:0px 50px 40px 50px;">
+				   
+				  	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					  	<tr>
+					  		<td> 
+					  			<div style="font-size: 18px;flex: 1;margin-right: 15px; font-weight: bold;">
+				   	扫描右侧的二维码，即可<span style="color: #2778f8; line-height: 40px;">通过微信公众号<br>更快捷地掌握自己的{yun:}if $info.type==1{/yun}招聘{yun:}else if $info.type==2{/yun}求职{yun:}/if{/yun}进度。</span> 
+				   </div></td>
+						<td> 	<img src="{yun:}$info.sy_wx_qcode{/yun}" alt="" width="100" height="100"> </td>
+				   
+				   </tr>
+				  
+				  
+				   </table>
+			    </td>
+			   
+		    </tr>
+		    {yun:}/if{/yun}
+			<tr>
+				<td bgcolor="#fff"
+					style="border-left:1px solid #ddd;border-right:1px solid #ddd;border-bottom:1px solid #ddd;border-radius: 0 0 3px 3px; background-color: #f5f5f5; font-family: PingFangSC-Medium, Arial, Helvetica, sans-serif;">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tbody>
+							<tr style="font-size: 12px; color: #666666;">
+								<td>
+									<dl style="margin: 0; padding: 15px 30px 10px 0;">
+										<dt style="margin: 0;">
+											<dd style="display: flex; align-items: center;justify-content: space-around;">
+												
+											</dd>
+											<dd style="padding: 10px 0;">
+												如果你并未发过此请求，可能是因为 其它用户在重置密码时而误输入了你的邮箱地址而使你收到了这封邮件，你可以放心忽略此封邮件，无需进行任何操作。
+											</dd>
+											<dd>
+												如有任何问题，可以与我们联系，我们将尽快为你解答。<br>
+												{yun:}if $info.sy_webemail{/yun}Email: {yun:}$info.sy_webemail{/yun}{yun:}/if{/yun} {yun:}if $info.sy_freewebtel{/yun}电话： {yun:}$info.sy_freewebtel{/yun}{yun:}/if{/yun}
+											</dd>
+										</dt>
+									</dl>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+</body>
+
+</html>

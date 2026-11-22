@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../../../admin/header.js"></script>
+    <script src="../../../admin/httpVueLoader.js"></script>
+</head>
+
+<body>
+    <div id="daohaapp">
+        <calllog :startend="datearr" :callstatus="status"></calllog>
+    </div>
+    <!-- script -->
+    <script>
+        const custoapp = new Vue({
+            el: '#daohaapp',
+            data: function () {
+                return {
+                    status: '-1',
+                    datearr: []
+                }
+            },
+			components: {
+                'calllog': httpVueLoader('../component/calllog.vue'),
+			},
+            created(){
+                let homeQuery = window.parent.homeapp.$route.query
+                this.status = homeQuery.call_status
+                if (homeQuery.s_time && homeQuery.e_time) {
+                    this.datearr.push(parseInt(homeQuery.s_time))
+                    this.datearr.push(parseInt(homeQuery.e_time))
+                }
+            },
+            methods: {
+            }
+        });
+    </script>
+</body>
+
+</html>
