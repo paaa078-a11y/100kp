@@ -7,8 +7,8 @@
 		<title>{yun:}$title{/yun}</title>
 		<meta name="keywords" content="{yun:}$keywords{/yun}" />
 		<meta name="description" content="{yun:}$description{/yun}" />
-		<link href="{yun:}$style{/yun}/style/index.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
-		<link href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$style{/yun}/style/index.css?v={yun:}$config.cachecode{/yun}&adscroll=2" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}&adscroll=2" rel="stylesheet" type="text/css" />
 		<link href="{yun:}$config.sy_weburl{/yun}/js/layui/css/layui.css?v={yun:}$config.cachecode{/yun}" rel="stylesheet" type="text/css" /> 
 		{yun:}if $ishtml{/yun}
 			<script src="{yun:}url m=ajax c=wjump{/yun}" language="javascript"></script>
@@ -326,7 +326,7 @@
 			
 <!-- 首页底部浮动广告 /app/controller/ajax/index.class.php  -->
 	{yun:}if $config.sy_footer_fix=='1'{/yun}
-		<div class="tip_bottom">
+		<div id="tip_bottom" class="tip_bottom none">
 			<div class="tip_bottom_cont">
 				<div class="tip_bottom_bg"></div>
 				<div class="tip_bottom_cont_c">
@@ -352,7 +352,6 @@
 					<span class="ban_close" onclick="colse_bottom()">关闭</span> 
 					{yun:}$footer_ad.html{/yun} 
 				</div>
-				<input type="hidden" value='1' id='bottom_ad_is_show' />
 			</div>
 		{yun:}/adlist{/yun} 
 		
@@ -369,7 +368,7 @@
 	<script src="{yun:}$config.sy_weburl{/yun}/js/layui/layui.js?v={yun:}$config.cachecode{/yun}"></script>
 	<script src="{yun:}$config.sy_weburl{/yun}/js/public.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
 	
-	<script src="{yun:}$style{/yun}/js/index.js?v={yun:}$config.cachecode{/yun}" language="javascript"></script>
+	<script src="{yun:}$style{/yun}/js/index.js?v={yun:}$config.cachecode{/yun}&adscroll=2" language="javascript"></script>
 	<script src="{yun:}$style{/yun}/js/reg_ajax.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
 	<script src="{yun:}$config.sy_weburl{/yun}/js/slides.jquery.js?v={yun:}$config.cachecode{/yun}" type="text/javascript"></script>
 	
@@ -498,6 +497,8 @@
 				}, function(data) {
 					layer.closeAll('loading');
 					$(".tip_bottom_left").html(data);
+					$('#tip_bottom').removeClass('none').attr('data-ready', '1');
+					updateBottomAds();
 				})
 			})
 		</script>
