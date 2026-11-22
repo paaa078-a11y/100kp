@@ -744,7 +744,8 @@
                 pic_type: '',
                 file_maxsize: '',
 				cert_status: 0,
-				poi: []
+				poi: [],
+				poiSearchSeq: 0
             },
             created() {
 
@@ -763,7 +764,7 @@
                 address: function (value) {
                     this.cominfo.address = value;
                     if (this.map_key !='' && this.addressShow){
-                        debounce(this.localsearch(), 1000);
+                        debounce(() => this.localsearch(), 1000);
                     }
                 },
             },
@@ -802,27 +803,36 @@
                 localsearch: function () {
                     let that = this;
 					if(that.cominfo.address.length > 3){
-						$.post('index.php?c=poi', {address: that.cominfo.address}, function(e){
+						let requestSeq = ++that.poiSearchSeq;
+						that.poi = [];
+						$.post('index.php?m=ajax&c=poi', {address: that.cominfo.address}, function(e){
+							if(requestSeq !== that.poiSearchSeq){
+								return;
+							}
 							if(e.status == '1' && e.tips.length > 0){
 								that.poi = e.tips;
+								if (e.auto_location || e.location) {
+									that.setMapPoint(e.auto_location || e.location);
+								}
 							}
 						}, 'json');
 					}
                 },
 				poiClick: function(key){
-					map.clearMap();
 					var location = this.poi[key].location;
+					this.setMapPoint(location);
+				},
+				setMapPoint: function(location){
+					if (!location || !map) {
+						return;
+					}
 					var lngLat = location.split(',');
-					
 					this.longitude = lngLat[0];
 					this.latitude = lngLat[1];
-					
+					map.clearMap();
 					var point = new AMap.LngLat(lngLat[0], lngLat[1]);
 					map.setZoomAndCenter(17, point);
-					var marker = new AMap.Marker({
-						position: point
-					});
-					map.add(marker);
+					map.add(new AMap.Marker({position: point}));
 				},
                 bindFoundedYear: function (obj) {
                     this.dateValue = obj.date;

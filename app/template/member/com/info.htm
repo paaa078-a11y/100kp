@@ -1049,6 +1049,7 @@
         })
 	});
 	var timeout = null;
+	var poiSearchSeq = 0;
 	function debounce(func, wait = 500) {
 		// 清除定时器
 		if (timeout !== null) clearTimeout(timeout);
@@ -1068,10 +1069,24 @@
 	}
 	function localsearch(city){
 		var address = $("#address").val().replace(/\s+/g,"");
+		var requestSeq = ++poiSearchSeq;
 		map.clearMap();
 		if(address.length > 3){
 			$.post('index.php?m=ajax&c=poi', {address: address}, function(e){
+				if(requestSeq !== poiSearchSeq){
+					return;
+				}
 				if(e.status == '1' && e.tips.length > 0){
+						if(e.auto_location || e.location){
+							var autoPoint = (e.auto_location || e.location).split(',');
+							document.getElementById("map_x").value = autoPoint[0];
+							document.getElementById("map_y").value = autoPoint[1];
+							map.clearMap();
+							map.setZoomAndCenter(17, new AMap.LngLat(autoPoint[0], autoPoint[1]));
+							map.add(new AMap.Marker({
+								position: new AMap.LngLat(autoPoint[0], autoPoint[1])
+							}));
+						}
 					var html = '';
 					html +=  '<ul>';
 					for(var i in e.tips){
@@ -1091,7 +1106,6 @@
 					$("#poiSearch").show();
 					
 					setTimeout(function(){
-						map.clearMap();
 						$("#poiSearch li").on('click', function(){
 							var id = $(this).attr('data-id');
 							var location = e.tips[id].location;

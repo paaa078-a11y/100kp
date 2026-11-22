@@ -230,7 +230,7 @@
             localsearch: function () {
 				var that = this;
                 if(that.info.link_address.length > 3){
-                    $.post('index.php?c=poi', {address: that.info.link_address}, function(e){
+                    $.post('index.php?m=ajax&c=poi', {address: that.info.link_address}, function(e){
                         if(e.status == '1' && e.tips.length > 0){
                             that.poi = e.tips;
                         }

@@ -1320,6 +1320,7 @@ function tdt_keyword_geocoding($data = array())
     if ($key === '' || $keyword === '') {
         return '';
     }
+    $keyword = mb_substr($keyword, 0, 120, 'UTF-8');
 
     $ds = json_encode(array(
         'keyWord' => $keyword,
@@ -1338,18 +1339,71 @@ function tdt_keyword_geocoding($data = array())
     if ($lng === '' || $lat === '') {
         return '';
     }
-    $gcj = wgs84_to_gcj02($lng, $lat);
-    $detail = isset($result['result']) && is_array($result['result']) ? $result['result'] : array();
-    $formatted = isset($detail['formatted_address']) ? $detail['formatted_address'] : $keyword;
+    $exact = wgs84_to_gcj02($lng, $lat);
+    $autoLocation = round($exact['lng'], 6) . ',' . round($exact['lat'], 6);
+    $tips = array(array(
+        'name' => $keyword,
+        'address' => $keyword,
+        'location' => $autoLocation,
+        'value' => $keyword,
+        'exact' => 1
+    ));
+    $seen = array($autoLocation => true);
+
+    // 以精确地址为中心检索附近 POI，结果格式与现有高德 inputtips 保持一致。
+    $searchData = array(
+        'keyWord' => $keyword,
+        'level' => 15,
+        'mapBound' => implode(',', array(
+            round($lng - 0.08, 6),
+            round($lat - 0.06, 6),
+            round($lng + 0.08, 6),
+            round($lat + 0.06, 6)
+        )),
+        'queryType' => 1,
+        'start' => 0,
+        'count' => 10
+    );
+    $searchUrl = 'https://api.tianditu.gov.cn/v2/search?postStr=' . rawurlencode(json_encode($searchData, JSON_UNESCAPED_UNICODE))
+        . '&type=query&tk=' . rawurlencode($key);
+    $searchResult = json_decode(CurlGet($searchUrl, array()), true);
+
+    if (is_array($searchResult) && !empty($searchResult['pois']) && is_array($searchResult['pois'])) {
+        foreach ($searchResult['pois'] as $poi) {
+            $lonlat = isset($poi['lonlat']) ? trim($poi['lonlat']) : '';
+            if ($lonlat === '' || strpos($lonlat, ',') === false) {
+                continue;
+            }
+            $point = explode(',', $lonlat);
+            if (count($point) < 2 || $point[0] === '' || $point[1] === '') {
+                continue;
+            }
+            $gcj = wgs84_to_gcj02(trim($point[0]), trim($point[1]));
+            $location = round($gcj['lng'], 6) . ',' . round($gcj['lat'], 6);
+            if (isset($seen[$location])) {
+                continue;
+            }
+            $seen[$location] = true;
+            $name = !empty($poi['name']) ? trim($poi['name']) : $keyword;
+            $address = !empty($poi['address']) ? trim($poi['address']) : $name;
+            $tips[] = array(
+                'name' => $name,
+                'address' => $address,
+                'location' => $location,
+                'value' => $name
+            );
+            if (count($tips) >= 11) {
+                break;
+            }
+        }
+    }
 
     return json_encode(array(
-        'count' => 1,
-        'tips' => array(array(
-            'name' => $formatted,
-            'address' => $formatted,
-            'location' => round($gcj['lng'], 6) . ',' . round($gcj['lat'], 6),
-            'value' => $formatted
-        ))
+        'status' => '1',
+        'count' => count($tips),
+        'auto_location' => $autoLocation,
+        'location' => $autoLocation,
+        'tips' => $tips
     ), JSON_UNESCAPED_UNICODE);
 }
 
