@@ -6,7 +6,7 @@
     <meta name="keywords" content="{yun:}$keywords{/yun}">
     <meta name="description" content="{yun:}$description{/yun}">
     <link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}">
-    <link rel="stylesheet" href="{yun:}$style{/yun}/style/site.css?v={yun:}$config.cachecode{/yun}&citypage=5">
+    <link rel="stylesheet" href="{yun:}$style{/yun}/style/site.css?v={yun:}$config.cachecode{/yun}&citypage=6">
 </head>
 <body class="body_bg">
 {yun:}include file="$tplstyle/header.htm"{/yun}
@@ -115,7 +115,7 @@
 
     {yun:}hy_list hy_list=hy_list{/yun}
     {yun:}if $hy_list{/yun}
-    <section id="industryModePanel" class="city-mode-panel city-industry-panel" hidden>
+    <section id="industryModePanel" class="city-mode-panel city-panel city-industry-panel" hidden>
         <h2 class="city-section-title">按行业选择</h2>
         <div class="city-industry-grid">
             {yun:}foreach item=item from=$hy_list{/yun}
@@ -127,15 +127,16 @@
 </main>
 
 <script>
+var siteSearchCities = {yun:}$site_search_json{/yun};
 (function () {
     var provinceSelect = document.getElementById('provinceSelect');
     var citySelect = document.getElementById('citySelect');
     var searchInput = document.getElementById('citySearchInput');
     var searchButton = document.getElementById('citySearchButton');
     var searchResult = document.getElementById('citySearchResult');
-    var cityLinks = Array.prototype.slice.call(document.querySelectorAll('.city-province-cities a'));
     var cityModePanel = document.getElementById('cityModePanel');
     var industryModePanel = document.getElementById('industryModePanel');
+    var typeRank = {province: 0, city: 1, district: 2};
 
     function go(url) {
         if (url) {
@@ -166,6 +167,12 @@
         go(this.value);
     });
 
+    function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, function (char) {
+            return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char];
+        });
+    }
+
     function renderSearch() {
         var keyword = searchInput.value.trim().toLowerCase();
         if (!keyword) {
@@ -173,19 +180,24 @@
             searchResult.innerHTML = '';
             return;
         }
-        var matches = cityLinks.filter(function (link) {
-            return link.dataset.name.indexOf(keyword) > -1 ||
-                link.dataset.eName.toLowerCase().indexOf(keyword) === 0 ||
-                link.dataset.letter.toLowerCase() === keyword;
-        }).slice(0, 12);
+        var matches = siteSearchCities.filter(function (item) {
+            return item.name.indexOf(keyword) > -1 ||
+                item.province.indexOf(keyword) > -1 ||
+                item.pinyin.indexOf(keyword) > -1 ||
+                item.province_pinyin.indexOf(keyword) > -1 ||
+                item.letter.toLowerCase() === keyword;
+        }).sort(function (first, second) {
+            return (typeRank[first.type] - typeRank[second.type]) ||
+                first.name.localeCompare(second.name, 'zh-CN');
+        }).slice(0, 16);
         if (!matches.length) {
             searchResult.innerHTML = '<div class="city-search-empty">未找到匹配城市</div>';
             searchResult.style.display = 'block';
             return;
         }
-        searchResult.innerHTML = matches.map(function (link) {
-            return '<button type="button" data-url="' + link.dataset.url + '">' +
-                '<span>' + link.dataset.name + '</span><em>' + link.dataset.province + '</em></button>';
+        searchResult.innerHTML = matches.map(function (item) {
+            return '<button type="button" data-url="' + escapeHtml(item.url) + '">' +
+                '<span>' + escapeHtml(item.name) + '</span><em>' + escapeHtml(item.province) + '</em></button>';
         }).join('');
         searchResult.style.display = 'block';
     }
@@ -217,6 +229,15 @@
         if (!event.target.closest('.city-search')) {
             searchResult.style.display = 'none';
         }
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.city-province-row'), function (row) {
+        row.addEventListener('mouseenter', function () {
+            this.closest('.city-letter-group').classList.add('is-hovered');
+        });
+        row.addEventListener('mouseleave', function () {
+            this.closest('.city-letter-group').classList.remove('is-hovered');
+        });
     });
 
     Array.prototype.forEach.call(document.querySelectorAll('.city-mode-btn'), function (button) {

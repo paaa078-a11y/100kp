@@ -394,14 +394,15 @@ class site_model extends model
                         if ($matched) {
                             $v['city_str'] = $city_str;
                             $v['city_sort'] = $city_sort;
-                            $sort_arr[] = $city_sort;
+                            // 自动定位优先地级市站，其次省级站，最后才匹配县区站。
+                            $sort_arr[] = $city_sort == 2 ? 0 : ($city_sort == 1 ? 1 : 2);
                             $match_arr[] = $v;
                         }
                     }
                 }
                 if (!empty($match_arr)) {
 
-                    array_multisort($sort_arr, SORT_DESC, $match_arr);
+                    array_multisort($sort_arr, SORT_ASC, $match_arr);
 
                     $citydomain['did'] = $match_arr[0]['id'];
                     $citydomain['cityname'] = $match_arr[0]['cityname'];

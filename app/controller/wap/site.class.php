@@ -28,6 +28,10 @@ class site_controller extends common{
         $siteCityData = get_site_city_groups();
         $this->yunset('province_groups', $siteCityData['groups']);
         $this->yunset('province_list', $siteCityData['provinces']);
+        $this->yunset('site_search_json', json_encode(
+            $siteCityData['search_cities'],
+            JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        ));
         $localHotCities = array();
         $localProvinceId = $siteinfo && !empty($siteinfo['province']) ? (int)$siteinfo['province'] : 0;
         foreach ($siteCityData['groups'] as $provinces) {
@@ -72,6 +76,7 @@ class site_controller extends common{
 		$return['province_groups'] = $cityData['groups'];
 		$return['provinces'] = $cityData['provinces'];
 		$return['cities'] = $cityData['cities'];
+		$return['search_cities'] = $cityData['search_cities'];
 		$return['hy'] = $hy_site;
 		echo json_encode($return);
 	}

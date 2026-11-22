@@ -287,6 +287,7 @@ body.body_bg {
     color: #999;
     font-size: 18px;
     font-weight: 700;
+    transition: background-color .18s ease, color .18s ease;
 }
 
 .city-letter-content {
@@ -300,10 +301,24 @@ body.body_bg {
     min-height: 52px;
     padding: 15px 0;
     border-bottom: 1px dashed #eee;
+    transition: background-color .18s ease;
 }
 
 .city-province-row:last-child {
     border-bottom: 0;
+}
+
+.city-province-row:hover {
+    background: #f7f7f7;
+}
+
+.city-letter-group.is-hovered .city-letter {
+    background: #e93d35;
+    color: #fff;
+}
+
+.city-letter-group.is-hovered .city-province-name {
+    color: #e93d35;
 }
 
 .city-province-name {
@@ -334,20 +349,23 @@ body.body_bg {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 14px;
+    margin-top: 22px;
 }
 
 .city-industry-grid a {
-    height: 46px;
-    line-height: 46px;
-    border: 1px solid #eee;
+    height: 56px;
+    line-height: 56px;
+    border: 1px solid #e8e8e8;
     border-radius: 3px;
     color: #555;
     text-align: center;
+    transition: color .18s ease, border-color .18s ease, background-color .18s ease;
 }
 
 .city-industry-grid a:hover {
     border-color: #f25743;
     color: #f25743;
+    background: #fff8f6;
 }
 
 @media (max-width: 1240px) {

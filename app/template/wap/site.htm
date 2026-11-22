@@ -93,11 +93,22 @@
 
 <script src="{yun:}$wap_style{/yun}/js/jquery.min.js?v={yun:}$config.cachecode{/yun}"></script>
 <script>
+var siteSearchCities = {yun:}$site_search_json{/yun};
 (function () {
     var input = document.getElementById('mobileCitySearch');
     var result = document.getElementById('mobileCitySearchResult');
     var groups = document.querySelector('.city-mobile-groups');
-    var links = Array.prototype.slice.call(document.querySelectorAll('.city-mobile-cities a'));
+    var typeRank = {province: 0, city: 1, district: 2};
+
+    function mobileUrl(url) {
+        return String(url || '').replace(/\/?$/, '/') + 'm/';
+    }
+
+    function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, function (char) {
+            return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char];
+        });
+    }
 
     function search() {
         var keyword = input.value.trim().toLowerCase();
@@ -110,19 +121,24 @@
             });
             return;
         }
-        var matches = links.filter(function (link) {
-            return link.dataset.name.indexOf(keyword) > -1 ||
-                link.dataset.eName.toLowerCase().indexOf(keyword) === 0 ||
-                link.dataset.letter.toLowerCase() === keyword;
+        var matches = siteSearchCities.filter(function (item) {
+            return item.name.indexOf(keyword) > -1 ||
+                item.province.indexOf(keyword) > -1 ||
+                item.pinyin.indexOf(keyword) > -1 ||
+                item.province_pinyin.indexOf(keyword) > -1 ||
+                item.letter.toLowerCase() === keyword;
+        }).sort(function (first, second) {
+            return (typeRank[first.type] - typeRank[second.type]) ||
+                first.name.localeCompare(second.name, 'zh-CN');
         }).slice(0, 20);
         if (!matches.length) {
             result.innerHTML = '<div class="city-mobile-empty">未找到匹配城市</div>';
             result.style.display = 'block';
             return;
         }
-        result.innerHTML = matches.map(function (link) {
-            return '<a href="' + link.dataset.url + '"><span>' + link.dataset.name +
-                '</span><em>' + link.dataset.province + '</em></a>';
+        result.innerHTML = matches.map(function (item) {
+            return '<a href="' + escapeHtml(mobileUrl(item.url)) + '"><span>' + escapeHtml(item.name) +
+                '</span><em>' + escapeHtml(item.province) + '</em></a>';
         }).join('');
         result.style.display = 'block';
     }

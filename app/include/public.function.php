@@ -439,9 +439,10 @@ function get_site_city_groups()
     include(PLUS_PATH . 'cityparent.cache.php');
 
     $activeSites = array();
+    $searchSites = array();
     $lookupIds = array();
     foreach ($site_domain as $site) {
-        if ($site['fz_type'] != '1' || $site['is_show'] != '1') {
+        if ($site['fz_type'] != '1') {
             continue;
         }
         if (!empty($site['three_cityid'])) {
@@ -459,16 +460,31 @@ function get_site_city_groups()
         } else {
             $url = getprotocol($config['sy_weburl']) . $site['host'];
         }
-        $activeSites[$cityId] = array(
+        $siteItem = array(
             'id' => $cityId,
             'name' => $site['cityname'],
-            'url' => rtrim($url, '/') . '/'
+            'url' => rtrim($url, '/') . '/',
+            'is_show' => (string)$site['is_show'],
+            'domain_id' => (int)$site['id']
         );
+        $replaceSearch = !isset($searchSites[$cityId]) ||
+            ($siteItem['is_show'] === '1' && $searchSites[$cityId]['is_show'] !== '1') ||
+            ($siteItem['is_show'] === $searchSites[$cityId]['is_show'] && $siteItem['domain_id'] < $searchSites[$cityId]['domain_id']);
+        if ($replaceSearch) {
+            $searchSites[$cityId] = $siteItem;
+        }
+        if ($siteItem['is_show'] === '1') {
+            $replaceActive = !isset($activeSites[$cityId]) ||
+                $siteItem['domain_id'] < $activeSites[$cityId]['domain_id'];
+            if ($replaceActive) {
+                $activeSites[$cityId] = $siteItem;
+            }
+        }
         $lookupIds[$cityId] = $cityId;
     }
 
     $provinceIds = array();
-    foreach ($activeSites as $cityId => $site) {
+    foreach ($searchSites as $cityId => $site) {
         $nodeId = $cityId;
         for ($i = 0; $i < 4; $i++) {
             if (in_array((string)$nodeId, $city_index)) {
@@ -498,6 +514,54 @@ function get_site_city_groups()
     $groups = array();
     $provinces = array();
     $flatCities = array();
+    $searchCities = array();
+    require_once LIB_PATH . 'pin.php';
+    $pinyinCache = array();
+    $pinyinAliases = array(
+        '重庆' => 'chongqing',
+        '亳州' => 'bozhou',
+        '儋州' => 'danzhou'
+    );
+    foreach ($searchSites as $cityId => $site) {
+        $provinceId = !empty($provinceIds[$cityId]) ? $provinceIds[$cityId] : $cityId;
+        $province = isset($classMap[$provinceId]) ? $classMap[$provinceId] : array();
+        $city = isset($classMap[$cityId]) ? $classMap[$cityId] : array();
+        $cityName = !empty($city['name']) ? $city['name'] : $site['name'];
+        $provinceName = !empty($province['name']) ? $province['name'] : (isset($city_name[$provinceId]) ? $city_name[$provinceId] : '');
+        if (isset($pinyinAliases[$cityName])) {
+            $pinyin = $pinyinAliases[$cityName];
+        } elseif (isset($pinyinCache[$cityName])) {
+            $pinyin = $pinyinCache[$cityName];
+        } else {
+            $pinyin = strtolower(Pinyin($cityName, 'UTF-8'));
+            $pinyinCache[$cityName] = $pinyin;
+        }
+        if (isset($pinyinAliases[$provinceName])) {
+            $provincePinyin = $pinyinAliases[$provinceName];
+        } elseif (isset($pinyinCache[$provinceName])) {
+            $provincePinyin = $pinyinCache[$provinceName];
+        } else {
+            $provincePinyin = strtolower(Pinyin($provinceName, 'UTF-8'));
+            $pinyinCache[$provinceName] = $provincePinyin;
+        }
+        if ($cityId === $provinceId) {
+            $siteType = 'province';
+        } elseif (!empty($city_parent[$cityId]) && (int)$city_parent[$cityId] === $provinceId) {
+            $siteType = 'city';
+        } else {
+            $siteType = 'district';
+        }
+        $searchCities[] = array(
+            'id' => (int)$cityId,
+            'name' => $cityName,
+            'pinyin' => $pinyin,
+            'province' => $provinceName,
+            'province_pinyin' => $provincePinyin,
+            'letter' => !empty($city['letter']) ? strtoupper($city['letter']) : (!empty($province['letter']) ? strtoupper($province['letter']) : '#'),
+            'type' => $siteType,
+            'url' => $site['url']
+        );
+    }
     foreach ($activeSites as $cityId => $site) {
         if (empty($provinceIds[$cityId]) || $cityId === $provinceIds[$cityId]) {
             continue;
@@ -545,7 +609,8 @@ function get_site_city_groups()
     return array(
         'groups' => $groups,
         'provinces' => array_values($provinces),
-        'cities' => array_values($flatCities)
+        'cities' => array_values($flatCities),
+        'search_cities' => $searchCities
     );
 }
 

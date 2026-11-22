@@ -423,6 +423,10 @@ class index_controller extends common{
 		$siteCityData = get_site_city_groups();
 		$this->yunset('province_groups', $siteCityData['groups']);
 		$this->yunset('province_list', $siteCityData['provinces']);
+		$this->yunset('site_search_json', json_encode(
+			$siteCityData['search_cities'],
+			JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+		));
 
 		$this->seo("index");
 
