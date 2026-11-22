@@ -27,6 +27,25 @@ class index_controller extends map_controller
             $zoom = 11;
         }
         $this -> yunset('zoom', $zoom);
+
+        $centerName = !empty($this->config['cityname']) ? $this->config['cityname'] : '';
+        if ($centerName === '') {
+            $localCity = getLocalCity();
+            if (!empty($localCity['cityname'])) {
+                $centerName = $localCity['cityname'];
+            }
+        }
+        $mapCenter = get_map_city_center($centerName);
+        if (empty($mapCenter)) {
+            $mapCenter = array(
+                'lng' => $this->config['map_x'],
+                'lat' => $this->config['map_y']
+            );
+        }
+        $this->yunset('map_center_name', $centerName);
+        $this->yunset('map_center', $mapCenter);
+        $this->yunset('map_center_zoom', $centerName !== '' ? 11 : $zoom);
+
         $this -> yunset('getinfo', $_GET);
         $this -> seo('map');
         $this -> yun_tpl(array('index'));

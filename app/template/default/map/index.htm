@@ -6,7 +6,7 @@
 		<meta name="description" content="{yun:}$description{/yun}" />
 
 		<link rel="stylesheet" href="{yun:}$style{/yun}/style/css.css?v={yun:}$config.cachecode{/yun}" type="text/css" />
-		<link href="{yun:}$style{/yun}/style/map.css?v={yun:}$config.cachecode{/yun}&mapfix=4" rel="stylesheet" type="text/css" />
+		<link href="{yun:}$style{/yun}/style/map.css?v={yun:}$config.cachecode{/yun}&mapfix=6" rel="stylesheet" type="text/css" />
 
 		<title>{yun:}$title{/yun}</title>
 	</head>
@@ -67,8 +67,9 @@
 			var getdataurl = '{yun:}url m=map c=search{/yun}';
 			var marker_icon_url = "{yun:}$style{/yun}/images/map_markers.png";
 			var marker_icon_blue = "{yun:}$style{/yun}/images/map_marker_blue.png";
-			var x = "{yun:}$config.map_x{/yun}";
-			var y = "{yun:}$config.map_y{/yun}";
+			var x = "{yun:}$map_center.lng{/yun}";
+			var y = "{yun:}$map_center.lat{/yun}";
+			var map_zoom = "{yun:}$map_center_zoom{/yun}";
 			var map_tocity = "{yun:}$config.map_tocity{/yun}";
 		</script>
 		{yun:}include file="$tplstyle/jquery/jquery_js.htm"{/yun}
@@ -85,7 +86,7 @@
 			}
 		</script>
 		<script type="text/javascript" src="{yun:}$config.mapurl{/yun}" charset="utf-8"></script>
-		<script src="{yun:}$style{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}&mapfix=4"></script>
+		<script src="{yun:}$style{/yun}/js/map.js?v={yun:}$config.cachecode{/yun}&mapfix=6"></script>
 		{yun:}/if{/yun}
 		
 		<div class="none">

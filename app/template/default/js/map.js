@@ -7,7 +7,7 @@
     var requestSeq = 0;
     var moveTimer = null;
     var map = new AMap.Map('map-container', {
-        zoom: 13,
+        zoom: Number(window.map_zoom) || 13,
         center: [x, y]
     });
     window.map = map;

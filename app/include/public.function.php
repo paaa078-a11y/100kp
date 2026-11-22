@@ -430,6 +430,54 @@ function getLocalCity()
     return $cityInfo;
 }
 
+function get_map_city_center($cityName = '')
+{
+    $cityName = trim($cityName);
+    if ($cityName === '' || $cityName === '全国') {
+        return array();
+    }
+
+    include(PLUS_PATH . 'config.php');
+    $cacheFile = rtrim(DATA_PATH, '/') . '/cache/map_center_' . md5($cityName) . '.json';
+    if (is_file($cacheFile) && time() - filemtime($cacheFile) < 604800) {
+        $cached = json_decode(file_get_contents($cacheFile), true);
+        if (!empty($cached['lng']) && !empty($cached['lat'])) {
+            return $cached;
+        }
+    }
+
+    $center = array();
+    $tdtKey = isset($config['tdt_server_key']) ? trim($config['tdt_server_key']) : '';
+    if ($tdtKey !== '' && isset($config['map_type']) && (string)$config['map_type'] === '2') {
+        $data = json_encode(array('keyWord' => $cityName, 'level' => 12), JSON_UNESCAPED_UNICODE);
+        $url = 'https://api.tianditu.gov.cn/geocoder?ds=' . rawurlencode($data)
+            . '&tk=' . rawurlencode($tdtKey);
+        $result = json_decode(CurlGet($url, array()), true);
+        if (!empty($result['location']['lon']) && !empty($result['location']['lat'])) {
+            $point = wgs84_to_gcj02($result['location']['lon'], $result['location']['lat']);
+            $center = array(
+                'lng' => round($point['lng'], 6),
+                'lat' => round($point['lat'], 6)
+            );
+        }
+    }
+
+    if (empty($center) && !empty($config['map_key'])) {
+        $url = 'https://restapi.amap.com/v3/geocode/geo?address=' . rawurlencode($cityName)
+            . '&key=' . rawurlencode($config['map_key']);
+        $result = json_decode(CurlGet($url, array()), true);
+        if (!empty($result['geocodes'][0]['location'])) {
+            $point = explode(',', $result['geocodes'][0]['location']);
+            $center = array('lng' => (float)$point[0], 'lat' => (float)$point[1]);
+        }
+    }
+
+    if (!empty($center)) {
+        @file_put_contents($cacheFile, json_encode($center), LOCK_EX);
+    }
+    return $center;
+}
+
 function get_site_city_groups()
 {
     global $db;
