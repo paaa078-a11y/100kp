@@ -1321,6 +1321,14 @@ function tdt_keyword_geocoding($data = array())
         return '';
     }
     $keyword = mb_substr($keyword, 0, 120, 'UTF-8');
+    $cacheBase = defined('DATA_PATH') ? DATA_PATH : (defined('PLUS_PATH') ? dirname(rtrim(PLUS_PATH, '/')) . '/' : '');
+    $cacheFile = $cacheBase !== '' ? rtrim($cacheBase, '/') . '/cache/tdt_poi_' . md5($keyword) . '.json' : '';
+    if ($cacheFile !== '' && is_file($cacheFile) && time() - filemtime($cacheFile) < 300) {
+        $cached = file_get_contents($cacheFile);
+        if ($cached !== false && json_decode($cached, true)) {
+            return $cached;
+        }
+    }
 
     $ds = json_encode(array(
         'keyWord' => $keyword,
@@ -1398,13 +1406,162 @@ function tdt_keyword_geocoding($data = array())
         }
     }
 
-    return json_encode(array(
+    $response = json_encode(array(
         'status' => '1',
         'count' => count($tips),
         'auto_location' => $autoLocation,
         'location' => $autoLocation,
         'tips' => $tips
     ), JSON_UNESCAPED_UNICODE);
+    if ($cacheFile !== '') {
+        @file_put_contents($cacheFile, $response, LOCK_EX);
+    }
+    return $response;
+}
+
+function tdt_parallel_get($urls = array())
+{
+    $results = array();
+    if (empty($urls) || !function_exists('curl_multi_init')) {
+        return $results;
+    }
+
+    $multi = curl_multi_init();
+    $handles = array();
+    foreach ($urls as $name => $url) {
+        $handle = curl_init($url);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 4);
+        curl_setopt($handle, CURLOPT_TIMEOUT, 8);
+        curl_multi_add_handle($multi, $handle);
+        $handles[$name] = $handle;
+    }
+
+    do {
+        do {
+            $status = curl_multi_exec($multi, $running);
+        } while ($status === CURLM_CALL_MULTI_PERFORM);
+        if ($running && curl_multi_select($multi, 0.5) === -1) {
+            usleep(50000);
+        }
+    } while ($running);
+
+    foreach ($handles as $name => $handle) {
+        $results[$name] = curl_errno($handle) === 0 ? curl_multi_getcontent($handle) : '';
+        curl_multi_remove_handle($multi, $handle);
+        curl_close($handle);
+    }
+    curl_multi_close($multi);
+    return $results;
+}
+
+function tdt_keyword_geocoding_fast($data = array())
+{
+    $key = !empty($data['tdt_server_key']) ? trim($data['tdt_server_key']) : '';
+    $keyword = !empty($data['address']) ? trim($data['address']) : '';
+    if ($key === '' || $keyword === '') {
+        return '';
+    }
+    $keyword = mb_substr($keyword, 0, 120, 'UTF-8');
+    $cacheBase = defined('DATA_PATH') ? DATA_PATH : (defined('PLUS_PATH') ? dirname(rtrim(PLUS_PATH, '/')) . '/' : '');
+    $cacheFile = $cacheBase !== '' ? rtrim($cacheBase, '/') . '/cache/tdt_poi_' . md5($keyword) . '.json' : '';
+    if ($cacheFile !== '' && is_file($cacheFile) && time() - filemtime($cacheFile) < 300) {
+        $cached = file_get_contents($cacheFile);
+        if ($cached !== false && json_decode($cached, true)) {
+            return $cached;
+        }
+    }
+
+    $geoData = json_encode(array('keyWord' => $keyword, 'level' => 12), JSON_UNESCAPED_UNICODE);
+    $geoUrl = 'https://api.tianditu.gov.cn/geocoder?ds=' . rawurlencode($geoData)
+        . '&tk=' . rawurlencode($key);
+    $searchData = json_encode(array(
+        'keyWord' => $keyword,
+        'level' => 12,
+        'mapBound' => '73,18,135,54',
+        'queryType' => 1,
+        'start' => 0,
+        'count' => 10
+    ), JSON_UNESCAPED_UNICODE);
+    $searchUrl = 'https://api.tianditu.gov.cn/v2/search?postStr=' . rawurlencode($searchData)
+        . '&type=query&tk=' . rawurlencode($key);
+    $responses = tdt_parallel_get(array('geocoder' => $geoUrl, 'search' => $searchUrl));
+    $geoResult = json_decode(isset($responses['geocoder']) ? $responses['geocoder'] : '', true);
+    $searchResult = json_decode(isset($responses['search']) ? $responses['search'] : '', true);
+    if (!is_array($searchResult) && !is_array($geoResult)) {
+        return '';
+    }
+
+    $tips = array();
+    $seen = array();
+    $autoLocation = '';
+    if (is_array($geoResult) && !empty($geoResult['location']) && is_array($geoResult['location'])) {
+        $geoLocation = $geoResult['location'];
+        $lng = isset($geoLocation['lon']) ? $geoLocation['lon'] : (isset($geoLocation['lng']) ? $geoLocation['lng'] : '');
+        $lat = isset($geoLocation['lat']) ? $geoLocation['lat'] : '';
+        if ($lng !== '' && $lat !== '') {
+            $exact = wgs84_to_gcj02($lng, $lat);
+            $autoLocation = round($exact['lng'], 6) . ',' . round($exact['lat'], 6);
+            $tips[] = array(
+                'name' => $keyword,
+                'address' => $keyword,
+                'location' => $autoLocation,
+                'value' => $keyword,
+                'exact' => 1
+            );
+            $seen[$autoLocation] = true;
+        }
+    }
+
+    if (is_array($searchResult) && !empty($searchResult['pois']) && is_array($searchResult['pois'])) {
+        foreach ($searchResult['pois'] as $poi) {
+            $lonlat = isset($poi['lonlat']) ? trim($poi['lonlat']) : '';
+            if ($lonlat === '' || strpos($lonlat, ',') === false) {
+                continue;
+            }
+            $point = explode(',', $lonlat);
+            if (count($point) < 2 || $point[0] === '' || $point[1] === '') {
+                continue;
+            }
+            $gcj = wgs84_to_gcj02(trim($point[0]), trim($point[1]));
+            $tipLocation = round($gcj['lng'], 6) . ',' . round($gcj['lat'], 6);
+            if ($autoLocation === '') {
+                $autoLocation = $tipLocation;
+            }
+            if (isset($seen[$tipLocation])) {
+                continue;
+            }
+            $seen[$tipLocation] = true;
+            $name = !empty($poi['name']) ? trim($poi['name']) : $keyword;
+            $address = !empty($poi['address']) ? trim($poi['address']) : $name;
+            $tips[] = array(
+                'name' => $name,
+                'address' => $address,
+                'location' => $tipLocation,
+                'value' => $name
+            );
+            if (count($tips) >= 11) {
+                break;
+            }
+        }
+    }
+    if ($autoLocation === '' || empty($tips)) {
+        return '';
+    }
+
+    $response = json_encode(array(
+        'status' => '1',
+        'count' => count($tips),
+        'auto_location' => $autoLocation,
+        'location' => $autoLocation,
+        'tips' => $tips
+    ), JSON_UNESCAPED_UNICODE);
+    if ($cacheFile !== '') {
+        @file_put_contents($cacheFile, $response, LOCK_EX);
+    }
+    return $response;
 }
 
 function getPoi($data=array()){
@@ -1416,7 +1573,10 @@ function getPoi($data=array()){
     if (isset($config['map_type']) && (string)$config['map_type'] === '2'
         && !empty($config['tdt_server_key']) && !empty($data['address'])) {
         $data['tdt_server_key'] = $config['tdt_server_key'];
-        $res = tdt_keyword_geocoding($data);
+        $res = tdt_keyword_geocoding_fast($data);
+        if ($res === '') {
+            $res = tdt_keyword_geocoding($data);
+        }
     } elseif($config['bmap_webak'] && $data['address']){
 
         $url = 'https://restapi.amap.com/v3/assistant/inputtips?key='. $config['bmap_webak'] .'&keywords='.$data['address'];

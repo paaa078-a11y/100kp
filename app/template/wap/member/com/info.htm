@@ -764,7 +764,7 @@
                 address: function (value) {
                     this.cominfo.address = value;
                     if (this.map_key !='' && this.addressShow){
-                        debounce(() => this.localsearch(), 1000);
+                        debounce(() => this.localsearch(), 300);
                     }
                 },
             },
@@ -799,13 +799,25 @@
                     }
                     this.city = cityStr ? cityStr : citydefault;
                     this.areaShow = false;
+                    if (this.addressShow && this.cominfo.address && this.cominfo.address.length > 3) {
+                        this.localsearch();
+                    }
+                },
+                getFullAddress: function () {
+                    var detail = (this.cominfo.address || this.address || '').replace(/\s+/g, '');
+                    var region = (this.city || '').replace(/\s+/g, '');
+                    if (!region || detail.indexOf(region) === 0) {
+                        return detail;
+                    }
+                    return region + detail;
                 },
                 localsearch: function () {
                     let that = this;
-					if(that.cominfo.address.length > 3){
+					let address = that.getFullAddress();
+					if(address.length > 3){
 						let requestSeq = ++that.poiSearchSeq;
 						that.poi = [];
-						$.post('index.php?m=ajax&c=poi', {address: that.cominfo.address}, function(e){
+						$.post('index.php?m=ajax&c=poi', {address: address}, function(e){
 							if(requestSeq !== that.poiSearchSeq){
 								return;
 							}

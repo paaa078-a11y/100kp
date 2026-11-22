@@ -20,6 +20,9 @@ layui.use(['form'], function () {
                 $("#three_cityid").html(html);
             }
             form.render('select');
+            if (typeof addressKeyup === 'function' && $("#address").length && $("#address").val()) {
+                setTimeout(addressKeyup, 50);
+            }
         });
     } else {
         if ($("#cityid")) {

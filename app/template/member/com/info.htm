@@ -6,6 +6,26 @@
 	var setPosition	=	'{yun:}$config.com_enforce_setposition{/yun}';
 	var map_key = '{yun:}$config.map_enabled{/yun}';
 
+	function getFullAddress(detail){
+		var parts = [];
+		['provinceid', 'cityid', 'three_cityid'].forEach(function(id){
+			var value = $.trim($('#' + id).val());
+			if(!value){
+				return;
+			}
+			var name = $.trim($('#' + id + ' option:selected').text());
+			if(name && name !== '请选择' && parts[parts.length - 1] !== name){
+				parts.push(name);
+			}
+		});
+		var region = parts.join('').replace(/\s+/g, '');
+		detail = $.trim(detail || '').replace(/\s+/g, '');
+		if(!region || detail.indexOf(region) === 0){
+			return detail;
+		}
+		return region + detail;
+	}
+
 	function checkIsUsed(typeStr){
 
 		 var checkStr = $("#"+typeStr).val();
@@ -976,7 +996,7 @@
 
 </script>
 <script language=javascript src='{yun:}$config.sy_weburl{/yun}/data/plus/city.cache.js?v={yun:}$config.cachecode{/yun}'></script>
-<script language=javascript src='{yun:}$config.sy_weburl{/yun}/js/city.js?v={yun:}$config.cachecode{/yun}'></script>
+<script language=javascript src='{yun:}$config.sy_weburl{/yun}/js/city.js?v={yun:}$config.cachecode{/yun}&addressfix=1'></script>
 <script src="{yun:}$config.sy_weburl{/yun}/js/layui.upload.js?v={yun:}$config.cachecode{/yun}" type='text/javascript'></script>
 
 <script src="{yun:}$config.sy_weburl{/yun}/js/ueditor/ueditor.config.js?v={yun:}$config.cachecode{/yun}"></script>
@@ -1058,7 +1078,7 @@
 		}, wait);
 	}
 	function addressKeyup(){
-		debounce(localsearch, 1000);
+		debounce(localsearch, 300);
 	}
 	function clickSearch(){
 		var address = $("#address").val().replace(/\s+/g,"");
@@ -1068,7 +1088,7 @@
 		localsearch();
 	}
 	function localsearch(city){
-		var address = $("#address").val().replace(/\s+/g,"");
+		var address = getFullAddress($("#address").val());
 		var requestSeq = ++poiSearchSeq;
 		map.clearMap();
 		if(address.length > 3){
